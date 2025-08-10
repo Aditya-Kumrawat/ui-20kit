@@ -1167,6 +1167,11 @@ export default function Chatbot() {
                     {vapiError ||
                       "Unable to connect to Vapi API. Check your configuration."}
                   </p>
+                  {vapiError?.includes("Invalid Key") && (
+                    <p className="text-xs text-red-600 mt-1">
+                      💡 Tip: Use VITE_VAPI_PUBLIC_KEY for client-side and VAPI_PRIVATE_KEY for server-side
+                    </p>
+                  )}
                 </div>
               </div>
               <Button
