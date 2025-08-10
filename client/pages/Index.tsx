@@ -309,37 +309,57 @@ export default function Index() {
               </motion.div>
 
               {/* 3 Flowing Menu Stacked */}
-              <motion.div 
+              <motion.div
                 className="space-y-3"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1.0 }}
+                variants={menuContainerVariants}
+                initial="hidden"
+                animate="visible"
               >
                 {menuItems.map((menu, menuIndex) => (
                   <motion.div
                     key={menuIndex}
                     ref={el => menuRefs.current[menuIndex] = el}
                     className={`bg-gradient-to-r ${menu.color} p-4 rounded-2xl shadow-lg`}
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      y: [0, -3, 0]
+                    }}
+                    transition={{
+                      opacity: { delay: 1.0 + menuIndex * 0.2 },
+                      x: { delay: 1.0 + menuIndex * 0.2 },
+                      y: {
+                        duration: 2 + menuIndex * 0.3,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }
+                    }}
                     whileHover={{ scale: 1.02, x: 10 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
                     <div className="flex justify-between items-center">
                       {menu.letters.map((letter, letterIndex) => (
                         <motion.div
                           key={`${menuIndex}-${letterIndex}`}
                           className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold"
-                          whileHover={{ 
+                          whileHover={{
                             scale: 1.2,
                             backgroundColor: "rgba(255,255,255,0.3)"
                           }}
                           animate={{
                             rotate: [0, 360],
+                            scale: [1, 1.05, 1]
                           }}
                           transition={{
                             rotate: {
-                              duration: 3 + letterIndex * 0.5,
+                              duration: 4 + letterIndex * 0.5,
                               repeat: Infinity,
                               ease: "linear"
+                            },
+                            scale: {
+                              duration: 2 + letterIndex * 0.2,
+                              repeat: Infinity,
+                              ease: "easeInOut"
                             }
                           }}
                         >
