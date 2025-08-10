@@ -9,10 +9,11 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
       body: req.body,
     });
 
-    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    // For server-side API calls, we need the private key
+    const apiKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     if (!apiKey) {
       return res.status(500).json({
-        error: "Vapi API key not configured on server",
+        error: "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY environment variable.",
       });
     }
 
