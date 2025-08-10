@@ -336,6 +336,14 @@ export default function Chatbot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Debug logging function
+  const addDebugLog = (message: string) => {
+    const timestamp = new Date().toLocaleTimeString();
+    const logMessage = `[${timestamp}] ${message}`;
+    console.log(`🔊 VAPI DEBUG: ${logMessage}`);
+    setDebugLogs(prev => [...prev.slice(-9), logMessage]); // Keep last 10 logs
+  };
+
   const quickActions: QuickAction[] = [
     {
       id: "analyze",
