@@ -880,12 +880,26 @@ export default function Chatbot() {
         setIsRecording(false);
         setVapiStatus("test-mode");
         videoRef.current?.pause();
+        addDebugLog("🛑 Recording stopped - ready for next interaction");
       } else {
         addDebugLog("🧪 Starting test mode recording...");
+        addDebugLog("🎤 Microphone activated (simulated)");
         setIsRecording(true);
         setVapiStatus("recording");
         videoRef.current?.play();
+
+        // Start the voice interaction simulation
         simulateVapiInteraction();
+
+        // Auto-stop recording after the simulation completes
+        setTimeout(() => {
+          if (isRecording) {
+            addDebugLog("⏰ Auto-stopping recording after 10 seconds");
+            setIsRecording(false);
+            setVapiStatus("test-mode");
+            videoRef.current?.pause();
+          }
+        }, 10000); // Auto-stop after 10 seconds
       }
       return;
     }
