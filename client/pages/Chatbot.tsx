@@ -663,48 +663,50 @@ export default function Chatbot() {
 
     addDebugLog("Setting up Vapi event listeners...");
 
-    vapi.on("speech.transcript.partial", (data: any) => {
-      addDebugLog(`📝 Partial transcript: ${data.text}`);
-      setInputValue(data.text);
+    vapi.on("speech-start", () => {
+      addDebugLog("🎤 Speech started");
     });
 
-    vapi.on("speech.transcript.final", (data: any) => {
-      addDebugLog(`✅ Final transcript: ${data.text}`);
-      handleSendMessage(data.text);
-      setTranscript((prev) => [...prev, `User: ${data.text}`]);
+    vapi.on("speech-end", () => {
+      addDebugLog("🔇 Speech ended");
     });
 
-    vapi.on("response.message", (data: any) => {
-      addDebugLog(`🤖 AI response: ${data.text}`);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          content: data.text,
-          sender: "ai" as const,
-          timestamp: new Date(),
-          status: "read" as const,
-        },
-      ]);
-      setTranscript((prev) => [...prev, `AI: ${data.text}`]);
+    vapi.on("transcript", (transcript: any) => {
+      addDebugLog(`📝 Transcript: ${transcript.text}`);
+      if (transcript.type === "partial") {
+        setInputValue(transcript.text);
+      } else if (transcript.type === "final") {
+        addDebugLog(`✅ Final transcript: ${transcript.text}`);
+        handleSendMessage(transcript.text);
+        setTranscript((prev) => [...prev, `User: ${transcript.text}`]);
+      }
     });
 
-    vapi.on("silence.start", () => {
-      addDebugLog("🔇 Silence detected - pausing video");
-      videoRef.current?.pause();
+    vapi.on("message", (message: any) => {
+      if (message.type === "transcript" && message.role === "assistant") {
+        addDebugLog(`🤖 AI response: ${message.transcript}`);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString(),
+            content: message.transcript,
+            sender: "ai" as const,
+            timestamp: new Date(),
+            status: "read" as const,
+          },
+        ]);
+        setTranscript((prev) => [...prev, `AI: ${message.transcript}`]);
+      }
     });
 
-    vapi.on("silence.end", () => {
-      addDebugLog("🔊 Speech detected - resuming video");
-      videoRef.current?.play();
-    });
+    // Additional event handlers can be added here
 
-    vapi.on("call.started", () => {
+    vapi.on("call-start", () => {
       addDebugLog("📞 Call started");
       setVapiStatus("call-active");
     });
 
-    vapi.on("call.ended", () => {
+    vapi.on("call-end", () => {
       addDebugLog("📞 Call ended");
       setVapiStatus("call-ended");
       setIsRecording(false);
