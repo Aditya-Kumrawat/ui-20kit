@@ -935,6 +935,77 @@ export default function Chatbot() {
           </div>
         </motion.header>
 
+        {/* Network Status Banner */}
+        {(networkStatus === 'offline' || networkStatus === 'restricted') && !testMode && (
+          <motion.div
+            className="bg-yellow-100 border-b border-yellow-200 px-6 py-3"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-4 h-4 bg-yellow-500 rounded-full animate-pulse"></div>
+                <div>
+                  <span className="text-sm font-medium text-yellow-800">
+                    {networkStatus === 'offline' ? 'Network Connectivity Issues' : 'API Access Restricted'}
+                  </span>
+                  <p className="text-xs text-yellow-700">
+                    {networkStatus === 'offline'
+                      ? 'Unable to reach Vapi API servers. Check your internet connection.'
+                      : 'API requests are being blocked. This may be due to firewall or CORS restrictions.'}
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setTestMode(true);
+                  setVapiStatus("test-mode");
+                  addDebugLog("🧪 Test Mode enabled manually");
+                }}
+                className="bg-yellow-50 border-yellow-300 text-yellow-800 hover:bg-yellow-100"
+              >
+                Use Test Mode
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+        {testMode && (
+          <motion.div
+            className="bg-blue-100 border-b border-blue-200 px-6 py-3"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                <div>
+                  <span className="text-sm font-medium text-blue-800">Test Mode Active</span>
+                  <p className="text-xs text-blue-700">
+                    Using simulated responses. Voice interactions will be mocked for testing.
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setTestMode(false);
+                  setVapiStatus("disconnected");
+                  addDebugLog("🔧 Test Mode disabled");
+                }}
+                className="bg-blue-50 border-blue-300 text-blue-800 hover:bg-blue-100"
+              >
+                Exit Test Mode
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
         {/* Quick Actions */}
         <motion.div
           className="bg-white border-b border-gray-200 px-6 py-3"
