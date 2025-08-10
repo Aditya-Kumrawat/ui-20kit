@@ -147,12 +147,14 @@ export default function Index() {
 
             {/* CTA Buttons */}
             <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                className="hidden sm:inline-flex text-gray-600 hover:text-gray-900"
-              >
-                Sign In
-              </Button>
+              <Link to="/login">
+                <Button
+                  variant="ghost"
+                  className="hidden sm:inline-flex text-gray-600 hover:text-gray-900"
+                >
+                  Sign In
+                </Button>
+              </Link>
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
