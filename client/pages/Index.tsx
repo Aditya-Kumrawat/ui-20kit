@@ -815,22 +815,133 @@ export default function Index() {
 
       {/* AI Features Section */}
       <div className="bg-gray-50 py-20 relative overflow-hidden">
-        {/* Background Image */}
+        {/* Enhanced Background with Multiple Layers */}
+
+        {/* Base Gradient Background */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)",
+            opacity: 0.03
+          }}
+        />
+
+        {/* Main Background Image */}
         <motion.div
           className="absolute top-0 left-0 w-full h-full"
           style={{
-            opacity: 0.1,
+            opacity: 0.08,
             backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2F367bf7c31aaf4132aebce1464b5e15b5?format=webp&width=800)",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
             backgroundSize: "cover",
-            backgroundColor: "#e9f4ff"
+            mixBlendMode: "multiply"
           }}
           initial={{ opacity: 0, scale: 1.1 }}
-          whileInView={{ opacity: 0.1, scale: 1 }}
+          whileInView={{ opacity: 0.08, scale: 1 }}
           transition={{ duration: 1.5 }}
           viewport={{ once: true }}
         />
+
+        {/* Animated Gradient Overlay */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
+          }}
+          animate={{
+            background: [
+              "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
+              "radial-gradient(circle at 40% 30%, rgba(120, 119, 198, 0.15) 0%, transparent 50%), radial-gradient(circle at 60% 70%, rgba(255, 119, 198, 0.15) 0%, transparent 50%)",
+              "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)"
+            ]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+
+        {/* Floating Particles */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-blue-400/20 rounded-full"
+            style={{
+              left: `${10 + Math.random() * 80}%`,
+              top: `${10 + Math.random() * 80}%`,
+            }}
+            animate={{
+              y: [-20, 20, -20],
+              x: [-10, 10, -10],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+
+        {/* Larger Floating Elements */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`large-${i}`}
+            className="absolute rounded-full bg-gradient-to-r from-purple-400/10 to-pink-400/10 backdrop-blur-sm"
+            style={{
+              width: `${60 + Math.random() * 100}px`,
+              height: `${60 + Math.random() * 100}px`,
+              left: `${Math.random() * 90}%`,
+              top: `${Math.random() * 90}%`,
+            }}
+            animate={{
+              y: [-30, 30, -30],
+              x: [-20, 20, -20],
+              rotate: [0, 180, 360],
+              opacity: [0.05, 0.15, 0.05],
+            }}
+            transition={{
+              duration: 12 + Math.random() * 8,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+
+        {/* Mesh Gradient Pattern */}
+        <div
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 25% 25%, #667eea 0%, transparent 50%),
+              radial-gradient(circle at 75% 25%, #764ba2 0%, transparent 50%),
+              radial-gradient(circle at 25% 75%, #f093fb 0%, transparent 50%),
+              radial-gradient(circle at 75% 75%, #4facfe 0%, transparent 50%)
+            `,
+            backgroundSize: "100% 100%",
+            backgroundPosition: "0% 0%"
+          }}
+        />
+
+        {/* Neural Network Pattern */}
+        <svg
+          className="absolute inset-0 w-full h-full opacity-5"
+          viewBox="0 0 800 600"
+        >
+          <defs>
+            <pattern id="neural-grid" width="100" height="100" patternUnits="userSpaceOnUse">
+              <circle cx="50" cy="50" r="2" fill="#6366f1" opacity="0.3"/>
+              <line x1="50" y1="50" x2="150" y2="50" stroke="#6366f1" strokeWidth="1" opacity="0.2"/>
+              <line x1="50" y1="50" x2="50" y2="150" stroke="#6366f1" strokeWidth="1" opacity="0.2"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#neural-grid)"/>
+        </svg>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <motion.div
