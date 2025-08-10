@@ -671,14 +671,16 @@ export default function Chatbot() {
       addDebugLog("🔇 Speech ended");
     });
 
-    vapi.on("transcript", (transcript: any) => {
-      addDebugLog(`📝 Transcript: ${transcript.text}`);
-      if (transcript.type === "partial") {
-        setInputValue(transcript.text);
-      } else if (transcript.type === "final") {
-        addDebugLog(`✅ Final transcript: ${transcript.text}`);
-        handleSendMessage(transcript.text);
-        setTranscript((prev) => [...prev, `User: ${transcript.text}`]);
+    vapi.on("message", (message: any) => {
+      if (message.type === "transcript") {
+        addDebugLog(`📝 Transcript: ${message.transcriptType} - ${message.transcript}`);
+        if (message.transcriptType === "partial") {
+          setInputValue(message.transcript);
+        } else if (message.transcriptType === "final") {
+          addDebugLog(`✅ Final transcript: ${message.transcript}`);
+          handleSendMessage(message.transcript);
+          setTranscript((prev) => [...prev, `User: ${message.transcript}`]);
+        }
       }
     });
 
