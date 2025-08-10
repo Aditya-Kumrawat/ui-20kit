@@ -309,7 +309,7 @@ const initializeVapi = () => {
   }
 
   // Validate key format (public keys typically start with specific prefixes)
-  if (apiKey.startsWith('sk-') || apiKey.length < 30) {
+  if (apiKey.startsWith("sk-") || apiKey.length < 30) {
     console.error(
       "❌ Invalid API key format. Make sure you're using the PUBLIC key (not private key) for the Web SDK.",
     );
@@ -835,7 +835,9 @@ export default function Chatbot() {
           // Check if we're in an iframe
           const isInIframe = window.self !== window.top;
           if (isInIframe) {
-            addDebugLog("🔍 Detected iframe environment - checking permissions policy");
+            addDebugLog(
+              "🔍 Detected iframe environment - checking permissions policy",
+            );
           }
 
           // First check if getUserMedia is available
@@ -886,8 +888,10 @@ export default function Chatbot() {
             addDebugLog("✅ Microphone permissions granted");
           } catch (streamError: any) {
             clearTimeout(timeoutId);
-            if (streamError.name === 'AbortError') {
-              throw new Error("Microphone permission request timed out. Please try opening the app directly in your browser.");
+            if (streamError.name === "AbortError") {
+              throw new Error(
+                "Microphone permission request timed out. Please try opening the app directly in your browser.",
+              );
             }
             throw streamError;
           }
@@ -1006,14 +1010,18 @@ export default function Chatbot() {
     } catch (error: any) {
       const errorMessage = error?.message || "Unknown error";
 
-          // Enhanced error categorization with iframe-specific handling
+      // Enhanced error categorization with iframe-specific handling
       let userFriendlyMessage = errorMessage;
       let shouldSuggestDirectAccess = false;
 
       if (errorMessage.includes("Failed to fetch")) {
         userFriendlyMessage =
           "Network connection failed. Please check your internet connection and try again.";
-      } else if (errorMessage.includes("Microphone access blocked") || errorMessage.includes("Permission denied") || errorMessage.includes("not allowed in this document")) {
+      } else if (
+        errorMessage.includes("Microphone access blocked") ||
+        errorMessage.includes("Permission denied") ||
+        errorMessage.includes("not allowed in this document")
+      ) {
         userFriendlyMessage =
           "Microphone access is restricted in this environment. For voice features, please open the application directly in your browser.";
         shouldSuggestDirectAccess = true;
@@ -1025,8 +1033,12 @@ export default function Chatbot() {
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
 
       if (shouldSuggestDirectAccess) {
-        addDebugLog("💡 Suggestion: Open app directly in browser for microphone access");
-        setVapiError(`${userFriendlyMessage} Try opening this app in a new browser tab.`);
+        addDebugLog(
+          "💡 Suggestion: Open app directly in browser for microphone access",
+        );
+        setVapiError(
+          `${userFriendlyMessage} Try opening this app in a new browser tab.`,
+        );
       } else {
         setVapiError(userFriendlyMessage);
       }
@@ -1163,7 +1175,8 @@ export default function Chatbot() {
                   </p>
                   {vapiError?.includes("Invalid Key") && (
                     <p className="text-xs text-red-600 mt-1">
-                      💡 Tip: Use VITE_VAPI_PUBLIC_KEY for client-side and VAPI_PRIVATE_KEY for server-side
+                      💡 Tip: Use VITE_VAPI_PUBLIC_KEY for client-side and
+                      VAPI_PRIVATE_KEY for server-side
                     </p>
                   )}
                 </div>
@@ -1218,141 +1231,147 @@ export default function Chatbot() {
               <div className="flex-1 max-w-4xl mx-auto w-full px-6 py-6 flex flex-col min-h-0">
                 {/* Chat Container with Fixed Height and Scrolling */}
                 <div className="flex-1 flex flex-col min-h-0">
-                  <div className="flex-1 overflow-y-auto space-y-6 pr-2 chat-scrollbar" style={{scrollBehavior: 'smooth'}}>
-                  <AnimatePresence>
-                    {messages.map((message) => (
-                      <motion.div
-                        key={message.id}
-                        className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div
-                          className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}
+                  <div
+                    className="flex-1 overflow-y-auto space-y-6 pr-2 chat-scrollbar"
+                    style={{ scrollBehavior: "smooth" }}
+                  >
+                    <AnimatePresence>
+                      {messages.map((message) => (
+                        <motion.div
+                          key={message.id}
+                          className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                          transition={{ duration: 0.3 }}
                         >
-                          {/* Avatar */}
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: 0.1 }}
-                          >
-                            <Avatar className="w-8 h-8">
-                              {message.sender === "user" ? (
-                                <AvatarFallback className="bg-blue-100 text-blue-700">
-                                  <User size={16} />
-                                </AvatarFallback>
-                              ) : (
-                                <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                                  <Brain size={16} />
-                                </AvatarFallback>
-                              )}
-                            </Avatar>
-                          </motion.div>
-
-                          {/* Message Content */}
                           <div
-                            className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}
+                            className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}
                           >
+                            {/* Avatar */}
                             <motion.div
-                              className={`inline-block px-4 py-3 rounded-2xl ${
-                                message.sender === "user"
-                                  ? "bg-blue-600 text-white"
-                                  : "bg-white border border-gray-200 text-gray-900"
-                              }`}
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{ delay: 0.2 }}
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ delay: 0.1 }}
                             >
-                              <p className="text-sm leading-relaxed font-['Poppins',sans-serif]">
-                                {message.content}
-                              </p>
+                              <Avatar className="w-8 h-8">
+                                {message.sender === "user" ? (
+                                  <AvatarFallback className="bg-blue-100 text-blue-700">
+                                    <User size={16} />
+                                  </AvatarFallback>
+                                ) : (
+                                  <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                                    <Brain size={16} />
+                                  </AvatarFallback>
+                                )}
+                              </Avatar>
                             </motion.div>
 
-                            {/* Message Info */}
+                            {/* Message Content */}
                             <div
-                              className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}
+                              className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}
                             >
-                              <span>{formatTime(message.timestamp)}</span>
-                              {message.sender === "user" &&
-                                getStatusIcon(message.status)}
-                            </div>
-
-                            {/* Suggestions */}
-                            {message.suggestions && message.sender === "ai" && (
                               <motion.div
-                                className="flex flex-wrap gap-2 mt-3"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
+                                className={`inline-block px-4 py-3 rounded-2xl ${
+                                  message.sender === "user"
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-white border border-gray-200 text-gray-900"
+                                }`}
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ delay: 0.2 }}
                               >
-                                {message.suggestions.map(
-                                  (suggestion, index) => (
-                                    <motion.button
-                                      key={index}
-                                      onClick={() =>
-                                        handleSuggestionClick(suggestion)
-                                      }
-                                      className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors"
-                                      initial={{ opacity: 0, scale: 0.8 }}
-                                      animate={{ opacity: 1, scale: 1 }}
-                                      transition={{ delay: 0.6 + index * 0.1 }}
-                                      whileHover={{ scale: 1.05 }}
-                                      whileTap={{ scale: 0.95 }}
-                                    >
-                                      {suggestion}
-                                    </motion.button>
-                                  ),
-                                )}
+                                <p className="text-sm leading-relaxed font-['Poppins',sans-serif]">
+                                  {message.content}
+                                </p>
                               </motion.div>
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
 
-                  {/* Typing Indicator */}
-                  <AnimatePresence>
-                    {isTyping && (
-                      <motion.div
-                        className="flex justify-start"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className="flex items-start gap-3 max-w-[70%]">
-                          <Avatar className="w-8 h-8">
-                            <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                              <Brain size={16} />
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
-                            <div className="flex items-center gap-1">
-                              {[0, 1, 2].map((i) => (
-                                <motion.div
-                                  key={i}
-                                  className="w-2 h-2 bg-gray-400 rounded-full"
-                                  animate={{
-                                    scale: [1, 1.2, 1],
-                                    opacity: [0.5, 1, 0.5],
-                                  }}
-                                  transition={{
-                                    duration: 1,
-                                    delay: i * 0.2,
-                                    repeat: Infinity,
-                                    ease: "easeInOut",
-                                  }}
-                                />
-                              ))}
+                              {/* Message Info */}
+                              <div
+                                className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}
+                              >
+                                <span>{formatTime(message.timestamp)}</span>
+                                {message.sender === "user" &&
+                                  getStatusIcon(message.status)}
+                              </div>
+
+                              {/* Suggestions */}
+                              {message.suggestions &&
+                                message.sender === "ai" && (
+                                  <motion.div
+                                    className="flex flex-wrap gap-2 mt-3"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                  >
+                                    {message.suggestions.map(
+                                      (suggestion, index) => (
+                                        <motion.button
+                                          key={index}
+                                          onClick={() =>
+                                            handleSuggestionClick(suggestion)
+                                          }
+                                          className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors"
+                                          initial={{ opacity: 0, scale: 0.8 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          transition={{
+                                            delay: 0.6 + index * 0.1,
+                                          }}
+                                          whileHover={{ scale: 1.05 }}
+                                          whileTap={{ scale: 0.95 }}
+                                        >
+                                          {suggestion}
+                                        </motion.button>
+                                      ),
+                                    )}
+                                  </motion.div>
+                                )}
                             </div>
                           </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+
+                    {/* Typing Indicator */}
+                    <AnimatePresence>
+                      {isTyping && (
+                        <motion.div
+                          className="flex justify-start"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <div className="flex items-start gap-3 max-w-[70%]">
+                            <Avatar className="w-8 h-8">
+                              <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                                <Brain size={16} />
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
+                              <div className="flex items-center gap-1">
+                                {[0, 1, 2].map((i) => (
+                                  <motion.div
+                                    key={i}
+                                    className="w-2 h-2 bg-gray-400 rounded-full"
+                                    animate={{
+                                      scale: [1, 1.2, 1],
+                                      opacity: [0.5, 1, 0.5],
+                                    }}
+                                    transition={{
+                                      duration: 1,
+                                      delay: i * 0.2,
+                                      repeat: Infinity,
+                                      ease: "easeInOut",
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
                     <div ref={messagesEndRef} />
                   </div>

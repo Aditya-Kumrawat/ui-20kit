@@ -11,18 +11,22 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
 
     // Check for available API keys
     const privateKey = process.env.VAPI_PRIVATE_KEY;
-    const publicKey = process.env.VITE_VAPI_PUBLIC_KEY || process.env.VITE_VAPI_KEY;
+    const publicKey =
+      process.env.VITE_VAPI_PUBLIC_KEY || process.env.VITE_VAPI_KEY;
     const apiKey = privateKey || publicKey || process.env.VAPI_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY or VITE_VAPI_PUBLIC_KEY environment variable.",
+        error:
+          "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY or VITE_VAPI_PUBLIC_KEY environment variable.",
       });
     }
 
     const keyType = privateKey ? "private" : "public";
     if (keyType === "public") {
-      console.log("⚠️ Using public key for server operations - some features may be limited");
+      console.log(
+        "⚠️ Using public key for server operations - some features may be limited",
+      );
     }
 
     // Extract the Vapi endpoint from the request
@@ -80,13 +84,15 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
     console.log("📞 Creating Vapi call via server proxy");
 
     const privateKey = process.env.VAPI_PRIVATE_KEY;
-    const publicKey = process.env.VITE_VAPI_PUBLIC_KEY || process.env.VITE_VAPI_KEY;
+    const publicKey =
+      process.env.VITE_VAPI_PUBLIC_KEY || process.env.VITE_VAPI_KEY;
     const apiKey = privateKey || publicKey || process.env.VAPI_KEY;
 
     if (!apiKey) {
       console.error("❌ No API key configured for call creation");
       return res.status(500).json({
-        error: "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY or VITE_VAPI_PUBLIC_KEY environment variable.",
+        error:
+          "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY or VITE_VAPI_PUBLIC_KEY environment variable.",
       });
     }
 
@@ -94,7 +100,9 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
     console.log(`📞 Creating call with ${keyType} key`);
 
     if (keyType === "public") {
-      console.log("⚠️ Using public key for call creation - this may not work for all call types");
+      console.log(
+        "⚠️ Using public key for call creation - this may not work for all call types",
+      );
     }
 
     // Create call configuration
@@ -177,7 +185,8 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
 
     // Check environment variables
     const privateKey = process.env.VAPI_PRIVATE_KEY;
-    const publicKey = process.env.VITE_VAPI_PUBLIC_KEY || process.env.VITE_VAPI_KEY;
+    const publicKey =
+      process.env.VITE_VAPI_PUBLIC_KEY || process.env.VITE_VAPI_KEY;
     const fallbackKey = process.env.VAPI_KEY;
 
     console.log("🔍 Environment check:");
@@ -200,7 +209,9 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
 
       // For public keys, we can't test admin endpoints, so we'll validate format and assume success
       if (apiKey.length >= 30 && /^[a-f0-9-]+$/.test(apiKey)) {
-        console.log("✅ Public key format appears valid - skipping admin endpoint test");
+        console.log(
+          "✅ Public key format appears valid - skipping admin endpoint test",
+        );
         return res.json({
           success: true,
           status: 200,
@@ -228,7 +239,8 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
     } else {
       console.error("❌ No API key found in environment variables");
       return res.status(500).json({
-        error: "Vapi API key not configured. Set VAPI_PRIVATE_KEY or VITE_VAPI_PUBLIC_KEY environment variable.",
+        error:
+          "Vapi API key not configured. Set VAPI_PRIVATE_KEY or VITE_VAPI_PUBLIC_KEY environment variable.",
         configured: false,
         debug: {
           vapiPrivateKeyExists: !!privateKey,
