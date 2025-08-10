@@ -936,6 +936,30 @@ export default function Chatbot() {
               </div>
             </motion.div>
 
+            {/* Debug Panel */}
+            {debugLogs.length > 0 && (
+              <motion.div
+                className="bg-gray-900 text-green-400 border-t border-gray-200 p-4 h-32 overflow-y-auto font-mono text-xs"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <div className="max-w-4xl mx-auto">
+                  <h3 className="text-green-300 font-semibold mb-2 flex items-center gap-2">
+                    <Zap size={14} />
+                    Vapi Debug Console
+                  </h3>
+                  <div className="space-y-1">
+                    {debugLogs.map((log, index) => (
+                      <div key={index} className="text-green-400">
+                        {log}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             {/* Transcript Section */}
             <motion.div
               className="bg-gray-100 border-t border-gray-200 p-4 h-48 overflow-y-auto"
