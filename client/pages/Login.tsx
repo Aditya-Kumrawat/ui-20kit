@@ -205,9 +205,9 @@ export default function Login() {
                         type="checkbox"
                         className="w-4 h-4 rounded border-white/30 bg-white/10 text-blue-500 focus:ring-blue-400/20"
                       />
-                      <span className="text-white/80 text-sm">Remember me</span>
+                      <span className="text-gray-700 text-sm">Remember me</span>
                     </label>
-                    <a href="#" className="text-blue-300 hover:text-blue-200 text-sm transition-colors">
+                    <a href="#" className="text-purple-600 hover:text-purple-500 text-sm transition-colors">
                       Forgot password?
                     </a>
                   </motion.div>
