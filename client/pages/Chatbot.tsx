@@ -297,10 +297,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
 // Initialize Vapi Web SDK for browser-based voice calls
 const initializeVapi = () => {
+  // For Web SDK, we need the public API key (not private key)
   const apiKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
 
   if (!apiKey) {
-    console.warn("⚠️ Vapi API key not found in environment variables");
+    console.warn("⚠️ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables");
     return null;
   }
 
