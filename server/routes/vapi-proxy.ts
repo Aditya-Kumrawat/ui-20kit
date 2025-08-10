@@ -53,19 +53,21 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
 export const handleVapiCall: RequestHandler = async (req, res) => {
   try {
     console.log('📞 Creating Vapi call via server proxy');
-    
+
     const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     if (!apiKey) {
-      return res.status(500).json({ 
-        error: 'Vapi API key not configured on server' 
+      console.error('❌ No API key configured for call creation');
+      return res.status(500).json({
+        error: 'Vapi API key not configured on server'
       });
     }
 
     // Create call configuration
     const callConfig = req.body;
-    console.log('🔧 Call config:', JSON.stringify(callConfig, null, 2));
+    console.log('🔧 Call config received:', JSON.stringify(callConfig, null, 2));
 
     // Make the call creation request to Vapi API
+    console.log('📡 Making call request to Vapi API...');
     const vapiResponse = await fetch('https://api.vapi.ai/call', {
       method: 'POST',
       headers: {
@@ -80,23 +82,35 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
 
     if (!vapiResponse.ok) {
       const errorData = await vapiResponse.text();
-      console.error('❌ Vapi call failed:', errorData);
-      return res.status(vapiResponse.status).json({ 
-        error: 'Vapi call creation failed', 
-        details: errorData 
+      console.error('❌ Vapi call failed:', vapiResponse.status, errorData);
+      return res.status(vapiResponse.status).json({
+        error: 'Vapi call creation failed',
+        details: errorData,
+        status: vapiResponse.status
       });
     }
 
     const callData = await vapiResponse.json();
-    console.log('✅ Vapi call created successfully:', callData.id);
-    
-    res.json(callData);
+    console.log('✅ Vapi call created successfully!');
+    console.log('📋 Call details:', {
+      id: callData.id,
+      status: callData.status,
+      type: callData.type
+    });
+
+    // Return success response
+    res.json({
+      success: true,
+      call: callData,
+      message: 'Vapi call created via server proxy'
+    });
 
   } catch (error: any) {
     console.error('❌ Vapi call creation error:', error);
-    res.status(500).json({ 
-      error: 'Vapi call creation failed', 
-      details: error.message 
+    res.status(500).json({
+      error: 'Vapi call creation failed',
+      details: error.message,
+      stack: error.stack?.substring(0, 200)
     });
   }
 };
