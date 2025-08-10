@@ -2,7 +2,11 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
-import { handleVapiProxy, handleVapiCall, handleVapiTest } from "./routes/vapi-proxy";
+import {
+  handleVapiProxy,
+  handleVapiCall,
+  handleVapiTest,
+} from "./routes/vapi-proxy";
 
 export function createServer() {
   const app = express();

@@ -297,41 +297,41 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
 // Server-side Vapi proxy to bypass client-side network restrictions
 const createServerProxiedVapi = () => {
-  console.log('🚀 Creating server-proxied Vapi implementation');
+  console.log("🚀 Creating server-proxied Vapi implementation");
 
   // Create a proxy object that mimics Vapi SDK but uses server-side calls
   const proxiedVapi = {
     async start(config: any) {
-      console.log('📞 Starting Vapi call via server proxy');
-      console.log('🔧 Call config:', JSON.stringify(config, null, 2));
+      console.log("📞 Starting Vapi call via server proxy");
+      console.log("🔧 Call config:", JSON.stringify(config, null, 2));
 
       try {
-        const response = await fetch('/api/vapi/call', {
-          method: 'POST',
+        const response = await fetch("/api/vapi/call", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(config)
+          body: JSON.stringify(config),
         });
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || 'Server proxy call failed');
+          throw new Error(errorData.error || "Server proxy call failed");
         }
 
         const callData = await response.json();
-        console.log('✅ Server proxy call successful:', callData);
+        console.log("✅ Server proxy call successful:", callData);
 
         // Simulate successful call start
         return callData;
       } catch (error: any) {
-        console.error('❌ Server proxy call failed:', error);
+        console.error("❌ Server proxy call failed:", error);
         throw new Error(`Server proxy failed: ${error.message}`);
       }
     },
 
     async stop() {
-      console.log('🛑 Stopping Vapi call via server proxy');
+      console.log("🛑 Stopping Vapi call via server proxy");
       // Implement stop logic via server proxy if needed
       return Promise.resolve();
     },
@@ -344,7 +344,7 @@ const createServerProxiedVapi = () => {
     },
 
     removeAllListeners() {
-      console.log('🧹 Removing all event listeners');
+      console.log("🧹 Removing all event listeners");
       this.eventListeners = {};
     },
 
@@ -357,7 +357,7 @@ const createServerProxiedVapi = () => {
       }
     },
 
-    eventListeners: {} as any
+    eventListeners: {} as any,
   };
 
   return proxiedVapi;
@@ -368,7 +368,9 @@ const vapi = createServerProxiedVapi();
 // Force enable real API calls - remove all environment restrictions
 const isRestrictedEnvironment = () => {
   // DISABLED: Always return false to force real API usage
-  console.log('🚀 Environment restrictions DISABLED - forcing real Vapi API calls');
+  console.log(
+    "🚀 Environment restrictions DISABLED - forcing real Vapi API calls",
+  );
   return false;
 };
 
@@ -398,7 +400,9 @@ export default function Chatbot() {
   const [vapiError, setVapiError] = useState<string | null>(null);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
   const [testMode, setTestMode] = useState(false); // DISABLED: Force real API usage
-  const [networkStatus, setNetworkStatus] = useState<'unknown' | 'online' | 'offline' | 'restricted'>('unknown');
+  const [networkStatus, setNetworkStatus] = useState<
+    "unknown" | "online" | "offline" | "restricted"
+  >("unknown");
   const [transcript, setTranscript] = useState([
     "AI: Hello! I'm ready to help you with genetic analysis.",
     "User: Can you help me understand my DNA results?",
@@ -415,7 +419,7 @@ export default function Chatbot() {
     const timestamp = new Date().toLocaleTimeString();
     const logMessage = `[${timestamp}] ${message}`;
     console.log(`🔊 VAPI DEBUG: ${logMessage}`);
-    setDebugLogs(prev => [...prev.slice(-9), logMessage]); // Keep last 10 logs
+    setDebugLogs((prev) => [...prev.slice(-9), logMessage]); // Keep last 10 logs
   };
 
   // Initial environment check log
@@ -451,7 +455,7 @@ export default function Chatbot() {
       "Can you explain what genetic variants mean?",
       "What should I know about my hereditary risks?",
       "Help me understand my family's genetic history",
-      "What does this genetic report mean for me?"
+      "What does this genetic report mean for me?",
     ];
 
     const aiResponses = [
@@ -461,64 +465,78 @@ export default function Chatbot() {
       "Genetic variants are natural differences in your DNA sequence. Some are beneficial, others neutral, and some may indicate health risks. I'll help you understand which variants are most important for you.",
       "Understanding hereditary risks is crucial for proactive health management. I can help you identify potential genetic predispositions and suggest appropriate screening or lifestyle modifications.",
       "Family genetic history provides important context for your results. I can help you understand inheritance patterns and what this means for you and your relatives.",
-      "Your genetic report contains a wealth of information about your health, ancestry, and traits. Let me walk you through the key findings and what they mean in practical terms."
+      "Your genetic report contains a wealth of information about your health, ancestry, and traits. Let me walk you through the key findings and what they mean in practical terms.",
     ];
 
     addDebugLog("🎤 Simulating voice recording...");
     addDebugLog("📻 Listening for speech...");
 
     // Simulate real-time transcription (partial updates)
-    const selectedQuestion = sampleQuestions[Math.floor(Math.random() * sampleQuestions.length)];
-    const words = selectedQuestion.split(' ');
-    let currentTranscript = '';
+    const selectedQuestion =
+      sampleQuestions[Math.floor(Math.random() * sampleQuestions.length)];
+    const words = selectedQuestion.split(" ");
+    let currentTranscript = "";
 
     // Simulate partial transcription word by word
     words.forEach((word, index) => {
-      setTimeout(() => {
-        currentTranscript += (index > 0 ? ' ' : '') + word;
-        setInputValue(currentTranscript);
-        addDebugLog(`📝 Partial transcript: "${currentTranscript}"`);
-      }, 200 * (index + 1));
+      setTimeout(
+        () => {
+          currentTranscript += (index > 0 ? " " : "") + word;
+          setInputValue(currentTranscript);
+          addDebugLog(`📝 Partial transcript: "${currentTranscript}"`);
+        },
+        200 * (index + 1),
+      );
     });
 
     // Simulate final transcript and AI response
-    setTimeout(() => {
-      addDebugLog(`✅ Final transcript: "${selectedQuestion}"`);
-      setInputValue(''); // Clear input after sending
-      handleSendMessage(selectedQuestion);
-      setTranscript(prev => [...prev, `User: ${selectedQuestion}`]);
+    setTimeout(
+      () => {
+        addDebugLog(`✅ Final transcript: "${selectedQuestion}"`);
+        setInputValue(""); // Clear input after sending
+        handleSendMessage(selectedQuestion);
+        setTranscript((prev) => [...prev, `User: ${selectedQuestion}`]);
 
-      // Simulate AI processing time
-      addDebugLog("🧠 AI processing your request...");
-      setIsTyping(true);
+        // Simulate AI processing time
+        addDebugLog("🧠 AI processing your request...");
+        setIsTyping(true);
 
-      setTimeout(() => {
-        const selectedResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
-        addDebugLog(`🤖 AI response generated: "${selectedResponse.substring(0, 50)}..."`);
+        setTimeout(
+          () => {
+            const selectedResponse =
+              aiResponses[Math.floor(Math.random() * aiResponses.length)];
+            addDebugLog(
+              `🤖 AI response generated: "${selectedResponse.substring(0, 50)}..."`,
+            );
 
-        setMessages(prev => [...prev, {
-          id: Date.now().toString(),
-          content: selectedResponse,
-          sender: "ai" as const,
-          timestamp: new Date(),
-          status: "read" as const,
-          suggestions: [
-            "Tell me more details",
-            "What are the next steps?",
-            "Show me specific examples",
-            "Explain the science behind this"
-          ]
-        }]);
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: Date.now().toString(),
+                content: selectedResponse,
+                sender: "ai" as const,
+                timestamp: new Date(),
+                status: "read" as const,
+                suggestions: [
+                  "Tell me more details",
+                  "What are the next steps?",
+                  "Show me specific examples",
+                  "Explain the science behind this",
+                ],
+              },
+            ]);
 
-        setTranscript(prev => [...prev, `AI: ${selectedResponse}`]);
-        setIsTyping(false);
+            setTranscript((prev) => [...prev, `AI: ${selectedResponse}`]);
+            setIsTyping(false);
 
-        // Simulate text-to-speech
-        addDebugLog("🔊 AI speaking response...");
-
-      }, 2000 + Math.random() * 1000); // Variable AI response time
-
-    }, words.length * 200 + 500);
+            // Simulate text-to-speech
+            addDebugLog("🔊 AI speaking response...");
+          },
+          2000 + Math.random() * 1000,
+        ); // Variable AI response time
+      },
+      words.length * 200 + 500,
+    );
   };
 
   const quickActions: QuickAction[] = [
@@ -577,12 +595,12 @@ export default function Chatbot() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000); // Short 3s timeout
 
-      const response = await fetch('https://httpbin.org/get', {
-        method: 'GET',
+      const response = await fetch("https://httpbin.org/get", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        signal: controller.signal
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -602,7 +620,7 @@ export default function Chatbot() {
       // Immediately enable test mode
       setTestMode(true);
       setVapiStatus("test-mode");
-      setNetworkStatus('restricted');
+      setNetworkStatus("restricted");
 
       return false;
     }
@@ -618,11 +636,11 @@ export default function Chatbot() {
       // Test server-side Vapi connectivity via proxy
       addDebugLog("📡 Testing server proxy connection...");
 
-      const testResponse = await fetch('/api/vapi/test', {
-        method: 'GET',
+      const testResponse = await fetch("/api/vapi/test", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       if (!testResponse.ok) {
@@ -635,17 +653,16 @@ export default function Chatbot() {
       if (testData.success) {
         addDebugLog("✅ Server-side Vapi proxy: WORKING!");
         setVapiStatus("connected");
-        setNetworkStatus('online');
+        setNetworkStatus("online");
         addDebugLog("🎤 Ready to start voice recording via server proxy!");
       } else {
         throw new Error(testData.error || "Server proxy test failed");
       }
-
     } catch (error: any) {
       addDebugLog(`❌ Server proxy test failed: ${error.message}`);
       setVapiError(`Server proxy failed: ${error.message}`);
       setVapiStatus("error");
-      setNetworkStatus('offline');
+      setNetworkStatus("offline");
 
       addDebugLog("🚫 Server proxy required for this environment");
     }
@@ -657,13 +674,15 @@ export default function Chatbot() {
     const isRestrictedEnvironment = () => {
       // Check for common restricted environment indicators
       const hostname = window.location.hostname;
-      const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
-      const isFlyDev = hostname.includes('.fly.dev');
-      const isBuilder = hostname.includes('builder.io');
+      const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
+      const isFlyDev = hostname.includes(".fly.dev");
+      const isBuilder = hostname.includes("builder.io");
 
       // If we're in a development environment that might have network restrictions
-      if (isFlyDev || isBuilder || window.location.protocol === 'file:') {
-        addDebugLog("🔍 Restricted environment detected - preemptively enabling Test Mode");
+      if (isFlyDev || isBuilder || window.location.protocol === "file:") {
+        addDebugLog(
+          "🔍 Restricted environment detected - preemptively enabling Test Mode",
+        );
         return true;
       }
 
@@ -675,7 +694,7 @@ export default function Chatbot() {
       addDebugLog("🧪 Auto-enabling Test Mode for restricted environment");
       setTestMode(true);
       setVapiStatus("test-mode");
-      setNetworkStatus('restricted');
+      setNetworkStatus("restricted");
       return; // Skip Vapi setup
     }
 
@@ -753,7 +772,7 @@ export default function Chatbot() {
         addDebugLog("🧪 Falling back to Test Mode");
         setTestMode(true);
         setVapiStatus("test-mode");
-        setNetworkStatus('restricted');
+        setNetworkStatus("restricted");
       }
     };
 
@@ -849,8 +868,10 @@ export default function Chatbot() {
         // Check microphone permissions first
         try {
           addDebugLog("Requesting microphone permissions...");
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          stream.getTracks().forEach(track => track.stop()); // Clean up
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+          stream.getTracks().forEach((track) => track.stop()); // Clean up
           addDebugLog("✅ Microphone permissions granted");
         } catch (permError: any) {
           throw new Error(`Microphone permission denied: ${permError.message}`);
@@ -877,16 +898,18 @@ export default function Chatbot() {
                 messages: [
                   {
                     role: "system",
-                    content: "You are a helpful AI assistant specializing in DNA analysis, genetic research, and data interpretation. Keep your responses concise and informative. You can help with genetic analysis, data visualization, research reports, and explaining genetic variants."
-                  }
-                ]
+                    content:
+                      "You are a helpful AI assistant specializing in DNA analysis, genetic research, and data interpretation. Keep your responses concise and informative. You can help with genetic analysis, data visualization, research reports, and explaining genetic variants.",
+                  },
+                ],
               },
               voice: {
                 provider: "11labs",
-                voiceId: voiceId
+                voiceId: voiceId,
               },
-              firstMessage: "Hello! I'm your AI assistant. I can help you with DNA analysis and genetic research. How can I assist you today?"
-            }
+              firstMessage:
+                "Hello! I'm your AI assistant. I can help you with DNA analysis and genetic research. How can I assist you today?",
+            },
           };
         }
 
@@ -897,18 +920,19 @@ export default function Chatbot() {
 
         while (retryCount < maxRetries) {
           try {
-            addDebugLog(`Attempt ${retryCount + 1}/${maxRetries}: Starting Vapi call...`);
+            addDebugLog(
+              `Attempt ${retryCount + 1}/${maxRetries}: Starting Vapi call...`,
+            );
 
             // Add timeout to Vapi start call
             const startPromise = vapi.start(callConfig);
             const timeoutPromise = new Promise((_, reject) =>
-              setTimeout(() => reject(new Error("Vapi start timeout")), 15000)
+              setTimeout(() => reject(new Error("Vapi start timeout")), 15000),
             );
 
             await Promise.race([startPromise, timeoutPromise]);
             addDebugLog("✅ Vapi call started successfully");
             break; // Success, exit retry loop
-
           } catch (startError: any) {
             lastError = startError;
             retryCount++;
@@ -916,15 +940,20 @@ export default function Chatbot() {
 
             addDebugLog(`��� Attempt ${retryCount} failed: ${errorMsg}`);
 
-            if (errorMsg.includes("Failed to fetch") || errorMsg.includes("timeout")) {
+            if (
+              errorMsg.includes("Failed to fetch") ||
+              errorMsg.includes("timeout")
+            ) {
               if (retryCount < maxRetries) {
                 addDebugLog(`⏳ Retrying in 1 second...`);
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise((resolve) => setTimeout(resolve, 1000));
                 continue;
               } else {
                 // All retries failed - throw error instead of falling back
                 addDebugLog("🛑 All retries failed - real API required");
-                throw new Error("Failed to connect to Vapi API after multiple attempts. Check network connectivity.");
+                throw new Error(
+                  "Failed to connect to Vapi API after multiple attempts. Check network connectivity.",
+                );
               }
             }
 
@@ -951,77 +980,93 @@ export default function Chatbot() {
             "What do these DNA markers mean for my health?",
             "How should I interpret my family genetic history?",
             "Are there any health risks I should know about?",
-            "Can you explain what genetic variants are?"
+            "Can you explain what genetic variants are?",
           ];
 
-          const selectedPhrase = testPhrases[Math.floor(Math.random() * testPhrases.length)];
-          const words = selectedPhrase.split(' ');
-          let currentTranscript = '';
+          const selectedPhrase =
+            testPhrases[Math.floor(Math.random() * testPhrases.length)];
+          const words = selectedPhrase.split(" ");
+          let currentTranscript = "";
 
           // Simulate word-by-word transcription
           words.forEach((word, index) => {
-            setTimeout(() => {
-              currentTranscript += (index > 0 ? ' ' : '') + word;
-              setInputValue(currentTranscript);
-              addDebugLog(`📝 Live transcript: "${currentTranscript}"`);
+            setTimeout(
+              () => {
+                currentTranscript += (index > 0 ? " " : "") + word;
+                setInputValue(currentTranscript);
+                addDebugLog(`📝 Live transcript: "${currentTranscript}"`);
 
-              // Simulate final transcript when complete
-              if (index === words.length - 1) {
-                setTimeout(() => {
-                  addDebugLog(`✅ Final transcript: "${selectedPhrase}"`);
-                  setInputValue('');
-                  handleSendMessage(selectedPhrase);
-                  setTranscript(prev => [...prev, `User: ${selectedPhrase}`]);
-
-                  // Simulate AI response
-                  setIsTyping(true);
-                  addDebugLog("🧠 AI processing your genetic question...");
-
+                // Simulate final transcript when complete
+                if (index === words.length - 1) {
                   setTimeout(() => {
-                    const aiResponses = [
-                      "Based on your genetic test results, I can help you understand the key markers and their implications for your health. Let me break down the most important findings.",
-                      "Your DNA markers provide valuable insights into health predispositions and traits. I'll explain what each variant means and how it might affect you.",
-                      "Genetic variants are natural differences in DNA that can influence health, traits, and drug responses. Let me explain the significance of your specific variants.",
-                      "Your family genetic history combined with your test results gives us a comprehensive view of your genetic profile. Here's what's most important to know.",
-                      "These genetic markers indicate both protective factors and potential health considerations. I'll help you understand what actions you might consider."
-                    ];
+                    addDebugLog(`✅ Final transcript: "${selectedPhrase}"`);
+                    setInputValue("");
+                    handleSendMessage(selectedPhrase);
+                    setTranscript((prev) => [
+                      ...prev,
+                      `User: ${selectedPhrase}`,
+                    ]);
 
-                    const aiResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+                    // Simulate AI response
+                    setIsTyping(true);
+                    addDebugLog("🧠 AI processing your genetic question...");
 
-                    setMessages(prev => [...prev, {
-                      id: Date.now().toString(),
-                      content: aiResponse,
-                      sender: "ai" as const,
-                      timestamp: new Date(),
-                      status: "read" as const,
-                      suggestions: [
-                        "Tell me more about specific risks",
-                        "What lifestyle changes should I consider?",
-                        "How accurate are these predictions?",
-                        "Should I share this with my doctor?"
-                      ]
-                    }]);
+                    setTimeout(
+                      () => {
+                        const aiResponses = [
+                          "Based on your genetic test results, I can help you understand the key markers and their implications for your health. Let me break down the most important findings.",
+                          "Your DNA markers provide valuable insights into health predispositions and traits. I'll explain what each variant means and how it might affect you.",
+                          "Genetic variants are natural differences in DNA that can influence health, traits, and drug responses. Let me explain the significance of your specific variants.",
+                          "Your family genetic history combined with your test results gives us a comprehensive view of your genetic profile. Here's what's most important to know.",
+                          "These genetic markers indicate both protective factors and potential health considerations. I'll help you understand what actions you might consider.",
+                        ];
 
-                    setTranscript(prev => [...prev, `AI: ${aiResponse}`]);
-                    setIsTyping(false);
-                    addDebugLog("🎉 AI response delivered via server proxy!");
+                        const aiResponse =
+                          aiResponses[
+                            Math.floor(Math.random() * aiResponses.length)
+                          ];
 
-                    // Auto-stop recording after response
-                    setTimeout(() => {
-                      if (isRecording) {
-                        setIsRecording(false);
-                        setVapiStatus("connected");
-                        videoRef.current?.pause();
-                        addDebugLog("🛑 Voice session completed");
-                      }
-                    }, 2000);
+                        setMessages((prev) => [
+                          ...prev,
+                          {
+                            id: Date.now().toString(),
+                            content: aiResponse,
+                            sender: "ai" as const,
+                            timestamp: new Date(),
+                            status: "read" as const,
+                            suggestions: [
+                              "Tell me more about specific risks",
+                              "What lifestyle changes should I consider?",
+                              "How accurate are these predictions?",
+                              "Should I share this with my doctor?",
+                            ],
+                          },
+                        ]);
 
-                  }, 2000 + Math.random() * 1000);
-                }, 500);
-              }
-            }, 300 * (index + 1));
+                        setTranscript((prev) => [...prev, `AI: ${aiResponse}`]);
+                        setIsTyping(false);
+                        addDebugLog(
+                          "🎉 AI response delivered via server proxy!",
+                        );
+
+                        // Auto-stop recording after response
+                        setTimeout(() => {
+                          if (isRecording) {
+                            setIsRecording(false);
+                            setVapiStatus("connected");
+                            videoRef.current?.pause();
+                            addDebugLog("🛑 Voice session completed");
+                          }
+                        }, 2000);
+                      },
+                      2000 + Math.random() * 1000,
+                    );
+                  }, 500);
+                }
+              },
+              300 * (index + 1),
+            );
           });
-
         }, 1000);
       }
     } catch (error: any) {
@@ -1030,11 +1075,14 @@ export default function Chatbot() {
       // Enhanced error categorization
       let userFriendlyMessage = errorMessage;
       if (errorMessage.includes("Failed to fetch")) {
-        userFriendlyMessage = "Network connection failed. Please check your internet connection and try again.";
+        userFriendlyMessage =
+          "Network connection failed. Please check your internet connection and try again.";
       } else if (errorMessage.includes("Microphone permission")) {
-        userFriendlyMessage = "Microphone access required. Please allow microphone permissions and try again.";
+        userFriendlyMessage =
+          "Microphone access required. Please allow microphone permissions and try again.";
       } else if (errorMessage.includes("Invalid API key")) {
-        userFriendlyMessage = "Invalid API key. Please check your Vapi configuration.";
+        userFriendlyMessage =
+          "Invalid API key. Please check your Vapi configuration.";
       }
 
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
@@ -1128,7 +1176,7 @@ export default function Chatbot() {
         </motion.header>
 
         {/* Real API Status Banner */}
-        {vapiStatus === 'connected' && (
+        {vapiStatus === "connected" && (
           <motion.div
             className="bg-green-100 border-b border-green-200 px-6 py-3"
             initial={{ opacity: 0, y: -10 }}
@@ -1139,7 +1187,9 @@ export default function Chatbot() {
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-green-500 rounded-full"></div>
                 <div>
-                  <span className="text-sm font-medium text-green-800">Real Vapi API Connected</span>
+                  <span className="text-sm font-medium text-green-800">
+                    Real Vapi API Connected
+                  </span>
                   <p className="text-xs text-green-700">
                     Voice assistant is ready for real-time conversations.
                   </p>
@@ -1149,7 +1199,7 @@ export default function Chatbot() {
           </motion.div>
         )}
 
-        {vapiStatus === 'error' && (
+        {vapiStatus === "error" && (
           <motion.div
             className="bg-red-100 border-b border-red-200 px-6 py-3"
             initial={{ opacity: 0, y: -10 }}
@@ -1160,9 +1210,12 @@ export default function Chatbot() {
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-red-500 rounded-full"></div>
                 <div>
-                  <span className="text-sm font-medium text-red-800">API Connection Failed</span>
+                  <span className="text-sm font-medium text-red-800">
+                    API Connection Failed
+                  </span>
                   <p className="text-xs text-red-700">
-                    {vapiError || "Unable to connect to Vapi API. Check your configuration."}
+                    {vapiError ||
+                      "Unable to connect to Vapi API. Check your configuration."}
                   </p>
                 </div>
               </div>
@@ -1214,136 +1267,138 @@ export default function Chatbot() {
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto">
               <div className="max-w-4xl mx-auto px-6 py-6 space-y-6">
-          <AnimatePresence>
-            {messages.map((message) => (
-              <motion.div
-                key={message.id}
-                className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div
-                  className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}
-                >
-                  {/* Avatar */}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    <Avatar className="w-8 h-8">
-                      {message.sender === "user" ? (
-                        <AvatarFallback className="bg-blue-100 text-blue-700">
-                          <User size={16} />
-                        </AvatarFallback>
-                      ) : (
-                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                          <Brain size={16} />
-                        </AvatarFallback>
-                      )}
-                    </Avatar>
-                  </motion.div>
-
-                  {/* Message Content */}
-                  <div
-                    className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}
-                  >
+                <AnimatePresence>
+                  {messages.map((message) => (
                     <motion.div
-                      className={`inline-block px-4 py-3 rounded-2xl ${
-                        message.sender === "user"
-                          ? "bg-blue-600 text-white"
-                          : "bg-white border border-gray-200 text-gray-900"
-                      }`}
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
+                      key={message.id}
+                      className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <p className="text-sm leading-relaxed">
-                        {message.content}
-                      </p>
-                    </motion.div>
-
-                    {/* Message Info */}
-                    <div
-                      className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}
-                    >
-                      <span>{formatTime(message.timestamp)}</span>
-                      {message.sender === "user" &&
-                        getStatusIcon(message.status)}
-                    </div>
-
-                    {/* Suggestions */}
-                    {message.suggestions && message.sender === "ai" && (
-                      <motion.div
-                        className="flex flex-wrap gap-2 mt-3"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                      <div
+                        className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}
                       >
-                        {message.suggestions.map((suggestion, index) => (
-                          <motion.button
-                            key={index}
-                            onClick={() => handleSuggestionClick(suggestion)}
-                            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.6 + index * 0.1 }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            {suggestion}
-                          </motion.button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-
-          {/* Typing Indicator */}
-          <AnimatePresence>
-            {isTyping && (
-              <motion.div
-                className="flex justify-start"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="flex items-start gap-3 max-w-[70%]">
-                  <Avatar className="w-8 h-8">
-                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                      <Brain size={16} />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
-                    <div className="flex items-center gap-1">
-                      {[0, 1, 2].map((i) => (
+                        {/* Avatar */}
                         <motion.div
-                          key={i}
-                          className="w-2 h-2 bg-gray-400 rounded-full"
-                          animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.5, 1, 0.5],
-                          }}
-                          transition={{
-                            duration: 1,
-                            delay: i * 0.2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.1 }}
+                        >
+                          <Avatar className="w-8 h-8">
+                            {message.sender === "user" ? (
+                              <AvatarFallback className="bg-blue-100 text-blue-700">
+                                <User size={16} />
+                              </AvatarFallback>
+                            ) : (
+                              <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                                <Brain size={16} />
+                              </AvatarFallback>
+                            )}
+                          </Avatar>
+                        </motion.div>
+
+                        {/* Message Content */}
+                        <div
+                          className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}
+                        >
+                          <motion.div
+                            className={`inline-block px-4 py-3 rounded-2xl ${
+                              message.sender === "user"
+                                ? "bg-blue-600 text-white"
+                                : "bg-white border border-gray-200 text-gray-900"
+                            }`}
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                          >
+                            <p className="text-sm leading-relaxed">
+                              {message.content}
+                            </p>
+                          </motion.div>
+
+                          {/* Message Info */}
+                          <div
+                            className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}
+                          >
+                            <span>{formatTime(message.timestamp)}</span>
+                            {message.sender === "user" &&
+                              getStatusIcon(message.status)}
+                          </div>
+
+                          {/* Suggestions */}
+                          {message.suggestions && message.sender === "ai" && (
+                            <motion.div
+                              className="flex flex-wrap gap-2 mt-3"
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.5 }}
+                            >
+                              {message.suggestions.map((suggestion, index) => (
+                                <motion.button
+                                  key={index}
+                                  onClick={() =>
+                                    handleSuggestionClick(suggestion)
+                                  }
+                                  className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors"
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: 0.6 + index * 0.1 }}
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                >
+                                  {suggestion}
+                                </motion.button>
+                              ))}
+                            </motion.div>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+
+                {/* Typing Indicator */}
+                <AnimatePresence>
+                  {isTyping && (
+                    <motion.div
+                      className="flex justify-start"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="flex items-start gap-3 max-w-[70%]">
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                            <Brain size={16} />
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
+                          <div className="flex items-center gap-1">
+                            {[0, 1, 2].map((i) => (
+                              <motion.div
+                                key={i}
+                                className="w-2 h-2 bg-gray-400 rounded-full"
+                                animate={{
+                                  scale: [1, 1.2, 1],
+                                  opacity: [0.5, 1, 0.5],
+                                }}
+                                transition={{
+                                  duration: 1,
+                                  delay: i * 0.2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut",
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <div ref={messagesEndRef} />
               </div>
@@ -1386,7 +1441,9 @@ export default function Chatbot() {
 
                     {/* Character count or file indicator */}
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
-                      {inputValue.length > 0 && <span>{inputValue.length}</span>}
+                      {inputValue.length > 0 && (
+                        <span>{inputValue.length}</span>
+                      )}
                     </div>
                   </div>
 
@@ -1401,7 +1458,9 @@ export default function Chatbot() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
-                    transition={isRecording ? { duration: 1, repeat: Infinity } : {}}
+                    transition={
+                      isRecording ? { duration: 1, repeat: Infinity } : {}
+                    }
                   >
                     {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
                   </motion.button>
@@ -1423,14 +1482,22 @@ export default function Chatbot() {
                   <div className="flex items-center gap-4">
                     <span>AI is ready to help with genetic analysis</span>
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${
-                        vapiStatus === "connected" ? "bg-green-500" :
-                        vapiStatus === "recording" ? "bg-red-500 animate-pulse" :
-                        vapiStatus === "error" ? "bg-red-500" :
-                        vapiStatus === "testing" ? "bg-yellow-500 animate-pulse" :
-                        "bg-gray-400"
-                      }`}></div>
-                      <span className="text-xs capitalize">{vapiStatus.replace('-', ' ')}</span>
+                      <div
+                        className={`w-2 h-2 rounded-full ${
+                          vapiStatus === "connected"
+                            ? "bg-green-500"
+                            : vapiStatus === "recording"
+                              ? "bg-red-500 animate-pulse"
+                              : vapiStatus === "error"
+                                ? "bg-red-500"
+                                : vapiStatus === "testing"
+                                  ? "bg-yellow-500 animate-pulse"
+                                  : "bg-gray-400"
+                        }`}
+                      ></div>
+                      <span className="text-xs capitalize">
+                        {vapiStatus.replace("-", " ")}
+                      </span>
                       <span className="text-xs px-1 rounded bg-purple-100 text-purple-700">
                         Real API
                       </span>
@@ -1446,7 +1513,9 @@ export default function Chatbot() {
                       </motion.div>
                     )}
                     {vapiError && (
-                      <span className="text-xs text-red-500">Error: {vapiError}</span>
+                      <span className="text-xs text-red-500">
+                        Error: {vapiError}
+                      </span>
                     )}
                   </div>
                   <div className="flex items-center gap-2">
@@ -1562,13 +1631,14 @@ export default function Chatbot() {
               </div>
             </div>
             <div className="flex-1 flex flex-col">
-
               {/* Video Controls and Info */}
               <div className="p-4 space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium text-gray-900">AI Assistant</h4>
-                    <p className="text-sm text-gray-500">Ready to help with analysis</p>
+                    <p className="text-sm text-gray-500">
+                      Ready to help with analysis
+                    </p>
                   </div>
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline">
