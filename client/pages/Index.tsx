@@ -540,7 +540,7 @@ export default function Index() {
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ 
+                whileHover={{
                   y: -5,
                   boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
                 }}
@@ -548,6 +548,267 @@ export default function Index() {
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
               >
+                {/* Animated Video Component */}
+                <div className="relative h-32 mb-4 bg-gray-50 rounded-xl overflow-hidden">
+                  {/* Neural Networks Animation */}
+                  {feature.title === "Neural Networks" && (
+                    <svg className="w-full h-full absolute inset-0" viewBox="0 0 200 120" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+                      {/* Neural Network Nodes */}
+                      {[
+                        { x: 20, y: 30, layer: 0 }, { x: 20, y: 60 }, { x: 20, y: 90 },
+                        { x: 70, y: 20, layer: 1 }, { x: 70, y: 45 }, { x: 70, y: 70 }, { x: 70, y: 95 },
+                        { x: 120, y: 30, layer: 2 }, { x: 120, y: 60 }, { x: 120, y: 90 },
+                        { x: 170, y: 45, layer: 3 }, { x: 170, y: 75 }
+                      ].map((node, i) => (
+                        <motion.circle
+                          key={i}
+                          cx={node.x}
+                          cy={node.y}
+                          r="4"
+                          fill="#ffffff"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{
+                            scale: [0, 1.2, 1],
+                            opacity: 1,
+                          }}
+                          transition={{
+                            duration: 1,
+                            delay: node.layer * 0.3 + (i % 4) * 0.1,
+                            repeat: Infinity,
+                            repeatDelay: 2
+                          }}
+                        />
+                      ))}
+
+                      {/* Connection Lines */}
+                      {[
+                        { x1: 24, y1: 30, x2: 66, y2: 20 }, { x1: 24, y1: 30, x2: 66, y2: 45 },
+                        { x1: 24, y1: 60, x2: 66, y2: 45 }, { x1: 24, y1: 60, x2: 66, y2: 70 },
+                        { x1: 24, y1: 90, x2: 66, y2: 70 }, { x1: 24, y1: 90, x2: 66, y2: 95 },
+                        { x1: 74, y1: 20, x2: 116, y2: 30 }, { x1: 74, y1: 45, x2: 116, y2: 30 },
+                        { x1: 74, y1: 70, x2: 116, y2: 60 }, { x1: 74, y1: 95, x2: 116, y2: 90 },
+                        { x1: 124, y1: 30, x2: 166, y2: 45 }, { x1: 124, y1: 60, x2: 166, y2: 45 },
+                        { x1: 124, y1: 90, x2: 166, y2: 75 }
+                      ].map((line, i) => (
+                        <motion.line
+                          key={i}
+                          x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2}
+                          stroke="#ffffff"
+                          strokeWidth="1"
+                          opacity="0.6"
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{
+                            duration: 2,
+                            delay: i * 0.1,
+                            repeat: Infinity,
+                            repeatDelay: 1
+                          }}
+                        />
+                      ))}
+
+                      {/* Data Flow Animation */}
+                      <motion.circle
+                        cx="0"
+                        cy="60"
+                        r="3"
+                        fill="#fbbf24"
+                        animate={{
+                          cx: [0, 20, 70, 120, 170, 200],
+                          cy: [60, 60, 45, 60, 60, 60]
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          repeatDelay: 1,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    </svg>
+                  )}
+
+                  {/* Computer Vision Animation */}
+                  {feature.title === "Computer Vision" && (
+                    <div className="relative w-full h-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                      {/* Image Processing Grid */}
+                      <div className="grid grid-cols-8 gap-1 absolute inset-4">
+                        {[...Array(64)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            className="bg-white/30 rounded-sm"
+                            initial={{ opacity: 0.3, scale: 0.8 }}
+                            animate={{
+                              opacity: [0.3, 1, 0.3],
+                              scale: [0.8, 1, 0.8],
+                              backgroundColor: [
+                                "rgba(255,255,255,0.3)",
+                                "rgba(251,191,36,0.8)",
+                                "rgba(255,255,255,0.3)"
+                              ]
+                            }}
+                            transition={{
+                              duration: 2,
+                              delay: (i % 8) * 0.1 + Math.floor(i / 8) * 0.05,
+                              repeat: Infinity,
+                              repeatDelay: 1
+                            }}
+                          />
+                        ))}
+                      </div>
+
+                      {/* Scanning Line */}
+                      <motion.div
+                        className="absolute left-0 w-full h-0.5 bg-yellow-400 shadow-lg"
+                        animate={{ y: [0, 120, 0] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          repeatDelay: 0.5,
+                          ease: "easeInOut"
+                        }}
+                      />
+
+                      {/* Detection Box */}
+                      <motion.div
+                        className="absolute border-2 border-yellow-400 rounded"
+                        style={{ width: '40px', height: '30px' }}
+                        animate={{
+                          x: [20, 80, 140, 80, 20],
+                          y: [20, 40, 60, 40, 20]
+                        }}
+                        transition={{
+                          duration: 4,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Natural Language Processing Animation */}
+                  {feature.title === "Natural Language" && (
+                    <div className="relative w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 flex flex-col justify-center p-4">
+                      {/* Text Processing Lines */}
+                      {["Hello World", "AI Processing", "Text Analysis", "Language Model"].map((text, i) => (
+                        <motion.div
+                          key={i}
+                          className="text-white text-xs mb-1 font-mono"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{
+                            opacity: [0, 1, 1, 0],
+                            x: [-20, 0, 0, 20]
+                          }}
+                          transition={{
+                            duration: 2,
+                            delay: i * 0.5,
+                            repeat: Infinity,
+                            repeatDelay: 2
+                          }}
+                        >
+                          {text}
+                        </motion.div>
+                      ))}
+
+                      {/* Processing Dots */}
+                      <div className="flex gap-1 mt-2">
+                        {[...Array(3)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            className="w-2 h-2 bg-yellow-300 rounded-full"
+                            animate={{
+                              scale: [1, 1.5, 1],
+                              opacity: [0.5, 1, 0.5]
+                            }}
+                            transition={{
+                              duration: 1,
+                              delay: i * 0.2,
+                              repeat: Infinity
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Predictive Analytics Animation */}
+                  {feature.title === "Predictive Analytics" && (
+                    <div className="relative w-full h-full bg-gradient-to-br from-green-500 to-teal-500">
+                      <svg className="w-full h-full" viewBox="0 0 200 120">
+                        {/* Chart Background */}
+                        <rect x="20" y="20" width="160" height="80" fill="rgba(255,255,255,0.1)" rx="4" />
+
+                        {/* Grid Lines */}
+                        {[30, 40, 50, 60, 70, 80, 90].map((y, i) => (
+                          <line key={i} x1="25" y1={y} x2="175" y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                        ))}
+
+                        {/* Animated Chart Line */}
+                        <motion.path
+                          d="M25,90 L45,80 L65,70 L85,60 L105,50 L125,45 L145,40 L165,35 L175,30"
+                          stroke="#fbbf24"
+                          strokeWidth="3"
+                          fill="none"
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            repeatDelay: 1,
+                            ease: "easeInOut"
+                          }}
+                        />
+
+                        {/* Data Points */}
+                        {[
+                          { x: 25, y: 90 }, { x: 45, y: 80 }, { x: 65, y: 70 }, { x: 85, y: 60 },
+                          { x: 105, y: 50 }, { x: 125, y: 45 }, { x: 145, y: 40 }, { x: 165, y: 35 }, { x: 175, y: 30 }
+                        ].map((point, i) => (
+                          <motion.circle
+                            key={i}
+                            cx={point.x}
+                            cy={point.y}
+                            r="3"
+                            fill="#ffffff"
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{
+                              scale: [0, 1.2, 1],
+                              opacity: 1
+                            }}
+                            transition={{
+                              duration: 0.5,
+                              delay: 0.3 * i,
+                              repeat: Infinity,
+                              repeatDelay: 3
+                            }}
+                          />
+                        ))}
+
+                        {/* Bar Chart Animation */}
+                        {[40, 60, 80, 100, 120, 140, 160].map((x, i) => (
+                          <motion.rect
+                            key={i}
+                            x={x}
+                            y="100"
+                            width="8"
+                            height="0"
+                            fill="rgba(255,255,255,0.7)"
+                            animate={{
+                              height: [0, 10 + i * 5, 0],
+                              y: [100, 90 - i * 5, 100]
+                            }}
+                            transition={{
+                              duration: 2,
+                              delay: i * 0.1,
+                              repeat: Infinity,
+                              repeatDelay: 2
+                            }}
+                          />
+                        ))}
+                      </svg>
+                    </div>
+                  )}
+                </div>
+
                 <motion.div
                   className={`w-16 h-16 rounded-xl bg-gradient-to-r ${feature.gradient} flex items-center justify-center text-2xl mb-4 shadow-sm`}
                   whileHover={{ scale: 1.1, rotate: 5 }}
@@ -557,7 +818,7 @@ export default function Index() {
                 </motion.div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
                 <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-                
+
                 {/* Simple progress indicator */}
                 <motion.div
                   className="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden"
