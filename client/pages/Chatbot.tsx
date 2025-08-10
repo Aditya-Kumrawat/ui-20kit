@@ -1525,7 +1525,7 @@ export default function Chatbot() {
                     <Button size="sm" variant="outline" className="hover:bg-purple-50">
                       <Play size={16} />
                     </Button>
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" className="hover:bg-purple-50">
                       <Pause size={16} />
                     </Button>
                   </div>
@@ -1554,13 +1554,27 @@ export default function Chatbot() {
                 </div>
 
                 {/* Video Stats */}
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Status:</span>
-                    <span className="text-green-600 flex items-center gap-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      Active
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 font-['Poppins',sans-serif]">Status:</span>
+                    <span className="text-green-600 flex items-center gap-2 font-semibold font-['Poppins',sans-serif]">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      Connected
                     </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 font-['Poppins',sans-serif]">Response Time:</span>
+                    <span className="font-semibold text-purple-600 font-['Poppins',sans-serif]">&lt; 200ms</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 font-['Poppins',sans-serif]">Quality:</span>
+                    <span className="font-semibold text-blue-600 font-['Poppins',sans-serif]">4K HD</span>
+                  </div>
+                  <div className="pt-3 border-t border-gray-200">
+                    <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+                      <Sparkles size={14} className="text-purple-500" />
+                      <span className="font-medium font-['Poppins',sans-serif]">Powered by Advanced AI</span>
+                    </div>
                   </div>
                 </div>
               </div>
