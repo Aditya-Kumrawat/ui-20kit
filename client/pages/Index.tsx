@@ -814,8 +814,27 @@ export default function Index() {
       </div>
 
       {/* AI Features Section */}
-      <div className="bg-gray-50 py-20">
-        <div className="max-w-7xl mx-auto px-6">
+      <div className="bg-gray-50 py-20 relative overflow-hidden">
+        {/* Background Image */}
+        <motion.div
+          className="absolute top-0 left-0 w-full h-full opacity-10"
+          initial={{ opacity: 0, scale: 1.1 }}
+          whileInView={{ opacity: 0.1, scale: 1 }}
+          transition={{ duration: 1.5 }}
+          viewport={{ once: true }}
+        >
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2F367bf7c31aaf4132aebce1464b5e15b5?format=webp&width=800"
+            alt="AI Background"
+            className="w-full h-full object-cover"
+            style={{
+              transform: "rotate(-90deg) scale(1.2)",
+              filter: "blur(1px)"
+            }}
+          />
+        </motion.div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 30 }}
