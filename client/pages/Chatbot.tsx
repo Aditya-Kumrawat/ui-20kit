@@ -320,16 +320,11 @@ const createRealVapi = () => {
 
 const vapi = createRealVapi();
 
-// Immediate environment detection
+// Force enable real API calls - remove all environment restrictions
 const isRestrictedEnvironment = () => {
-  const hostname = window.location.hostname;
-  return (
-    hostname.includes('.fly.dev') ||
-    hostname.includes('.builder.io') ||
-    hostname.includes('localhost') ||
-    window.location.protocol === 'file:' ||
-    window.location.href.includes('489d9f1341ed4d1887a46cebe12e960e')
-  );
+  // DISABLED: Always return false to force real API usage
+  console.log('🚀 Environment restrictions DISABLED - forcing real Vapi API calls');
+  return false;
 };
 
 export default function Chatbot() {
