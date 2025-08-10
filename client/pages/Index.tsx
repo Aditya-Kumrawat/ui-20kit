@@ -177,31 +177,6 @@ export default function Index() {
         </div>
       </div>
 
-      {/* Video Section - 5% space */}
-      <div className="max-w-4xl mx-auto px-6 py-20">
-        <motion.div 
-          className="bg-gray-100 rounded-2xl p-6 shadow-lg"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
-        >
-          <div className="relative rounded-xl overflow-hidden">
-            <video
-              autoPlay
-              muted
-              controls={false}
-              playsInline
-              loop
-              className="w-full h-auto rounded-xl"
-            >
-              <source
-                type="video/mp4"
-                src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
-              />
-            </video>
-          </div>
-        </motion.div>
-      </div>
 
       {/* Footer */}
       <div className="border-t border-gray-100 mt-20">
