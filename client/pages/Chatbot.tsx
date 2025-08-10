@@ -1176,26 +1176,55 @@ export default function Chatbot() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                <div className={`w-4 h-4 rounded-full ${
+                  isRecording ? 'bg-red-500 animate-pulse' : 'bg-blue-500'
+                }`}></div>
                 <div>
-                  <span className="text-sm font-medium text-blue-800">Test Mode Active</span>
+                  <span className="text-sm font-medium text-blue-800">
+                    Test Mode Active {isRecording && '- Recording'}
+                  </span>
                   <p className="text-xs text-blue-700">
-                    Using simulated responses. Voice interactions will be mocked for testing.
+                    {isRecording
+                      ? "🎤 Simulating voice recording and AI responses..."
+                      : "Using simulated responses. Click microphone to test voice interaction."}
                   </p>
                 </div>
               </div>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  setTestMode(false);
-                  setVapiStatus("disconnected");
-                  addDebugLog("🔧 Test Mode disabled");
-                }}
-                className="bg-blue-50 border-blue-300 text-blue-800 hover:bg-blue-100"
-              >
-                Exit Test Mode
-              </Button>
+              <div className="flex gap-2">
+                {!isRecording && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      addDebugLog("🎯 Manual test interaction triggered");
+                      setIsRecording(true);
+                      setVapiStatus("recording");
+                      videoRef.current?.play();
+                      simulateVapiInteraction();
+                      setTimeout(() => {
+                        setIsRecording(false);
+                        setVapiStatus("test-mode");
+                        videoRef.current?.pause();
+                      }, 8000);
+                    }}
+                    className="bg-blue-50 border-blue-300 text-blue-800 hover:bg-blue-100"
+                  >
+                    Test Voice
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setTestMode(false);
+                    setVapiStatus("disconnected");
+                    addDebugLog("🔧 Test Mode disabled");
+                  }}
+                  className="bg-blue-50 border-blue-300 text-blue-800 hover:bg-blue-100"
+                >
+                  Exit Test Mode
+                </Button>
+              </div>
             </div>
           </motion.div>
         )}
