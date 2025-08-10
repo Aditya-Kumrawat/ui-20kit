@@ -20,6 +20,8 @@ export default function Login() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
     console.log("Login attempt:", { email, password });
+    // Navigate to dashboard after successful login
+    navigate("/dashboard");
   };
 
   const handleGoogleLogin = () => {
