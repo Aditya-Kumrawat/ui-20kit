@@ -1175,7 +1175,7 @@ export default function Chatbot() {
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ delay: 0.2 }}
                           >
-                            <p className="text-sm leading-relaxed">
+                            <p className="text-sm leading-relaxed font-['Poppins',sans-serif]">
                               {message.content}
                             </p>
                           </motion.div>
