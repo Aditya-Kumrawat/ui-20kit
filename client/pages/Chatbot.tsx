@@ -960,7 +960,9 @@ export default function Chatbot() {
                 </h3>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-gray-500">Live</span>
+                  <span className="text-xs text-gray-500">
+                    {vapiStatus === "recording" ? "Recording" : "Live"}
+                  </span>
                 </div>
               </div>
             </div>
