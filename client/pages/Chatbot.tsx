@@ -436,55 +436,44 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
-  // Network connectivity test with multiple endpoints
+  // Safe network connectivity test with immediate fallback
   const testNetworkConnectivity = async () => {
-    const endpoints = [
-      { url: 'https://api.vapi.ai/health', name: 'Vapi Health' },
-      { url: 'https://api.vapi.ai/', name: 'Vapi API Root' },
-      { url: 'https://httpbin.org/get', name: 'External Test' },
-      { url: 'https://jsonplaceholder.typicode.com/posts/1', name: 'JSONPlaceholder' }
-    ];
+    try {
+      addDebugLog("📡 Testing basic network connectivity...");
 
-    let anySuccess = false;
+      // First try a simple, safe test
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // Short 3s timeout
 
-    for (const endpoint of endpoints) {
-      try {
-        addDebugLog(`Testing connectivity to ${endpoint.name}...`);
+      const response = await fetch('https://httpbin.org/get', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal
+      });
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      clearTimeout(timeoutId);
 
-        const response = await fetch(endpoint.url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-
-        if (response.ok) {
-          addDebugLog(`✅ ${endpoint.name}: OK (${response.status})`);
-          anySuccess = true;
-        } else {
-          addDebugLog(`⚠️ ${endpoint.name}: ${response.status} ${response.statusText}`);
-        }
-      } catch (error: any) {
-        if (error.name === 'AbortError') {
-          addDebugLog(`⏰ ${endpoint.name}: Timeout (>5s)`);
-        } else {
-          addDebugLog(`❌ ${endpoint.name}: ${error.message}`);
-        }
+      if (response.ok) {
+        addDebugLog("✅ Basic network connectivity: OK");
+        return true;
+      } else {
+        addDebugLog(`⚠️ Network test returned: ${response.status}`);
+        return false;
       }
-    }
+    } catch (error: any) {
+      // ANY network error means we should use test mode
+      addDebugLog(`❌ Network test failed: ${error.message}`);
+      addDebugLog("🛑 Network restrictions detected - enabling Test Mode");
 
-    if (!anySuccess) {
-      addDebugLog("❌ All network connectivity tests failed - likely behind firewall/proxy");
-      addDebugLog("💡 Recommendation: Use Test Mode for development");
-    }
+      // Immediately enable test mode
+      setTestMode(true);
+      setVapiStatus("test-mode");
+      setNetworkStatus('restricted');
 
-    return anySuccess;
+      return false;
+    }
   };
 
   // Test Vapi connection with automatic fallback
