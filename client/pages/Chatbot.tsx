@@ -817,8 +817,29 @@ export default function Chatbot() {
         setVapiError(null);
         setVapiStatus("starting");
 
-        // Check microphone permissions first
+        // Check microphone permissions with better error handling
         try {
+          addDebugLog("Checking microphone permissions...");
+
+          // First check if getUserMedia is available
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            addDebugLog("⚠️ MediaDevices API not available - browser/environment limitation");
+            throw new Error("Microphone access not available in this environment. Please try opening the app directly in your browser.");
+          }
+
+          // Check permissions policy
+          if (typeof navigator.permissions !== 'undefined') {
+            try {
+              const permission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+              if (permission.state === 'denied') {
+                throw new Error("Microphone access denied by browser settings. Please enable microphone permissions and reload the page.");
+              }
+            } catch (e) {
+              // Permissions API might not be fully supported, continue with getUserMedia
+              addDebugLog("⚠️ Permissions API check failed, trying direct access...");
+            }
+          }
+
           addDebugLog("Requesting microphone permissions...");
           const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -826,7 +847,14 @@ export default function Chatbot() {
           stream.getTracks().forEach((track) => track.stop()); // Clean up
           addDebugLog("✅ Microphone permissions granted");
         } catch (permError: any) {
-          throw new Error(`Microphone permission denied: ${permError.message}`);
+          const errorMsg = permError.message || "Permission denied";
+          addDebugLog(`❌ Microphone access failed: ${errorMsg}`);
+
+          if (errorMsg.includes("Permission denied") || errorMsg.includes("not allowed")) {
+            throw new Error("Microphone access blocked. This may be due to browser security settings or iframe restrictions. Please open the app directly in your browser and allow microphone access.");
+          } else {
+            throw new Error(`Microphone error: ${errorMsg}`);
+          }
         }
 
         // Check if Vapi SDK is available
