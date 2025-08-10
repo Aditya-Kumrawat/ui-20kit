@@ -661,6 +661,23 @@ export default function Chatbot() {
   };
 
   const toggleRecording = async () => {
+    // Handle test mode
+    if (testMode) {
+      if (isRecording) {
+        addDebugLog("🧪 Stopping test mode recording...");
+        setIsRecording(false);
+        setVapiStatus("test-mode");
+        videoRef.current?.pause();
+      } else {
+        addDebugLog("🧪 Starting test mode recording...");
+        setIsRecording(true);
+        setVapiStatus("recording");
+        videoRef.current?.play();
+        simulateVapiInteraction();
+      }
+      return;
+    }
+
     try {
       if (isRecording) {
         addDebugLog("Stopping Vapi recording...");
