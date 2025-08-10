@@ -608,75 +608,46 @@ export default function Chatbot() {
     }
   };
 
-  // Force real API connection test - no fallbacks
+  // Test server-side Vapi proxy connection
   const testVapiConnection = async () => {
     try {
-      addDebugLog("🚀 Testing REAL Vapi API connection...");
+      addDebugLog("🚀 Testing server-side Vapi proxy...");
       setVapiStatus("testing");
       setVapiError(null);
 
-      // 1. Check if API key is properly set
-      const apiKey = import.meta.env.VITE_VAPI_KEY;
-      if (!apiKey || apiKey === "your_vapi_api_key_here") {
-        throw new Error("VITE_VAPI_KEY not properly configured in environment variables");
-      }
+      // Test server-side Vapi connectivity via proxy
+      addDebugLog("📡 Testing server proxy connection...");
 
-      // 2. Validate API key format (should be UUID)
-      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-      if (!uuidRegex.test(apiKey)) {
-        throw new Error("Invalid API key format - should be a UUID");
-      }
-
-      addDebugLog(`✅ API Key format valid: ${apiKey.substring(0, 8)}...`);
-
-      // 3. Check assistant configuration
-      const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
-      if (assistantId) {
-        addDebugLog(`✅ Using pre-created assistant: ${assistantId}`);
-      } else {
-        addDebugLog("✅ Will use dynamic assistant configuration");
-      }
-
-      // 4. Test real Vapi API connectivity
-      addDebugLog("🔑 Testing Vapi API connectivity...");
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-      const testResponse = await fetch('https://api.vapi.ai/assistant', {
+      const testResponse = await fetch('/api/vapi/test', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
-        },
-        signal: controller.signal
+        }
       });
 
-      clearTimeout(timeoutId);
+      if (!testResponse.ok) {
+        throw new Error(`Server proxy test failed: ${testResponse.status}`);
+      }
 
-      if (testResponse.status === 401) {
-        throw new Error("Invalid API key - authentication failed");
-      } else if (testResponse.status === 403) {
-        throw new Error("API key lacks required permissions");
-      } else if (testResponse.ok || testResponse.status === 404) {
-        addDebugLog("✅ Vapi API connectivity: SUCCESSFUL");
+      const testData = await testResponse.json();
+      addDebugLog(`🔍 Server test result: ${JSON.stringify(testData)}`);
+
+      if (testData.success) {
+        addDebugLog("✅ Server-side Vapi proxy: WORKING!");
         setVapiStatus("connected");
         setNetworkStatus('online');
-        addDebugLog("🎤 Ready to start REAL voice recording!");
+        addDebugLog("🎤 Ready to start voice recording via server proxy!");
       } else {
-        addDebugLog(`⚠️ Vapi API returned status: ${testResponse.status}`);
-        setVapiStatus("connected"); // Still consider it working
-        setNetworkStatus('online');
+        throw new Error(testData.error || "Server proxy test failed");
       }
 
     } catch (error: any) {
-      addDebugLog(`❌ Real API test failed: ${error.message}`);
-      setVapiError(`Real API connection failed: ${error.message}`);
+      addDebugLog(`❌ Server proxy test failed: ${error.message}`);
+      setVapiError(`Server proxy failed: ${error.message}`);
       setVapiStatus("error");
       setNetworkStatus('offline');
 
-      // Don't fall back to test mode - force user to fix the issue
-      addDebugLog("🚫 Real API mode required - no fallback to test mode");
+      addDebugLog("🚫 Server proxy required for this environment");
     }
   };
 
