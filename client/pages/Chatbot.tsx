@@ -404,7 +404,17 @@ export default function Chatbot() {
       }
 
       addDebugLog(`✅ API Key configured: ${apiKey.substring(0, 8)}...`);
+
+      // Check assistant configuration
+      const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+      if (assistantId) {
+        addDebugLog(`✅ Using pre-created assistant: ${assistantId}`);
+      } else {
+        addDebugLog("✅ Will use dynamic assistant configuration");
+      }
+
       setVapiStatus("connected");
+      addDebugLog("🎤 Ready to start voice recording!");
     } catch (error: any) {
       addDebugLog(`❌ Connection test failed: ${error.message}`);
       setVapiError(error.message);
