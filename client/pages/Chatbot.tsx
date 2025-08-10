@@ -898,6 +898,7 @@ export default function Chatbot() {
             <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
               <div className="relative">
                 <video
+                  ref={videoRef}
                   autoPlay={true}
                   muted={true}
                   controls={false}
