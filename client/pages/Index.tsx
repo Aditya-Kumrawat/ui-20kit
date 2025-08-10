@@ -1,8 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
+import anime from "animejs";
 
 export default function Index() {
   const [selectedUser, setSelectedUser] = useState(0);
+  const techStackRef = useRef<HTMLDivElement>(null);
+  const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const techStack = [
+    { name: "React", color: "#61DAFB", icon: "⚛️" },
+    { name: "Node.js", color: "#339933", icon: "🟢" },
+    { name: "Express", color: "#000000", icon: "🚀" },
+    { name: "Firebase", color: "#FFCA28", icon: "🔥" }
+  ];
+
+  const menuItems = [
+    { letters: ["A", "B", "C", "D", "E"], color: "from-purple-500 to-pink-500" },
+    { letters: ["F", "G", "H", "I", "J"], color: "from-blue-500 to-purple-500" },
+    { letters: ["K", "L", "M", "N", "O"], color: "from-pink-500 to-red-500" }
+  ];
+
+  useEffect(() => {
+    // Tech stack flowing animation
+    if (techStackRef.current) {
+      anime({
+        targets: techStackRef.current.children,
+        translateX: [100, 0],
+        opacity: [0, 1],
+        scale: [0.8, 1],
+        delay: anime.stagger(200),
+        duration: 800,
+        easing: 'easeOutElastic(1, .8)',
+        loop: true,
+        direction: 'alternate'
+      });
+    }
+
+    // Menu items floating animation
+    menuRefs.current.forEach((menuRef, index) => {
+      if (menuRef) {
+        anime({
+          targets: menuRef.children,
+          translateY: [0, -10, 0],
+          scale: [1, 1.05, 1],
+          delay: anime.stagger(100, { start: index * 300 }),
+          duration: 2000,
+          easing: 'easeInOutSine',
+          loop: true
+        });
+      }
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-start via-purple-900 to-purple-end relative overflow-hidden">
@@ -18,135 +67,317 @@ export default function Index() {
       <div className="relative z-10 flex items-center justify-center min-h-screen p-8">
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-10 max-w-6xl w-full shadow-2xl">
           {/* Header */}
-          <div className="flex items-center justify-between mb-12">
+          <motion.div 
+            className="flex items-center justify-between mb-12"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+              <motion.div 
+                className="w-8 h-8 bg-black rounded-lg flex items-center justify-center"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
                 <span className="text-white font-bold text-sm">F7</span>
-              </div>
+              </motion.div>
             </div>
             
             <div className="flex items-center gap-4">
-              <Button variant="outline" className="rounded-full px-6 py-2 border-gray-300 text-gray-700 hover:bg-gray-50">
-                Contact
-              </Button>
-              <Button className="rounded-full px-6 py-2 bg-gray-800 text-white hover:bg-gray-900">
-                Menu
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button variant="outline" className="rounded-full px-6 py-2 border-gray-300 text-gray-700 hover:bg-gray-50">
+                  Contact
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button className="rounded-full px-6 py-2 bg-gray-800 text-white hover:bg-gray-900">
+                  Menu
+                </Button>
+              </motion.div>
               <div className="flex items-center gap-3">
                 <span className="text-sm text-gray-600">En</span>
                 <span className="text-sm text-gray-400">|</span>
                 <span className="text-sm text-gray-600">Us</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Main content grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left content */}
-            <div className="space-y-8">
+            <motion.div 
+              className="space-y-8"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               {/* Pink accent decoration */}
               <div className="relative">
-                <div className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-pink-accent to-pink-400 rounded-full opacity-80"></div>
-                <div className="absolute -top-2 left-8 w-4 h-4 bg-pink-300 rounded-full"></div>
+                <motion.div 
+                  className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-pink-accent to-pink-400 rounded-full opacity-80"
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 180, 360]
+                  }}
+                  transition={{ 
+                    duration: 4, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                ></motion.div>
+                <motion.div 
+                  className="absolute -top-2 left-8 w-4 h-4 bg-pink-300 rounded-full"
+                  animate={{ 
+                    y: [0, -10, 0],
+                    opacity: [0.8, 1, 0.8]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                ></motion.div>
               </div>
 
               {/* Main heading */}
-              <div className="space-y-2">
+              <motion.div 
+                className="space-y-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
                 <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                   Unleash Your
                 </h1>
                 <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                   Creativity<span className="text-gray-400">//</span>
                 </h1>
-              </div>
+              </motion.div>
 
               {/* Action buttons */}
-              <div className="flex items-center gap-6">
-                <Button className="bg-pink-button hover:bg-pink-500 text-white px-8 py-3 rounded-xl font-medium shadow-lg">
-                  Generate
-                </Button>
-                <Button variant="ghost" className="text-gray-600 hover:text-gray-800 flex items-center gap-2">
-                  <span className="w-8 h-8 border border-gray-300 rounded-full flex items-center justify-center">
-                    <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
-                  </span>
-                  View the manual
-                </Button>
-              </div>
+              <motion.div 
+                className="flex items-center gap-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0,0,0,0.2)" }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button className="bg-pink-button hover:bg-pink-500 text-white px-8 py-3 rounded-xl font-medium shadow-lg">
+                    Generate
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button variant="ghost" className="text-gray-600 hover:text-gray-800 flex items-center gap-2">
+                    <span className="w-8 h-8 border border-gray-300 rounded-full flex items-center justify-center">
+                      <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
+                    </span>
+                    View the manual
+                  </Button>
+                </motion.div>
+              </motion.div>
 
               {/* Description text */}
-              <div className="space-y-4 text-gray-600 text-sm leading-relaxed max-w-md">
+              <motion.div 
+                className="space-y-4 text-gray-600 text-sm leading-relaxed max-w-md"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
                 <p>
                   Our technology is based on advanced deep learning algorithms that bring incredible accuracy and creativity to the image creation process. Equipped with a large amount of data and the ability to adapt to a variety of styles and concepts.
                 </p>
                 <div className="flex items-center gap-6 text-xs text-gray-400">
-                  <span className="hover:text-gray-600 cursor-pointer">How it works</span>
-                  <span className="hover:text-gray-600 cursor-pointer">FAQ</span>
+                  <motion.span 
+                    className="hover:text-gray-600 cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    How it works
+                  </motion.span>
+                  <motion.span 
+                    className="hover:text-gray-600 cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    FAQ
+                  </motion.span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Right content - 3D sphere and cards */}
-            <div className="space-y-8">
-              {/* Video content */}
-              <div className="relative flex justify-center" />
+            {/* Right content - Video and animations */}
+            <motion.div 
+              className="space-y-6"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              {/* Video in curved box */}
+              <motion.div 
+                className="bg-gradient-to-br from-gray-100 to-gray-200 p-4 rounded-3xl shadow-lg overflow-hidden"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <div className="relative rounded-2xl overflow-hidden bg-black/5">
+                  <video
+                    autoPlay
+                    muted
+                    controls={false}
+                    playsInline
+                    loop
+                    className="w-full h-auto object-cover rounded-2xl"
+                  >
+                    <source
+                      type="video/mp4"
+                      src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
+                    />
+                  </video>
+                </div>
+              </motion.div>
 
-              <div className="flex flex-col relative mt-5 h-auto pb-8">
-                <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
-                  <div className="relative">
-                    <video
-                      autoPlay
-                      muted
-                      controls={false}
-                      playsInline
-                      loop
-                      className="w-full h-full object-cover object-center rounded-sm relative flex flex-col mt-5 min-h-5 min-w-5"
+              {/* Tech Stack Flowing Animation */}
+              <motion.div 
+                className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Tech Stack</h3>
+                <div ref={techStackRef} className="flex justify-center items-center gap-6 flex-wrap">
+                  {techStack.map((tech, index) => (
+                    <motion.div
+                      key={tech.name}
+                      className="flex flex-col items-center gap-2 p-3 bg-white rounded-xl shadow-md min-w-[80px]"
+                      whileHover={{ 
+                        scale: 1.1, 
+                        rotate: 5,
+                        boxShadow: "0 10px 20px rgba(0,0,0,0.1)"
+                      }}
+                      style={{ borderLeft: `4px solid ${tech.color}` }}
                     >
-                      <source
-                        type="video/mp4"
-                        src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
-                      />
-                    </video>
-                    <div className="w-full pt-[70.04%] pointer-events-none text-0" />
-                  </div>
+                      <span className="text-2xl">{tech.icon}</span>
+                      <span className="text-xs font-medium text-gray-700">{tech.name}</span>
+                    </motion.div>
+                  ))}
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Feature cards */}
-              <div className="grid grid-cols-2 gap-4">
-                {/* Templates card */}
-                <div className="bg-gray-900 text-white p-6 rounded-2xl relative overflow-hidden">
-                  <div className="relative z-10">
-                    <h3 className="font-semibold mb-2">Templates</h3>
-                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                      <span className="text-gray-900 text-xs">→</span>
+              {/* 3 Flowing Menu Stacked */}
+              <motion.div 
+                className="space-y-3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
+              >
+                {menuItems.map((menu, menuIndex) => (
+                  <motion.div
+                    key={menuIndex}
+                    ref={el => menuRefs.current[menuIndex] = el}
+                    className={`bg-gradient-to-r ${menu.color} p-4 rounded-2xl shadow-lg`}
+                    whileHover={{ scale: 1.02, x: 10 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
+                    <div className="flex justify-between items-center">
+                      {menu.letters.map((letter, letterIndex) => (
+                        <motion.div
+                          key={`${menuIndex}-${letterIndex}`}
+                          className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold"
+                          whileHover={{ 
+                            scale: 1.2,
+                            backgroundColor: "rgba(255,255,255,0.3)"
+                          }}
+                          animate={{
+                            rotate: [0, 360],
+                          }}
+                          transition={{
+                            rotate: {
+                              duration: 3 + letterIndex * 0.5,
+                              repeat: Infinity,
+                              ease: "linear"
+                            }
+                          }}
+                        >
+                          {letter}
+                        </motion.div>
+                      ))}
                     </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* Feature cards with closer spacing */}
+              <motion.div 
+                className="grid grid-cols-2 gap-3 mt-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.2 }}
+              >
+                {/* Templates card */}
+                <motion.div 
+                  className="bg-gray-900 text-white p-4 rounded-2xl relative overflow-hidden"
+                  whileHover={{ scale: 1.05, rotate: 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <div className="relative z-10">
+                    <h3 className="font-semibold mb-2 text-sm">Templates</h3>
+                    <motion.div 
+                      className="w-6 h-6 bg-white rounded-full flex items-center justify-center"
+                      whileHover={{ rotate: 180 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <span className="text-gray-900 text-xs">→</span>
+                    </motion.div>
                   </div>
-                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-xl"></div>
-                </div>
+                  <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-xl"></div>
+                </motion.div>
 
                 {/* Design card */}
-                <div className="bg-gray-100 p-6 rounded-2xl">
-                  <h3 className="font-semibold mb-2 text-gray-900">Design</h3>
+                <motion.div 
+                  className="bg-gray-100 p-4 rounded-2xl"
+                  whileHover={{ scale: 1.05, rotate: -1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <h3 className="font-semibold mb-2 text-gray-900 text-sm">Design</h3>
                   <p className="text-xs text-gray-600 mb-3">Check out the gallery of our best works. How to combine different styles</p>
-                  <div className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                  <motion.div 
+                    className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center"
+                    whileHover={{ rotate: 180 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <span className="text-white text-xs">→</span>
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
 
                 {/* Interesting solutions card */}
-                <div className="bg-gradient-to-br from-purple-500 to-pink-500 text-white p-6 rounded-2xl col-span-2">
+                <motion.div 
+                  className="bg-gradient-to-br from-purple-500 to-pink-500 text-white p-4 rounded-2xl col-span-2"
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold mb-1">Interesting solutions</h3>
+                      <h3 className="font-semibold mb-1 text-sm">Interesting solutions</h3>
                     </div>
-                    <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                    <motion.div 
+                      className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center"
+                      whileHover={{ rotate: 180 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <span className="text-white text-xs">→</span>
-                    </div>
+                    </motion.div>
                   </div>
-                  <div className="mt-4 h-16 bg-white/10 rounded-lg backdrop-blur-sm"></div>
-                </div>
-              </div>
-            </div>
+                  <motion.div 
+                    className="mt-3 h-12 bg-white/10 rounded-lg backdrop-blur-sm"
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  ></motion.div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </div>
