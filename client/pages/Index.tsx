@@ -472,6 +472,159 @@ export default function Index() {
         </div>
       </motion.div>
 
+      {/* Meet Your AI Assistant Section */}
+      <div className="py-20" style={{ backgroundColor: "#e9f4ff" }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            data-aos="fade-up"
+          >
+            <h2
+              className="text-4xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+            >
+              Meet Your AI Assistant
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Experience the future of intelligent interaction with our advanced
+              AI assistant
+            </p>
+          </motion.div>
+
+          {/* Video Container */}
+          <motion.div
+            className="flex justify-center mb-8"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            data-aos="fade-up"
+          >
+            <div className="relative w-full max-w-2xl">
+              <motion.div
+                className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-white/50 shadow-xl"
+                whileHover={{
+                  scale: 1.02,
+                  boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="relative rounded-3xl overflow-hidden bg-gray-100">
+                  <video
+                    autoPlay
+                    muted
+                    controls={false}
+                    playsInline
+                    loop
+                    className="w-full h-auto rounded-3xl max-h-96 object-cover"
+                    style={{ aspectRatio: "16/9" }}
+                  >
+                    <source
+                      type="video/mp4"
+                      src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
+                    />
+                  </video>
+
+                  {/* Play indicator overlay */}
+                  <motion.div
+                    className="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
+                    whileHover={{ opacity: 1 }}
+                  >
+                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-white ml-1"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Description Text */}
+          <motion.div
+            className="text-center max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+            data-aos="fade-up"
+          >
+            <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              Our AI assistant combines cutting-edge natural language processing
+              with advanced machine learning to provide intelligent,
+              context-aware responses. Whether you're coding, analyzing data, or
+              exploring creative solutions, your AI companion is here to help
+              you achieve more.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <span className="text-blue-600 text-xl">🤖</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Intelligent Conversations
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Natural, context-aware dialogue that understands your needs
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+                viewport={{ once: true }}
+              >
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <span className="text-purple-600 text-xl">⚡</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Real-time Assistance
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Instant responses and solutions powered by advanced AI
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <span className="text-green-600 text-xl">🎯</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Personalized Experience
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Adapts to your workflow and preferences over time
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
       {/* Tech Stack Section with Mobile/PC Mockups */}
       <div className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-6">
