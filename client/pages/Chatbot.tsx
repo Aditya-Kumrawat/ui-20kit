@@ -839,56 +839,8 @@ export default function Chatbot() {
   };
 
   const toggleRecording = async () => {
-    // FIRST: Bulletproof environment check
-    if (isRestrictedEnvironment()) {
-      addDebugLog("🛡️ Restricted environment detected - forcing Test Mode");
-      if (!testMode) {
-        setTestMode(true);
-        setVapiStatus("test-mode");
-        setNetworkStatus('restricted');
-      }
-    }
-
-    // SECOND: Handle test mode (with additional safety check)
-    if (testMode || isRestrictedEnvironment()) {
-      if (isRecording) {
-        addDebugLog("🧪 Stopping test mode recording...");
-        setIsRecording(false);
-        setVapiStatus("test-mode");
-        videoRef.current?.pause();
-        addDebugLog("🛑 Recording stopped - ready for next interaction");
-      } else {
-        addDebugLog("🧪 Starting test mode recording...");
-        addDebugLog("🎤 Microphone activated (simulated)");
-        setIsRecording(true);
-        setVapiStatus("recording");
-        videoRef.current?.play();
-
-        // Start the voice interaction simulation
-        simulateVapiInteraction();
-
-        // Auto-stop recording after the simulation completes
-        setTimeout(() => {
-          if (isRecording) {
-            addDebugLog("⏰ Auto-stopping recording after 10 seconds");
-            setIsRecording(false);
-            setVapiStatus("test-mode");
-            videoRef.current?.pause();
-          }
-        }, 10000); // Auto-stop after 10 seconds
-      }
-      return;
-    }
-
-    // THIRD: Final safety check before any Vapi operations
-    if (isRestrictedEnvironment()) {
-      addDebugLog("❌ BLOCKED: Attempted Vapi call in restricted environment");
-      addDebugLog("🧪 Forcing Test Mode activation");
-      setTestMode(true);
-      setVapiStatus("test-mode");
-      setVapiError("Network restricted - using Test Mode");
-      return;
-    }
+    // FORCED REAL API MODE - All safety checks DISABLED
+    addDebugLog("🚀 REAL VAPI API MODE - No restrictions applied");
 
     try {
       if (isRecording) {
