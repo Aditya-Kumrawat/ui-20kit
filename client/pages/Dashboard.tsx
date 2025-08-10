@@ -368,11 +368,7 @@ export default function Dashboard() {
               >
                 <source
                   type="video/mp4"
-                  src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                />
-                <source
-                  type="video/mp4"
-                  src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4"
+                  src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2F84c92a2126f04b12917d149b99d6a13b?alt=media&token=2a038587-3580-43f1-90c1-58c21713e468&apiKey=ad2efc99155b417783200fc7999ced3f"
                 />
                 <p className="text-white text-center">Your browser does not support the video tag.</p>
               </video>
