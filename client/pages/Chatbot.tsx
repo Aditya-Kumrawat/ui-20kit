@@ -325,6 +325,7 @@ export default function Chatbot() {
   const [vapiStatus, setVapiStatus] = useState("disconnected");
   const [vapiError, setVapiError] = useState<string | null>(null);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
+  const [testMode, setTestMode] = useState(false);
   const [transcript, setTranscript] = useState([
     "AI: Hello! I'm ready to help you with genetic analysis.",
     "User: Can you help me understand my DNA results?",
