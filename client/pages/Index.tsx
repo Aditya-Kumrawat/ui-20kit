@@ -255,9 +255,13 @@ export default function Index() {
                     AI Potential
                   </motion.span>
                   <motion.span
-                    className="text-yellow-400"
+                    className="text-gray-800"
+                    style={{
+                      textShadow: "1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px -1px 0px #ffffff, -1px 1px 0px #ffffff",
+                      WebkitTextStroke: "1px #000000"
+                    }}
                     animate={{
-                      opacity: [0.6, 1, 0.6],
+                      opacity: [0.8, 1, 0.8],
                       scale: [1, 1.1, 1],
                     }}
                     transition={{
