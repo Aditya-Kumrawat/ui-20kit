@@ -555,11 +555,30 @@ export default function Chatbot() {
         addDebugLog("Starting Vapi recording...");
         setVapiError(null);
         setVapiStatus("starting");
-        await vapi.start();
+
+        // Configure the assistant for the call
+        const assistantConfig = {
+          model: {
+            provider: "openai",
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "system",
+                content: "You are a helpful AI assistant specializing in DNA analysis, genetic research, and data interpretation. Keep your responses concise and informative."
+              }
+            ]
+          },
+          voice: {
+            provider: "11labs",
+            voiceId: "rachel"
+          }
+        };
+
+        await vapi.start(assistantConfig);
         setIsRecording(true);
         setVapiStatus("recording");
         videoRef.current?.play();
-        addDebugLog("✅ Vapi started successfully");
+        addDebugLog("✅ Vapi started successfully with assistant config");
       }
     } catch (error: any) {
       const errorMessage = error?.message || "Unknown error";
