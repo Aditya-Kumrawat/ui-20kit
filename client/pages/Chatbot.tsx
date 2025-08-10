@@ -826,8 +826,7 @@ export default function Chatbot() {
             {/* Video Header */}
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                  <Video size={20} className="text-purple-600" />
+                <h3 className="text-lg font-semibold text-gray-900">
                   AI Avatar
                 </h3>
                 <div className="flex items-center gap-2">
@@ -847,6 +846,12 @@ export default function Chatbot() {
                   playsInline
                   loop
                   className="w-full h-full object-cover"
+                  style={{
+                    backgroundImage: "url(https://cdn.builder.io/o/assets%2F2d06e16d643b4c26a7274cfb607b5ae9%2Fbee1bb34bf2e4c0dbc11df7949ed5286?alt=media&token=74af9788-f085-4553-95bb-35a3dd5a4471&apiKey=2d06e16d643b4c26a7274cfb607b5ae9)",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                    backgroundSize: "cover"
+                  }}
                   poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzg0IiBoZWlnaHQ9IjIxNiIgdmlld0JveD0iMCAwIDM4NCAyMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzODQiIGhlaWdodD0iMjE2IiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjE5MiIgY3k9IjEwOCIgcj0iMzAiIGZpbGw9IiM2MzY2RjEiLz4KPHN2ZyB4PSIxNzciIHk9IjkzIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+Cjxwb2x5Z29uIHBvaW50cz0iNSAzIDE5IDEyIDUgMjEgNSAzIi8+Cjwvc3ZnPgo8dGV4dCB4PSIxNDIiIHk9IjE4MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjOUNBM0FGIj5DbGljayB0byBwbGF5PC90ZXh0Pgo8L3N2Zz4K"
                 >
                   <source
@@ -923,14 +928,6 @@ export default function Chatbot() {
 
                 {/* Video Stats */}
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Duration:</span>
-                    <span className="text-gray-900">2:34</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Quality:</span>
-                    <span className="text-gray-900">HD</span>
-                  </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Status:</span>
                     <span className="text-green-600 flex items-center gap-1">
