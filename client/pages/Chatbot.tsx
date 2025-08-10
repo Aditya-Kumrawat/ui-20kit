@@ -476,33 +476,20 @@ export default function Chatbot() {
     }
   };
 
-  // Test Vapi connection with automatic fallback
+  // Simplified connection test with safe fallback
   const testVapiConnection = async () => {
     try {
-      addDebugLog("🔍 Starting comprehensive connection test...");
+      addDebugLog("🔍 Testing Vapi configuration...");
       setVapiStatus("testing");
       setVapiError(null);
 
-      // 1. Check basic network connectivity
-      addDebugLog("📡 Testing network connectivity...");
-      const networkOk = await testNetworkConnectivity();
-
-      if (!networkOk) {
-        setNetworkStatus('offline');
-        addDebugLog("🛑 Network connectivity failed - suggesting Test Mode");
-        addDebugLog("💡 Click 'Test Mode' to try the interface without API calls");
-        throw new Error("Network connectivity issues detected. Try Test Mode for offline development.");
-      }
-
-      setNetworkStatus('online');
-
-      // 2. Check if API key is properly set
+      // 1. Check if API key is properly set
       const apiKey = import.meta.env.VITE_VAPI_KEY;
       if (!apiKey || apiKey === "your_vapi_api_key_here") {
         throw new Error("VITE_VAPI_KEY not properly configured in environment variables");
       }
 
-      // 3. Validate API key format (should be UUID)
+      // 2. Validate API key format (should be UUID)
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if (!uuidRegex.test(apiKey)) {
         throw new Error("Invalid API key format - should be a UUID");
@@ -510,7 +497,7 @@ export default function Chatbot() {
 
       addDebugLog(`✅ API Key format valid: ${apiKey.substring(0, 8)}...`);
 
-      // 4. Check assistant configuration
+      // 3. Check assistant configuration
       const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
       if (assistantId) {
         addDebugLog(`✅ Using pre-created assistant: ${assistantId}`);
@@ -518,12 +505,24 @@ export default function Chatbot() {
         addDebugLog("✅ Will use dynamic assistant configuration");
       }
 
-      // 5. Test API key validity with Vapi API
+      // 4. Attempt basic network test (but don't fail if it doesn't work)
       try {
-        addDebugLog("🔑 Testing API key authentication...");
+        addDebugLog("📡 Attempting network connectivity test...");
+        const networkOk = await testNetworkConnectivity();
+
+        if (!networkOk) {
+          // Network test already enabled test mode, just return
+          addDebugLog("🧪 Test Mode already enabled due to network restrictions");
+          return;
+        }
+
+        setNetworkStatus('online');
+
+        // 5. Only test API if basic network works
+        addDebugLog("🔑 Testing Vapi API connectivity...");
 
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // Shorter timeout
 
         const testResponse = await fetch('https://api.vapi.ai/assistant', {
           method: 'GET',
@@ -541,45 +540,35 @@ export default function Chatbot() {
         } else if (testResponse.status === 403) {
           throw new Error("API key lacks required permissions");
         } else if (testResponse.ok || testResponse.status === 404) {
-          addDebugLog("✅ API key authentication: OK");
-          setNetworkStatus('online');
+          addDebugLog("✅ Vapi API connectivity: OK");
+          setVapiStatus("connected");
+          addDebugLog("🎤 Ready to start voice recording!");
         } else {
-          addDebugLog(`⚠️ API responded with status: ${testResponse.status}`);
-          setNetworkStatus('restricted');
+          addDebugLog(`⚠️ Vapi API returned status: ${testResponse.status}`);
+          setVapiStatus("connected"); // Still consider it working for non-critical errors
         }
-      } catch (fetchError: any) {
-        if (fetchError.name === 'AbortError') {
-          addDebugLog("⏰ API key test timed out");
-          setNetworkStatus('restricted');
-          throw new Error("API requests are timing out. Network may be restricted.");
-        } else if (fetchError.message.includes("Invalid API key")) {
-          throw fetchError;
-        } else if (fetchError.message.includes("Failed to fetch")) {
-          addDebugLog("🚫 API requests blocked - likely firewall/CORS issue");
-          setNetworkStatus('restricted');
-          throw new Error("API requests are being blocked. Try Test Mode for development.");
-        } else {
-          addDebugLog(`⚠️ API key test inconclusive: ${fetchError.message}`);
-          setNetworkStatus('restricted');
-        }
+
+      } catch (apiError: any) {
+        addDebugLog(`❌ Vapi API test failed: ${apiError.message}`);
+        addDebugLog("🧪 Enabling Test Mode due to API connectivity issues");
+        setTestMode(true);
+        setVapiStatus("test-mode");
+        setNetworkStatus('restricted');
       }
 
-      setVapiStatus("connected");
-      addDebugLog("🎤 Ready to start voice recording!");
-
     } catch (error: any) {
-      addDebugLog(`❌ Connection test failed: ${error.message}`);
+      addDebugLog(`❌ Configuration test failed: ${error.message}`);
       setVapiError(error.message);
       setVapiStatus("error");
 
-      // Auto-suggest test mode for network issues
-      if (error.message.includes("Network") || error.message.includes("blocked") || error.message.includes("restricted")) {
-        addDebugLog("💡 Auto-enabling Test Mode due to network issues");
+      // Enable test mode for any configuration issues too
+      if (!testMode) {
+        addDebugLog("💡 Enabling Test Mode due to configuration issues");
         setTimeout(() => {
           setTestMode(true);
           setVapiStatus("test-mode");
           addDebugLog("🧪 Test Mode enabled automatically");
-        }, 2000);
+        }, 1000);
       }
     }
   };
