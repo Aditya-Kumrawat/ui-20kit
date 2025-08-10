@@ -327,12 +327,12 @@ export default function Login() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.2 }}
                 >
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="text-2xl font-bold text-gray-800">
                     Experience AI Like Never Before
                   </h3>
-                  <p className="text-white/80 leading-relaxed">
-                    Join thousands of developers and creators who are building the future with our 
-                    advanced AI platform. From natural language processing to computer vision, 
+                  <p className="text-gray-600 leading-relaxed">
+                    Join thousands of developers and creators who are building the future with our
+                    advanced AI platform. From natural language processing to computer vision,
                     unlock the full potential of artificial intelligence.
                   </p>
                   
