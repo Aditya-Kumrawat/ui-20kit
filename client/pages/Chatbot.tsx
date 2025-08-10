@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import Vapi from "@vapi-ai/web";
 import {
   Send,
   Paperclip,
@@ -294,6 +295,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   );
 };
 
+// Initialize Vapi
+const vapi = new Vapi({
+  apiKey: import.meta.env.VITE_VAPI_KEY, // using Vite env variable format
+});
+
 export default function Chatbot() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -325,6 +331,7 @@ export default function Chatbot() {
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const quickActions: QuickAction[] = [
     {
@@ -372,6 +379,50 @@ export default function Chatbot() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Vapi event listeners
+  useEffect(() => {
+    vapi.on("speech.transcript.partial", (data: any) => {
+      // live transcript (partial)
+      setInputValue(data.text);
+    });
+
+    vapi.on("speech.transcript.final", (data: any) => {
+      // final transcript from user
+      handleSendMessage(data.text);
+      setTranscript((prev) => [...prev, `User: ${data.text}`]);
+    });
+
+    vapi.on("response.message", (data: any) => {
+      // AI reply from Vapi
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          content: data.text,
+          sender: "ai" as const,
+          timestamp: new Date(),
+          status: "read" as const,
+        },
+      ]);
+      setTranscript((prev) => [...prev, `AI: ${data.text}`]);
+    });
+
+    vapi.on("silence.start", () => {
+      // pause video when silent
+      videoRef.current?.pause();
+    });
+
+    vapi.on("silence.end", () => {
+      // resume video when talking
+      videoRef.current?.play();
+    });
+
+    // Cleanup event listeners
+    return () => {
+      vapi.removeAllListeners();
+    };
+  }, []);
 
   const handleSendMessage = (content: string) => {
     if (!content.trim()) return;
@@ -437,9 +488,16 @@ export default function Chatbot() {
     handleSendMessage(suggestion);
   };
 
-  const toggleRecording = () => {
-    setIsRecording(!isRecording);
-    // Here you would implement actual voice recording
+  const toggleRecording = async () => {
+    if (isRecording) {
+      await vapi.stop();
+      setIsRecording(false);
+      videoRef.current?.pause(); // stop video
+    } else {
+      await vapi.start();
+      setIsRecording(true);
+      videoRef.current?.play(); // start video
+    }
   };
 
   const formatTime = (date: Date) => {
