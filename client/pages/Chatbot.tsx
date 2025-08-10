@@ -1446,7 +1446,7 @@ export default function Chatbot() {
 
           {/* Right Side - Video Container */}
           <motion.div
-            className="w-[500px] bg-white border-l border-gray-200 flex flex-col shadow-xl"
+            className="w-[350px] bg-white border-l border-gray-200 flex flex-col shadow-xl"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
