@@ -642,14 +642,8 @@ export default function Chatbot() {
       return false;
     };
 
-    // Immediately enable test mode for restricted environments
-    if (isRestrictedEnvironment()) {
-      addDebugLog("🧪 Auto-enabling Test Mode for restricted environment");
-      setTestMode(true);
-      setVapiStatus("test-mode");
-      setNetworkStatus("restricted");
-      return; // Skip Vapi setup
-    }
+    // Force real Vapi mode - disable automatic test mode detection
+    addDebugLog("🚀 Real Vapi mode enabled - skipping test mode auto-detection");
 
     addDebugLog("Setting up Vapi event listeners...");
   }, []);
