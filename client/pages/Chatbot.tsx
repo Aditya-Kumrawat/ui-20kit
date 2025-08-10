@@ -868,7 +868,7 @@ export default function Chatbot() {
         setIsRecording(false);
         setVapiStatus("stopped");
         videoRef.current?.pause();
-        addDebugLog("�� Vapi stopped successfully");
+        addDebugLog("✅ Vapi stopped successfully");
       } else {
         addDebugLog("Starting Vapi recording...");
         setVapiError(null);
@@ -1368,20 +1368,14 @@ export default function Chatbot() {
                       <div className={`w-2 h-2 rounded-full ${
                         vapiStatus === "connected" ? "bg-green-500" :
                         vapiStatus === "recording" ? "bg-red-500 animate-pulse" :
-                        vapiStatus === "test-mode" ? "bg-blue-500" :
                         vapiStatus === "error" ? "bg-red-500" :
+                        vapiStatus === "testing" ? "bg-yellow-500 animate-pulse" :
                         "bg-gray-400"
                       }`}></div>
                       <span className="text-xs capitalize">{vapiStatus.replace('-', ' ')}</span>
-                      {networkStatus !== 'unknown' && (
-                        <span className={`text-xs px-1 rounded ${
-                          networkStatus === 'online' ? 'bg-green-100 text-green-700' :
-                          networkStatus === 'offline' ? 'bg-red-100 text-red-700' :
-                          'bg-yellow-100 text-yellow-700'
-                        }`}>
-                          {networkStatus}
-                        </span>
-                      )}
+                      <span className="text-xs px-1 rounded bg-purple-100 text-purple-700">
+                        Real API
+                      </span>
                     </div>
                     {isRecording && (
                       <motion.div
