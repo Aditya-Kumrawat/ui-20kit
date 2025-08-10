@@ -500,14 +500,31 @@ export default function Chatbot() {
   };
 
   const toggleRecording = async () => {
-    if (isRecording) {
-      await vapi.stop();
+    try {
+      if (isRecording) {
+        addDebugLog("Stopping Vapi recording...");
+        await vapi.stop();
+        setIsRecording(false);
+        setVapiStatus("stopped");
+        videoRef.current?.pause();
+        addDebugLog("✅ Vapi stopped successfully");
+      } else {
+        addDebugLog("Starting Vapi recording...");
+        setVapiError(null);
+        setVapiStatus("starting");
+        await vapi.start();
+        setIsRecording(true);
+        setVapiStatus("recording");
+        videoRef.current?.play();
+        addDebugLog("✅ Vapi started successfully");
+      }
+    } catch (error: any) {
+      const errorMessage = error?.message || "Unknown error";
+      addDebugLog(`❌ Vapi error: ${errorMessage}`);
+      setVapiError(errorMessage);
+      setVapiStatus("error");
       setIsRecording(false);
-      videoRef.current?.pause(); // stop video
-    } else {
-      await vapi.start();
-      setIsRecording(true);
-      videoRef.current?.play(); // start video
+      console.error("Vapi error:", error);
     }
   };
 
