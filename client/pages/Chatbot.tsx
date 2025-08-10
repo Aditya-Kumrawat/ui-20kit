@@ -391,21 +391,44 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
+  // Test Vapi connection
+  const testVapiConnection = async () => {
+    try {
+      addDebugLog("Testing Vapi connection...");
+      setVapiStatus("testing");
+
+      // Check if API key is properly set
+      const apiKey = import.meta.env.VITE_VAPI_KEY;
+      if (!apiKey || apiKey === "your_vapi_api_key_here") {
+        throw new Error("VITE_VAPI_KEY not properly configured");
+      }
+
+      addDebugLog(`✅ API Key configured: ${apiKey.substring(0, 8)}...`);
+      setVapiStatus("connected");
+    } catch (error: any) {
+      addDebugLog(`❌ Connection test failed: ${error.message}`);
+      setVapiError(error.message);
+      setVapiStatus("error");
+    }
+  };
+
   // Vapi event listeners
   useEffect(() => {
+    addDebugLog("Setting up Vapi event listeners...");
+
     vapi.on("speech.transcript.partial", (data: any) => {
-      // live transcript (partial)
+      addDebugLog(`📝 Partial transcript: ${data.text}`);
       setInputValue(data.text);
     });
 
     vapi.on("speech.transcript.final", (data: any) => {
-      // final transcript from user
+      addDebugLog(`✅ Final transcript: ${data.text}`);
       handleSendMessage(data.text);
       setTranscript((prev) => [...prev, `User: ${data.text}`]);
     });
 
     vapi.on("response.message", (data: any) => {
-      // AI reply from Vapi
+      addDebugLog(`🤖 AI response: ${data.text}`);
       setMessages((prev) => [
         ...prev,
         {
@@ -420,14 +443,34 @@ export default function Chatbot() {
     });
 
     vapi.on("silence.start", () => {
-      // pause video when silent
+      addDebugLog("🔇 Silence detected - pausing video");
       videoRef.current?.pause();
     });
 
     vapi.on("silence.end", () => {
-      // resume video when talking
+      addDebugLog("🔊 Speech detected - resuming video");
       videoRef.current?.play();
     });
+
+    vapi.on("call.started", () => {
+      addDebugLog("📞 Call started");
+      setVapiStatus("call-active");
+    });
+
+    vapi.on("call.ended", () => {
+      addDebugLog("📞 Call ended");
+      setVapiStatus("call-ended");
+      setIsRecording(false);
+    });
+
+    vapi.on("error", (error: any) => {
+      addDebugLog(`❌ Vapi error: ${error.message || error}`);
+      setVapiError(error.message || "Unknown error");
+      setVapiStatus("error");
+    });
+
+    // Test connection on component mount
+    testVapiConnection();
 
     // Cleanup event listeners
     return () => {
