@@ -186,7 +186,9 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
     // Get response body for debugging
     let responseBody = "";
     try {
-      const text = await testResponse.text();
+      // Clone the response to avoid consuming the body stream
+      const clonedResponse = testResponse.clone();
+      const text = await clonedResponse.text();
       responseBody = text.substring(0, 200); // First 200 chars
       console.log("📄 Response body preview:", responseBody);
     } catch (e) {
