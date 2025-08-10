@@ -1220,10 +1220,11 @@ export default function Chatbot() {
           {/* Left Side - Chat and Transcript */}
           <div className="flex-1 flex flex-col">
             {/* Messages Area */}
-            <div className="flex-1 overflow-hidden">
-              <div className="h-full max-w-4xl mx-auto px-6 py-6">
-                {/* Chat Container with Custom Scrollbar */}
-                <div className="h-full overflow-y-auto space-y-6 pr-2 scrollbar-hide">
+            <div className="flex-1 flex flex-col min-h-0">
+              <div className="flex-1 max-w-4xl mx-auto w-full px-6 py-6 flex flex-col min-h-0">
+                {/* Chat Container with Fixed Height and Scrolling */}
+                <div className="flex-1 flex flex-col min-h-0">
+                  <div className="flex-1 overflow-y-auto space-y-6 pr-2 scroll-smooth" style={{scrollBehavior: 'smooth'}}>
                   <AnimatePresence>
                     {messages.map((message) => (
                       <motion.div
@@ -1359,7 +1360,8 @@ export default function Chatbot() {
                     )}
                   </AnimatePresence>
 
-                  <div ref={messagesEndRef} />
+                    <div ref={messagesEndRef} />
+                  </div>
                 </div>
               </div>
             </div>
