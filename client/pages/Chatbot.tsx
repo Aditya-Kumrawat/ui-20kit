@@ -837,55 +837,25 @@ export default function Chatbot() {
             </div>
 
             {/* Video Container */}
-            <div className="flex-1 flex flex-col">
-              <div className="aspect-video bg-gray-900 relative overflow-hidden">
+            <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
+              <div className="relative">
                 <video
-                  autoPlay
-                  muted
-                  controls
-                  playsInline
-                  loop
-                  className="w-full h-full object-cover"
-                  style={{
-                    backgroundImage: "url(https://cdn.builder.io/o/assets%2F2d06e16d643b4c26a7274cfb607b5ae9%2Fbee1bb34bf2e4c0dbc11df7949ed5286?alt=media&token=74af9788-f085-4553-95bb-35a3dd5a4471&apiKey=2d06e16d643b4c26a7274cfb607b5ae9)",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center",
-                    backgroundSize: "cover"
-                  }}
-                  poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzg0IiBoZWlnaHQ9IjIxNiIgdmlld0JveD0iMCAwIDM4NCAyMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzODQiIGhlaWdodD0iMjE2IiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjE5MiIgY3k9IjEwOCIgcj0iMzAiIGZpbGw9IiM2MzY2RjEiLz4KPHN2ZyB4PSIxNzciIHk9IjkzIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+Cjxwb2x5Z29uIHBvaW50cz0iNSAzIDE5IDEyIDUgMjEgNSAzIi8+Cjwvc3ZnPgo8dGV4dCB4PSIxNDIiIHk9IjE4MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjOUNBM0FGIj5DbGljayB0byBwbGF5PC90ZXh0Pgo8L3N2Zz4K"
+                  autoPlay={true}
+                  muted={true}
+                  controls={false}
+                  playsInline={true}
+                  loop={true}
+                  className="w-full h-full object-cover object-center rounded-sm relative flex flex-col mt-5 min-h-5 min-w-5"
                 >
                   <source
                     type="video/mp4"
-                    src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2F84c92a2126f04b12917d149b99d6a13b?alt=media&token=2a038587-3580-43f1-90c1-58c21713e468&apiKey=ad2efc99155b417783200fc7999ced3f"
+                    src="https://cdn.builder.io/o/assets%2F2d06e16d643b4c26a7274cfb607b5ae9%2F1933a4afdc3240f493211f92f8a5bbc4%2Fcompressed?apiKey=2d06e16d643b4c26a7274cfb607b5ae9&token=1933a4afdc3240f493211f92f8a5bbc4&alt=media&optimized=true"
                   />
-                  <p className="text-white text-center">
-                    Your browser does not support the video tag.
-                  </p>
                 </video>
-
-                {/* Video Overlay Controls */}
-                <div className="absolute top-4 right-4 flex gap-2">
-                  <Button size="sm" variant="outline" className="bg-black/50 text-white border-white/20 hover:bg-black/70">
-                    <Settings size={16} />
-                  </Button>
-                </div>
-
-                {/* AI Status Indicator */}
-                <motion.div
-                  className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm rounded-lg p-2 flex items-center gap-2"
-                  animate={{
-                    opacity: [0.7, 1, 0.7],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <Brain size={16} className="text-purple-400" />
-                  <span className="text-xs text-white">AI Active</span>
-                </motion.div>
+                <div className="w-full pt-[70.04048582995948%] pointer-events-none text-[0px]" />
               </div>
+            </div>
+            <div className="flex-1 flex flex-col">
 
               {/* Video Controls and Info */}
               <div className="p-4 space-y-4">
