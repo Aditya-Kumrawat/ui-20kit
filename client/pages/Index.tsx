@@ -277,8 +277,8 @@ export default function Index() {
                 <motion.p
                   className="text-xl text-white font-medium leading-relaxed max-w-lg"
                   style={{
-                    fontFamily: "'Proxima Nova', 'Poppins', sans-serif",
-                    textShadow: "1px 1px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000"
+                    fontFamily: "'Poppins', sans-serif",
+                    textShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)"
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
@@ -286,9 +286,9 @@ export default function Index() {
                 >
                   Transform your ideas into{" "}
                   <motion.span
-                    className="text-gray-800 font-semibold bg-white px-1 rounded"
+                    className="text-white font-semibold"
                     style={{
-                      border: "1px solid #000000"
+                      textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)"
                     }}
                     animate={{
                       scale: [1, 1.02, 1]
@@ -303,8 +303,8 @@ export default function Index() {
                   </motion.span>{" "}
                   with our cutting-edge AI platform. Build seamlessly across{" "}
                   <span
-                    className="text-gray-900 font-semibold bg-white px-1 rounded"
-                    style={{border: "1px solid #000000"}}
+                    className="text-white font-semibold"
+                    style={{textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)"}}
                   >
                     web and mobile
                   </span> platforms.
