@@ -826,9 +826,15 @@ export default function Chatbot() {
         setVapiError(null);
         setVapiStatus("starting");
 
-        // Check microphone permissions with better error handling
+        // Check microphone permissions with iframe detection
         try {
           addDebugLog("Checking microphone permissions...");
+
+          // Check if we're in an iframe
+          const isInIframe = window.self !== window.top;
+          if (isInIframe) {
+            addDebugLog("🔍 Detected iframe environment - checking permissions policy");
+          }
 
           // First check if getUserMedia is available
           if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -860,11 +866,29 @@ export default function Chatbot() {
           }
 
           addDebugLog("Requesting microphone permissions...");
-          const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-          });
-          stream.getTracks().forEach((track) => track.stop()); // Clean up
-          addDebugLog("✅ Microphone permissions granted");
+
+          // Use a shorter timeout for iframe environments
+          const permissionTimeout = isInIframe ? 3000 : 10000;
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => {
+            controller.abort();
+            addDebugLog("⏰ Microphone permission request timed out");
+          }, permissionTimeout);
+
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+              audio: true,
+            });
+            clearTimeout(timeoutId);
+            stream.getTracks().forEach((track) => track.stop()); // Clean up
+            addDebugLog("✅ Microphone permissions granted");
+          } catch (streamError: any) {
+            clearTimeout(timeoutId);
+            if (streamError.name === 'AbortError') {
+              throw new Error("Microphone permission request timed out. Please try opening the app directly in your browser.");
+            }
+            throw streamError;
+          }
         } catch (permError: any) {
           const errorMsg = permError.message || "Permission denied";
           addDebugLog(`❌ Microphone access failed: ${errorMsg}`);
@@ -980,21 +1004,31 @@ export default function Chatbot() {
     } catch (error: any) {
       const errorMessage = error?.message || "Unknown error";
 
-      // Enhanced error categorization
+          // Enhanced error categorization with iframe-specific handling
       let userFriendlyMessage = errorMessage;
+      let shouldSuggestDirectAccess = false;
+
       if (errorMessage.includes("Failed to fetch")) {
         userFriendlyMessage =
           "Network connection failed. Please check your internet connection and try again.";
-      } else if (errorMessage.includes("Microphone permission")) {
+      } else if (errorMessage.includes("Microphone access blocked") || errorMessage.includes("Permission denied") || errorMessage.includes("not allowed in this document")) {
         userFriendlyMessage =
-          "Microphone access required. Please allow microphone permissions and try again.";
+          "Microphone access is restricted in this environment. For voice features, please open the application directly in your browser.";
+        shouldSuggestDirectAccess = true;
       } else if (errorMessage.includes("Invalid API key")) {
         userFriendlyMessage =
           "Invalid API key. Please check your Vapi configuration.";
       }
 
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
-      setVapiError(userFriendlyMessage);
+
+      if (shouldSuggestDirectAccess) {
+        addDebugLog("💡 Suggestion: Open app directly in browser for microphone access");
+        setVapiError(`${userFriendlyMessage} Try opening this app in a new browser tab.`);
+      } else {
+        setVapiError(userFriendlyMessage);
+      }
+
       setVapiStatus("error");
       setIsRecording(false);
       console.error("Vapi error:", error);
