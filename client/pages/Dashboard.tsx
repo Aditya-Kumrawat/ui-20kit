@@ -227,10 +227,17 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
             <div className="bg-slate-800 rounded-lg p-3 space-y-2">
               <div className="flex items-center gap-2 text-xs text-gray-400">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                <span>Live Assistant</span>
               </div>
               <div className="aspect-video bg-gradient-to-br from-slate-700 to-slate-900 rounded-lg flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20"></div>
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: "url(https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fd5ef5f2a2a2d4fdda37b8beb31b2b7b7?alt=media&token=83995d22-6f0a-4e4a-979b-17c838b7d2cb&apiKey=ad2efc99155b417783200fc7999ced3f)",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                    backgroundSize: "cover"
+                  }}
+                ></div>
                 <motion.div
                   className="relative z-10"
                   animate={{
@@ -246,20 +253,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                   <Brain size={24} className="text-purple-400" />
                 </motion.div>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-400 hover:text-white">
-                    <Play size={12} />
-                  </Button>
-                  <div className="w-16 h-1 bg-slate-700 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-purple-500"
-                      animate={{ width: ["0%", "100%", "0%"] }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                    />
-                  </div>
-                </div>
-                <span className="text-xs text-gray-400">AI Active</span>
+              <div className="text-xs text-gray-400 mt-2">
+                AI Active
               </div>
             </div>
           </motion.div>
@@ -357,6 +352,45 @@ export default function Dashboard() {
             </div>
           </div>
         </motion.header>
+
+        {/* Avatar Video Section */}
+        <div className="flex flex-col relative mt-5">
+          <div className="flex gap-5 max-md:flex-col max-md:gap-0">
+            <div className="flex flex-col w-1/2 max-md:ml-0 max-md:w-full">
+              <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
+                <div className="relative">
+                  <video
+                    autoPlay
+                    muted
+                    controls={false}
+                    playsInline
+                    loop
+                    className="w-full h-full object-cover object-center rounded relative flex flex-col mt-5 min-h-5 min-w-5"
+                  >
+                    <source
+                      type="video/mp4"
+                      src="https://cdn.builder.io/api/v1/file/assets%2Fad2efc99155b417783200fc7999ced3f%2Fdbdad814ae434e89b1ddbd6db9f2655f"
+                    />
+                  </video>
+                  <div className="w-full pt-[70.04%] pointer-events-none text-[0]" />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col w-1/2 ml-5 max-md:ml-0 max-md:w-full">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">AI Assistant</h3>
+              <div className="bg-gray-50 rounded-lg p-4 min-h-[80px] flex items-center mt-4">
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {currentText}
+                  <motion.span
+                    className="inline-block w-2 h-4 bg-purple-500 ml-1"
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Main Dashboard Content */}
         <div className="p-6 space-y-6">
@@ -542,11 +576,10 @@ export default function Dashboard() {
             >
               {/* Avatar Video Component */}
               <Card className="p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">AI Assistant</h3>
                 <div className="space-y-4">
                   <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20"></div>
-                    
+
                     {/* Avatar Animation */}
                     <motion.div
                       className="relative z-10 w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center"
@@ -566,7 +599,7 @@ export default function Dashboard() {
                     >
                       <Brain size={32} className="text-white" />
                     </motion.div>
-                    
+
                     {/* Audio Waves */}
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
                       {Array.from({ length: 5 }, (_, i) => (
@@ -586,18 +619,6 @@ export default function Dashboard() {
                         />
                       ))}
                     </div>
-                  </div>
-                  
-                  {/* Typewriter Text */}
-                  <div className="bg-gray-50 rounded-lg p-4 min-h-[80px] flex items-center">
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      {currentText}
-                      <motion.span
-                        className="inline-block w-2 h-4 bg-purple-500 ml-1"
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{ duration: 1, repeat: Infinity }}
-                      />
-                    </p>
                   </div>
                 </div>
               </Card>
