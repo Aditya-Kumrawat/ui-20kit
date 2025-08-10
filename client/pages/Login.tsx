@@ -301,8 +301,8 @@ export default function Login() {
             >
               {/* Video Container */}
               <motion.div
-                className="rounded-2xl overflow-hidden bg-white/30 backdrop-blur-sm border border-purple-200/50 shadow-lg h-[350px]"
-                whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(139,69,193,0.15)" }}
+                className="rounded-2xl overflow-hidden bg-gray-900 border border-gray-700/50 h-[350px]"
+                whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <video
@@ -314,7 +314,7 @@ export default function Login() {
                 >
                   <source
                     type="video/mp4"
-                    src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
+                    src="https://cdn.builder.io/o/assets%2F3a97c5b7af5445f5b8b1bbe094d2a65a%2Ffe2cba453308494795049cc60a30a25c?alt=media&token=1a484597-1283-4054-b241-0645c9c09783&apiKey=3a97c5b7af5445f5b8b1bbe094d2a65a"
                   />
                 </video>
               </motion.div>
