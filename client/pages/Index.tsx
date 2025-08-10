@@ -159,9 +159,11 @@ export default function Index() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button className="bg-gray-900 text-white hover:bg-gray-800 rounded-xl px-6 shadow-sm">
-                  Get Started
-                </Button>
+                <Link to="/login">
+                  <Button className="bg-gray-900 text-white hover:bg-gray-800 rounded-xl px-6 shadow-sm">
+                    Get Started
+                  </Button>
+                </Link>
               </motion.div>
             </div>
           </motion.div>
