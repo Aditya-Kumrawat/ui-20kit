@@ -305,7 +305,7 @@ export default function Login() {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 {/* Video Container */}
-                <div className="flex-1 rounded-2xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/10 mb-6">
+                <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100/50 backdrop-blur-sm border border-purple-200/30 mb-6">
                   <video
                     autoPlay
                     muted
