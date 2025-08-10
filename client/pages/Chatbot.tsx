@@ -868,7 +868,7 @@ export default function Chatbot() {
         setIsRecording(false);
         setVapiStatus("stopped");
         videoRef.current?.pause();
-        addDebugLog("✅ Vapi stopped successfully");
+        addDebugLog("�� Vapi stopped successfully");
       } else {
         addDebugLog("Starting Vapi recording...");
         setVapiError(null);
@@ -1069,102 +1069,53 @@ export default function Chatbot() {
           </div>
         </motion.header>
 
-        {/* Network Status Banner */}
-        {(networkStatus === 'offline' || networkStatus === 'restricted') && !testMode && (
+        {/* Real API Status Banner */}
+        {vapiStatus === 'connected' && (
           <motion.div
-            className="bg-yellow-100 border-b border-yellow-200 px-6 py-3"
+            className="bg-green-100 border-b border-green-200 px-6 py-3"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-4 h-4 bg-yellow-500 rounded-full animate-pulse"></div>
+                <div className="w-4 h-4 bg-green-500 rounded-full"></div>
                 <div>
-                  <span className="text-sm font-medium text-yellow-800">
-                    {networkStatus === 'offline' ? 'Network Connectivity Issues' : 'API Access Restricted'}
-                  </span>
-                  <p className="text-xs text-yellow-700">
-                    {networkStatus === 'offline'
-                      ? 'Unable to reach Vapi API servers. Check your internet connection.'
-                      : 'API requests are being blocked. This may be due to firewall or CORS restrictions.'}
+                  <span className="text-sm font-medium text-green-800">Real Vapi API Connected</span>
+                  <p className="text-xs text-green-700">
+                    Voice assistant is ready for real-time conversations.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {vapiStatus === 'error' && (
+          <motion.div
+            className="bg-red-100 border-b border-red-200 px-6 py-3"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                <div>
+                  <span className="text-sm font-medium text-red-800">API Connection Failed</span>
+                  <p className="text-xs text-red-700">
+                    {vapiError || "Unable to connect to Vapi API. Check your configuration."}
                   </p>
                 </div>
               </div>
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => {
-                  setTestMode(true);
-                  setVapiStatus("test-mode");
-                  addDebugLog("🧪 Test Mode enabled manually");
-                }}
-                className="bg-yellow-50 border-yellow-300 text-yellow-800 hover:bg-yellow-100"
+                onClick={testVapiConnection}
+                className="bg-red-50 border-red-300 text-red-800 hover:bg-red-100"
               >
-                Use Test Mode
+                Retry Connection
               </Button>
-            </div>
-          </motion.div>
-        )}
-
-        {testMode && (
-          <motion.div
-            className="bg-blue-100 border-b border-blue-200 px-6 py-3"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className={`w-4 h-4 rounded-full ${
-                  isRecording ? 'bg-red-500 animate-pulse' : 'bg-blue-500'
-                }`}></div>
-                <div>
-                  <span className="text-sm font-medium text-blue-800">
-                    Test Mode Active {isRecording && '- Recording'}
-                  </span>
-                  <p className="text-xs text-blue-700">
-                    {isRecording
-                      ? "🎤 Simulating voice recording and AI responses..."
-                      : "Using simulated responses. Click microphone to test voice interaction."}
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                {!isRecording && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      addDebugLog("🎯 Manual test interaction triggered");
-                      setIsRecording(true);
-                      setVapiStatus("recording");
-                      videoRef.current?.play();
-                      simulateVapiInteraction();
-                      setTimeout(() => {
-                        setIsRecording(false);
-                        setVapiStatus("test-mode");
-                        videoRef.current?.pause();
-                      }, 8000);
-                    }}
-                    className="bg-blue-50 border-blue-300 text-blue-800 hover:bg-blue-100"
-                  >
-                    Test Voice
-                  </Button>
-                )}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    setTestMode(false);
-                    setVapiStatus("disconnected");
-                    addDebugLog("🔧 Test Mode disabled");
-                  }}
-                  className="bg-blue-50 border-blue-300 text-blue-800 hover:bg-blue-100"
-                >
-                  Exit Test Mode
-                </Button>
-              </div>
             </div>
           </motion.div>
         )}
