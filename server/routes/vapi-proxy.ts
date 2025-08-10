@@ -240,33 +240,15 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
 
     console.log(`🔑 Using ${keyType} API key: ${apiKey.substring(0, 8)}...`);
 
-    // Test API key validity with appropriate endpoint
+    // Test API key validity (only for private keys at this point)
     console.log(`📡 Making request to Vapi API (${keyType} key)...`);
-    let testResponse = await fetch(testEndpoint, {
+    const testResponse = await fetch(testEndpoint, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
     });
-
-    // If private endpoint fails with public key, try fallback
-    if (!testResponse.ok && keyType === "public") {
-      console.log("🔄 Public endpoint failed, trying alternative approach...");
-      // For public keys, we can't test admin endpoints, so we'll assume success if key is properly formatted
-      if (apiKey.length >= 30) {
-        console.log("✅ Public key appears valid (skipping admin endpoint test)");
-        return res.json({
-          success: true,
-          status: 200,
-          message: "Vapi API connectivity assumed successful (public key)",
-          configured: true,
-          apiKeyLength: apiKey.length,
-          keyType: "public",
-          note: "Public keys cannot access admin endpoints - assuming valid",
-        });
-      }
-    }
 
     console.log(
       `📊 Vapi response: ${testResponse.status} ${testResponse.statusText}`,
