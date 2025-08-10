@@ -1393,22 +1393,14 @@ export default function Chatbot() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Zap size={12} />
-                    <span>Powered by Vapi AI</span>
+                    <span>Powered by Real Vapi AI</span>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={testVapiConnection}
                       className="h-6 px-2 text-xs"
                     >
-                      Test Connection
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={testMode ? "default" : "outline"}
-                      onClick={toggleTestMode}
-                      className="h-6 px-2 text-xs"
-                    >
-                      {testMode ? "Exit Test" : "Test Mode"}
+                      Test Real API
                     </Button>
                   </div>
                 </div>
