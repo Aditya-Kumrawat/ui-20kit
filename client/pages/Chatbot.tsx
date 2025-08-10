@@ -845,7 +845,8 @@ export default function Chatbot() {
                   controls={false}
                   playsInline={true}
                   loop={true}
-                  className="w-full h-full object-cover object-center rounded-sm relative flex flex-col mt-5 min-h-5 min-w-5"
+                  className="w-full h-full object-center rounded-[40px] relative flex flex-col min-h-0 min-w-5"
+                  style={{ margin: "20px 0" }}
                 >
                   <source
                     type="video/mp4"
