@@ -282,9 +282,9 @@ export default function Login() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.1 }}
                 >
-                  <p className="text-white/70 text-sm">
+                  <p className="text-gray-600 text-sm">
                     Don't have an account?{" "}
-                    <a href="#" className="text-blue-300 hover:text-blue-200 font-semibold transition-colors">
+                    <a href="#" className="text-purple-600 hover:text-purple-500 font-semibold transition-colors">
                       Sign up for free
                     </a>
                   </p>
