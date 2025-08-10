@@ -369,7 +369,9 @@ export default function Chatbot() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [vapiStatus, setVapiStatus] = useState("disconnected");
+  const [vapiStatus, setVapiStatus] = useState(
+    isRestrictedEnvironment() ? "test-mode" : "disconnected"
+  );
   const [vapiError, setVapiError] = useState<string | null>(null);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
   const [testMode, setTestMode] = useState(isRestrictedEnvironment()); // Auto-enable for restricted environments
