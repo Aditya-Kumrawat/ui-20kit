@@ -298,10 +298,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 // Initialize Vapi Web SDK for browser-based voice calls
 const initializeVapi = () => {
   // For Web SDK, we need the public API key (not private key)
-  const apiKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
+  const apiKey =
+    import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
 
   if (!apiKey) {
-    console.warn("⚠️ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables");
+    console.warn(
+      "⚠️ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables",
+    );
     return null;
   }
 
@@ -643,7 +646,9 @@ export default function Chatbot() {
     };
 
     // Force real Vapi mode - disable automatic test mode detection
-    addDebugLog("🚀 Real Vapi mode enabled - skipping test mode auto-detection");
+    addDebugLog(
+      "🚀 Real Vapi mode enabled - skipping test mode auto-detection",
+    );
 
     addDebugLog("Setting up Vapi event listeners...");
   }, []);
@@ -668,7 +673,9 @@ export default function Chatbot() {
     vapi.on("message", (message: any) => {
       if (message.type === "transcript") {
         if (message.role === "user") {
-          addDebugLog(`📝 User transcript: ${message.transcriptType} - ${message.transcript}`);
+          addDebugLog(
+            `📝 User transcript: ${message.transcriptType} - ${message.transcript}`,
+          );
           if (message.transcriptType === "partial") {
             setInputValue(message.transcript);
           } else if (message.transcriptType === "final") {
@@ -782,7 +789,9 @@ export default function Chatbot() {
         setMessages((prev) =>
           prev
             .map((msg) =>
-              msg.id === userMessage.id ? { ...msg, status: "read" as const } : msg,
+              msg.id === userMessage.id
+                ? { ...msg, status: "read" as const }
+                : msg,
             )
             .concat(aiMessage),
         );
@@ -823,20 +832,30 @@ export default function Chatbot() {
 
           // First check if getUserMedia is available
           if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            addDebugLog("⚠️ MediaDevices API not available - browser/environment limitation");
-            throw new Error("Microphone access not available in this environment. Please try opening the app directly in your browser.");
+            addDebugLog(
+              "⚠️ MediaDevices API not available - browser/environment limitation",
+            );
+            throw new Error(
+              "Microphone access not available in this environment. Please try opening the app directly in your browser.",
+            );
           }
 
           // Check permissions policy
-          if (typeof navigator.permissions !== 'undefined') {
+          if (typeof navigator.permissions !== "undefined") {
             try {
-              const permission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
-              if (permission.state === 'denied') {
-                throw new Error("Microphone access denied by browser settings. Please enable microphone permissions and reload the page.");
+              const permission = await navigator.permissions.query({
+                name: "microphone" as PermissionName,
+              });
+              if (permission.state === "denied") {
+                throw new Error(
+                  "Microphone access denied by browser settings. Please enable microphone permissions and reload the page.",
+                );
               }
             } catch (e) {
               // Permissions API might not be fully supported, continue with getUserMedia
-              addDebugLog("⚠️ Permissions API check failed, trying direct access...");
+              addDebugLog(
+                "⚠️ Permissions API check failed, trying direct access...",
+              );
             }
           }
 
@@ -850,8 +869,13 @@ export default function Chatbot() {
           const errorMsg = permError.message || "Permission denied";
           addDebugLog(`❌ Microphone access failed: ${errorMsg}`);
 
-          if (errorMsg.includes("Permission denied") || errorMsg.includes("not allowed")) {
-            throw new Error("Microphone access blocked. This may be due to browser security settings or iframe restrictions. Please open the app directly in your browser and allow microphone access.");
+          if (
+            errorMsg.includes("Permission denied") ||
+            errorMsg.includes("not allowed")
+          ) {
+            throw new Error(
+              "Microphone access blocked. This may be due to browser security settings or iframe restrictions. Please open the app directly in your browser and allow microphone access.",
+            );
           } else {
             throw new Error(`Microphone error: ${errorMsg}`);
           }
@@ -859,7 +883,9 @@ export default function Chatbot() {
 
         // Check if Vapi SDK is available
         if (!vapi) {
-          throw new Error("Vapi SDK not initialized. Please check your API key configuration.");
+          throw new Error(
+            "Vapi SDK not initialized. Please check your API key configuration.",
+          );
         }
 
         // Configure the assistant for the call
@@ -1151,138 +1177,140 @@ export default function Chatbot() {
               <div className="h-full max-w-4xl mx-auto px-6 py-6">
                 {/* Chat Container with Custom Scrollbar */}
                 <div className="h-full overflow-y-auto space-y-6 pr-2 scrollbar-hide">
-                <AnimatePresence>
-                  {messages.map((message) => (
-                    <motion.div
-                      key={message.id}
-                      className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div
-                        className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}
+                  <AnimatePresence>
+                    {messages.map((message) => (
+                      <motion.div
+                        key={message.id}
+                        className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        transition={{ duration: 0.3 }}
                       >
-                        {/* Avatar */}
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.1 }}
-                        >
-                          <Avatar className="w-8 h-8">
-                            {message.sender === "user" ? (
-                              <AvatarFallback className="bg-blue-100 text-blue-700">
-                                <User size={16} />
-                              </AvatarFallback>
-                            ) : (
-                              <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                                <Brain size={16} />
-                              </AvatarFallback>
-                            )}
-                          </Avatar>
-                        </motion.div>
-
-                        {/* Message Content */}
                         <div
-                          className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}
+                          className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}
                         >
+                          {/* Avatar */}
                           <motion.div
-                            className={`inline-block px-4 py-3 rounded-2xl ${
-                              message.sender === "user"
-                                ? "bg-blue-600 text-white"
-                                : "bg-white border border-gray-200 text-gray-900"
-                            }`}
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.1 }}
                           >
-                            <p className="text-sm leading-relaxed font-['Poppins',sans-serif]">
-                              {message.content}
-                            </p>
+                            <Avatar className="w-8 h-8">
+                              {message.sender === "user" ? (
+                                <AvatarFallback className="bg-blue-100 text-blue-700">
+                                  <User size={16} />
+                                </AvatarFallback>
+                              ) : (
+                                <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                                  <Brain size={16} />
+                                </AvatarFallback>
+                              )}
+                            </Avatar>
                           </motion.div>
 
-                          {/* Message Info */}
+                          {/* Message Content */}
                           <div
-                            className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}
+                            className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}
                           >
-                            <span>{formatTime(message.timestamp)}</span>
-                            {message.sender === "user" &&
-                              getStatusIcon(message.status)}
-                          </div>
-
-                          {/* Suggestions */}
-                          {message.suggestions && message.sender === "ai" && (
                             <motion.div
-                              className="flex flex-wrap gap-2 mt-3"
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.5 }}
+                              className={`inline-block px-4 py-3 rounded-2xl ${
+                                message.sender === "user"
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-white border border-gray-200 text-gray-900"
+                              }`}
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.2 }}
                             >
-                              {message.suggestions.map((suggestion, index) => (
-                                <motion.button
-                                  key={index}
-                                  onClick={() =>
-                                    handleSuggestionClick(suggestion)
-                                  }
-                                  className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors"
-                                  initial={{ opacity: 0, scale: 0.8 }}
-                                  animate={{ opacity: 1, scale: 1 }}
-                                  transition={{ delay: 0.6 + index * 0.1 }}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  {suggestion}
-                                </motion.button>
-                              ))}
+                              <p className="text-sm leading-relaxed font-['Poppins',sans-serif]">
+                                {message.content}
+                              </p>
                             </motion.div>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
 
-                {/* Typing Indicator */}
-                <AnimatePresence>
-                  {isTyping && (
-                    <motion.div
-                      className="flex justify-start"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className="flex items-start gap-3 max-w-[70%]">
-                        <Avatar className="w-8 h-8">
-                          <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                            <Brain size={16} />
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
-                          <div className="flex items-center gap-1">
-                            {[0, 1, 2].map((i) => (
+                            {/* Message Info */}
+                            <div
+                              className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}
+                            >
+                              <span>{formatTime(message.timestamp)}</span>
+                              {message.sender === "user" &&
+                                getStatusIcon(message.status)}
+                            </div>
+
+                            {/* Suggestions */}
+                            {message.suggestions && message.sender === "ai" && (
                               <motion.div
-                                key={i}
-                                className="w-2 h-2 bg-gray-400 rounded-full"
-                                animate={{
-                                  scale: [1, 1.2, 1],
-                                  opacity: [0.5, 1, 0.5],
-                                }}
-                                transition={{
-                                  duration: 1,
-                                  delay: i * 0.2,
-                                  repeat: Infinity,
-                                  ease: "easeInOut",
-                                }}
-                              />
-                            ))}
+                                className="flex flex-wrap gap-2 mt-3"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                              >
+                                {message.suggestions.map(
+                                  (suggestion, index) => (
+                                    <motion.button
+                                      key={index}
+                                      onClick={() =>
+                                        handleSuggestionClick(suggestion)
+                                      }
+                                      className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors"
+                                      initial={{ opacity: 0, scale: 0.8 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      transition={{ delay: 0.6 + index * 0.1 }}
+                                      whileHover={{ scale: 1.05 }}
+                                      whileTap={{ scale: 0.95 }}
+                                    >
+                                      {suggestion}
+                                    </motion.button>
+                                  ),
+                                )}
+                              </motion.div>
+                            )}
                           </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+
+                  {/* Typing Indicator */}
+                  <AnimatePresence>
+                    {isTyping && (
+                      <motion.div
+                        className="flex justify-start"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="flex items-start gap-3 max-w-[70%]">
+                          <Avatar className="w-8 h-8">
+                            <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                              <Brain size={16} />
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
+                            <div className="flex items-center gap-1">
+                              {[0, 1, 2].map((i) => (
+                                <motion.div
+                                  key={i}
+                                  className="w-2 h-2 bg-gray-400 rounded-full"
+                                  animate={{
+                                    scale: [1, 1.2, 1],
+                                    opacity: [0.5, 1, 0.5],
+                                  }}
+                                  transition={{
+                                    duration: 1,
+                                    delay: i * 0.2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                  }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   <div ref={messagesEndRef} />
                 </div>
@@ -1365,7 +1393,9 @@ export default function Chatbot() {
                 {/* Input Helpers */}
                 <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
                   <div className="flex items-center gap-4">
-                    <span className="font-['Poppins',sans-serif] text-sm font-medium">AI is ready to help with genetic analysis</span>
+                    <span className="font-['Poppins',sans-serif] text-sm font-medium">
+                      AI is ready to help with genetic analysis
+                    </span>
                     <div className="flex items-center gap-2">
                       <div
                         className={`w-2 h-2 rounded-full ${
@@ -1486,12 +1516,16 @@ export default function Chatbot() {
                   <h3 className="text-xl font-bold text-gray-900 font-['Poppins',sans-serif]">
                     AI Avatar
                   </h3>
-                  <p className="text-sm text-gray-600 mt-1 font-['Poppins',sans-serif]">Genetic Research Assistant</p>
+                  <p className="text-sm text-gray-600 mt-1 font-['Poppins',sans-serif]">
+                    Genetic Research Assistant
+                  </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className={`w-3 h-3 rounded-full animate-pulse ${
-                    vapiStatus === "recording" ? "bg-red-500" : "bg-green-500"
-                  }`}></div>
+                  <div
+                    className={`w-3 h-3 rounded-full animate-pulse ${
+                      vapiStatus === "recording" ? "bg-red-500" : "bg-green-500"
+                    }`}
+                  ></div>
                   <span className="text-sm font-medium text-gray-700 font-['Poppins',sans-serif]">
                     {vapiStatus === "recording" ? "🎤 Recording" : "👁️ Live"}
                   </span>
@@ -1528,7 +1562,9 @@ export default function Chatbot() {
                     transition={{ duration: 1, repeat: Infinity }}
                   >
                     <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium font-['Poppins',sans-serif]">REC</span>
+                    <span className="text-sm font-medium font-['Poppins',sans-serif]">
+                      REC
+                    </span>
                   </motion.div>
                 )}
               </div>
@@ -1538,16 +1574,26 @@ export default function Chatbot() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-bold text-gray-900 font-['Poppins',sans-serif]">AI Assistant</h4>
+                    <h4 className="font-bold text-gray-900 font-['Poppins',sans-serif]">
+                      AI Assistant
+                    </h4>
                     <p className="text-sm text-gray-600 font-['Poppins',sans-serif]">
                       Ready to analyze your genetic data
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="hover:bg-purple-50">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-purple-50"
+                    >
                       <Play size={16} />
                     </Button>
-                    <Button size="sm" variant="outline" className="hover:bg-purple-50">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-purple-50"
+                    >
                       <Pause size={16} />
                     </Button>
                   </div>
@@ -1578,24 +1624,36 @@ export default function Chatbot() {
                 {/* Video Stats */}
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-['Poppins',sans-serif]">Status:</span>
+                    <span className="text-gray-600 font-['Poppins',sans-serif]">
+                      Status:
+                    </span>
                     <span className="text-green-600 flex items-center gap-2 font-semibold font-['Poppins',sans-serif]">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                       Connected
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-['Poppins',sans-serif]">Response Time:</span>
-                    <span className="font-semibold text-purple-600 font-['Poppins',sans-serif]">&lt; 200ms</span>
+                    <span className="text-gray-600 font-['Poppins',sans-serif]">
+                      Response Time:
+                    </span>
+                    <span className="font-semibold text-purple-600 font-['Poppins',sans-serif]">
+                      &lt; 200ms
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-['Poppins',sans-serif]">Quality:</span>
-                    <span className="font-semibold text-blue-600 font-['Poppins',sans-serif]">4K HD</span>
+                    <span className="text-gray-600 font-['Poppins',sans-serif]">
+                      Quality:
+                    </span>
+                    <span className="font-semibold text-blue-600 font-['Poppins',sans-serif]">
+                      4K HD
+                    </span>
                   </div>
                   <div className="pt-3 border-t border-gray-200">
                     <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                       <Sparkles size={14} className="text-purple-500" />
-                      <span className="font-medium font-['Poppins',sans-serif]">Powered by Advanced AI</span>
+                      <span className="font-medium font-['Poppins',sans-serif]">
+                        Powered by Advanced AI
+                      </span>
                     </div>
                   </div>
                 </div>

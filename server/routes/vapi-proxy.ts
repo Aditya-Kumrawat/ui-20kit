@@ -42,7 +42,11 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
     try {
       responseData = JSON.parse(responseText);
     } catch (jsonError) {
-      console.error("❌ Vapi response not valid JSON:", vapiResponse.status, responseText);
+      console.error(
+        "❌ Vapi response not valid JSON:",
+        vapiResponse.status,
+        responseText,
+      );
       return res.status(vapiResponse.status).json({
         error: "Invalid response format from Vapi API",
         details: responseText,
@@ -102,7 +106,11 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
     try {
       responseData = JSON.parse(responseText);
     } catch (jsonError) {
-      console.error("❌ Vapi response not valid JSON:", vapiResponse.status, responseText);
+      console.error(
+        "❌ Vapi response not valid JSON:",
+        vapiResponse.status,
+        responseText,
+      );
       return res.status(vapiResponse.status).json({
         error: "Vapi call creation failed",
         details: responseText,
