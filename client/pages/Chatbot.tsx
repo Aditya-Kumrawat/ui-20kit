@@ -607,10 +607,10 @@ export default function Chatbot() {
     }
   };
 
-  // Simplified connection test with safe fallback
+  // Force real API connection test - no fallbacks
   const testVapiConnection = async () => {
     try {
-      addDebugLog("🔍 Testing Vapi configuration...");
+      addDebugLog("🚀 Testing REAL Vapi API connection...");
       setVapiStatus("testing");
       setVapiError(null);
 
@@ -636,71 +636,46 @@ export default function Chatbot() {
         addDebugLog("✅ Will use dynamic assistant configuration");
       }
 
-      // 4. Attempt basic network test (but don't fail if it doesn't work)
-      try {
-        addDebugLog("📡 Attempting network connectivity test...");
-        const networkOk = await testNetworkConnectivity();
+      // 4. Test real Vapi API connectivity
+      addDebugLog("🔑 Testing Vapi API connectivity...");
 
-        if (!networkOk) {
-          // Network test already enabled test mode, just return
-          addDebugLog("🧪 Test Mode already enabled due to network restrictions");
-          return;
-        }
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
+      const testResponse = await fetch('https://api.vapi.ai/assistant', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (testResponse.status === 401) {
+        throw new Error("Invalid API key - authentication failed");
+      } else if (testResponse.status === 403) {
+        throw new Error("API key lacks required permissions");
+      } else if (testResponse.ok || testResponse.status === 404) {
+        addDebugLog("✅ Vapi API connectivity: SUCCESSFUL");
+        setVapiStatus("connected");
         setNetworkStatus('online');
-
-        // 5. Only test API if basic network works
-        addDebugLog("🔑 Testing Vapi API connectivity...");
-
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // Shorter timeout
-
-        const testResponse = await fetch('https://api.vapi.ai/assistant', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-          },
-          signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-
-        if (testResponse.status === 401) {
-          throw new Error("Invalid API key - authentication failed");
-        } else if (testResponse.status === 403) {
-          throw new Error("API key lacks required permissions");
-        } else if (testResponse.ok || testResponse.status === 404) {
-          addDebugLog("✅ Vapi API connectivity: OK");
-          setVapiStatus("connected");
-          addDebugLog("🎤 Ready to start voice recording!");
-        } else {
-          addDebugLog(`⚠️ Vapi API returned status: ${testResponse.status}`);
-          setVapiStatus("connected"); // Still consider it working for non-critical errors
-        }
-
-      } catch (apiError: any) {
-        addDebugLog(`❌ Vapi API test failed: ${apiError.message}`);
-        addDebugLog("🧪 Enabling Test Mode due to API connectivity issues");
-        setTestMode(true);
-        setVapiStatus("test-mode");
-        setNetworkStatus('restricted');
+        addDebugLog("🎤 Ready to start REAL voice recording!");
+      } else {
+        addDebugLog(`⚠️ Vapi API returned status: ${testResponse.status}`);
+        setVapiStatus("connected"); // Still consider it working
+        setNetworkStatus('online');
       }
 
     } catch (error: any) {
-      addDebugLog(`❌ Configuration test failed: ${error.message}`);
-      setVapiError(error.message);
+      addDebugLog(`❌ Real API test failed: ${error.message}`);
+      setVapiError(`Real API connection failed: ${error.message}`);
       setVapiStatus("error");
+      setNetworkStatus('offline');
 
-      // Enable test mode for any configuration issues too
-      if (!testMode) {
-        addDebugLog("💡 Enabling Test Mode due to configuration issues");
-        setTimeout(() => {
-          setTestMode(true);
-          setVapiStatus("test-mode");
-          addDebugLog("🧪 Test Mode enabled automatically");
-        }, 1000);
-      }
+      // Don't fall back to test mode - force user to fix the issue
+      addDebugLog("🚫 Real API mode required - no fallback to test mode");
     }
   };
 
