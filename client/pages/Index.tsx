@@ -87,48 +87,26 @@ export default function Index() {
 
             {/* Right content - 3D sphere and cards */}
             <div className="space-y-8">
-              {/* 3D Sphere with metallic ribbons */}
-              <div className="relative flex justify-center">
-                <div className="w-80 h-80 relative">
-                  {/* Main sphere */}
-                  <div className="w-full h-full bg-gradient-to-br from-purple-400 via-pink-400 to-purple-600 rounded-full shadow-2xl relative overflow-hidden">
-                    {/* Metallic ribbon effects */}
-                    <div className="absolute inset-0">
-                      {[...Array(8)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="absolute w-full h-6 bg-gradient-to-r from-pink-300/60 via-purple-300/80 to-pink-400/60 transform"
-                          style={{
-                            top: `${12 + i * 12}%`,
-                            transform: `rotate(${i * 22.5}deg) translateY(${Math.sin(i) * 10}px)`,
-                            borderRadius: '50px',
-                          }}
-                        ></div>
-                      ))}
-                    </div>
-                    {/* Glossy overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-full"></div>
-                  </div>
+              {/* Video content */}
+              <div className="relative flex justify-center" />
 
-                  {/* User avatars around sphere */}
-                  <div className="absolute top-4 right-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-600">Add your own options</span>
-                      <div className="flex -space-x-2">
-                        {[0, 1, 2].map((i) => (
-                          <div
-                            key={i}
-                            className={`w-8 h-8 rounded-full border-2 border-white cursor-pointer transition-all ${
-                              selectedUser === i ? 'ring-2 ring-pink-400' : ''
-                            }`}
-                            style={{
-                              backgroundColor: i === 0 ? '#8B5CF6' : i === 1 ? '#EC4899' : '#6366F1'
-                            }}
-                            onClick={() => setSelectedUser(i)}
-                          ></div>
-                        ))}
-                      </div>
-                    </div>
+              <div className="flex flex-col relative mt-5 h-auto pb-8">
+                <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
+                  <div className="relative">
+                    <video
+                      autoPlay
+                      muted
+                      controls={false}
+                      playsInline
+                      loop
+                      className="w-full h-full object-cover object-center rounded-sm relative flex flex-col mt-5 min-h-5 min-w-5"
+                    >
+                      <source
+                        type="video/mp4"
+                        src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
+                      />
+                    </video>
+                    <div className="w-full pt-[70.04%] pointer-events-none text-0" />
                   </div>
                 </div>
               </div>
