@@ -1148,6 +1148,14 @@ export default function Chatbot() {
                     >
                       Test Connection
                     </Button>
+                    <Button
+                      size="sm"
+                      variant={testMode ? "default" : "outline"}
+                      onClick={toggleTestMode}
+                      className="h-6 px-2 text-xs"
+                    >
+                      {testMode ? "Exit Test" : "Test Mode"}
+                    </Button>
                   </div>
                 </div>
               </div>
