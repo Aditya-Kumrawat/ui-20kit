@@ -294,14 +294,14 @@ export default function Login() {
 
             {/* Right Side - Video Container */}
             <motion.div
-              className="hidden lg:block"
+              className="hidden lg:block w-full max-w-md mx-auto"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <motion.div
-                className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl h-[600px] flex flex-col"
-                whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(255,255,255,0.1)" }}
+                className="bg-white/60 backdrop-blur-lg rounded-3xl p-8 border border-purple-200/50 shadow-2xl h-[600px] flex flex-col"
+                whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(139,69,193,0.15)" }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 {/* Video Container */}
