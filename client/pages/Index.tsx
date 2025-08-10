@@ -20,37 +20,46 @@ export default function Index() {
     { letters: ["K", "L", "M", "N", "O"], color: "from-pink-500 to-red-500" }
   ];
 
-  useEffect(() => {
-    // Tech stack flowing animation
-    if (techStackRef.current) {
-      anime({
-        targets: techStackRef.current.children,
-        translateX: [100, 0],
-        opacity: [0, 1],
-        scale: [0.8, 1],
-        delay: anime.stagger(200),
-        duration: 800,
-        easing: 'easeOutElastic(1, .8)',
-        loop: true,
-        direction: 'alternate'
-      });
-    }
-
-    // Menu items floating animation
-    menuRefs.current.forEach((menuRef, index) => {
-      if (menuRef) {
-        anime({
-          targets: menuRef.children,
-          translateY: [0, -10, 0],
-          scale: [1, 1.05, 1],
-          delay: anime.stagger(100, { start: index * 300 }),
-          duration: 2000,
-          easing: 'easeInOutSine',
-          loop: true
-        });
+  // Container variants for staggered animations
+  const techStackVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.8
       }
-    });
-  }, []);
+    }
+  };
+
+  const techItemVariants = {
+    hidden: {
+      opacity: 0,
+      x: 100,
+      scale: 0.8
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 20
+      }
+    }
+  };
+
+  const menuContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 1.0
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-start via-purple-900 to-purple-end relative overflow-hidden">
