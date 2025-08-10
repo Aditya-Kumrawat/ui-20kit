@@ -1358,7 +1358,7 @@ export default function Chatbot() {
                                   : "bg-gray-400"
                         }`}
                       ></div>
-                      <span className="text-xs capitalize">
+                      <span className="text-xs capitalize font-['Poppins',sans-serif] font-medium">
                         {vapiStatus.replace("-", " ")}
                       </span>
                       <span className="text-xs px-1 rounded bg-purple-100 text-purple-700">
