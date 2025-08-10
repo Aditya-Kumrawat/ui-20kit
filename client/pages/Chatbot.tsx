@@ -673,13 +673,29 @@ export default function Chatbot() {
 
     vapi.on("message", (message: any) => {
       if (message.type === "transcript") {
-        addDebugLog(`📝 Transcript: ${message.transcriptType} - ${message.transcript}`);
-        if (message.transcriptType === "partial") {
-          setInputValue(message.transcript);
-        } else if (message.transcriptType === "final") {
-          addDebugLog(`✅ Final transcript: ${message.transcript}`);
-          handleSendMessage(message.transcript);
-          setTranscript((prev) => [...prev, `User: ${message.transcript}`]);
+        if (message.role === "user") {
+          addDebugLog(`📝 User transcript: ${message.transcriptType} - ${message.transcript}`);
+          if (message.transcriptType === "partial") {
+            setInputValue(message.transcript);
+          } else if (message.transcriptType === "final") {
+            addDebugLog(`✅ Final user transcript: ${message.transcript}`);
+            setInputValue(""); // Clear input after final transcript
+            handleSendMessage(message.transcript);
+            setTranscript((prev) => [...prev, `User: ${message.transcript}`]);
+          }
+        } else if (message.role === "assistant") {
+          addDebugLog(`🤖 AI response: ${message.transcript}`);
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: Date.now().toString(),
+              content: message.transcript,
+              sender: "ai" as const,
+              timestamp: new Date(),
+              status: "read" as const,
+            },
+          ]);
+          setTranscript((prev) => [...prev, `AI: ${message.transcript}`]);
         }
       }
     });
