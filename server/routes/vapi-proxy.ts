@@ -82,17 +82,30 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
 
     console.log("📞 Vapi call response status:", vapiResponse.status);
 
-    if (!vapiResponse.ok) {
-      const errorData = await vapiResponse.text();
-      console.error("❌ Vapi call failed:", vapiResponse.status, errorData);
+    let responseData;
+    try {
+      responseData = await vapiResponse.json();
+    } catch (jsonError) {
+      // If JSON parsing fails, try to get text
+      const errorText = await vapiResponse.text();
+      console.error("❌ Vapi response not valid JSON:", vapiResponse.status, errorText);
       return res.status(vapiResponse.status).json({
         error: "Vapi call creation failed",
-        details: errorData,
+        details: errorText,
         status: vapiResponse.status,
       });
     }
 
-    const callData = await vapiResponse.json();
+    if (!vapiResponse.ok) {
+      console.error("❌ Vapi call failed:", vapiResponse.status, responseData);
+      return res.status(vapiResponse.status).json({
+        error: "Vapi call creation failed",
+        details: responseData,
+        status: vapiResponse.status,
+      });
+    }
+
+    const callData = responseData;
     console.log("✅ Vapi call created successfully!");
     console.log("📋 Call details:", {
       id: callData.id,
