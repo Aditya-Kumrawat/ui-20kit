@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import {
@@ -16,28 +16,63 @@ import {
   SiTailwindcss,
   SiVercel,
   SiPostgresql,
+  SiPython,
+  SiTensorflow,
+  SiKubernetes,
 } from "react-icons/si";
 
 export default function Index() {
   const [pillStyle, setPillStyle] = useState({ width: 0, left: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const heroRef = useRef(null);
+  const isHeroInView = useInView(heroRef);
+  
+  // Parallax effects
+  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   const techStack = [
     { name: "React", icon: SiReact, color: "#61DAFB" },
     { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
-    { name: "Express", icon: SiExpress, color: "#000000" },
-    { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-    { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
     { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
-    { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
+    { name: "Python", icon: SiPython, color: "#3776AB" },
+    { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
     { name: "Docker", icon: SiDocker, color: "#2496ED" },
+    { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
     { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
     { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
     { name: "Vercel", icon: SiVercel, color: "#000000" },
     { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
+    { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
   ];
 
-  const menuItems = ["Home", "Features", "Services", "About", "Contact"];
+  const aiFeatures = [
+    {
+      title: "Neural Networks",
+      description: "Advanced deep learning models for intelligent automation",
+      icon: "🧠",
+      gradient: "from-purple-600 to-blue-600"
+    },
+    {
+      title: "Computer Vision", 
+      description: "Real-time image and video analysis capabilities",
+      icon: "👁️",
+      gradient: "from-blue-600 to-cyan-600"
+    },
+    {
+      title: "Natural Language",
+      description: "Sophisticated text processing and generation",
+      icon: "💬",
+      gradient: "from-cyan-600 to-teal-600"
+    },
+    {
+      title: "Predictive Analytics",
+      description: "Data-driven insights and future predictions",
+      icon: "📊",
+      gradient: "from-teal-600 to-green-600"
+    }
+  ];
 
   useEffect(() => {
     AOS.init({
@@ -62,9 +97,26 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white" style={{ scrollBehavior: "smooth" }}>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-blue-900/20" />
+        <motion.div
+          className="absolute inset-0 opacity-30"
+          animate={{
+            background: [
+              "radial-gradient(circle at 20% 50%, #7c3aed 0%, transparent 50%)",
+              "radial-gradient(circle at 80% 20%, #3b82f6 0%, transparent 50%)",
+              "radial-gradient(circle at 40% 80%, #06b6d4 0%, transparent 50%)",
+              "radial-gradient(circle at 20% 50%, #7c3aed 0%, transparent 50%)"
+            ]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
+
       {/* Navigation Header */}
-      <nav className="border-b border-gray-100 bg-white/95 backdrop-blur-sm sticky top-0 z-50">
+      <nav className="relative z-50 border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <motion.div
             className="flex items-center justify-between"
@@ -73,60 +125,41 @@ export default function Index() {
             transition={{ duration: 0.6 }}
           >
             {/* Logo */}
-            <motion.div
+            <motion.div 
               className="flex items-center gap-3"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">F7</span>
+              <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/25">
+                <span className="text-white font-bold text-lg">AI</span>
               </div>
-              <span className="font-bold text-xl text-gray-900">Fusion</span>
+              <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                FusionAI
+              </span>
             </motion.div>
 
             {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-8">
-              <motion.a
-                href="#home"
-                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
-                whileHover={{ y: -2 }}
-              >
-                Home
-              </motion.a>
-              <motion.a
-                href="#features"
-                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
-                whileHover={{ y: -2 }}
-              >
-                Features
-              </motion.a>
-              <motion.a
-                href="#services"
-                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
-                whileHover={{ y: -2 }}
-              >
-                Services
-              </motion.a>
-              <motion.a
-                href="#about"
-                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
-                whileHover={{ y: -2 }}
-              >
-                About
-              </motion.a>
-              <motion.a
-                href="#contact"
-                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
-                whileHover={{ y: -2 }}
-              >
-                Contact
-              </motion.a>
+              {["Home", "Features", "Platform", "AI Models", "Contact"].map((item, index) => (
+                <motion.a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="text-white/70 hover:text-white font-medium transition-all duration-300 relative group"
+                  whileHover={{ y: -2 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  {item}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 group-hover:w-full transition-all duration-300" />
+                </motion.a>
+              ))}
             </div>
 
             {/* CTA Buttons */}
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
-                className="hidden sm:inline-flex text-gray-600 hover:text-gray-900"
+                className="hidden sm:inline-flex text-white/70 hover:text-white hover:bg-white/10"
               >
                 Sign In
               </Button>
@@ -134,59 +167,89 @@ export default function Index() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button className="bg-gray-900 text-white hover:bg-gray-800 rounded-lg px-6">
+                <Button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 rounded-xl px-6 shadow-lg shadow-purple-500/25">
                   Get Started
                 </Button>
               </motion.div>
-
-              {/* Mobile Menu Button */}
-              <Button
-                variant="ghost"
-                className="md:hidden p-2"
-                size="sm"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </Button>
             </div>
           </motion.div>
         </div>
       </nav>
 
-      {/* Hero Section with #e9f4ff background */}
-      <div className="py-20" style={{ backgroundColor: "#e9f4ff" }}>
+      {/* Hero Section */}
+      <motion.div 
+        ref={heroRef}
+        className="relative z-10 py-20"
+        style={{ y: heroY, opacity: heroOpacity }}
+      >
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content - 60% space */}
+            {/* Left Content */}
             <motion.div
               className="space-y-8"
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8 }}
-              data-aos="fade-right"
             >
-              <div className="space-y-4">
-                <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                  Unleash Your
-                </h1>
-                <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                  Creativity<span className="text-gray-400">//</span>
-                </h1>
+              <div className="space-y-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.2 }}
+                >
+                  <span className="inline-block px-4 py-2 bg-purple-500/20 backdrop-blur-sm border border-purple-500/30 rounded-full text-sm text-purple-300 mb-6">
+                    🚀 Next-Gen AI Platform
+                  </span>
+                </motion.div>
+                
+                <motion.h1 
+                  className="text-6xl lg:text-7xl font-bold leading-tight"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.3 }}
+                >
+                  <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    Unleash
+                  </span>
+                  <br />
+                  <motion.span
+                    className="text-white"
+                    animate={{ 
+                      textShadow: [
+                        "0 0 20px rgba(139, 92, 246, 0.5)",
+                        "0 0 40px rgba(59, 130, 246, 0.5)",
+                        "0 0 20px rgba(139, 92, 246, 0.5)"
+                      ]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    AI Power
+                  </motion.span>
+                </motion.h1>
+
+                <motion.p 
+                  className="text-xl text-white/70 leading-relaxed max-w-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.4 }}
+                >
+                  Transform your ideas into reality with our cutting-edge AI platform. 
+                  Build intelligent applications across web and mobile with unprecedented ease.
+                </motion.p>
               </div>
 
-              <p className="text-xl text-gray-600 leading-relaxed max-w-md">
-                Built with cutting-edge technologies to deliver the best energy
-                management experience
-              </p>
-
-              <div className="flex items-center gap-4">
+              <motion.div 
+                className="flex items-center gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.5 }}
+              >
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)" }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button className="bg-gray-900 text-white hover:bg-gray-800 px-8 py-3 text-lg rounded-lg">
-                    Generate
+                  <Button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-4 text-lg rounded-xl shadow-lg shadow-purple-500/25">
+                    Start Building
                   </Button>
                 </motion.div>
                 <motion.div
@@ -195,148 +258,493 @@ export default function Index() {
                 >
                   <Button
                     variant="outline"
-                    className="border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 text-lg rounded-lg"
+                    className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg rounded-xl backdrop-blur-sm"
                   >
-                    View Manual
+                    Watch Demo
                   </Button>
                 </motion.div>
-              </div>
+              </motion.div>
             </motion.div>
 
-            {/* Right Content - Expanded Video */}
+            {/* Right Content - AI Visualization */}
             <motion.div
-              className="flex justify-center"
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
+              className="flex justify-center relative"
+              initial={{ opacity: 0, x: 50 }}
+              animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
-              data-aos="fade-left"
             >
-              <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 shadow-lg w-full max-w-lg">
-                <div className="relative rounded-2xl overflow-hidden">
-                  <video
-                    autoPlay
-                    muted
-                    controls={false}
-                    playsInline
-                    loop
-                    className="w-full h-auto rounded-2xl"
-                  >
-                    <source
-                      type="video/mp4"
-                      src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
-                    />
-                  </video>
-                </div>
+              {/* Glass Container */}
+              <div className="relative w-full max-w-lg">
+                <motion.div
+                  className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl"
+                  animate={{ 
+                    boxShadow: [
+                      "0 25px 50px rgba(139, 92, 246, 0.2)",
+                      "0 25px 50px rgba(59, 130, 246, 0.2)",
+                      "0 25px 50px rgba(139, 92, 246, 0.2)"
+                    ]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  {/* Neural Network Visualization */}
+                  <div className="relative h-64 overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900/50 to-blue-900/50">
+                    {/* Animated Neural Nodes */}
+                    <svg className="w-full h-full absolute inset-0" viewBox="0 0 400 250">
+                      {/* Connection Lines */}
+                      <motion.g stroke="url(#gradient)" strokeWidth="2" fill="none" opacity="0.6">
+                        <motion.line x1="50" y1="50" x2="150" y2="80" 
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 0.6 }}
+                          transition={{ duration: 2, delay: 0.5 }}
+                        />
+                        <motion.line x1="50" y1="125" x2="150" y2="80" 
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 0.6 }}
+                          transition={{ duration: 2, delay: 0.7 }}
+                        />
+                        <motion.line x1="50" y1="200" x2="150" y2="170" 
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 0.6 }}
+                          transition={{ duration: 2, delay: 0.9 }}
+                        />
+                        <motion.line x1="150" y1="80" x2="250" y2="100" 
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 0.6 }}
+                          transition={{ duration: 2, delay: 1.1 }}
+                        />
+                        <motion.line x1="150" y1="170" x2="250" y2="150" 
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 0.6 }}
+                          transition={{ duration: 2, delay: 1.3 }}
+                        />
+                        <motion.line x1="250" y1="100" x2="350" y2="125" 
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 0.6 }}
+                          transition={{ duration: 2, delay: 1.5 }}
+                        />
+                        <motion.line x1="250" y1="150" x2="350" y2="125" 
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 0.6 }}
+                          transition={{ duration: 2, delay: 1.7 }}
+                        />
+                      </motion.g>
+                      
+                      {/* Neural Nodes */}
+                      {[
+                        { x: 50, y: 50 }, { x: 50, y: 125 }, { x: 50, y: 200 },
+                        { x: 150, y: 80 }, { x: 150, y: 170 },
+                        { x: 250, y: 100 }, { x: 250, y: 150 },
+                        { x: 350, y: 125 }
+                      ].map((node, index) => (
+                        <motion.circle
+                          key={index}
+                          cx={node.x}
+                          cy={node.y}
+                          r="8"
+                          fill="url(#nodeGradient)"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ 
+                            scale: 1, 
+                            opacity: 1,
+                            r: [8, 12, 8]
+                          }}
+                          transition={{ 
+                            scale: { duration: 0.5, delay: index * 0.2 },
+                            r: { duration: 2, repeat: Infinity, delay: index * 0.3 }
+                          }}
+                        />
+                      ))}
+                      
+                      {/* Gradients */}
+                      <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#8B5CF6" />
+                          <stop offset="100%" stopColor="#3B82F6" />
+                        </linearGradient>
+                        <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%">
+                          <stop offset="0%" stopColor="#FFFFFF" />
+                          <stop offset="100%" stopColor="#8B5CF6" />
+                        </radialGradient>
+                      </defs>
+                    </svg>
+                    
+                    {/* Floating Data Points */}
+                    {[...Array(6)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-2 h-2 bg-cyan-400 rounded-full"
+                        style={{
+                          left: `${20 + Math.random() * 60}%`,
+                          top: `${20 + Math.random() * 60}%`,
+                        }}
+                        animate={{
+                          y: [-10, 10, -10],
+                          opacity: [0.3, 1, 0.3],
+                          scale: [0.8, 1.2, 0.8]
+                        }}
+                        transition={{
+                          duration: 2 + Math.random() * 2,
+                          repeat: Infinity,
+                          delay: Math.random() * 2
+                        }}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* AI Stats */}
+                  <div className="mt-6 grid grid-cols-3 gap-4">
+                    {[
+                      { label: "Models", value: "50+" },
+                      { label: "Accuracy", value: "99.9%" },
+                      { label: "Speed", value: "Real-time" }
+                    ].map((stat, index) => (
+                      <motion.div
+                        key={stat.label}
+                        className="text-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 2 + index * 0.2 }}
+                      >
+                        <motion.div
+                          className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
+                        >
+                          {stat.value}
+                        </motion.div>
+                        <div className="text-white/60 text-sm">{stat.label}</div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Tech Stack Section - Flowing Right to Left with Real Icons */}
-      <div className="bg-white py-16 overflow-hidden">
-        <div className="mb-12" data-aos="fade-up">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-            Powered by Modern Technology
-          </h2>
-          <p className="text-gray-600 text-center max-w-2xl mx-auto">
-            Built with cutting-edge technologies to deliver the best experience
-          </p>
-        </div>
-
-        {/* Infinite Flowing Tech Stack */}
-        <div className="relative">
+      {/* Tech Stack Section with Mobile/PC Mockups */}
+      <div className="relative z-10 bg-black/20 py-20 backdrop-blur-sm border-y border-white/10">
+        <div className="max-w-7xl mx-auto px-6">
           <motion.div
-            className="flex gap-12 py-8"
-            animate={{
-              x: [0, -100 * techStack.length],
-            }}
-            transition={{
-              duration: 30,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            style={{ width: `${techStack.length * 200}px` }}
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
           >
-            {/* Triple the items for seamless loop */}
-            {[...techStack, ...techStack, ...techStack].map((tech, index) => {
-              const IconComponent = tech.icon;
-              return (
-                <motion.div
-                  key={`${tech.name}-${index}`}
-                  className="flex flex-col items-center group min-w-[150px]"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <div
-                    className="w-20 h-20 rounded-full flex items-center justify-center mb-4 border-2 bg-white shadow-lg group-hover:shadow-xl transition-all duration-300"
-                    style={{
-                      borderColor: `${tech.color}30`,
-                      backgroundColor: `${tech.color}05`,
-                    }}
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
+              Powered by Modern Technology
+            </h2>
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
+              Built with cutting-edge technologies for seamless web and mobile experiences
+            </p>
+          </motion.div>
+
+          {/* Platform Mockups */}
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            {/* Desktop Mockup */}
+            <motion.div
+              className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20"
+              whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(139, 92, 246, 0.2)" }}
+            >
+              <div className="bg-slate-800 rounded-2xl p-4 shadow-2xl">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-lg p-6 h-48">
+                  <motion.div
+                    className="space-y-3"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
                   >
-                    <IconComponent size={32} style={{ color: tech.color }} />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
-                    {tech.name}
-                  </span>
-                </motion.div>
-              );
-            })}
+                    <div className="h-4 bg-gradient-to-r from-purple-400 to-blue-400 rounded w-3/4"></div>
+                    <div className="h-3 bg-white/30 rounded w-1/2"></div>
+                    <div className="h-3 bg-white/20 rounded w-2/3"></div>
+                    <div className="grid grid-cols-3 gap-2 mt-4">
+                      {[...Array(6)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="h-8 bg-gradient-to-r from-cyan-400/30 to-blue-400/30 rounded"
+                          initial={{ scale: 0 }}
+                          whileInView={{ scale: 1 }}
+                          transition={{ delay: 0.7 + i * 0.1 }}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+              <div className="text-center mt-6">
+                <h3 className="text-xl font-bold text-white mb-2">💻 Web Platform</h3>
+                <p className="text-white/60">Full-featured desktop experience</p>
+              </div>
+            </motion.div>
+
+            {/* Mobile Mockup */}
+            <motion.div
+              className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20"
+              whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(59, 130, 246, 0.2)" }}
+            >
+              <div className="bg-slate-800 rounded-3xl p-3 shadow-2xl max-w-xs mx-auto">
+                <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-2xl p-4 h-64">
+                  <motion.div
+                    className="space-y-4"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full"></div>
+                      <div className="h-3 bg-white/40 rounded flex-1"></div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-3 bg-white/30 rounded w-full"></div>
+                      <div className="h-3 bg-white/20 rounded w-3/4"></div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[...Array(4)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="h-12 bg-gradient-to-r from-cyan-400/30 to-blue-400/30 rounded-lg"
+                          initial={{ scale: 0 }}
+                          whileInView={{ scale: 1 }}
+                          transition={{ delay: 0.7 + i * 0.1 }}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+              <div className="text-center mt-6">
+                <h3 className="text-xl font-bold text-white mb-2">📱 Mobile App</h3>
+                <p className="text-white/60">AI-powered mobile experience</p>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Tech Stack Icons */}
+          <motion.div
+            className="relative overflow-hidden"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true }}
+          >
+            <motion.div
+              className="flex gap-8 py-8"
+              animate={{
+                x: [0, -100 * techStack.length],
+              }}
+              transition={{
+                duration: 40,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              style={{ width: `${techStack.length * 200}px` }}
+            >
+              {[...techStack, ...techStack, ...techStack].map((tech, index) => {
+                const IconComponent = tech.icon;
+                return (
+                  <motion.div
+                    key={`${tech.name}-${index}`}
+                    className="flex flex-col items-center group min-w-[150px]"
+                    whileHover={{ scale: 1.1, y: -10 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
+                    <motion.div
+                      className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-xl border shadow-lg group-hover:shadow-2xl transition-all duration-300"
+                      style={{
+                        borderColor: `${tech.color}30`,
+                        backgroundColor: `${tech.color}10`,
+                        boxShadow: `0 8px 32px ${tech.color}20`
+                      }}
+                      whileHover={{
+                        boxShadow: `0 12px 40px ${tech.color}40`,
+                        borderColor: `${tech.color}60`
+                      }}
+                    >
+                      <IconComponent size={32} style={{ color: tech.color }} />
+                    </motion.div>
+                    <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors">
+                      {tech.name}
+                    </span>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
           </motion.div>
         </div>
       </div>
 
-      {/* Flowing Menu with Pill Animation */}
-      <div className="bg-gray-50 py-16" data-aos="fade-up">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Navigation
-            </h3>
-            <p className="text-gray-600">
-              Smooth flowing menu with interactive highlights
-            </p>
-          </div>
-
-          <div
-            ref={menuRef}
-            className="relative bg-white rounded-full p-2 shadow-lg mx-auto max-w-2xl"
+      {/* AI Features Section */}
+      <div className="relative z-10 py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
           >
-            {/* Animated Pill Background */}
-            <motion.div
-              className="absolute top-2 bg-gray-900 rounded-full h-12 transition-all duration-300 ease-out"
-              style={{
-                width: pillStyle.width,
-                left: pillStyle.left + 8,
-              }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: pillStyle.width > 0 ? 1 : 0 }}
-            />
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
+              🤖 AI-Powered Features
+            </h2>
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
+              Harness the power of artificial intelligence with our advanced ML models
+            </p>
+          </motion.div>
 
-            {/* Menu Items */}
-            <div className="flex justify-between relative z-10">
-              {menuItems.map((item, index) => (
-                <motion.button
-                  key={item}
-                  className="px-6 py-3 text-gray-700 hover:text-white font-medium rounded-full transition-colors duration-300 relative z-10"
-                  onMouseEnter={handleMouseEnter}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {aiFeatures.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  boxShadow: "0 20px 40px rgba(139, 92, 246, 0.2)",
+                  y: -10
+                }}
+                viewport={{ once: true }}
+              >
+                <motion.div
+                  className={`w-16 h-16 rounded-xl bg-gradient-to-r ${feature.gradient} flex items-center justify-center text-2xl mb-4 shadow-lg`}
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.8 }}
                 >
-                  {item}
-                </motion.button>
-              ))}
-            </div>
+                  {feature.icon}
+                </motion.div>
+                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
+                
+                {/* Progress Animation */}
+                <motion.div
+                  className="mt-4 h-1 bg-white/10 rounded-full overflow-hidden"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
+                >
+                  <motion.div
+                    className={`h-full bg-gradient-to-r ${feature.gradient} rounded-full`}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "100%" }}
+                    transition={{ duration: 2, delay: 1 + index * 0.2 }}
+                  />
+                </motion.div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Additional Content Section */}
-      <div className="bg-white py-20" data-aos="fade-up">
+      {/* Experience the Future Section */}
+      <div className="relative z-10 py-20 bg-black/20 backdrop-blur-sm border-y border-white/10">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
+              Experience the Future
+            </h2>
+            <p className="text-xl text-white/70 max-w-3xl mx-auto mb-12">
+              Join thousands of developers building the next generation of intelligent applications
+            </p>
+          </motion.div>
+
+          {/* Flowing Menu Section */}
+          <motion.div
+            className="relative overflow-hidden bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+              {[
+                {
+                  title: "AI Development Tools",
+                  description: "Advanced coding environment with AI assistance and real-time collaboration",
+                  icon: "🛠️",
+                  color: "from-purple-500 to-blue-500"
+                },
+                {
+                  title: "Neural Networks",
+                  description: "Pre-trained models and custom neural network architectures",
+                  icon: "🧠",
+                  color: "from-blue-500 to-cyan-500"
+                },
+                {
+                  title: "ML Operations",
+                  description: "Complete MLOps pipeline with monitoring and deployment automation",
+                  icon: "⚡",
+                  color: "from-cyan-500 to-teal-500"
+                }
+              ].map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  className="group bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer"
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 * index }}
+                  viewport={{ once: true }}
+                >
+                  <motion.div
+                    className={`w-12 h-12 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center text-2xl mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300`}
+                    whileHover={{ rotate: 15, scale: 1.1 }}
+                  >
+                    {item.icon}
+                  </motion.div>
+                  <h4 className="text-lg font-semibold text-white mb-3 group-hover:text-purple-300 transition-colors">
+                    {item.title}
+                  </h4>
+                  <p className="text-white/60 text-sm leading-relaxed group-hover:text-white/80 transition-colors">
+                    {item.description}
+                  </p>
+                  <motion.div
+                    className={`mt-4 text-transparent bg-gradient-to-r ${item.color} bg-clip-text text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2`}
+                    initial={{ x: -10 }}
+                    whileHover={{ x: 0 }}
+                  >
+                    Explore More →
+                  </motion.div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Flowing Background Animation */}
+            <motion.div
+              className="absolute inset-0 opacity-30 pointer-events-none"
+              initial={{ backgroundPosition: "0% 50%" }}
+              animate={{ backgroundPosition: "100% 50%" }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              style={{
+                background: "linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.1), transparent, rgba(59, 130, 246, 0.1), transparent, rgba(6, 182, 212, 0.1), transparent)",
+                backgroundSize: "300% 300%"
+              }}
+            />
+          </motion.div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="relative z-10 py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -344,127 +752,98 @@ export default function Index() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              Experience the Future
-            </h2>
-            <p className="text-xl text-gray-600 leading-relaxed mb-12">
-              Join thousands of developers who trust our platform to build
-              amazing applications with modern technologies.
+            <motion.h2 
+              className="text-5xl font-bold mb-6"
+              animate={{ 
+                backgroundPosition: ["0%", "100%", "0%"]
+              }}
+              transition={{ duration: 5, repeat: Infinity }}
+              style={{
+                background: "linear-gradient(45deg, #8B5CF6, #3B82F6, #06B6D4, #8B5CF6)",
+                backgroundSize: "300% 300%",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent"
+              }}
+            >
+              Ready to Build the Future?
+            </motion.h2>
+            <p className="text-xl text-white/70 leading-relaxed mb-12">
+              Start your AI journey today and transform your ideas into intelligent applications
             </p>
-          </motion.div>
-
-          {/* Flowing Menu Section */}
-          <motion.div
-            className="mt-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">
-              Explore Our Platform
-            </h3>
-
-            {/* Flowing Navigation Menu */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Development Tools */}
-                <motion.div
-                  className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Development Tools</h4>
-                  <p className="text-gray-600 text-sm">Advanced coding environment with AI assistance</p>
-                  <motion.div
-                    className="mt-4 text-blue-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-                    initial={{ x: -10 }}
-                    whileHover={{ x: 0 }}
-                  >
-                    Explore Tools →
-                  </motion.div>
-                </motion.div>
-
-                {/* Design System */}
-                <motion.div
-                  className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-600 transition-colors">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Design System</h4>
-                  <p className="text-gray-600 text-sm">Beautiful components and design tokens</p>
-                  <motion.div
-                    className="mt-4 text-purple-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-                    initial={{ x: -10 }}
-                    whileHover={{ x: 0 }}
-                  >
-                    View Components →
-                  </motion.div>
-                </motion.div>
-
-                {/* Analytics */}
-                <motion.div
-                  className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-600 transition-colors">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Analytics</h4>
-                  <p className="text-gray-600 text-sm">Real-time insights and performance metrics</p>
-                  <motion.div
-                    className="mt-4 text-green-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-                    initial={{ x: -10 }}
-                    whileHover={{ x: 0 }}
-                  >
-                    See Analytics →
-                  </motion.div>
-                </motion.div>
-              </div>
-
-              {/* Flowing Background Animation */}
+            
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
               <motion.div
-                className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"
-                initial={{ backgroundPosition: "0% 50%" }}
-                animate={{ backgroundPosition: "100% 50%" }}
-                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                style={{
-                  background: "linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent, rgba(147, 51, 234, 0.1), transparent)",
-                  backgroundSize: "200% 200%"
-                }}
-              />
-            </div>
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)" }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-4 text-lg rounded-xl shadow-lg shadow-purple-500/25">
+                  Get Started Free
+                </Button>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button
+                  variant="outline"
+                  className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg rounded-xl backdrop-blur-sm"
+                >
+                  Schedule Demo
+                </Button>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="text-center text-gray-500 text-sm">
-            © 2024 F7. All rights reserved.
+      <div className="relative z-10 border-t border-white/10 bg-black/20 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">AI</span>
+                </div>
+                <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                  FusionAI
+                </span>
+              </div>
+              <p className="text-white/60 leading-relaxed max-w-md">
+                Empowering developers to build intelligent applications with cutting-edge AI technology.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-white mb-4">Platform</h4>
+              <ul className="space-y-2 text-white/60">
+                <li>AI Models</li>
+                <li>Development Tools</li>
+                <li>API Documentation</li>
+                <li>Tutorials</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-white mb-4">Company</h4>
+              <ul className="space-y-2 text-white/60">
+                <li>About Us</li>
+                <li>Careers</li>
+                <li>Contact</li>
+                <li>Privacy Policy</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-white/10 mt-8 pt-8 text-center">
+            <p className="text-white/60 text-sm">
+              © 2024 FusionAI. All rights reserved. Built with ❤️ for the future.
+            </p>
           </div>
         </div>
       </div>
