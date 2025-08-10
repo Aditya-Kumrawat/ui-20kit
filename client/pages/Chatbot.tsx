@@ -1511,18 +1511,18 @@ export default function Chatbot() {
                 )}
               </div>
             </div>
-            <div className="flex-1 flex flex-col">
-              {/* Video Controls and Info */}
-              <div className="p-4 space-y-4">
+            {/* Video Controls and Info */}
+            <div className="p-6 border-t border-gray-200 bg-gray-50">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-medium text-gray-900">AI Assistant</h4>
-                    <p className="text-sm text-gray-500">
-                      Ready to help with analysis
+                    <h4 className="font-bold text-gray-900 font-['Poppins',sans-serif]">AI Assistant</h4>
+                    <p className="text-sm text-gray-600 font-['Poppins',sans-serif]">
+                      Ready to analyze your genetic data
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" className="hover:bg-purple-50">
                       <Play size={16} />
                     </Button>
                     <Button size="sm" variant="outline">
