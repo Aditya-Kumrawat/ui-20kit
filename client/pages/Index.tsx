@@ -219,122 +219,139 @@ export default function Index() {
               transition={{ duration: 0.8 }}
               data-aos="fade-right"
             >
-              <div className="space-y-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.2 }}
-                >
-                  <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-sm text-white mb-6 font-medium">
-                    🚀 Next-Gen AI Platform
-                  </span>
-                </motion.div>
-
-                <motion.h1
-                  className="text-5xl lg:text-7xl font-black leading-tight"
-                  style={{
-                    fontFamily: "'Synera', 'Proxima Nova', 'Space Grotesk', sans-serif",
-                  }}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.3 }}
-                >
-                  <span className="text-white text-glow">Unleash Your</span>
-                  <br />
-                  <motion.span
-                    className="animated-text pulse-animation"
-                    animate={{
-                      scale: [1, 1.05, 1],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    AI Potential
-                  </motion.span>
-                  <motion.span
-                    className="text-gray-800"
-                    style={{
-                      textShadow: "1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px -1px 0px #ffffff, -1px 1px 0px #ffffff",
-                      WebkitTextStroke: "1px #000000"
-                    }}
-                    animate={{
-                      opacity: [0.8, 1, 0.8],
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    //
-                  </motion.span>
-                </motion.h1>
-
-                <motion.p
-                  className="text-xl text-white font-medium leading-relaxed max-w-lg"
-                  style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    textShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)"
-                  }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.4 }}
-                >
-                  Transform your ideas into{" "}
-                  <motion.span
-                    className="text-white font-semibold"
-                    style={{
-                      textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)"
-                    }}
-                    animate={{
-                      scale: [1, 1.02, 1]
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    intelligent applications
-                  </motion.span>{" "}
-                  with our cutting-edge AI platform. Build seamlessly across{" "}
-                  <span
-                    className="text-white font-semibold"
-                    style={{textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)"}}
-                  >
-                    web and mobile
-                  </span> platforms.
-                </motion.p>
-              </div>
-
+              {/* Glass Box Container */}
               <motion.div
-                className="flex items-center gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.5 }}
+                className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8 shadow-2xl"
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
+                  backdropFilter: "blur(10px)",
+                  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)"
+                }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={isHeroInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ delay: 0.1, duration: 0.8 }}
+                whileHover={{
+                  scale: 1.02,
+                  boxShadow: "0 12px 40px 0 rgba(31, 38, 135, 0.5)"
+                }}
               >
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button className="bg-white text-gray-900 hover:bg-white/90 px-8 py-3 text-lg rounded-xl shadow-sm">
-                    Start Building
-                  </Button>
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button
-                    variant="outline"
-                    className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-3 text-lg rounded-xl"
+                <div className="space-y-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.2 }}
                   >
-                    Watch Demo
-                  </Button>
+                    <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-sm text-white mb-6 font-medium">
+                      🚀 Next-Gen AI Platform
+                    </span>
+                  </motion.div>
+
+                  <motion.h1
+                    className="text-5xl lg:text-7xl font-black leading-tight"
+                    style={{
+                      fontFamily: "'Synera', 'Proxima Nova', 'Space Grotesk', sans-serif",
+                    }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <span className="text-white text-glow">Unleash Your</span>
+                    <br />
+                    <motion.span
+                      className="animated-text pulse-animation"
+                      animate={{
+                        scale: [1, 1.05, 1],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      AI Potential
+                    </motion.span>
+                    <motion.span
+                      className="text-gray-800"
+                      style={{
+                        textShadow: "1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px -1px 0px #ffffff, -1px 1px 0px #ffffff",
+                        WebkitTextStroke: "1px #000000"
+                      }}
+                      animate={{
+                        opacity: [0.8, 1, 0.8],
+                        scale: [1, 1.1, 1],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      //
+                    </motion.span>
+                  </motion.h1>
+
+                  <motion.p
+                    className="text-xl text-white font-medium leading-relaxed max-w-lg"
+                    style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      textShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)"
+                    }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.4 }}
+                  >
+                    Transform your ideas into{" "}
+                    <motion.span
+                      className="text-white font-semibold"
+                      style={{
+                        textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)"
+                      }}
+                      animate={{
+                        scale: [1, 1.02, 1]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      intelligent applications
+                    </motion.span>{" "}
+                    with our cutting-edge AI platform. Build seamlessly across{" "}
+                    <span
+                      className="text-white font-semibold"
+                      style={{textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)"}}
+                    >
+                      web and mobile
+                    </span> platforms.
+                  </motion.p>
+                </div>
+
+                <motion.div
+                  className="flex items-center gap-4 mt-8"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.5 }}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Button className="bg-white text-gray-900 hover:bg-white/90 px-8 py-3 text-lg rounded-xl shadow-sm">
+                      Start Building
+                    </Button>
+                  </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Button
+                      variant="outline"
+                      className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-3 text-lg rounded-xl"
+                    >
+                      Watch Demo
+                    </Button>
+                  </motion.div>
                 </motion.div>
               </motion.div>
             </motion.div>
