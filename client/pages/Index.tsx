@@ -181,10 +181,15 @@ export default function Index() {
             muted
             loop
             playsInline
+            preload="auto"
             className="w-full h-full object-cover"
             style={{
               filter: "brightness(0.7)",
               minHeight: "100vh",
+            }}
+            onLoadedData={(e) => {
+              const video = e.target as HTMLVideoElement;
+              video.play().catch(console.error);
             }}
           >
             <source
