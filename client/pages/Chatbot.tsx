@@ -345,6 +345,49 @@ export default function Chatbot() {
     setDebugLogs(prev => [...prev.slice(-9), logMessage]); // Keep last 10 logs
   };
 
+  // Test mode - simulate Vapi functionality for testing
+  const toggleTestMode = () => {
+    setTestMode(!testMode);
+    if (!testMode) {
+      addDebugLog("🧪 Test mode enabled - simulating Vapi responses");
+      setVapiStatus("test-mode");
+    } else {
+      addDebugLog("🔧 Test mode disabled - using real Vapi");
+      setVapiStatus("disconnected");
+    }
+  };
+
+  const simulateVapiInteraction = () => {
+    if (!testMode) return;
+
+    // Simulate speech recognition
+    setTimeout(() => {
+      const testTranscript = "Can you help me analyze my DNA data?";
+      addDebugLog(`📝 Simulated transcript: ${testTranscript}`);
+      setInputValue(testTranscript);
+
+      // Simulate final transcript
+      setTimeout(() => {
+        handleSendMessage(testTranscript);
+        setTranscript(prev => [...prev, `User: ${testTranscript}`]);
+
+        // Simulate AI response
+        setTimeout(() => {
+          const aiResponse = "I'd be happy to help you analyze your DNA data! I can examine genetic markers, identify variants, and provide insights about your genetic profile. What specific aspects would you like me to focus on?";
+          addDebugLog(`🤖 Simulated AI response: ${aiResponse}`);
+          setMessages(prev => [...prev, {
+            id: Date.now().toString(),
+            content: aiResponse,
+            sender: "ai" as const,
+            timestamp: new Date(),
+            status: "read" as const,
+          }]);
+          setTranscript(prev => [...prev, `AI: ${aiResponse}`]);
+        }, 2000);
+      }, 1000);
+    }, 500);
+  };
+
   const quickActions: QuickAction[] = [
     {
       id: "analyze",
