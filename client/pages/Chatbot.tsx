@@ -352,7 +352,7 @@ export default function Chatbot() {
   const [vapiStatus, setVapiStatus] = useState("disconnected"); // Force real API mode
   const [vapiError, setVapiError] = useState<string | null>(null);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
-  const [testMode, setTestMode] = useState(false); // DISABLED: Force real API usage
+  const [testMode, setTestMode] = useState(false); // Force real API usage always
   const [networkStatus, setNetworkStatus] = useState<
     "unknown" | "online" | "offline" | "restricted"
   >("unknown");
