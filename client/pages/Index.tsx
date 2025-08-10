@@ -380,7 +380,7 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
               Powered by Modern Technology
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
