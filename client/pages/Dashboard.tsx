@@ -28,7 +28,7 @@ import {
   Target,
   PieChart,
   LineChart,
-  MoreHorizontal
+  MoreHorizontal,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -42,13 +42,45 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
   const menuItems = [
     { id: "home", label: "Homepage", icon: Home, href: "/dashboard" },
-    { id: "statistics", label: "Statistics", icon: BarChart3, href: "/dashboard/stats" },
-    { id: "analytics", label: "Analytics", icon: PieChart, href: "/dashboard/analytics", active: true },
-    { id: "appointments", label: "Appointments", icon: Calendar, href: "/dashboard/appointments" },
-    { id: "messages", label: "Messages", icon: MessageSquare, href: "/dashboard/messages", badge: 2 },
+    {
+      id: "statistics",
+      label: "Statistics",
+      icon: BarChart3,
+      href: "/dashboard/stats",
+    },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: PieChart,
+      href: "/dashboard/analytics",
+      active: true,
+    },
+    {
+      id: "appointments",
+      label: "Appointments",
+      icon: Calendar,
+      href: "/dashboard/appointments",
+    },
+    {
+      id: "messages",
+      label: "Messages",
+      icon: MessageSquare,
+      href: "/dashboard/messages",
+      badge: 2,
+    },
     { id: "ai", label: "AI Assistant", icon: Brain, href: "/dashboard/ai" },
-    { id: "chatbot", label: "Chatbot", icon: MessageSquare, href: "/dashboard/chatbot" },
-    { id: "community", label: "Community", icon: Users, href: "/dashboard/community" },
+    {
+      id: "chatbot",
+      label: "Chatbot",
+      icon: MessageSquare,
+      href: "/dashboard/chatbot",
+    },
+    {
+      id: "community",
+      label: "Community",
+      icon: Users,
+      href: "/dashboard/community",
+    },
   ];
 
   const toolItems = [
@@ -66,7 +98,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       {/* Logo Section */}
-      <motion.div 
+      <motion.div
         className="p-6 border-b border-slate-700/50"
         initial={false}
         animate={{ paddingLeft: isCollapsed ? 24 : 24 }}
@@ -126,8 +158,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <item.icon 
-              size={20} 
+            <item.icon
+              size={20}
               className={`${item.active || activeItem === item.id ? "text-purple-400" : "text-gray-400 group-hover:text-white"}`}
             />
             <AnimatePresence>
@@ -164,7 +196,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">Connected Profiles</div>
+              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
+                Connected Profiles
+              </div>
               <div className="flex -space-x-2 mb-3 px-2">
                 {[1, 2, 3].map((i) => (
                   <Avatar key={i} className="w-8 h-8 border-2 border-slate-700">
@@ -194,7 +228,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, delay: 0.1 }}
             >
-              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">AI Assistant</div>
+              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
+                AI Assistant
+              </div>
               {toolItems.map((tool, index) => (
                 <motion.button
                   key={tool.id}
@@ -204,9 +240,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                   transition={{ delay: 0.1 + index * 0.05 }}
                   whileHover={{ scale: 1.02 }}
                 >
-                  <tool.icon size={16} className="text-gray-400 group-hover:text-purple-400" />
+                  <tool.icon
+                    size={16}
+                    className="text-gray-400 group-hover:text-purple-400"
+                  />
                   <span className="text-left">{tool.label}</span>
-                  <ChevronRight size={12} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ChevronRight
+                    size={12}
+                    className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity"
+                  />
                 </motion.button>
               ))}
             </motion.div>
@@ -232,10 +274,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                 <div
                   className="absolute inset-0"
                   style={{
-                    backgroundImage: "url(https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fd5ef5f2a2a2d4fdda37b8beb31b2b7b7?alt=media&token=83995d22-6f0a-4e4a-979b-17c838b7d2cb&apiKey=ad2efc99155b417783200fc7999ced3f)",
+                    backgroundImage:
+                      "url(https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fd5ef5f2a2a2d4fdda37b8beb31b2b7b7?alt=media&token=83995d22-6f0a-4e4a-979b-17c838b7d2cb&apiKey=ad2efc99155b417783200fc7999ced3f)",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
-                    backgroundSize: "cover"
+                    backgroundSize: "cover",
                   }}
                 ></div>
                 <motion.div
@@ -253,9 +296,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                   <Brain size={24} className="text-purple-400" />
                 </motion.div>
               </div>
-              <div className="text-xs text-gray-400 mt-2">
-                AI Active
-              </div>
+              <div className="text-xs text-gray-400 mt-2">AI Active</div>
             </div>
           </motion.div>
         )}
@@ -268,12 +309,12 @@ export default function Dashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   const aiTexts = [
     "Hello! I'm your AI assistant ready to help you analyze your data.",
     "I can process your genetic information and provide insights.",
     "Let me know how I can assist you with your research today.",
-    "I'm here to make complex data analysis simple and intuitive."
+    "I'm here to make complex data analysis simple and intuitive.",
   ];
 
   // Typewriter effect
@@ -281,7 +322,7 @@ export default function Dashboard() {
     if (currentIndex < aiTexts.length) {
       const text = aiTexts[currentIndex];
       let charIndex = 0;
-      
+
       const typeInterval = setInterval(() => {
         if (charIndex < text.length) {
           setCurrentText(text.slice(0, charIndex + 1));
@@ -302,7 +343,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      
+
       {/* Main Content */}
       <motion.div
         className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"}`}
@@ -319,18 +360,22 @@ export default function Dashboard() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">DNA Overview</h1>
               <div className="flex items-center gap-4 mt-2">
-                <Badge variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-200">
+                <Badge
+                  variant="secondary"
+                  className="bg-blue-100 text-blue-700 hover:bg-blue-200"
+                >
                   Day
                 </Badge>
-                <Badge variant="outline" className="text-gray-600">Week</Badge>
-                <Badge variant="outline" className="text-gray-600">Month</Badge>
+                <Badge variant="outline" className="text-gray-600">
+                  Week
+                </Badge>
+                <Badge variant="outline" className="text-gray-600">
+                  Month
+                </Badge>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <motion.div
-                className="relative"
-                whileHover={{ scale: 1.05 }}
-              >
+              <motion.div className="relative" whileHover={{ scale: 1.05 }}>
                 <Button size="sm" variant="ghost" className="relative">
                   <Bell size={20} />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
@@ -343,7 +388,9 @@ export default function Dashboard() {
                 </AvatarFallback>
               </Avatar>
               <div className="text-right">
-                <div className="text-sm font-medium text-gray-900">Becca Kirby</div>
+                <div className="text-sm font-medium text-gray-900">
+                  Becca Kirby
+                </div>
                 <div className="text-xs text-gray-500">Chicago, USA</div>
               </div>
               <Button size="sm" variant="ghost">
@@ -370,14 +417,18 @@ export default function Dashboard() {
                   type="video/mp4"
                   src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2F84c92a2126f04b12917d149b99d6a13b?alt=media&token=2a038587-3580-43f1-90c1-58c21713e468&apiKey=ad2efc99155b417783200fc7999ced3f"
                 />
-                <p className="text-white text-center">Your browser does not support the video tag.</p>
+                <p className="text-white text-center">
+                  Your browser does not support the video tag.
+                </p>
               </video>
             </div>
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-600">AI Avatar Video Player</p>
               <div className="flex items-center justify-center gap-2 mt-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-xs text-gray-500">Video ready for interaction</span>
+                <span className="text-xs text-gray-500">
+                  Video ready for interaction
+                </span>
               </div>
             </div>
           </div>
@@ -393,10 +444,32 @@ export default function Dashboard() {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             {[
-              { label: "Analysis in progress", value: "27", icon: TrendingUp, color: "text-blue-600" },
-              { label: "Active treatments", value: "31", icon: Activity, color: "text-green-600" },
-              { label: "Hereditary", value: "92", icon: Zap, color: "text-purple-600", subtitle: "Average rate" },
-              { label: "Researches", value: "Sept. 15, 2022", icon: Target, color: "text-orange-600", subtitle: "September 15, 2022 / Week" },
+              {
+                label: "Analysis in progress",
+                value: "27",
+                icon: TrendingUp,
+                color: "text-blue-600",
+              },
+              {
+                label: "Active treatments",
+                value: "31",
+                icon: Activity,
+                color: "text-green-600",
+              },
+              {
+                label: "Hereditary",
+                value: "92",
+                icon: Zap,
+                color: "text-purple-600",
+                subtitle: "Average rate",
+              },
+              {
+                label: "Researches",
+                value: "Sept. 15, 2022",
+                icon: Target,
+                color: "text-orange-600",
+                subtitle: "September 15, 2022 / Week",
+              },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -409,9 +482,13 @@ export default function Dashboard() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
-                      <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </p>
                       {stat.subtitle && (
-                        <p className="text-xs text-gray-500 mt-1">{stat.subtitle}</p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {stat.subtitle}
+                        </p>
                       )}
                     </div>
                     <div className={`p-3 rounded-xl bg-gray-50 ${stat.color}`}>
@@ -434,12 +511,22 @@ export default function Dashboard() {
             >
               <Card className="p-6 h-96 border border-gray-200">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">DNA Interaction Visualization</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    DNA Interaction Visualization
+                  </h3>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="h-8 px-3 text-xs">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-3 text-xs"
+                    >
                       Export
                     </Button>
-                    <Button size="sm" variant="outline" className="h-8 px-3 text-xs">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-3 text-xs"
+                    >
                       Share
                     </Button>
                   </div>
@@ -498,7 +585,7 @@ export default function Dashboard() {
                         />
                       </g>
                     ))}
-                    
+
                     {/* DNA Base Pairs */}
                     {Array.from({ length: 15 }, (_, i) => (
                       <motion.line
@@ -523,7 +610,7 @@ export default function Dashboard() {
                       />
                     ))}
                   </motion.svg>
-                  
+
                   {/* Floating Particles */}
                   {Array.from({ length: 8 }, (_, i) => (
                     <motion.div
@@ -547,11 +634,13 @@ export default function Dashboard() {
                       }}
                     />
                   ))}
-                  
+
                   <div className="absolute bottom-4 left-4 text-sm text-gray-700">
                     <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3">
                       <div className="font-semibold">Good interaction</div>
-                      <div className="text-xs text-gray-600">with other molecules</div>
+                      <div className="text-xs text-gray-600">
+                        with other molecules
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -567,7 +656,9 @@ export default function Dashboard() {
             >
               {/* Avatar Video Component */}
               <Card className="p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">AI Assistant</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  AI Assistant
+                </h3>
                 <div className="space-y-4">
                   <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20"></div>
@@ -629,10 +720,14 @@ export default function Dashboard() {
 
               {/* Statistics Summary */}
               <Card className="p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Research Summary</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Research Summary
+                </h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Calculating the risk of diseases</span>
+                    <span className="text-sm text-gray-600">
+                      Calculating the risk of diseases
+                    </span>
                     <motion.div
                       className="w-4 h-4 bg-green-500 rounded-full"
                       animate={{ scale: [1, 1.2, 1] }}
@@ -640,11 +735,15 @@ export default function Dashboard() {
                     />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Diagnosis of genetic diseases</span>
+                    <span className="text-sm text-gray-600">
+                      Diagnosis of genetic diseases
+                    </span>
                     <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Patterns in heredity</span>
+                    <span className="text-sm text-gray-600">
+                      Patterns in heredity
+                    </span>
                     <div className="w-4 h-4 bg-orange-500 rounded-full"></div>
                   </div>
                 </div>
@@ -662,15 +761,22 @@ export default function Dashboard() {
             {/* Average Rate Chart */}
             <Card className="p-6 border border-gray-200">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Average Rate</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Average Rate
+                </h3>
                 <div className="text-sm text-gray-500">Average rate</div>
               </div>
               <div className="text-3xl font-bold text-gray-900 mb-2">92</div>
-              <div className="text-sm text-gray-600 mb-4">The degree of recent complications in hereditary polycythemia</div>
-              
+              <div className="text-sm text-gray-600 mb-4">
+                The degree of recent complications in hereditary polycythemia
+              </div>
+
               {/* Chart Visualization */}
               <div className="h-32 bg-gray-50 rounded-lg flex items-end justify-center p-4 relative overflow-hidden">
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 100">
+                <svg
+                  className="absolute inset-0 w-full h-full"
+                  viewBox="0 0 200 100"
+                >
                   <motion.path
                     d="M20,80 Q60,40 100,60 Q140,20 180,30"
                     stroke="#8b5cf6"
@@ -695,33 +801,49 @@ export default function Dashboard() {
 
             {/* Research Progress */}
             <Card className="p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Research Progress</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Research Progress
+              </h3>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm text-gray-600">DNA Analysis</span>
-                    <span className="text-sm font-medium text-gray-900">75%</span>
+                    <span className="text-sm font-medium text-gray-900">
+                      75%
+                    </span>
                   </div>
                   <Progress value={75} className="h-2" />
                 </div>
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-600">Genetic Mapping</span>
-                    <span className="text-sm font-medium text-gray-900">60%</span>
+                    <span className="text-sm text-gray-600">
+                      Genetic Mapping
+                    </span>
+                    <span className="text-sm font-medium text-gray-900">
+                      60%
+                    </span>
                   </div>
                   <Progress value={60} className="h-2" />
                 </div>
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-600">Risk Assessment</span>
-                    <span className="text-sm font-medium text-gray-900">90%</span>
+                    <span className="text-sm text-gray-600">
+                      Risk Assessment
+                    </span>
+                    <span className="text-sm font-medium text-gray-900">
+                      90%
+                    </span>
                   </div>
                   <Progress value={90} className="h-2" />
                 </div>
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-600">Report Generation</span>
-                    <span className="text-sm font-medium text-gray-900">45%</span>
+                    <span className="text-sm text-gray-600">
+                      Report Generation
+                    </span>
+                    <span className="text-sm font-medium text-gray-900">
+                      45%
+                    </span>
                   </div>
                   <Progress value={45} className="h-2" />
                 </div>

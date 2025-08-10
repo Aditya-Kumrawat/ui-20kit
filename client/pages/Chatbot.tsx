@@ -26,7 +26,7 @@ import {
   Zap,
   MessageSquare,
   Settings,
-  Upload
+  Upload,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -51,7 +51,8 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "Hello! I'm your AI assistant. I can help you with DNA analysis, genetic research, data interpretation, and much more. How can I assist you today?",
+      content:
+        "Hello! I'm your AI assistant. I can help you with DNA analysis, genetic research, data interpretation, and much more. How can I assist you today?",
       sender: "ai",
       timestamp: new Date(Date.now() - 60000),
       status: "read",
@@ -59,11 +60,11 @@ export default function Chatbot() {
         "Analyze my DNA data",
         "Explain genetic variants",
         "Generate research report",
-        "Help with data visualization"
-      ]
-    }
+        "Help with data visualization",
+      ],
+    },
   ]);
-  
+
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -75,38 +76,38 @@ export default function Chatbot() {
       id: "analyze",
       label: "Analyze Data",
       icon: <Database size={16} />,
-      prompt: "Help me analyze my genetic data"
+      prompt: "Help me analyze my genetic data",
     },
     {
       id: "explain",
       label: "Explain",
       icon: <Brain size={16} />,
-      prompt: "Explain this genetic concept to me"
+      prompt: "Explain this genetic concept to me",
     },
     {
       id: "visualize",
       label: "Visualize",
       icon: <ImageIcon size={16} />,
-      prompt: "Create a visualization of my data"
+      prompt: "Create a visualization of my data",
     },
     {
       id: "code",
       label: "Generate Code",
       icon: <Code size={16} />,
-      prompt: "Generate code for genetic analysis"
+      prompt: "Generate code for genetic analysis",
     },
     {
       id: "report",
       label: "Create Report",
       icon: <FileText size={16} />,
-      prompt: "Generate a research report"
+      prompt: "Generate a research report",
     },
     {
       id: "insights",
       label: "Get Insights",
       icon: <Sparkles size={16} />,
-      prompt: "Provide insights about my genetic profile"
-    }
+      prompt: "Provide insights about my genetic profile",
+    },
   ];
 
   const scrollToBottom = () => {
@@ -125,48 +126,52 @@ export default function Chatbot() {
       content: content.trim(),
       sender: "user",
       timestamp: new Date(),
-      status: "sending"
+      status: "sending",
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputValue("");
     setIsTyping(true);
 
     // Simulate AI response
-    setTimeout(() => {
-      const aiResponses = [
-        "I understand you're looking for genetic analysis. Let me process this information and provide you with detailed insights.",
-        "Based on your request, I can help you analyze the genetic patterns. Would you like me to focus on specific variants or provide a comprehensive overview?",
-        "Great question! Let me break down the genetic data for you. I'll analyze the key markers and provide actionable insights.",
-        "I can assist with that analysis. Let me examine the genetic sequence and identify any significant patterns or variants.",
-        "Perfect! I'll help you interpret this genetic information. Would you like me to generate visualizations or focus on specific aspects?"
-      ];
+    setTimeout(
+      () => {
+        const aiResponses = [
+          "I understand you're looking for genetic analysis. Let me process this information and provide you with detailed insights.",
+          "Based on your request, I can help you analyze the genetic patterns. Would you like me to focus on specific variants or provide a comprehensive overview?",
+          "Great question! Let me break down the genetic data for you. I'll analyze the key markers and provide actionable insights.",
+          "I can assist with that analysis. Let me examine the genetic sequence and identify any significant patterns or variants.",
+          "Perfect! I'll help you interpret this genetic information. Would you like me to generate visualizations or focus on specific aspects?",
+        ];
 
-      const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
-      
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: randomResponse,
-        sender: "ai",
-        timestamp: new Date(),
-        status: "read",
-        suggestions: [
-          "Show me detailed analysis",
-          "Create visualization",
-          "Export results",
-          "Explain methodology"
-        ]
-      };
+        const randomResponse =
+          aiResponses[Math.floor(Math.random() * aiResponses.length)];
 
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === userMessage.id 
-            ? { ...msg, status: "read" }
-            : msg
-        ).concat(aiMessage)
-      );
-      setIsTyping(false);
-    }, 1500 + Math.random() * 1000);
+        const aiMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          content: randomResponse,
+          sender: "ai",
+          timestamp: new Date(),
+          status: "read",
+          suggestions: [
+            "Show me detailed analysis",
+            "Create visualization",
+            "Export results",
+            "Explain methodology",
+          ],
+        };
+
+        setMessages((prev) =>
+          prev
+            .map((msg) =>
+              msg.id === userMessage.id ? { ...msg, status: "read" } : msg,
+            )
+            .concat(aiMessage),
+        );
+        setIsTyping(false);
+      },
+      1500 + Math.random() * 1000,
+    );
   };
 
   const handleQuickAction = (action: QuickAction) => {
@@ -183,7 +188,7 @@ export default function Chatbot() {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   const getStatusIcon = (status?: string) => {
@@ -236,7 +241,9 @@ export default function Chatbot() {
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
             </motion.div>
             <div>
-              <h1 className="text-lg font-semibold text-gray-900">AI Chatbot</h1>
+              <h1 className="text-lg font-semibold text-gray-900">
+                AI Chatbot
+              </h1>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <span>Online</span>
@@ -244,7 +251,7 @@ export default function Chatbot() {
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200">
             AI Powered
@@ -266,7 +273,9 @@ export default function Chatbot() {
         transition={{ duration: 0.5, delay: 0.1 }}
       >
         <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          <span className="text-sm text-gray-600 whitespace-nowrap mr-2">Quick Actions:</span>
+          <span className="text-sm text-gray-600 whitespace-nowrap mr-2">
+            Quick Actions:
+          </span>
           {quickActions.map((action, index) => (
             <motion.button
               key={action.id}
@@ -298,7 +307,9 @@ export default function Chatbot() {
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}>
+                <div
+                  className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}
+                >
                   {/* Avatar */}
                   <motion.div
                     initial={{ scale: 0 }}
@@ -319,7 +330,9 @@ export default function Chatbot() {
                   </motion.div>
 
                   {/* Message Content */}
-                  <div className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}>
+                  <div
+                    className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}
+                  >
                     <motion.div
                       className={`inline-block px-4 py-3 rounded-2xl ${
                         message.sender === "user"
@@ -330,13 +343,18 @@ export default function Chatbot() {
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <p className="text-sm leading-relaxed">{message.content}</p>
+                      <p className="text-sm leading-relaxed">
+                        {message.content}
+                      </p>
                     </motion.div>
 
                     {/* Message Info */}
-                    <div className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}>
+                    <div
+                      className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}
+                    >
                       <span>{formatTime(message.timestamp)}</span>
-                      {message.sender === "user" && getStatusIcon(message.status)}
+                      {message.sender === "user" &&
+                        getStatusIcon(message.status)}
                     </div>
 
                     {/* Suggestions */}
@@ -448,12 +466,10 @@ export default function Chatbot() {
                 className="pr-12 py-3 rounded-xl border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
                 disabled={isTyping}
               />
-              
+
               {/* Character count or file indicator */}
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
-                {inputValue.length > 0 && (
-                  <span>{inputValue.length}</span>
-                )}
+                {inputValue.length > 0 && <span>{inputValue.length}</span>}
               </div>
             </div>
 
@@ -461,8 +477,8 @@ export default function Chatbot() {
             <motion.button
               onClick={toggleRecording}
               className={`p-2 rounded-full transition-all ${
-                isRecording 
-                  ? "bg-red-500 text-white" 
+                isRecording
+                  ? "bg-red-500 text-white"
                   : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
               }`}
               whileHover={{ scale: 1.1 }}
