@@ -274,14 +274,35 @@ export default function Index() {
                 </motion.h1>
 
                 <motion.p
-                  className="text-xl text-white/80 leading-relaxed max-w-lg"
+                  className="text-xl text-white font-medium leading-relaxed max-w-lg"
+                  style={{
+                    fontFamily: "'Proxima Nova', 'Poppins', sans-serif",
+                    textShadow: "2px 2px 4px rgba(0,0,0,0.3)"
+                  }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.4 }}
                 >
-                  Transform your ideas into intelligent applications with our
-                  cutting-edge AI platform. Build seamlessly across web and
-                  mobile platforms.
+                  Transform your ideas into{" "}
+                  <motion.span
+                    className="text-cyan-300 font-semibold"
+                    animate={{
+                      textShadow: [
+                        "0 0 5px rgba(103, 232, 249, 0.5)",
+                        "0 0 15px rgba(103, 232, 249, 0.8)",
+                        "0 0 5px rgba(103, 232, 249, 0.5)"
+                      ]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    intelligent applications
+                  </motion.span>{" "}
+                  with our cutting-edge AI platform. Build seamlessly across{" "}
+                  <span className="text-yellow-300 font-semibold">web and mobile</span> platforms.
                 </motion.p>
               </div>
 
