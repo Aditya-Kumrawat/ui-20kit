@@ -69,7 +69,7 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
 // Specific handler for Vapi call creation
 export const handleVapiCall: RequestHandler = async (req, res) => {
   try {
-    console.log("📞 Creating Vapi call via server proxy");
+    console.log("�� Creating Vapi call via server proxy");
 
     const apiKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     if (!apiKey) {
@@ -250,10 +250,11 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
       success,
       status: testResponse.status,
       message: success
-        ? "Vapi API connectivity successful from server"
-        : "Vapi API connectivity failed from server",
+        ? `Vapi API connectivity successful from server (${keyType} key)`
+        : `Vapi API connectivity failed from server (${keyType} key)`,
       configured: true,
       apiKeyLength: apiKey.length,
+      keyType,
       responsePreview: responseBody.substring(0, 50),
     };
 
