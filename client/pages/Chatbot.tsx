@@ -295,7 +295,48 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   );
 };
 
-// Initialize real Vapi - force real API connection
+// Configure custom fetch with CORS and proxy settings for .fly.dev
+const setupCustomFetch = () => {
+  const originalFetch = window.fetch;
+
+  window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = input.toString();
+
+    // Configure headers for Vapi API calls
+    if (url.includes('api.vapi.ai')) {
+      console.log('🌐 Intercepting Vapi API call:', url);
+
+      const enhancedInit: RequestInit = {
+        ...init,
+        mode: 'cors',
+        credentials: 'omit',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Authorization, Content-Type',
+          ...init?.headers,
+        },
+      };
+
+      console.log('📡 Enhanced fetch config:', enhancedInit);
+
+      try {
+        const response = await originalFetch(input, enhancedInit);
+        console.log('✅ Fetch response:', response.status, response.statusText);
+        return response;
+      } catch (error) {
+        console.error('❌ Fetch error:', error);
+        throw error;
+      }
+    }
+
+    // Use original fetch for non-Vapi calls
+    return originalFetch(input, init);
+  };
+};
+
+// Initialize real Vapi with enhanced networking
 const createRealVapi = () => {
   const apiKey = import.meta.env.VITE_VAPI_KEY;
 
@@ -304,7 +345,10 @@ const createRealVapi = () => {
     throw new Error('VITE_VAPI_KEY environment variable is required');
   }
 
-  console.log('🚀 Initializing REAL Vapi with API key:', apiKey.substring(0, 8) + '...');
+  console.log('🚀 Setting up custom fetch for .fly.dev environment');
+  setupCustomFetch();
+
+  console.log('🔑 Initializing REAL Vapi with API key:', apiKey.substring(0, 8) + '...');
 
   try {
     const vapiInstance = new Vapi({
