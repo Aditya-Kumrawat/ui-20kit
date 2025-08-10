@@ -35,7 +35,19 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
 
     console.log("✅ Vapi response status:", vapiResponse.status);
 
-    const responseData = await vapiResponse.json();
+    let responseData;
+    try {
+      responseData = await vapiResponse.json();
+    } catch (jsonError) {
+      // If JSON parsing fails, try to get text
+      const errorText = await vapiResponse.text();
+      console.error("❌ Vapi response not valid JSON:", vapiResponse.status, errorText);
+      return res.status(vapiResponse.status).json({
+        error: "Invalid response format from Vapi API",
+        details: errorText,
+        status: vapiResponse.status,
+      });
+    }
 
     // Forward the response back to client
     res.status(vapiResponse.status).json(responseData);
