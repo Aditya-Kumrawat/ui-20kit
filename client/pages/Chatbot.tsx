@@ -557,24 +557,40 @@ export default function Chatbot() {
         setVapiStatus("starting");
 
         // Configure the assistant for the call
-        const assistantConfig = {
-          model: {
-            provider: "openai",
-            model: "gpt-3.5-turbo",
-            messages: [
-              {
-                role: "system",
-                content: "You are a helpful AI assistant specializing in DNA analysis, genetic research, and data interpretation. Keep your responses concise and informative."
-              }
-            ]
-          },
-          voice: {
-            provider: "11labs",
-            voiceId: "rachel"
-          }
-        };
+        const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+        const voiceId = import.meta.env.VITE_VAPI_VOICE_ID || "rachel";
 
-        await vapi.start(assistantConfig);
+        let callConfig;
+
+        if (assistantId) {
+          // Use pre-created assistant
+          addDebugLog(`Using pre-created assistant: ${assistantId}`);
+          callConfig = { assistantId };
+        } else {
+          // Create assistant configuration dynamically
+          addDebugLog("Creating dynamic assistant configuration");
+          callConfig = {
+            assistant: {
+              model: {
+                provider: "openai",
+                model: "gpt-3.5-turbo",
+                messages: [
+                  {
+                    role: "system",
+                    content: "You are a helpful AI assistant specializing in DNA analysis, genetic research, and data interpretation. Keep your responses concise and informative. You can help with genetic analysis, data visualization, research reports, and explaining genetic variants."
+                  }
+                ]
+              },
+              voice: {
+                provider: "11labs",
+                voiceId: voiceId
+              },
+              firstMessage: "Hello! I'm your AI assistant. I can help you with DNA analysis and genetic research. How can I assist you today?"
+            }
+          };
+        }
+
+        await vapi.start(callConfig);
         setIsRecording(true);
         setVapiStatus("recording");
         videoRef.current?.play();
