@@ -397,11 +397,22 @@ export default function Chatbot() {
     setDebugLogs(prev => [...prev.slice(-9), logMessage]); // Keep last 10 logs
   };
 
+  // Initial environment check log
+  useEffect(() => {
+    if (isRestrictedEnvironment()) {
+      addDebugLog("🛡️ RESTRICTED ENVIRONMENT DETECTED");
+      addDebugLog("🧪 Test Mode auto-enabled to prevent network errors");
+      addDebugLog(`📍 Hostname: ${window.location.hostname}`);
+    } else {
+      addDebugLog("�� Unrestricted environment - Vapi API available");
+    }
+  }, []);
+
   // Test mode - simulate Vapi functionality for testing
   const toggleTestMode = () => {
     setTestMode(!testMode);
     if (!testMode) {
-      addDebugLog("🧪 Test mode enabled - simulating Vapi responses");
+      addDebugLog("��� Test mode enabled - simulating Vapi responses");
       setVapiStatus("test-mode");
     } else {
       addDebugLog("🔧 Test mode disabled - using real Vapi");
