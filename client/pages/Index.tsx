@@ -27,7 +27,7 @@ export default function Index() {
   const { scrollY } = useScroll();
   const heroRef = useRef(null);
   const isHeroInView = useInView(heroRef);
-  
+
   // Subtle parallax effects
   const heroY = useTransform(scrollY, [0, 500], [0, 50]);
 
@@ -52,28 +52,32 @@ export default function Index() {
   const aiFeatures = [
     {
       title: "Neural Networks",
-      description: "Advanced deep learning models for intelligent automation and pattern recognition",
+      description:
+        "Advanced deep learning models for intelligent automation and pattern recognition",
       icon: "🧠",
-      gradient: "from-purple-100 to-blue-100"
+      gradient: "from-purple-100 to-blue-100",
     },
     {
-      title: "Computer Vision", 
-      description: "Real-time image and video analysis with state-of-the-art accuracy",
+      title: "Computer Vision",
+      description:
+        "Real-time image and video analysis with state-of-the-art accuracy",
       icon: "👁️",
-      gradient: "from-blue-100 to-cyan-100"
+      gradient: "from-blue-100 to-cyan-100",
     },
     {
       title: "Natural Language",
-      description: "Sophisticated text processing, understanding, and generation capabilities",
+      description:
+        "Sophisticated text processing, understanding, and generation capabilities",
       icon: "💬",
-      gradient: "from-cyan-100 to-teal-100"
+      gradient: "from-cyan-100 to-teal-100",
     },
     {
       title: "Predictive Analytics",
-      description: "Data-driven insights and future predictions with machine learning",
+      description:
+        "Data-driven insights and future predictions with machine learning",
       icon: "📊",
-      gradient: "from-teal-100 to-green-100"
-    }
+      gradient: "from-teal-100 to-green-100",
+    },
   ];
 
   useEffect(() => {
@@ -99,7 +103,10 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900" style={{ scrollBehavior: "smooth" }}>
+    <div
+      className="min-h-screen bg-white text-gray-900"
+      style={{ scrollBehavior: "smooth" }}
+    >
       {/* Navigation Header */}
       <nav className="border-b border-gray-100 bg-white/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -110,7 +117,7 @@ export default function Index() {
             transition={{ duration: 0.6 }}
           >
             {/* Logo */}
-            <motion.div 
+            <motion.div
               className="flex items-center gap-3"
               whileHover={{ scale: 1.02 }}
             >
@@ -122,20 +129,22 @@ export default function Index() {
 
             {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-8">
-              {["Home", "Features", "Platform", "AI Models", "Contact"].map((item, index) => (
-                <motion.a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200 relative group"
-                  whileHover={{ y: -2 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {item}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300" />
-                </motion.a>
-              ))}
+              {["Home", "Features", "Platform", "AI Models", "Contact"].map(
+                (item, index) => (
+                  <motion.a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200 relative group"
+                    whileHover={{ y: -2 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    {item}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300" />
+                  </motion.a>
+                ),
+              )}
             </div>
 
             {/* CTA Buttons */}
@@ -175,7 +184,7 @@ export default function Index() {
             className="w-full h-full object-cover"
             style={{
               filter: "brightness(0.7)",
-              minHeight: "100vh"
+              minHeight: "100vh",
             }}
           >
             <source
@@ -208,10 +217,12 @@ export default function Index() {
                     🚀 Next-Gen AI Platform
                   </span>
                 </motion.div>
-                
+
                 <motion.h1
                   className="text-5xl lg:text-6xl font-bold text-white leading-tight"
-                  style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+                  style={{
+                    fontFamily: "'Synera', 'Space Grotesk', sans-serif",
+                  }}
                   initial={{ opacity: 0, y: 30 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.3 }}
@@ -228,12 +239,13 @@ export default function Index() {
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.4 }}
                 >
-                  Transform your ideas into intelligent applications with our cutting-edge AI platform.
-                  Build seamlessly across web and mobile platforms.
+                  Transform your ideas into intelligent applications with our
+                  cutting-edge AI platform. Build seamlessly across web and
+                  mobile platforms.
                 </motion.p>
               </div>
 
-              <motion.div 
+              <motion.div
                 className="flex items-center gap-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
@@ -273,9 +285,17 @@ export default function Index() {
                 <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl">
                   {/* Clean Neural Network Visualization */}
                   <div className="relative h-64 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50">
-                    <svg className="w-full h-full absolute inset-0" viewBox="0 0 400 250">
+                    <svg
+                      className="w-full h-full absolute inset-0"
+                      viewBox="0 0 400 250"
+                    >
                       {/* Connection Lines */}
-                      <motion.g stroke="#6366f1" strokeWidth="2" fill="none" opacity="0.3">
+                      <motion.g
+                        stroke="#6366f1"
+                        strokeWidth="2"
+                        fill="none"
+                        opacity="0.3"
+                      >
                         {[
                           { x1: 50, y1: 50, x2: 150, y2: 80 },
                           { x1: 50, y1: 125, x2: 150, y2: 80 },
@@ -283,24 +303,34 @@ export default function Index() {
                           { x1: 150, y1: 80, x2: 250, y2: 100 },
                           { x1: 150, y1: 170, x2: 250, y2: 150 },
                           { x1: 250, y1: 100, x2: 350, y2: 125 },
-                          { x1: 250, y1: 150, x2: 350, y2: 125 }
+                          { x1: 250, y1: 150, x2: 350, y2: 125 },
                         ].map((line, index) => (
                           <motion.line
                             key={index}
-                            x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2}
+                            x1={line.x1}
+                            y1={line.y1}
+                            x2={line.x2}
+                            y2={line.y2}
                             initial={{ pathLength: 0, opacity: 0 }}
                             animate={{ pathLength: 1, opacity: 0.3 }}
-                            transition={{ duration: 1.5, delay: 0.5 + index * 0.2 }}
+                            transition={{
+                              duration: 1.5,
+                              delay: 0.5 + index * 0.2,
+                            }}
                           />
                         ))}
                       </motion.g>
-                      
+
                       {/* Neural Nodes */}
                       {[
-                        { x: 50, y: 50 }, { x: 50, y: 125 }, { x: 50, y: 200 },
-                        { x: 150, y: 80 }, { x: 150, y: 170 },
-                        { x: 250, y: 100 }, { x: 250, y: 150 },
-                        { x: 350, y: 125 }
+                        { x: 50, y: 50 },
+                        { x: 50, y: 125 },
+                        { x: 50, y: 200 },
+                        { x: 150, y: 80 },
+                        { x: 150, y: 170 },
+                        { x: 250, y: 100 },
+                        { x: 250, y: 150 },
+                        { x: 350, y: 125 },
                       ].map((node, index) => (
                         <motion.circle
                           key={index}
@@ -309,18 +339,18 @@ export default function Index() {
                           r="6"
                           fill="#6366f1"
                           initial={{ scale: 0, opacity: 0 }}
-                          animate={{ 
-                            scale: 1, 
+                          animate={{
+                            scale: 1,
                             opacity: 1,
                           }}
-                          transition={{ 
+                          transition={{
                             scale: { duration: 0.5, delay: index * 0.1 },
-                            opacity: { duration: 0.5, delay: index * 0.1 }
+                            opacity: { duration: 0.5, delay: index * 0.1 },
                           }}
                         />
                       ))}
                     </svg>
-                    
+
                     {/* Floating Data Points */}
                     {[...Array(4)].map((_, i) => (
                       <motion.div
@@ -337,18 +367,18 @@ export default function Index() {
                         transition={{
                           duration: 2 + Math.random(),
                           repeat: Infinity,
-                          delay: Math.random() * 2
+                          delay: Math.random() * 2,
                         }}
                       />
                     ))}
                   </div>
-                  
+
                   {/* AI Stats */}
                   <div className="mt-6 grid grid-cols-3 gap-4">
                     {[
                       { label: "Models", value: "50+" },
                       { label: "Accuracy", value: "99.9%" },
-                      { label: "Speed", value: "Real-time" }
+                      { label: "Speed", value: "Real-time" },
                     ].map((stat, index) => (
                       <motion.div
                         key={stat.label}
@@ -357,8 +387,12 @@ export default function Index() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1.5 + index * 0.2 }}
                       >
-                        <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                        <div className="text-gray-600 text-sm">{stat.label}</div>
+                        <div className="text-2xl font-bold text-gray-900">
+                          {stat.value}
+                        </div>
+                        <div className="text-gray-600 text-sm">
+                          {stat.label}
+                        </div>
                       </motion.div>
                     ))}
                   </div>
@@ -380,11 +414,15 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
+            <h2
+              className="text-4xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+            >
               Powered by Modern Technology
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Built with cutting-edge technologies for seamless web and mobile experiences
+              Built with cutting-edge technologies for seamless web and mobile
+              experiences
             </p>
           </motion.div>
 
@@ -400,7 +438,10 @@ export default function Index() {
             {/* Desktop Mockup */}
             <motion.div
               className="bg-gray-50 rounded-3xl p-8 border border-gray-100"
-              whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+              }}
               transition={{ duration: 0.3 }}
             >
               <div className="bg-white rounded-2xl p-4 shadow-lg">
@@ -434,15 +475,22 @@ export default function Index() {
                 </div>
               </div>
               <div className="text-center mt-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">💻 Web Platform</h3>
-                <p className="text-gray-600">Full-featured desktop experience</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  💻 Web Platform
+                </h3>
+                <p className="text-gray-600">
+                  Full-featured desktop experience
+                </p>
               </div>
             </motion.div>
 
             {/* Mobile Mockup */}
             <motion.div
               className="bg-gray-50 rounded-3xl p-8 border border-gray-100"
-              whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+              }}
               transition={{ duration: 0.3 }}
             >
               <div className="bg-white rounded-3xl p-3 shadow-lg max-w-xs mx-auto">
@@ -476,7 +524,9 @@ export default function Index() {
                 </div>
               </div>
               <div className="text-center mt-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">📱 Mobile App</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  📱 Mobile App
+                </h3>
                 <p className="text-gray-600">AI-powered mobile experience</p>
               </div>
             </motion.div>
@@ -502,10 +552,14 @@ export default function Index() {
                   <motion.div
                     key={`${tech.name}-${index}`}
                     className="flex flex-col items-center group min-w-[150px]"
-                    whileHover={{ 
-                      scale: 1.1, 
+                    whileHover={{
+                      scale: 1.1,
                       y: -10,
-                      transition: { type: "spring", stiffness: 300, damping: 20 }
+                      transition: {
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                      },
                     }}
                   >
                     <motion.div
@@ -516,14 +570,17 @@ export default function Index() {
                       }}
                       whileHover={{
                         borderColor: tech.color,
-                        boxShadow: `0 12px 30px ${tech.color}30`
+                        boxShadow: `0 12px 30px ${tech.color}30`,
                       }}
                     >
                       <motion.div
                         whileHover={{ rotate: 360, scale: 1.2 }}
                         transition={{ duration: 0.6 }}
                       >
-                        <IconComponent size={32} style={{ color: tech.color }} />
+                        <IconComponent
+                          size={32}
+                          style={{ color: tech.color }}
+                        />
                       </motion.div>
                     </motion.div>
                     <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
@@ -548,11 +605,15 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
+            <h2
+              className="text-4xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+            >
               Meet Your AI Assistant
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Experience the future of intelligent interaction with our advanced AI assistant
+              Experience the future of intelligent interaction with our advanced
+              AI assistant
             </p>
           </motion.div>
 
@@ -568,7 +629,10 @@ export default function Index() {
             <div className="relative w-full max-w-2xl">
               <motion.div
                 className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-white/50 shadow-xl"
-                whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(0,0,0,0.15)" }}
+                whileHover={{
+                  scale: 1.02,
+                  boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
+                }}
                 transition={{ duration: 0.3 }}
               >
                 <div className="relative rounded-2xl overflow-hidden bg-gray-100">
@@ -593,8 +657,12 @@ export default function Index() {
                     whileHover={{ opacity: 1 }}
                   >
                     <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
+                      <svg
+                        className="w-6 h-6 text-white ml-1"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M8 5v14l11-7z" />
                       </svg>
                     </div>
                   </motion.div>
@@ -613,9 +681,11 @@ export default function Index() {
             data-aos="fade-up"
           >
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
-              Our AI assistant combines cutting-edge natural language processing with advanced machine learning
-              to provide intelligent, context-aware responses. Whether you're coding, analyzing data, or exploring
-              creative solutions, your AI companion is here to help you achieve more.
+              Our AI assistant combines cutting-edge natural language processing
+              with advanced machine learning to provide intelligent,
+              context-aware responses. Whether you're coding, analyzing data, or
+              exploring creative solutions, your AI companion is here to help
+              you achieve more.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
@@ -629,8 +699,12 @@ export default function Index() {
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
                   <span className="text-blue-600 text-xl">🤖</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Intelligent Conversations</h3>
-                <p className="text-gray-600 text-sm">Natural, context-aware dialogue that understands your needs</p>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Intelligent Conversations
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Natural, context-aware dialogue that understands your needs
+                </p>
               </motion.div>
 
               <motion.div
@@ -643,8 +717,12 @@ export default function Index() {
                 <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
                   <span className="text-purple-600 text-xl">⚡</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Real-time Assistance</h3>
-                <p className="text-gray-600 text-sm">Instant responses and solutions powered by advanced AI</p>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Real-time Assistance
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Instant responses and solutions powered by advanced AI
+                </p>
               </motion.div>
 
               <motion.div
@@ -657,8 +735,12 @@ export default function Index() {
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
                   <span className="text-green-600 text-xl">🎯</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Personalized Experience</h3>
-                <p className="text-gray-600 text-sm">Adapts to your workflow and preferences over time</p>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Personalized Experience
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Adapts to your workflow and preferences over time
+                </p>
               </motion.div>
             </div>
           </motion.div>
@@ -676,11 +758,15 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
+            <h2
+              className="text-4xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+            >
               🤖 AI-Powered Features
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Harness the power of artificial intelligence with our advanced machine learning models
+              Harness the power of artificial intelligence with our advanced
+              machine learning models
             </p>
           </motion.div>
 
@@ -694,7 +780,7 @@ export default function Index() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{
                   y: -5,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                 }}
                 viewport={{ once: true }}
                 data-aos="fade-up"
@@ -704,13 +790,28 @@ export default function Index() {
                 <div className="relative h-32 mb-4 bg-gray-50 rounded-xl overflow-hidden">
                   {/* Neural Networks Animation */}
                   {feature.title === "Neural Networks" && (
-                    <svg className="w-full h-full absolute inset-0" viewBox="0 0 200 120" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+                    <svg
+                      className="w-full h-full absolute inset-0"
+                      viewBox="0 0 200 120"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      }}
+                    >
                       {/* Neural Network Nodes */}
                       {[
-                        { x: 20, y: 30, layer: 0 }, { x: 20, y: 60 }, { x: 20, y: 90 },
-                        { x: 70, y: 20, layer: 1 }, { x: 70, y: 45 }, { x: 70, y: 70 }, { x: 70, y: 95 },
-                        { x: 120, y: 30, layer: 2 }, { x: 120, y: 60 }, { x: 120, y: 90 },
-                        { x: 170, y: 45, layer: 3 }, { x: 170, y: 75 }
+                        { x: 20, y: 30, layer: 0 },
+                        { x: 20, y: 60 },
+                        { x: 20, y: 90 },
+                        { x: 70, y: 20, layer: 1 },
+                        { x: 70, y: 45 },
+                        { x: 70, y: 70 },
+                        { x: 70, y: 95 },
+                        { x: 120, y: 30, layer: 2 },
+                        { x: 120, y: 60 },
+                        { x: 120, y: 90 },
+                        { x: 170, y: 45, layer: 3 },
+                        { x: 170, y: 75 },
                       ].map((node, i) => (
                         <motion.circle
                           key={i}
@@ -727,24 +828,33 @@ export default function Index() {
                             duration: 1,
                             delay: node.layer * 0.3 + (i % 4) * 0.1,
                             repeat: Infinity,
-                            repeatDelay: 2
+                            repeatDelay: 2,
                           }}
                         />
                       ))}
 
                       {/* Connection Lines */}
                       {[
-                        { x1: 24, y1: 30, x2: 66, y2: 20 }, { x1: 24, y1: 30, x2: 66, y2: 45 },
-                        { x1: 24, y1: 60, x2: 66, y2: 45 }, { x1: 24, y1: 60, x2: 66, y2: 70 },
-                        { x1: 24, y1: 90, x2: 66, y2: 70 }, { x1: 24, y1: 90, x2: 66, y2: 95 },
-                        { x1: 74, y1: 20, x2: 116, y2: 30 }, { x1: 74, y1: 45, x2: 116, y2: 30 },
-                        { x1: 74, y1: 70, x2: 116, y2: 60 }, { x1: 74, y1: 95, x2: 116, y2: 90 },
-                        { x1: 124, y1: 30, x2: 166, y2: 45 }, { x1: 124, y1: 60, x2: 166, y2: 45 },
-                        { x1: 124, y1: 90, x2: 166, y2: 75 }
+                        { x1: 24, y1: 30, x2: 66, y2: 20 },
+                        { x1: 24, y1: 30, x2: 66, y2: 45 },
+                        { x1: 24, y1: 60, x2: 66, y2: 45 },
+                        { x1: 24, y1: 60, x2: 66, y2: 70 },
+                        { x1: 24, y1: 90, x2: 66, y2: 70 },
+                        { x1: 24, y1: 90, x2: 66, y2: 95 },
+                        { x1: 74, y1: 20, x2: 116, y2: 30 },
+                        { x1: 74, y1: 45, x2: 116, y2: 30 },
+                        { x1: 74, y1: 70, x2: 116, y2: 60 },
+                        { x1: 74, y1: 95, x2: 116, y2: 90 },
+                        { x1: 124, y1: 30, x2: 166, y2: 45 },
+                        { x1: 124, y1: 60, x2: 166, y2: 45 },
+                        { x1: 124, y1: 90, x2: 166, y2: 75 },
                       ].map((line, i) => (
                         <motion.line
                           key={i}
-                          x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2}
+                          x1={line.x1}
+                          y1={line.y1}
+                          x2={line.x2}
+                          y2={line.y2}
                           stroke="#ffffff"
                           strokeWidth="1"
                           opacity="0.6"
@@ -754,7 +864,7 @@ export default function Index() {
                             duration: 2,
                             delay: i * 0.1,
                             repeat: Infinity,
-                            repeatDelay: 1
+                            repeatDelay: 1,
                           }}
                         />
                       ))}
@@ -767,13 +877,13 @@ export default function Index() {
                         fill="#fbbf24"
                         animate={{
                           cx: [0, 20, 70, 120, 170, 200],
-                          cy: [60, 60, 45, 60, 60, 60]
+                          cy: [60, 60, 45, 60, 60, 60],
                         }}
                         transition={{
                           duration: 3,
                           repeat: Infinity,
                           repeatDelay: 1,
-                          ease: "easeInOut"
+                          ease: "easeInOut",
                         }}
                       />
                     </svg>
@@ -795,14 +905,14 @@ export default function Index() {
                               backgroundColor: [
                                 "rgba(255,255,255,0.3)",
                                 "rgba(251,191,36,0.8)",
-                                "rgba(255,255,255,0.3)"
-                              ]
+                                "rgba(255,255,255,0.3)",
+                              ],
                             }}
                             transition={{
                               duration: 2,
                               delay: (i % 8) * 0.1 + Math.floor(i / 8) * 0.05,
                               repeat: Infinity,
-                              repeatDelay: 1
+                              repeatDelay: 1,
                             }}
                           />
                         ))}
@@ -816,22 +926,22 @@ export default function Index() {
                           duration: 2,
                           repeat: Infinity,
                           repeatDelay: 0.5,
-                          ease: "easeInOut"
+                          ease: "easeInOut",
                         }}
                       />
 
                       {/* Detection Box */}
                       <motion.div
                         className="absolute border-2 border-yellow-400 rounded"
-                        style={{ width: '40px', height: '30px' }}
+                        style={{ width: "40px", height: "30px" }}
                         animate={{
                           x: [20, 80, 140, 80, 20],
-                          y: [20, 40, 60, 40, 20]
+                          y: [20, 40, 60, 40, 20],
                         }}
                         transition={{
                           duration: 4,
                           repeat: Infinity,
-                          ease: "easeInOut"
+                          ease: "easeInOut",
                         }}
                       />
                     </div>
@@ -841,20 +951,25 @@ export default function Index() {
                   {feature.title === "Natural Language" && (
                     <div className="relative w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 flex flex-col justify-center p-4">
                       {/* Text Processing Lines */}
-                      {["Hello World", "AI Processing", "Text Analysis", "Language Model"].map((text, i) => (
+                      {[
+                        "Hello World",
+                        "AI Processing",
+                        "Text Analysis",
+                        "Language Model",
+                      ].map((text, i) => (
                         <motion.div
                           key={i}
                           className="text-white text-xs mb-1 font-mono"
                           initial={{ opacity: 0, x: -20 }}
                           animate={{
                             opacity: [0, 1, 1, 0],
-                            x: [-20, 0, 0, 20]
+                            x: [-20, 0, 0, 20],
                           }}
                           transition={{
                             duration: 2,
                             delay: i * 0.5,
                             repeat: Infinity,
-                            repeatDelay: 2
+                            repeatDelay: 2,
                           }}
                         >
                           {text}
@@ -869,12 +984,12 @@ export default function Index() {
                             className="w-2 h-2 bg-yellow-300 rounded-full"
                             animate={{
                               scale: [1, 1.5, 1],
-                              opacity: [0.5, 1, 0.5]
+                              opacity: [0.5, 1, 0.5],
                             }}
                             transition={{
                               duration: 1,
                               delay: i * 0.2,
-                              repeat: Infinity
+                              repeat: Infinity,
                             }}
                           />
                         ))}
@@ -887,11 +1002,26 @@ export default function Index() {
                     <div className="relative w-full h-full bg-gradient-to-br from-green-500 to-teal-500">
                       <svg className="w-full h-full" viewBox="0 0 200 120">
                         {/* Chart Background */}
-                        <rect x="20" y="20" width="160" height="80" fill="rgba(255,255,255,0.1)" rx="4" />
+                        <rect
+                          x="20"
+                          y="20"
+                          width="160"
+                          height="80"
+                          fill="rgba(255,255,255,0.1)"
+                          rx="4"
+                        />
 
                         {/* Grid Lines */}
                         {[30, 40, 50, 60, 70, 80, 90].map((y, i) => (
-                          <line key={i} x1="25" y1={y} x2="175" y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                          <line
+                            key={i}
+                            x1="25"
+                            y1={y}
+                            x2="175"
+                            y2={y}
+                            stroke="rgba(255,255,255,0.2)"
+                            strokeWidth="0.5"
+                          />
                         ))}
 
                         {/* Animated Chart Line */}
@@ -906,14 +1036,21 @@ export default function Index() {
                             duration: 3,
                             repeat: Infinity,
                             repeatDelay: 1,
-                            ease: "easeInOut"
+                            ease: "easeInOut",
                           }}
                         />
 
                         {/* Data Points */}
                         {[
-                          { x: 25, y: 90 }, { x: 45, y: 80 }, { x: 65, y: 70 }, { x: 85, y: 60 },
-                          { x: 105, y: 50 }, { x: 125, y: 45 }, { x: 145, y: 40 }, { x: 165, y: 35 }, { x: 175, y: 30 }
+                          { x: 25, y: 90 },
+                          { x: 45, y: 80 },
+                          { x: 65, y: 70 },
+                          { x: 85, y: 60 },
+                          { x: 105, y: 50 },
+                          { x: 125, y: 45 },
+                          { x: 145, y: 40 },
+                          { x: 165, y: 35 },
+                          { x: 175, y: 30 },
                         ].map((point, i) => (
                           <motion.circle
                             key={i}
@@ -924,13 +1061,13 @@ export default function Index() {
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{
                               scale: [0, 1.2, 1],
-                              opacity: 1
+                              opacity: 1,
                             }}
                             transition={{
                               duration: 0.5,
                               delay: 0.3 * i,
                               repeat: Infinity,
-                              repeatDelay: 3
+                              repeatDelay: 3,
                             }}
                           />
                         ))}
@@ -946,13 +1083,13 @@ export default function Index() {
                             fill="rgba(255,255,255,0.7)"
                             animate={{
                               height: [0, 10 + i * 5, 0],
-                              y: [100, 90 - i * 5, 100]
+                              y: [100, 90 - i * 5, 100],
                             }}
                             transition={{
                               duration: 2,
                               delay: i * 0.1,
                               repeat: Infinity,
-                              repeatDelay: 2
+                              repeatDelay: 2,
                             }}
                           />
                         ))}
@@ -968,8 +1105,12 @@ export default function Index() {
                 >
                   {feature.icon}
                 </motion.div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
 
                 {/* Simple progress indicator */}
                 <motion.div
@@ -1002,11 +1143,15 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
+            <h2
+              className="text-4xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+            >
               Experience the Future
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
-              Join thousands of developers building the next generation of intelligent applications
+              Join thousands of developers building the next generation of
+              intelligent applications
             </p>
           </motion.div>
 
@@ -1023,22 +1168,25 @@ export default function Index() {
               {[
                 {
                   title: "AI Development Tools",
-                  description: "Advanced coding environment with AI assistance and real-time collaboration features",
+                  description:
+                    "Advanced coding environment with AI assistance and real-time collaboration features",
                   icon: "🛠️",
-                  color: "from-blue-500 to-purple-500"
+                  color: "from-blue-500 to-purple-500",
                 },
                 {
                   title: "Neural Networks",
-                  description: "Pre-trained models and custom neural network architectures for any use case",
+                  description:
+                    "Pre-trained models and custom neural network architectures for any use case",
                   icon: "🧠",
-                  color: "from-purple-500 to-pink-500"
+                  color: "from-purple-500 to-pink-500",
                 },
                 {
                   title: "ML Operations",
-                  description: "Complete MLOps pipeline with monitoring, deployment, and scaling automation",
+                  description:
+                    "Complete MLOps pipeline with monitoring, deployment, and scaling automation",
                   icon: "⚡",
-                  color: "from-pink-500 to-orange-500"
-                }
+                  color: "from-pink-500 to-orange-500",
+                },
               ].map((item, index) => (
                 <motion.div
                   key={item.title}
@@ -1079,8 +1227,9 @@ export default function Index() {
               animate={{ backgroundPosition: "100% 50%" }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               style={{
-                background: "linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent, rgba(147, 51, 234, 0.1), transparent)",
-                backgroundSize: "200% 200%"
+                background:
+                  "linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent, rgba(147, 51, 234, 0.1), transparent)",
+                backgroundSize: "200% 200%",
               }}
             />
           </motion.div>
@@ -1097,13 +1246,17 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-5xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
+            <h2
+              className="text-5xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+            >
               Ready to Build the Future?
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed mb-12">
-              Start your AI journey today and transform your ideas into intelligent applications
+              Start your AI journey today and transform your ideas into
+              intelligent applications
             </p>
-            
+
             <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center"
               initial={{ opacity: 0, y: 20 }}
@@ -1143,13 +1296,16 @@ export default function Index() {
                 <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
                   <span className="text-white font-bold text-lg">AI</span>
                 </div>
-                <span className="font-bold text-xl text-gray-900">FusionAI</span>
+                <span className="font-bold text-xl text-gray-900">
+                  FusionAI
+                </span>
               </div>
               <p className="text-gray-600 leading-relaxed max-w-md">
-                Empowering developers to build intelligent applications with cutting-edge AI technology.
+                Empowering developers to build intelligent applications with
+                cutting-edge AI technology.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-semibold text-gray-900 mb-4">Platform</h4>
               <ul className="space-y-2 text-gray-600">
@@ -1159,7 +1315,7 @@ export default function Index() {
                 <li>Tutorials</li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold text-gray-900 mb-4">Company</h4>
               <ul className="space-y-2 text-gray-600">
@@ -1170,10 +1326,11 @@ export default function Index() {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-100 mt-8 pt-8 text-center">
             <p className="text-gray-500 text-sm">
-              © 2024 FusionAI. All rights reserved. Built with ❤️ for the future.
+              © 2024 FusionAI. All rights reserved. Built with ❤️ for the
+              future.
             </p>
           </div>
         </div>
