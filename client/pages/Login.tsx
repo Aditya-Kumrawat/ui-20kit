@@ -310,7 +310,7 @@ export default function Login() {
                   muted
                   loop
                   playsInline
-                  className="w-full h-full object-cover mt-px"
+                  className="w-full h-full object-cover object-center"
                   style={{
                     backgroundImage: "url(https://cdn.builder.io/o/assets%2F3a97c5b7af5445f5b8b1bbe094d2a65a%2F7282a234d8494c2d8649bf262f707fdf?alt=media&token=890d4dc3-2a9b-4786-a260-21ccf9a5acf6&apiKey=3a97c5b7af5445f5b8b1bbe094d2a65a)",
                     backgroundRepeat: "no-repeat",
