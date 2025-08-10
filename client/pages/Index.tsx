@@ -162,7 +162,7 @@ export default function Index() {
       {/* Hero Section */}
       <motion.div
         ref={heroRef}
-        className="relative py-20 overflow-hidden"
+        className="relative min-h-screen overflow-hidden flex items-center"
         style={{ y: heroY }}
       >
         {/* Background Video */}
@@ -173,7 +173,10 @@ export default function Index() {
             loop
             playsInline
             className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.7)" }}
+            style={{
+              filter: "brightness(0.7)",
+              minHeight: "100vh"
+            }}
           >
             <source
               type="video/mp4"
@@ -181,7 +184,7 @@ export default function Index() {
             />
           </video>
           {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-blue-900/20"></div>
+          <div className="absolute inset-0 bg-blue-900/30"></div>
         </div>
 
         {/* Content */}
