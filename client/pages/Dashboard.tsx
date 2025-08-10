@@ -354,26 +354,29 @@ export default function Dashboard() {
         </motion.header>
 
         {/* Video Section Below Topbar */}
-        <div className="flex flex-col relative mt-5">
-          <div className="flex gap-5">
-            <div className="flex flex-col w-1/2">
-              <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
-                <div className="relative">
-                  <video
-                    autoPlay
-                    muted
-                    controls={false}
-                    playsInline
-                    loop
-                    className="w-full h-full object-cover object-center rounded"
-                  >
-                    <source
-                      type="video/mp4"
-                      src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fe90d29dec205457b9974fb469c4619dc?alt=media&token=5e125eee-ed98-41a3-9416-20ae89b44101&apiKey=ad2efc99155b417783200fc7999ced3f"
-                    />
-                  </video>
+        <div className="px-6 py-4">
+          <div className="max-w-4xl">
+            <div className="relative w-full aspect-video bg-gray-100 rounded-lg overflow-hidden shadow-lg">
+              <video
+                autoPlay
+                muted
+                controls={false}
+                playsInline
+                loop
+                className="w-full h-full object-cover"
+                onLoadedData={(e) => {
+                  const video = e.target as HTMLVideoElement;
+                  video.play().catch(console.error);
+                }}
+              >
+                <source
+                  type="video/mp4"
+                  src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fe90d29dec205457b9974fb469c4619dc?alt=media&token=5e125eee-ed98-41a3-9416-20ae89b44101&apiKey=ad2efc99155b417783200fc7999ced3f"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                  <p className="text-gray-500">Video loading...</p>
                 </div>
-              </div>
+              </video>
             </div>
           </div>
         </div>
