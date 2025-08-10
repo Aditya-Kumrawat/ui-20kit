@@ -829,6 +829,11 @@ export default function Chatbot() {
           throw new Error(`Microphone permission denied: ${permError.message}`);
         }
 
+        // Check if Vapi SDK is available
+        if (!vapi) {
+          throw new Error("Vapi SDK not initialized. Please check your API key configuration.");
+        }
+
         // Configure the assistant for the call
         const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
         const voiceId = import.meta.env.VITE_VAPI_VOICE_ID || "rachel";
@@ -838,30 +843,28 @@ export default function Chatbot() {
         if (assistantId) {
           // Use pre-created assistant
           addDebugLog(`Using pre-created assistant: ${assistantId}`);
-          callConfig = { assistantId };
+          callConfig = assistantId; // For Web SDK, just pass the assistant ID
         } else {
           // Create assistant configuration dynamically
           addDebugLog("Creating dynamic assistant configuration");
           callConfig = {
-            assistant: {
-              model: {
-                provider: "openai",
-                model: "gpt-3.5-turbo",
-                messages: [
-                  {
-                    role: "system",
-                    content:
-                      "You are a helpful AI assistant specializing in DNA analysis, genetic research, and data interpretation. Keep your responses concise and informative. You can help with genetic analysis, data visualization, research reports, and explaining genetic variants.",
-                  },
-                ],
-              },
-              voice: {
-                provider: "11labs",
-                voiceId: voiceId,
-              },
-              firstMessage:
-                "Hello! I'm your AI assistant. I can help you with DNA analysis and genetic research. How can I assist you today?",
+            model: {
+              provider: "openai",
+              model: "gpt-3.5-turbo",
+              messages: [
+                {
+                  role: "system",
+                  content:
+                    "You are a helpful AI assistant specializing in DNA analysis, genetic research, and data interpretation. Keep your responses concise and informative. You can help with genetic analysis, data visualization, research reports, and explaining genetic variants.",
+                },
+              ],
             },
+            voice: {
+              provider: "11labs",
+              voiceId: voiceId,
+            },
+            firstMessage:
+              "Hello! I'm your AI assistant. I can help you with DNA analysis and genetic research. How can I assist you today?",
           };
         }
 
