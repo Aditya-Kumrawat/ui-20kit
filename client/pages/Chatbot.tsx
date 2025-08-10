@@ -335,6 +335,18 @@ const createSafeVapi = () => {
 
 const vapi = createSafeVapi();
 
+// Immediate environment detection
+const isRestrictedEnvironment = () => {
+  const hostname = window.location.hostname;
+  return (
+    hostname.includes('.fly.dev') ||
+    hostname.includes('.builder.io') ||
+    hostname.includes('localhost') ||
+    window.location.protocol === 'file:' ||
+    window.location.href.includes('489d9f1341ed4d1887a46cebe12e960e')
+  );
+};
+
 export default function Chatbot() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
