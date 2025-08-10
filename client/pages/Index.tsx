@@ -220,95 +220,98 @@ export default function Index() {
               data-aos="fade-right"
             >
               <div className="space-y-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-sm text-white mb-6 font-medium">
-                      🚀 Next-Gen AI Platform
-                    </span>
-                  </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.2 }}
+                >
+                  <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-sm text-white mb-6 font-medium">
+                    🚀 Next-Gen AI Platform
+                  </span>
+                </motion.div>
 
-                  <motion.h1
-                    className="text-5xl lg:text-7xl font-black leading-tight"
-                    style={{
-                      fontFamily: "'Synera', 'Proxima Nova', 'Space Grotesk', sans-serif",
+                <motion.h1
+                  className="text-5xl lg:text-7xl font-black leading-tight"
+                  style={{
+                    fontFamily:
+                      "'Synera', 'Proxima Nova', 'Space Grotesk', sans-serif",
+                  }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.3 }}
+                >
+                  <span className="text-white">Unleash Your</span>
+                  <br />
+                  <motion.span
+                    className="animated-text pulse-animation"
+                    animate={{
+                      scale: [1, 1.05, 1],
                     }}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.3 }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                   >
-                    <span className="text-white">Unleash Your</span>
-                    <br />
-                    <motion.span
-                      className="animated-text pulse-animation"
-                      animate={{
-                        scale: [1, 1.05, 1],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      AI Potential
-                    </motion.span>
-                    <motion.span
-                      className="text-gray-800"
-                      style={{
-                        textShadow: "1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px -1px 0px #ffffff, -1px 1px 0px #ffffff",
-                        WebkitTextStroke: "1px #000000"
-                      }}
-                      animate={{
-                        opacity: [0.8, 1, 0.8],
-                        scale: [1, 1.1, 1],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      //
-                    </motion.span>
-                  </motion.h1>
+                    AI Potential
+                  </motion.span>
+                  <motion.span
+                    className="text-gray-800"
+                    style={{
+                      textShadow:
+                        "1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px -1px 0px #ffffff, -1px 1px 0px #ffffff",
+                      WebkitTextStroke: "1px #000000",
+                    }}
+                    animate={{
+                      opacity: [0.8, 1, 0.8],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    //
+                  </motion.span>
+                </motion.h1>
 
-                  <motion.p
-                    className="text-xl text-white font-medium leading-relaxed max-w-lg"
+                <motion.p
+                  className="text-xl text-white font-medium leading-relaxed max-w-lg"
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    textShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.4 }}
+                >
+                  Transform your ideas into{" "}
+                  <motion.span
+                    className="text-white font-semibold"
                     style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      textShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)"
+                      textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)",
                     }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.4 }}
+                    animate={{
+                      scale: [1, 1.02, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                   >
-                    Transform your ideas into{" "}
-                    <motion.span
-                      className="text-white font-semibold"
-                      style={{
-                        textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)"
-                      }}
-                      animate={{
-                        scale: [1, 1.02, 1]
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      intelligent applications
-                    </motion.span>{" "}
-                    with our cutting-edge AI platform. Build seamlessly across{" "}
-                    <span
-                      className="text-white font-semibold"
-                      style={{textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)"}}
-                    >
-                      web and mobile
-                    </span> platforms.
-                  </motion.p>
+                    intelligent applications
+                  </motion.span>{" "}
+                  with our cutting-edge AI platform. Build seamlessly across{" "}
+                  <span
+                    className="text-white font-semibold"
+                    style={{ textShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)" }}
+                  >
+                    web and mobile
+                  </span>{" "}
+                  platforms.
+                </motion.p>
               </div>
 
               <motion.div
@@ -821,8 +824,9 @@ export default function Index() {
         <div
           className="absolute inset-0"
           style={{
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)",
-            opacity: 0.03
+            background:
+              "linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)",
+            opacity: 0.03,
           }}
         />
 
@@ -831,11 +835,12 @@ export default function Index() {
           className="absolute top-0 left-0 w-full h-full"
           style={{
             opacity: 0.08,
-            backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2F367bf7c31aaf4132aebce1464b5e15b5?format=webp&width=800)",
+            backgroundImage:
+              "url(https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2F367bf7c31aaf4132aebce1464b5e15b5?format=webp&width=800)",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
             backgroundSize: "cover",
-            mixBlendMode: "multiply"
+            mixBlendMode: "multiply",
           }}
           initial={{ opacity: 0, scale: 1.1 }}
           whileInView={{ opacity: 0.08, scale: 1 }}
@@ -847,19 +852,20 @@ export default function Index() {
         <motion.div
           className="absolute inset-0"
           style={{
-            background: "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
+            background:
+              "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
           }}
           animate={{
             background: [
               "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
               "radial-gradient(circle at 40% 30%, rgba(120, 119, 198, 0.15) 0%, transparent 50%), radial-gradient(circle at 60% 70%, rgba(255, 119, 198, 0.15) 0%, transparent 50%)",
-              "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)"
-            ]
+              "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
+            ],
           }}
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
         />
 
@@ -882,7 +888,7 @@ export default function Index() {
               duration: 4 + Math.random() * 4,
               repeat: Infinity,
               delay: Math.random() * 2,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
           />
         ))}
@@ -908,7 +914,7 @@ export default function Index() {
               duration: 12 + Math.random() * 8,
               repeat: Infinity,
               delay: Math.random() * 5,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
           />
         ))}
@@ -924,7 +930,7 @@ export default function Index() {
               radial-gradient(circle at 75% 75%, #4facfe 0%, transparent 50%)
             `,
             backgroundSize: "100% 100%",
-            backgroundPosition: "0% 0%"
+            backgroundPosition: "0% 0%",
           }}
         />
 
@@ -934,13 +940,34 @@ export default function Index() {
           viewBox="0 0 800 600"
         >
           <defs>
-            <pattern id="neural-grid" width="100" height="100" patternUnits="userSpaceOnUse">
-              <circle cx="50" cy="50" r="2" fill="#6366f1" opacity="0.3"/>
-              <line x1="50" y1="50" x2="150" y2="50" stroke="#6366f1" strokeWidth="1" opacity="0.2"/>
-              <line x1="50" y1="50" x2="50" y2="150" stroke="#6366f1" strokeWidth="1" opacity="0.2"/>
+            <pattern
+              id="neural-grid"
+              width="100"
+              height="100"
+              patternUnits="userSpaceOnUse"
+            >
+              <circle cx="50" cy="50" r="2" fill="#6366f1" opacity="0.3" />
+              <line
+                x1="50"
+                y1="50"
+                x2="150"
+                y2="50"
+                stroke="#6366f1"
+                strokeWidth="1"
+                opacity="0.2"
+              />
+              <line
+                x1="50"
+                y1="50"
+                x2="50"
+                y2="150"
+                stroke="#6366f1"
+                strokeWidth="1"
+                opacity="0.2"
+              />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#neural-grid)"/>
+          <rect width="100%" height="100%" fill="url(#neural-grid)" />
         </svg>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -1330,10 +1357,11 @@ export default function Index() {
       <div
         className="bg-white py-20"
         style={{
-          backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2Fcf48a3f22a3549a6be89dc220ad49256)",
+          backgroundImage:
+            "url(https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2Fcf48a3f22a3549a6be89dc220ad49256)",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          backgroundSize: "cover"
+          backgroundSize: "cover",
         }}
       >
         <div className="max-w-6xl mx-auto px-6">
