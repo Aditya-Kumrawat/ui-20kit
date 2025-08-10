@@ -148,7 +148,7 @@ export default function Login() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <Label htmlFor="email" className="text-white/90 text-sm font-medium">
+                    <Label htmlFor="email" className="text-gray-700 text-sm font-medium">
                       Email Address
                     </Label>
                     <div className="mt-2">
@@ -158,7 +158,7 @@ export default function Login() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email"
-                        className="bg-white/10 backdrop-blur-sm border-white/30 text-white placeholder:text-white/50 rounded-xl h-12 focus:border-blue-400 focus:ring-blue-400/20"
+                        className="bg-white/70 backdrop-blur-sm border-purple-200 text-gray-800 placeholder:text-gray-500 rounded-xl h-12 focus:border-purple-400 focus:ring-purple-400/20"
                         required
                       />
                     </div>
