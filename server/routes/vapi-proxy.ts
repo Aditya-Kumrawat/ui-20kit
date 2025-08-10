@@ -35,16 +35,17 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
 
     console.log("✅ Vapi response status:", vapiResponse.status);
 
+    // Read response once and handle both JSON and text cases
+    const responseText = await vapiResponse.text();
     let responseData;
+
     try {
-      responseData = await vapiResponse.json();
+      responseData = JSON.parse(responseText);
     } catch (jsonError) {
-      // If JSON parsing fails, try to get text
-      const errorText = await vapiResponse.text();
-      console.error("❌ Vapi response not valid JSON:", vapiResponse.status, errorText);
+      console.error("❌ Vapi response not valid JSON:", vapiResponse.status, responseText);
       return res.status(vapiResponse.status).json({
         error: "Invalid response format from Vapi API",
-        details: errorText,
+        details: responseText,
         status: vapiResponse.status,
       });
     }
@@ -94,16 +95,17 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
 
     console.log("📞 Vapi call response status:", vapiResponse.status);
 
+    // Read response once and handle both JSON and text cases
+    const responseText = await vapiResponse.text();
     let responseData;
+
     try {
-      responseData = await vapiResponse.json();
+      responseData = JSON.parse(responseText);
     } catch (jsonError) {
-      // If JSON parsing fails, try to get text
-      const errorText = await vapiResponse.text();
-      console.error("❌ Vapi response not valid JSON:", vapiResponse.status, errorText);
+      console.error("❌ Vapi response not valid JSON:", vapiResponse.status, responseText);
       return res.status(vapiResponse.status).json({
         error: "Vapi call creation failed",
-        details: errorText,
+        details: responseText,
         status: vapiResponse.status,
       });
     }
