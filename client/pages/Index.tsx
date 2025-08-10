@@ -817,22 +817,20 @@ export default function Index() {
       <div className="bg-gray-50 py-20 relative overflow-hidden">
         {/* Background Image */}
         <motion.div
-          className="absolute top-0 left-0 w-full h-full opacity-10"
+          className="absolute top-0 left-0 w-full h-full"
+          style={{
+            opacity: 0.1,
+            backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2F367bf7c31aaf4132aebce1464b5e15b5?format=webp&width=800)",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            backgroundColor: "#e9f4ff"
+          }}
           initial={{ opacity: 0, scale: 1.1 }}
           whileInView={{ opacity: 0.1, scale: 1 }}
           transition={{ duration: 1.5 }}
           viewport={{ once: true }}
-        >
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2F367bf7c31aaf4132aebce1464b5e15b5?format=webp&width=800"
-            alt="AI Background"
-            className="w-full h-full object-cover"
-            style={{
-              transform: "rotate(-90deg) scale(1.2)",
-              filter: "blur(1px)"
-            }}
-          />
-        </motion.div>
+        />
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <motion.div
@@ -1218,7 +1216,15 @@ export default function Index() {
       </div>
 
       {/* Experience the Future Section */}
-      <div className="bg-white py-20">
+      <div
+        className="bg-white py-20"
+        style={{
+          backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F6e445024a61944279a6203b3218ce05b%2Fcf48a3f22a3549a6be89dc220ad49256)",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "cover"
+        }}
+      >
         <div className="max-w-6xl mx-auto px-6">
           <motion.div
             className="text-center mb-16"
