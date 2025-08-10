@@ -630,8 +630,20 @@ export default function Chatbot() {
       setVapiStatus("error");
     });
 
-    // Test connection on component mount
-    testVapiConnection();
+    // Test connection on component mount with safe fallback
+    const initializeVapi = async () => {
+      try {
+        await testVapiConnection();
+      } catch (error: any) {
+        addDebugLog(`❌ Initialization failed: ${error.message}`);
+        addDebugLog("🧪 Falling back to Test Mode");
+        setTestMode(true);
+        setVapiStatus("test-mode");
+        setNetworkStatus('restricted');
+      }
+    };
+
+    initializeVapi();
 
     // Cleanup event listeners
     return () => {
