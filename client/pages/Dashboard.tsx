@@ -114,7 +114,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                 ? "bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-white border border-purple-500/30"
                 : "hover:bg-slate-700/50 text-gray-300 hover:text-white"
             }`}
-            onClick={() => setActiveItem(item.id)}
+            onClick={() => {
+              setActiveItem(item.id);
+              if (item.id === "chatbot") {
+                navigate("/dashboard/chatbot");
+              }
+            }}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.05 }}
