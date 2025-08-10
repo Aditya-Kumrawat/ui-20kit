@@ -1269,7 +1269,7 @@ export default function Chatbot() {
 
             {/* Input Area */}
             <motion.div
-              className="bg-white border-t border-gray-200 px-6 py-4"
+              className="bg-white border-t border-gray-200 px-6 py-6 shadow-lg"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
