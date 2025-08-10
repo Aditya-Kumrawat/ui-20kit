@@ -198,7 +198,16 @@ export default function Index() {
             />
           </video>
           {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-blue-900/30"></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundColor: "rgba(31, 41, 75, 0.3)",
+              backgroundImage: "url(https://cdn.builder.io/api/v1/file/assets%2Fe9fe55751a454e1a9d431eccc0ec2898%2F49927da657104b99a1dee40e371f42be)",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              backgroundSize: "cover"
+            }}
+          ></div>
         </div>
 
         {/* Content */}
