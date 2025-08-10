@@ -292,66 +292,64 @@ export default function Login() {
               </motion.div>
             </motion.div>
 
-            {/* Right Side - Video Container */}
+            {/* Right Side - Video and Text */}
             <motion.div
-              className="hidden lg:block w-full max-w-md mx-auto"
+              className="hidden lg:block w-full max-w-md mx-auto space-y-6"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
+              {/* Video Container */}
               <motion.div
-                className="bg-white/60 backdrop-blur-lg rounded-3xl p-8 border border-purple-200/50 shadow-2xl h-[600px] flex flex-col"
-                whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(139,69,193,0.15)" }}
+                className="rounded-2xl overflow-hidden bg-white/30 backdrop-blur-sm border border-purple-200/50 shadow-lg h-[350px]"
+                whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(139,69,193,0.15)" }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                {/* Video Container */}
-                <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100/50 backdrop-blur-sm border border-purple-200/30 mb-6">
-                  <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover"
-                  >
-                    <source
-                      type="video/mp4"
-                      src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
-                    />
-                  </video>
-                </div>
-
-                {/* Bottom Text Content */}
-                <motion.div
-                  className="text-center space-y-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2 }}
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
                 >
-                  <h3 className="text-2xl font-bold text-gray-800">
-                    Experience AI Like Never Before
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Join thousands of developers and creators who are building the future with our
-                    advanced AI platform. From natural language processing to computer vision,
-                    unlock the full potential of artificial intelligence.
-                  </p>
-                  
-                  {/* Feature Pills */}
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {["Real-time AI", "Advanced ML", "Easy Integration", "24/7 Support"].map((feature, index) => (
-                      <motion.span
-                        key={feature}
-                        className="px-3 py-1 bg-purple-100/70 backdrop-blur-sm rounded-full text-purple-700 text-sm border border-purple-200/50"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1.3 + index * 0.1 }}
-                        whileHover={{ scale: 1.05, backgroundColor: "rgba(139,69,193,0.2)" }}
-                      >
-                        {feature}
-                      </motion.span>
-                    ))}
-                  </div>
-                </motion.div>
+                  <source
+                    type="video/mp4"
+                    src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
+                  />
+                </video>
+              </motion.div>
+
+              {/* Bottom Text Content */}
+              <motion.div
+                className="text-center space-y-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 }}
+              >
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Experience AI Like Never Before
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Join thousands of developers and creators who are building the future with our
+                  advanced AI platform. From natural language processing to computer vision,
+                  unlock the full potential of artificial intelligence.
+                </p>
+
+                {/* Feature Pills */}
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {["Real-time AI", "Advanced ML", "Easy Integration", "24/7 Support"].map((feature, index) => (
+                    <motion.span
+                      key={feature}
+                      className="px-3 py-1 bg-white/60 backdrop-blur-sm rounded-full text-purple-700 text-sm border border-purple-200/50 shadow-sm"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 1.3 + index * 0.1 }}
+                      whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.8)" }}
+                    >
+                      {feature}
+                    </motion.span>
+                  ))}
+                </div>
               </motion.div>
             </motion.div>
           </div>
