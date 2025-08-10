@@ -211,6 +211,7 @@ export default function Index() {
                 
                 <motion.h1
                   className="text-5xl lg:text-6xl font-bold text-white leading-tight"
+                  style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
                   initial={{ opacity: 0, y: 30 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.3 }}
