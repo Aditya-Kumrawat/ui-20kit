@@ -186,7 +186,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
           </motion.button>
         ))}
 
-
         {/* AI Assistant Section */}
         <AnimatePresence>
           {!isCollapsed && (
