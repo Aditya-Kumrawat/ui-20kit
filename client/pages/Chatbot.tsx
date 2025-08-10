@@ -391,26 +391,90 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
+  // Network connectivity test
+  const testNetworkConnectivity = async () => {
+    try {
+      addDebugLog("Testing network connectivity...");
+      const response = await fetch('https://api.vapi.ai/health', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        addDebugLog("✅ Network connectivity to Vapi API: OK");
+        return true;
+      } else {
+        addDebugLog(`⚠️ Vapi API returned status: ${response.status}`);
+        return false;
+      }
+    } catch (error: any) {
+      addDebugLog(`❌ Network connectivity test failed: ${error.message}`);
+      return false;
+    }
+  };
+
   // Test Vapi connection
   const testVapiConnection = async () => {
     try {
       addDebugLog("Testing Vapi connection...");
       setVapiStatus("testing");
+      setVapiError(null);
 
-      // Check if API key is properly set
+      // 1. Check network connectivity
+      const networkOk = await testNetworkConnectivity();
+      if (!networkOk) {
+        throw new Error("Network connectivity issues detected");
+      }
+
+      // 2. Check if API key is properly set
       const apiKey = import.meta.env.VITE_VAPI_KEY;
       if (!apiKey || apiKey === "your_vapi_api_key_here") {
         throw new Error("VITE_VAPI_KEY not properly configured");
       }
 
+      // 3. Validate API key format (should be UUID)
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(apiKey)) {
+        throw new Error("Invalid API key format - should be a UUID");
+      }
+
       addDebugLog(`✅ API Key configured: ${apiKey.substring(0, 8)}...`);
 
-      // Check assistant configuration
+      // 4. Check assistant configuration
       const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
       if (assistantId) {
         addDebugLog(`✅ Using pre-created assistant: ${assistantId}`);
       } else {
         addDebugLog("✅ Will use dynamic assistant configuration");
+      }
+
+      // 5. Test API key validity with a simple API call
+      try {
+        addDebugLog("Testing API key validity...");
+        const testResponse = await fetch('https://api.vapi.ai/assistant', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (testResponse.status === 401) {
+          throw new Error("Invalid API key - authentication failed");
+        } else if (testResponse.status === 403) {
+          throw new Error("API key lacks required permissions");
+        } else if (testResponse.ok || testResponse.status === 404) {
+          addDebugLog("✅ API key authentication: OK");
+        } else {
+          addDebugLog(`⚠️ API responded with status: ${testResponse.status}`);
+        }
+      } catch (fetchError: any) {
+        if (fetchError.message.includes("Invalid API key")) {
+          throw fetchError;
+        }
+        addDebugLog(`⚠️ API key test inconclusive: ${fetchError.message}`);
       }
 
       setVapiStatus("connected");
