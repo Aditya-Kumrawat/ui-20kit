@@ -830,7 +830,7 @@ export default function Chatbot() {
         setMessages((prev) =>
           prev
             .map((msg) =>
-              msg.id === userMessage.id ? { ...msg, status: "read" } : msg,
+              msg.id === userMessage.id ? { ...msg, status: "read" as const } : msg,
             )
             .concat(aiMessage),
         );
