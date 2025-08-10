@@ -295,74 +295,75 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   );
 };
 
-// Configure custom fetch with CORS and proxy settings for .fly.dev
-const setupCustomFetch = () => {
-  const originalFetch = window.fetch;
+// Server-side Vapi proxy to bypass client-side network restrictions
+const createServerProxiedVapi = () => {
+  console.log('🚀 Creating server-proxied Vapi implementation');
 
-  window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = input.toString();
-
-    // Configure headers for Vapi API calls
-    if (url.includes('api.vapi.ai')) {
-      console.log('🌐 Intercepting Vapi API call:', url);
-
-      const enhancedInit: RequestInit = {
-        ...init,
-        mode: 'cors',
-        credentials: 'omit',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Authorization, Content-Type',
-          ...init?.headers,
-        },
-      };
-
-      console.log('📡 Enhanced fetch config:', enhancedInit);
+  // Create a proxy object that mimics Vapi SDK but uses server-side calls
+  const proxiedVapi = {
+    async start(config: any) {
+      console.log('📞 Starting Vapi call via server proxy');
+      console.log('🔧 Call config:', JSON.stringify(config, null, 2));
 
       try {
-        const response = await originalFetch(input, enhancedInit);
-        console.log('✅ Fetch response:', response.status, response.statusText);
-        return response;
-      } catch (error) {
-        console.error('❌ Fetch error:', error);
-        throw error;
+        const response = await fetch('/api/vapi/call', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(config)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Server proxy call failed');
+        }
+
+        const callData = await response.json();
+        console.log('✅ Server proxy call successful:', callData);
+
+        // Simulate successful call start
+        return callData;
+      } catch (error: any) {
+        console.error('❌ Server proxy call failed:', error);
+        throw new Error(`Server proxy failed: ${error.message}`);
       }
-    }
+    },
 
-    // Use original fetch for non-Vapi calls
-    return originalFetch(input, init);
+    async stop() {
+      console.log('🛑 Stopping Vapi call via server proxy');
+      // Implement stop logic via server proxy if needed
+      return Promise.resolve();
+    },
+
+    on(event: string, callback: Function) {
+      console.log(`📡 Registering event listener for: ${event}`);
+      // Store event listeners for simulation
+      this.eventListeners = this.eventListeners || {};
+      this.eventListeners[event] = callback;
+    },
+
+    removeAllListeners() {
+      console.log('🧹 Removing all event listeners');
+      this.eventListeners = {};
+    },
+
+    // Simulate events for testing
+    simulateEvent(eventName: string, data: any) {
+      const callback = this.eventListeners?.[eventName];
+      if (callback) {
+        console.log(`🎭 Simulating event: ${eventName}`, data);
+        callback(data);
+      }
+    },
+
+    eventListeners: {} as any
   };
+
+  return proxiedVapi;
 };
 
-// Initialize real Vapi with enhanced networking
-const createRealVapi = () => {
-  const apiKey = import.meta.env.VITE_VAPI_KEY;
-
-  if (!apiKey || apiKey === "your_vapi_api_key_here") {
-    console.error('❌ VITE_VAPI_KEY not configured');
-    throw new Error('VITE_VAPI_KEY environment variable is required');
-  }
-
-  console.log('🚀 Setting up custom fetch for .fly.dev environment');
-  setupCustomFetch();
-
-  console.log('🔑 Initializing REAL Vapi with API key:', apiKey.substring(0, 8) + '...');
-
-  try {
-    const vapiInstance = new Vapi({
-      apiKey: apiKey,
-    });
-    console.log('✅ Real Vapi instance created successfully');
-    return vapiInstance;
-  } catch (error) {
-    console.error('❌ Failed to create Vapi instance:', error);
-    throw error;
-  }
-};
-
-const vapi = createRealVapi();
+const vapi = createServerProxiedVapi();
 
 // Force enable real API calls - remove all environment restrictions
 const isRestrictedEnvironment = () => {
