@@ -1477,9 +1477,9 @@ export default function Chatbot() {
               </div>
             </div>
 
-            {/* Video Container */}
-            <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
-              <div className="relative">
+            {/* Video Container - Maximized */}
+            <div className="flex-1 p-4">
+              <div className="relative w-full h-full min-h-[400px] bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl overflow-hidden shadow-2xl">
                 <video
                   ref={videoRef}
                   autoPlay={true}
@@ -1487,15 +1487,28 @@ export default function Chatbot() {
                   controls={false}
                   playsInline={true}
                   loop={true}
-                  className="w-full h-full object-center rounded-[40px] relative flex flex-col min-h-0 min-w-5"
-                  style={{ margin: "20px 0" }}
+                  className="w-full h-full object-cover"
                 >
                   <source
                     type="video/mp4"
                     src="https://cdn.builder.io/o/assets%2F2d06e16d643b4c26a7274cfb607b5ae9%2F1933a4afdc3240f493211f92f8a5bbc4%2Fcompressed?apiKey=2d06e16d643b4c26a7274cfb607b5ae9&token=1933a4afdc3240f493211f92f8a5bbc4&alt=media&optimized=true"
                   />
                 </video>
-                <div className="w-full pt-[70.04048582995948%] pointer-events-none text-[0px]" />
+
+                {/* Video Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+
+                {/* Recording Indicator */}
+                {vapiStatus === "recording" && (
+                  <motion.div
+                    className="absolute top-4 right-4 flex items-center gap-2 bg-red-500/90 text-white px-3 py-2 rounded-full backdrop-blur-sm"
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  >
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium font-['Poppins',sans-serif]">REC</span>
+                  </motion.div>
+                )}
               </div>
             </div>
             <div className="flex-1 flex flex-col">
