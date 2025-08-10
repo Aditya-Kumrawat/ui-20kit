@@ -823,7 +823,6 @@ export default function Index() {
         </div>
       </div>
 
-
       {/* AI Features Section */}
       <div className="bg-gray-50 py-20 relative overflow-hidden">
         {/* Enhanced Background with Multiple Layers */}

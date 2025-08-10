@@ -16,7 +16,7 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     // Simulate login process
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
     console.log("Login attempt:", { email, password });
   };
@@ -80,7 +80,7 @@ export default function Login() {
               linear-gradient(rgba(139,69,193,0.1) 1px, transparent 1px),
               linear-gradient(90deg, rgba(139,69,193,0.1) 1px, transparent 1px)
             `,
-            backgroundSize: '50px 50px'
+            backgroundSize: "50px 50px",
           }}
         />
       </div>
@@ -89,7 +89,6 @@ export default function Login() {
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6 bg-white">
         <div className="w-full max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center justify-items-center">
-            
             {/* Left Side - Login Form */}
             <motion.div
               className="w-full max-w-md mx-auto lg:mx-0 space-y-8"
@@ -110,7 +109,9 @@ export default function Login() {
                     whileHover={{ scale: 1.05, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <span className="text-purple-700 font-bold text-xl">AI</span>
+                    <span className="text-purple-700 font-bold text-xl">
+                      AI
+                    </span>
                   </motion.div>
                   <span className="text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
                     FusionAI
@@ -148,7 +149,10 @@ export default function Login() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <Label htmlFor="email" className="text-gray-700 text-sm font-medium">
+                    <Label
+                      htmlFor="email"
+                      className="text-gray-700 text-sm font-medium"
+                    >
                       Email Address
                     </Label>
                     <div className="mt-2">
@@ -170,7 +174,10 @@ export default function Login() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.6 }}
                   >
-                    <Label htmlFor="password" className="text-gray-700 text-sm font-medium">
+                    <Label
+                      htmlFor="password"
+                      className="text-gray-700 text-sm font-medium"
+                    >
                       Password
                     </Label>
                     <div className="mt-2 relative">
@@ -207,7 +214,10 @@ export default function Login() {
                       />
                       <span className="text-gray-700 text-sm">Remember me</span>
                     </label>
-                    <a href="#" className="text-purple-600 hover:text-purple-500 text-sm transition-colors">
+                    <a
+                      href="#"
+                      className="text-purple-600 hover:text-purple-500 text-sm transition-colors"
+                    >
                       Forgot password?
                     </a>
                   </motion.div>
@@ -232,7 +242,11 @@ export default function Login() {
                           <motion.div
                             className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                             animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            transition={{
+                              duration: 1,
+                              repeat: Infinity,
+                              ease: "linear",
+                            }}
                           />
                           <span>Signing In...</span>
                         </motion.div>
@@ -253,7 +267,9 @@ export default function Login() {
                       <div className="w-full border-t border-white/20"></div>
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="px-4 bg-white/60 text-gray-600">or continue with</span>
+                      <span className="px-4 bg-white/60 text-gray-600">
+                        or continue with
+                      </span>
                     </div>
                   </motion.div>
 
@@ -284,7 +300,10 @@ export default function Login() {
                 >
                   <p className="text-gray-600 text-sm">
                     Don't have an account?{" "}
-                    <a href="#" className="text-purple-600 hover:text-purple-500 font-semibold transition-colors">
+                    <a
+                      href="#"
+                      className="text-purple-600 hover:text-purple-500 font-semibold transition-colors"
+                    >
                       Sign up for free
                     </a>
                   </p>
@@ -312,10 +331,11 @@ export default function Login() {
                   playsInline
                   className="w-full h-full object-cover object-center"
                   style={{
-                    backgroundImage: "url(https://cdn.builder.io/o/assets%2F3a97c5b7af5445f5b8b1bbe094d2a65a%2F7282a234d8494c2d8649bf262f707fdf?alt=media&token=890d4dc3-2a9b-4786-a260-21ccf9a5acf6&apiKey=3a97c5b7af5445f5b8b1bbe094d2a65a)",
+                    backgroundImage:
+                      "url(https://cdn.builder.io/o/assets%2F3a97c5b7af5445f5b8b1bbe094d2a65a%2F7282a234d8494c2d8649bf262f707fdf?alt=media&token=890d4dc3-2a9b-4786-a260-21ccf9a5acf6&apiKey=3a97c5b7af5445f5b8b1bbe094d2a65a)",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
-                    backgroundSize: "cover"
+                    backgroundSize: "cover",
                   }}
                 >
                   <source
@@ -336,21 +356,30 @@ export default function Login() {
                   Experience AI Like Never Before
                 </h3>
                 <p className="text-gray-600 leading-relaxed -mt-px">
-                  Join thousands of developers and creators who are building the future with our
-                  advanced AI platform. From natural language processing to computer vision,
-                  unlock the full potential of artificial intelligence.
+                  Join thousands of developers and creators who are building the
+                  future with our advanced AI platform. From natural language
+                  processing to computer vision, unlock the full potential of
+                  artificial intelligence.
                 </p>
 
                 {/* Feature Pills */}
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {["Real-time AI", "Advanced ML", "Easy Integration", "24/7 Support"].map((feature, index) => (
+                  {[
+                    "Real-time AI",
+                    "Advanced ML",
+                    "Easy Integration",
+                    "24/7 Support",
+                  ].map((feature, index) => (
                     <motion.span
                       key={feature}
                       className="px-3 py-1 bg-white/60 backdrop-blur-sm rounded-full text-purple-700 text-sm border border-purple-200/50 shadow-sm mt-px"
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 1.3 + index * 0.1 }}
-                      whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.8)" }}
+                      whileHover={{
+                        scale: 1.05,
+                        backgroundColor: "rgba(255,255,255,0.8)",
+                      }}
                     >
                       {feature}
                     </motion.span>
