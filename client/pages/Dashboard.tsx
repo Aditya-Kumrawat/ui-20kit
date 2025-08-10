@@ -356,27 +356,49 @@ export default function Dashboard() {
         {/* Video Section Below Topbar */}
         <div className="px-6 py-4">
           <div className="max-w-4xl">
-            <div className="relative w-full aspect-video bg-gray-100 rounded-lg overflow-hidden shadow-lg">
+            <div className="relative w-full aspect-video bg-gray-900 rounded-lg overflow-hidden shadow-lg">
               <video
                 autoPlay
                 muted
-                controls={false}
+                controls
                 playsInline
                 loop
+                preload="auto"
                 className="w-full h-full object-cover"
+                onLoadStart={() => console.log('Video load started')}
                 onLoadedData={(e) => {
+                  console.log('Video data loaded');
                   const video = e.target as HTMLVideoElement;
-                  video.play().catch(console.error);
+                  video.play().then(() => {
+                    console.log('Video playing successfully');
+                  }).catch((error) => {
+                    console.error('Video play failed:', error);
+                  });
+                }}
+                onError={(e) => {
+                  console.error('Video error:', e);
+                }}
+                onCanPlay={() => {
+                  console.log('Video can play');
                 }}
               >
                 <source
                   type="video/mp4"
                   src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fe90d29dec205457b9974fb469c4619dc?alt=media&token=5e125eee-ed98-41a3-9416-20ae89b44101&apiKey=ad2efc99155b417783200fc7999ced3f"
                 />
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-                  <p className="text-gray-500">Video loading...</p>
-                </div>
+                Your browser does not support the video tag.
               </video>
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white pointer-events-none">
+                <motion.div
+                  className="text-center"
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 0 }}
+                  transition={{ delay: 2, duration: 1 }}
+                >
+                  <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-2"></div>
+                  <p>Loading video...</p>
+                </motion.div>
+              </div>
             </div>
           </div>
         </div>
