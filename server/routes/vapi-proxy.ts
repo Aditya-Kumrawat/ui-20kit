@@ -71,11 +71,11 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
   try {
     console.log("📞 Creating Vapi call via server proxy");
 
-    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    const apiKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     if (!apiKey) {
       console.error("❌ No API key configured for call creation");
       return res.status(500).json({
-        error: "Vapi API key not configured on server",
+        error: "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY environment variable.",
       });
     }
 
