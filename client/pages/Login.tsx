@@ -26,7 +26,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-white via-lavender-50 to-purple-50">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video
@@ -34,13 +34,15 @@ export default function Login() {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover opacity-30"
+          className="w-full h-full object-cover opacity-10"
         >
           <source
             type="video/mp4"
             src="https://cdn.builder.io/api/v1/image/assets%2F627a9941e0f84ba9a1e4d483e654346d%2F5bee1870f7d54ea68116a7d3f91cb28e"
           />
         </video>
+        {/* Light overlay */}
+        <div className="absolute inset-0 bg-white/80" />
       </div>
 
       {/* Animated Background Elements */}
@@ -49,7 +51,7 @@ export default function Login() {
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-gradient-to-r from-purple-400/20 to-pink-400/20 backdrop-blur-sm"
+            className="absolute rounded-full bg-gradient-to-r from-purple-200/30 to-lavender-200/30 backdrop-blur-sm"
             style={{
               width: `${100 + Math.random() * 200}px`,
               height: `${100 + Math.random() * 200}px`,
@@ -71,12 +73,12 @@ export default function Login() {
         ))}
 
         {/* Grid Pattern */}
-        <div 
-          className="absolute inset-0 opacity-10"
+        <div
+          className="absolute inset-0 opacity-5"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+              linear-gradient(rgba(139,69,193,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(139,69,193,0.1) 1px, transparent 1px)
             `,
             backgroundSize: '50px 50px'
           }}
