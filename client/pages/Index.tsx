@@ -548,7 +548,7 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
               Meet Your AI Assistant
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -676,7 +676,7 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
               🤖 AI-Powered Features
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -1002,7 +1002,7 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
               Experience the Future
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
@@ -1097,7 +1097,7 @@ export default function Index() {
             viewport={{ once: true }}
             data-aos="fade-up"
           >
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-5xl font-bold text-gray-900 mb-6" style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}>
               Ready to Build the Future?
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed mb-12">
