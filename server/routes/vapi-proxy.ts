@@ -158,8 +158,9 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
     console.log("🧪 Testing Vapi connectivity from server...");
 
     // Check environment variables
-    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    const apiKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     console.log("🔍 Environment check:");
+    console.log("  - VAPI_PRIVATE_KEY exists:", !!process.env.VAPI_PRIVATE_KEY);
     console.log("  - VAPI_KEY exists:", !!process.env.VAPI_KEY);
     console.log("  - VITE_VAPI_KEY exists:", !!process.env.VITE_VAPI_KEY);
     console.log("  - Final API key length:", apiKey?.length || 0);
@@ -167,9 +168,10 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
     if (!apiKey) {
       console.error("❌ No API key found in environment variables");
       return res.status(500).json({
-        error: "Vapi API key not configured on server",
+        error: "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY environment variable.",
         configured: false,
         debug: {
+          vapiPrivateKeyExists: !!process.env.VAPI_PRIVATE_KEY,
           vapiKeyExists: !!process.env.VAPI_KEY,
           viteVapiKeyExists: !!process.env.VITE_VAPI_KEY,
         },
