@@ -1,0 +1,385 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
+export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Simulate login process
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsLoading(false);
+    console.log("Login attempt:", { email, password });
+  };
+
+  const handleGoogleLogin = () => {
+    console.log("Google login clicked");
+  };
+
+  return (
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover opacity-30"
+        >
+          <source
+            type="video/mp4"
+            src="https://cdn.builder.io/api/v1/image/assets%2F627a9941e0f84ba9a1e4d483e654346d%2F5bee1870f7d54ea68116a7d3f91cb28e"
+          />
+        </video>
+      </div>
+
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Floating Orbs */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-gradient-to-r from-purple-400/20 to-pink-400/20 backdrop-blur-sm"
+            style={{
+              width: `${100 + Math.random() * 200}px`,
+              height: `${100 + Math.random() * 200}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              x: [-20, 20, -20],
+              y: [-30, 30, -30],
+              rotate: [0, 180, 360],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 10 + Math.random() * 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        {/* Grid Pattern */}
+        <div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px'
+          }}
+        />
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            
+            {/* Left Side - Login Form */}
+            <motion.div
+              className="space-y-8"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              {/* Logo/Brand */}
+              <motion.div 
+                className="text-center lg:text-left"
+                initial={{ opacity: 0, y: -30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Link to="/" className="inline-flex items-center gap-3 group">
+                  <motion.div 
+                    className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30"
+                    whileHover={{ scale: 1.05, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <span className="text-white font-bold text-xl">AI</span>
+                  </motion.div>
+                  <span className="text-2xl font-bold text-white group-hover:text-blue-200 transition-colors">
+                    FusionAI
+                  </span>
+                </Link>
+              </motion.div>
+
+              {/* Welcome Text */}
+              <motion.div
+                className="text-center lg:text-left"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+                  Welcome Back
+                </h1>
+                <p className="text-white/80 text-lg">
+                  Sign in to continue your AI journey
+                </p>
+              </motion.div>
+
+              {/* Login Form Glass Container */}
+              <motion.div
+                className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl"
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                whileHover={{ boxShadow: "0 25px 50px rgba(255,255,255,0.1)" }}
+              >
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Email Field */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <Label htmlFor="email" className="text-white/90 text-sm font-medium">
+                      Email Address
+                    </Label>
+                    <div className="mt-2">
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        className="bg-white/10 backdrop-blur-sm border-white/30 text-white placeholder:text-white/50 rounded-xl h-12 focus:border-blue-400 focus:ring-blue-400/20"
+                        required
+                      />
+                    </div>
+                  </motion.div>
+
+                  {/* Password Field */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    <Label htmlFor="password" className="text-white/90 text-sm font-medium">
+                      Password
+                    </Label>
+                    <div className="mt-2 relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter your password"
+                        className="bg-white/10 backdrop-blur-sm border-white/30 text-white placeholder:text-white/50 rounded-xl h-12 pr-12 focus:border-blue-400 focus:ring-blue-400/20"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/90 transition-colors"
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
+                  </motion.div>
+
+                  {/* Remember Me & Forgot Password */}
+                  <motion.div
+                    className="flex items-center justify-between"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.7 }}
+                  >
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 rounded border-white/30 bg-white/10 text-blue-500 focus:ring-blue-400/20"
+                      />
+                      <span className="text-white/80 text-sm">Remember me</span>
+                    </label>
+                    <a href="#" className="text-blue-300 hover:text-blue-200 text-sm transition-colors">
+                      Forgot password?
+                    </a>
+                  </motion.div>
+
+                  {/* Sign In Button */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 }}
+                  >
+                    <Button
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl h-12 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                    >
+                      {isLoading ? (
+                        <motion.div
+                          className="flex items-center space-x-2"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <motion.div
+                            className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          />
+                          <span>Signing In...</span>
+                        </motion.div>
+                      ) : (
+                        "Sign In"
+                      )}
+                    </Button>
+                  </motion.div>
+
+                  {/* Divider */}
+                  <motion.div
+                    className="relative"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.9 }}
+                  >
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-white/20"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-4 bg-transparent text-white/60">or continue with</span>
+                    </div>
+                  </motion.div>
+
+                  {/* Google Login */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.0 }}
+                  >
+                    <Button
+                      type="button"
+                      onClick={handleGoogleLogin}
+                      variant="outline"
+                      className="w-full bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 rounded-xl h-12 font-semibold transition-all duration-300"
+                    >
+                      <FaGoogle className="mr-3 text-lg" />
+                      Continue with Google
+                    </Button>
+                  </motion.div>
+                </form>
+
+                {/* Sign Up Link */}
+                <motion.div
+                  className="mt-6 text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.1 }}
+                >
+                  <p className="text-white/70 text-sm">
+                    Don't have an account?{" "}
+                    <a href="#" className="text-blue-300 hover:text-blue-200 font-semibold transition-colors">
+                      Sign up for free
+                    </a>
+                  </p>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+
+            {/* Right Side - Video Container */}
+            <motion.div
+              className="hidden lg:block"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <motion.div
+                className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl h-[600px] flex flex-col"
+                whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(255,255,255,0.1)" }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {/* Video Container */}
+                <div className="flex-1 rounded-2xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/10 mb-6">
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover"
+                  >
+                    <source
+                      type="video/mp4"
+                      src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
+                    />
+                  </video>
+                </div>
+
+                {/* Bottom Text Content */}
+                <motion.div
+                  className="text-center space-y-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2 }}
+                >
+                  <h3 className="text-2xl font-bold text-white">
+                    Experience AI Like Never Before
+                  </h3>
+                  <p className="text-white/80 leading-relaxed">
+                    Join thousands of developers and creators who are building the future with our 
+                    advanced AI platform. From natural language processing to computer vision, 
+                    unlock the full potential of artificial intelligence.
+                  </p>
+                  
+                  {/* Feature Pills */}
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {["Real-time AI", "Advanced ML", "Easy Integration", "24/7 Support"].map((feature, index) => (
+                      <motion.span
+                        key={feature}
+                        className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white/90 text-sm border border-white/30"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.3 + index * 0.1 }}
+                        whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.3)" }}
+                      >
+                        {feature}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [-20, -100, -20],
+              opacity: [0, 1, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
