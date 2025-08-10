@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import anime from "animejs";
+import { motion, stagger } from "framer-motion";
 
 export default function Index() {
   const [selectedUser, setSelectedUser] = useState(0);
