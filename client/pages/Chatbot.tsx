@@ -1224,7 +1224,7 @@ export default function Chatbot() {
               <div className="flex-1 max-w-4xl mx-auto w-full px-6 py-6 flex flex-col min-h-0">
                 {/* Chat Container with Fixed Height and Scrolling */}
                 <div className="flex-1 flex flex-col min-h-0">
-                  <div className="flex-1 overflow-y-auto space-y-6 pr-2 scroll-smooth" style={{scrollBehavior: 'smooth'}}>
+                  <div className="flex-1 overflow-y-auto space-y-6 pr-2 chat-scrollbar" style={{scrollBehavior: 'smooth'}}>
                   <AnimatePresence>
                     {messages.map((message) => (
                       <motion.div
