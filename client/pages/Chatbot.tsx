@@ -297,7 +297,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
 // Initialize Vapi
 const vapi = new Vapi({
-  apiKey: b876a304 - 7d36- 46ff - b7a2 - 6263cc5897f8, // using Vite env variable format
+  apiKey: import.meta.env.VITE_VAPI_KEY, // using Vite env variable format
 });
 
 export default function Chatbot() {
