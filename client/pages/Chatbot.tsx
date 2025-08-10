@@ -295,75 +295,27 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   );
 };
 
-// Server-side Vapi proxy to bypass client-side network restrictions
-const createServerProxiedVapi = () => {
-  console.log("🚀 Creating server-proxied Vapi implementation");
+// Initialize Vapi Web SDK for browser-based voice calls
+const initializeVapi = () => {
+  const apiKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
 
-  // Create a proxy object that mimics Vapi SDK but uses server-side calls
-  const proxiedVapi = {
-    async start(config: any) {
-      console.log("📞 Starting Vapi call via server proxy");
-      console.log("🔧 Call config:", JSON.stringify(config, null, 2));
+  if (!apiKey) {
+    console.warn("⚠️ Vapi API key not found in environment variables");
+    return null;
+  }
 
-      try {
-        const response = await fetch("/api/vapi/call", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(config),
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.error || "Server proxy call failed");
-        }
-
-        console.log("✅ Server proxy call successful:", responseData);
-
-        // Simulate successful call start
-        return responseData;
-      } catch (error: any) {
-        console.error("❌ Server proxy call failed:", error);
-        throw new Error(`Server proxy failed: ${error.message}`);
-      }
-    },
-
-    async stop() {
-      console.log("🛑 Stopping Vapi call via server proxy");
-      // Implement stop logic via server proxy if needed
-      return Promise.resolve();
-    },
-
-    on(event: string, callback: Function) {
-      console.log(`📡 Registering event listener for: ${event}`);
-      // Store event listeners for simulation
-      this.eventListeners = this.eventListeners || {};
-      this.eventListeners[event] = callback;
-    },
-
-    removeAllListeners() {
-      console.log("🧹 Removing all event listeners");
-      this.eventListeners = {};
-    },
-
-    // Simulate events for testing
-    simulateEvent(eventName: string, data: any) {
-      const callback = this.eventListeners?.[eventName];
-      if (callback) {
-        console.log(`🎭 Simulating event: ${eventName}`, data);
-        callback(data);
-      }
-    },
-
-    eventListeners: {} as any,
-  };
-
-  return proxiedVapi;
+  try {
+    console.log("🚀 Initializing Vapi Web SDK");
+    const vapi = new Vapi(apiKey);
+    console.log("✅ Vapi Web SDK initialized successfully");
+    return vapi;
+  } catch (error) {
+    console.error("❌ Failed to initialize Vapi Web SDK:", error);
+    return null;
+  }
 };
 
-const vapi = createServerProxiedVapi();
+const vapi = initializeVapi();
 
 // Force enable real API calls - remove all environment restrictions
 const isRestrictedEnvironment = () => {
