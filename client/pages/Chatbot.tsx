@@ -295,10 +295,45 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   );
 };
 
-// Initialize Vapi
-const vapi = new Vapi({
-  apiKey: import.meta.env.VITE_VAPI_KEY, // using Vite env variable format
-});
+// Initialize Vapi with safe wrapper
+const createSafeVapi = () => {
+  // Check if we're in a restricted environment immediately
+  const hostname = window.location.hostname;
+  const isRestrictedEnvironment =
+    hostname.includes('.fly.dev') ||
+    hostname.includes('.builder.io') ||
+    hostname.includes('localhost') ||
+    window.location.protocol === 'file:';
+
+  if (isRestrictedEnvironment) {
+    console.log('🧪 Restricted environment detected - creating mock Vapi instance');
+    // Return a mock Vapi object for restricted environments
+    return {
+      start: async () => { throw new Error('Mock Vapi - use Test Mode'); },
+      stop: async () => { console.log('Mock Vapi stop'); },
+      on: () => { console.log('Mock Vapi event listener'); },
+      removeAllListeners: () => { console.log('Mock Vapi cleanup'); }
+    };
+  }
+
+  // Return real Vapi for unrestricted environments
+  try {
+    return new Vapi({
+      apiKey: import.meta.env.VITE_VAPI_KEY,
+    });
+  } catch (error) {
+    console.error('Failed to create Vapi instance:', error);
+    // Return mock if Vapi creation fails
+    return {
+      start: async () => { throw new Error('Vapi creation failed - use Test Mode'); },
+      stop: async () => { console.log('Mock Vapi stop'); },
+      on: () => { console.log('Mock Vapi event listener'); },
+      removeAllListeners: () => { console.log('Mock Vapi cleanup'); }
+    };
+  }
+};
+
+const vapi = createSafeVapi();
 
 export default function Chatbot() {
   const [isCollapsed, setIsCollapsed] = useState(false);
