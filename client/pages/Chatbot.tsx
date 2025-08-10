@@ -573,8 +573,44 @@ export default function Chatbot() {
     }
   };
 
-  // Vapi event listeners
+  // Environment detection
   useEffect(() => {
+    // Check if we're in a restricted environment
+    const isRestrictedEnvironment = () => {
+      // Check for common restricted environment indicators
+      const hostname = window.location.hostname;
+      const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+      const isFlyDev = hostname.includes('.fly.dev');
+      const isBuilder = hostname.includes('builder.io');
+
+      // If we're in a development environment that might have network restrictions
+      if (isFlyDev || isBuilder || window.location.protocol === 'file:') {
+        addDebugLog("🔍 Restricted environment detected - preemptively enabling Test Mode");
+        return true;
+      }
+
+      return false;
+    };
+
+    // Immediately enable test mode for restricted environments
+    if (isRestrictedEnvironment()) {
+      addDebugLog("🧪 Auto-enabling Test Mode for restricted environment");
+      setTestMode(true);
+      setVapiStatus("test-mode");
+      setNetworkStatus('restricted');
+      return; // Skip Vapi setup
+    }
+
+    addDebugLog("Setting up Vapi event listeners...");
+  }, []);
+
+  // Vapi event listeners (only if not in test mode)
+  useEffect(() => {
+    if (testMode) {
+      addDebugLog("🧪 Skipping Vapi setup - Test Mode active");
+      return;
+    }
+
     addDebugLog("Setting up Vapi event listeners...");
 
     vapi.on("speech.transcript.partial", (data: any) => {
