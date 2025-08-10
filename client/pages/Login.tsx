@@ -341,7 +341,7 @@ export default function Login() {
                     {["Real-time AI", "Advanced ML", "Easy Integration", "24/7 Support"].map((feature, index) => (
                       <motion.span
                         key={feature}
-                        className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white/90 text-sm border border-white/30"
+                        className="px-3 py-1 bg-purple-100/70 backdrop-blur-sm rounded-full text-purple-700 text-sm border border-purple-200/50"
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 1.3 + index * 0.1 }}
