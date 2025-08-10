@@ -800,29 +800,52 @@ export default function Chatbot() {
           };
         }
 
-        // Retry logic for starting Vapi
+        // Retry logic for starting Vapi with automatic fallback
         let retryCount = 0;
-        const maxRetries = 3;
+        const maxRetries = 2; // Reduced retries to fail faster
+        let lastError;
 
         while (retryCount < maxRetries) {
           try {
             addDebugLog(`Attempt ${retryCount + 1}/${maxRetries}: Starting Vapi call...`);
-            await vapi.start(callConfig);
+
+            // Add timeout to Vapi start call
+            const startPromise = vapi.start(callConfig);
+            const timeoutPromise = new Promise((_, reject) =>
+              setTimeout(() => reject(new Error("Vapi start timeout")), 15000)
+            );
+
+            await Promise.race([startPromise, timeoutPromise]);
+            addDebugLog("✅ Vapi call started successfully");
             break; // Success, exit retry loop
+
           } catch (startError: any) {
+            lastError = startError;
             retryCount++;
             const errorMsg = startError?.message || "Unknown error";
 
-            if (errorMsg.includes("Failed to fetch")) {
-              addDebugLog(`❌ Network error on attempt ${retryCount}: ${errorMsg}`);
+            addDebugLog(`❌ Attempt ${retryCount} failed: ${errorMsg}`);
+
+            if (errorMsg.includes("Failed to fetch") || errorMsg.includes("timeout")) {
               if (retryCount < maxRetries) {
-                addDebugLog(`⏳ Retrying in 2 seconds...`);
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                addDebugLog(`⏳ Retrying in 1 second...`);
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 continue;
+              } else {
+                // All retries failed - suggest test mode
+                addDebugLog("🛑 All retries failed - network issues detected");
+                addDebugLog("💡 Auto-enabling Test Mode due to persistent failures");
+
+                setTestMode(true);
+                setVapiStatus("test-mode");
+                setIsRecording(true);
+                videoRef.current?.play();
+                simulateVapiInteraction();
+                return; // Exit early, don't throw error
               }
             }
 
-            // Re-throw the error if it's not a network issue or we've exhausted retries
+            // Re-throw non-network errors immediately
             throw startError;
           }
         }
