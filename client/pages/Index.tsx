@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import anime from "animejs";
 
 export default function Index() {
@@ -206,7 +206,7 @@ export default function Index() {
                     FAQ
                   </motion.span>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
 
             {/* Right content - Video and animations */}
