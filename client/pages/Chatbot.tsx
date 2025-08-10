@@ -801,8 +801,18 @@ export default function Chatbot() {
   };
 
   const toggleRecording = async () => {
-    // Handle test mode
-    if (testMode) {
+    // FIRST: Bulletproof environment check
+    if (isRestrictedEnvironment()) {
+      addDebugLog("🛡️ Restricted environment detected - forcing Test Mode");
+      if (!testMode) {
+        setTestMode(true);
+        setVapiStatus("test-mode");
+        setNetworkStatus('restricted');
+      }
+    }
+
+    // SECOND: Handle test mode (with additional safety check)
+    if (testMode || isRestrictedEnvironment()) {
       if (isRecording) {
         addDebugLog("🧪 Stopping test mode recording...");
         setIsRecording(false);
