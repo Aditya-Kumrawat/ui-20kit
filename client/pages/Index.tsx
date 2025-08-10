@@ -347,10 +347,115 @@ export default function Index() {
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
               Experience the Future
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-gray-600 leading-relaxed mb-12">
               Join thousands of developers who trust our platform to build
               amazing applications with modern technologies.
             </p>
+          </motion.div>
+
+          {/* Flowing Menu Section */}
+          <motion.div
+            className="mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-2xl font-bold text-gray-900 mb-8">
+              Explore Our Platform
+            </h3>
+
+            {/* Flowing Navigation Menu */}
+            <div className="relative overflow-hidden bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Development Tools */}
+                <motion.div
+                  className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Development Tools</h4>
+                  <p className="text-gray-600 text-sm">Advanced coding environment with AI assistance</p>
+                  <motion.div
+                    className="mt-4 text-blue-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                    initial={{ x: -10 }}
+                    whileHover={{ x: 0 }}
+                  >
+                    Explore Tools →
+                  </motion.div>
+                </motion.div>
+
+                {/* Design System */}
+                <motion.div
+                  className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-600 transition-colors">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Design System</h4>
+                  <p className="text-gray-600 text-sm">Beautiful components and design tokens</p>
+                  <motion.div
+                    className="mt-4 text-purple-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                    initial={{ x: -10 }}
+                    whileHover={{ x: 0 }}
+                  >
+                    View Components →
+                  </motion.div>
+                </motion.div>
+
+                {/* Analytics */}
+                <motion.div
+                  className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-600 transition-colors">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Analytics</h4>
+                  <p className="text-gray-600 text-sm">Real-time insights and performance metrics</p>
+                  <motion.div
+                    className="mt-4 text-green-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                    initial={{ x: -10 }}
+                    whileHover={{ x: 0 }}
+                  >
+                    See Analytics →
+                  </motion.div>
+                </motion.div>
+              </div>
+
+              {/* Flowing Background Animation */}
+              <motion.div
+                className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"
+                initial={{ backgroundPosition: "0% 50%" }}
+                animate={{ backgroundPosition: "100% 50%" }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                style={{
+                  background: "linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent, rgba(147, 51, 234, 0.1), transparent)",
+                  backgroundSize: "200% 200%"
+                }}
+              />
+            </div>
           </motion.div>
         </div>
       </div>
