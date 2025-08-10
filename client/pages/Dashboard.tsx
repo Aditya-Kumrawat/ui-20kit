@@ -186,37 +186,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
           </motion.button>
         ))}
 
-        {/* Connected Profiles Section */}
-        <AnimatePresence>
-          {!isCollapsed && (
-            <motion.div
-              className="mt-8 pt-6 border-t border-slate-700/50"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
-                Connected Profiles
-              </div>
-              <div className="flex -space-x-2 mb-3 px-2">
-                {[1, 2, 3].map((i) => (
-                  <Avatar key={i} className="w-8 h-8 border-2 border-slate-700">
-                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
-                      U{i}
-                    </AvatarFallback>
-                  </Avatar>
-                ))}
-              </div>
-              <Button
-                size="sm"
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white border-0 text-xs"
-              >
-                Add Profile
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* AI Assistant Section */}
         <AnimatePresence>
