@@ -21,6 +21,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@vapi-ai/web": "^2.3.8",
     "aos": "^2.3.4",
     "bits-ui": "^2.9.2",
     "dotenv": "^17.2.0",
