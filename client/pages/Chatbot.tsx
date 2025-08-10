@@ -27,8 +27,23 @@ import {
   MessageSquare,
   Settings,
   Upload,
+  Home,
+  BarChart3,
+  Users,
+  Calendar,
+  Mail,
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  Pause,
+  Search,
+  Bell,
+  TrendingUp,
+  Activity,
+  Target,
+  PieChart,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Message {
   id: string;
@@ -47,7 +62,240 @@ interface QuickAction {
   prompt: string;
 }
 
+interface SidebarProps {
+  isCollapsed: boolean;
+  setIsCollapsed: (collapsed: boolean) => void;
+}
+
+const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
+  const [activeItem, setActiveItem] = useState("chatbot");
+  const navigate = useNavigate();
+
+  const menuItems = [
+    { id: "home", label: "Homepage", icon: Home, href: "/dashboard" },
+    {
+      id: "statistics",
+      label: "Statistics",
+      icon: BarChart3,
+      href: "/dashboard/stats",
+    },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: PieChart,
+      href: "/dashboard/analytics",
+    },
+    {
+      id: "appointments",
+      label: "Appointments",
+      icon: Calendar,
+      href: "/dashboard/appointments",
+    },
+    {
+      id: "messages",
+      label: "Messages",
+      icon: MessageSquare,
+      href: "/dashboard/messages",
+      badge: 2,
+    },
+    { id: "ai", label: "AI Assistant", icon: Brain, href: "/dashboard/ai" },
+    {
+      id: "chatbot",
+      label: "Chatbot",
+      icon: MessageSquare,
+      href: "/dashboard/chatbot",
+      active: true,
+    },
+    {
+      id: "community",
+      label: "Community",
+      icon: Users,
+      href: "/dashboard/community",
+    },
+  ];
+
+  const toolItems = [
+    { id: "dna", label: "DNA Profile", icon: Activity },
+    { id: "scanner", label: "Genetic Scanner", icon: Search },
+    { id: "analysis", label: "General Analysis", icon: Target },
+  ];
+
+  return (
+    <motion.div
+      className={`fixed left-0 top-0 h-full bg-gradient-to-b from-slate-900 to-slate-800 text-white z-50 shadow-2xl ${
+        isCollapsed ? "w-20" : "w-72"
+      }`}
+      animate={{ width: isCollapsed ? 80 : 288 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+    >
+      {/* Logo Section */}
+      <motion.div
+        className="p-6 border-b border-slate-700/50"
+        initial={false}
+        animate={{ paddingLeft: isCollapsed ? 24 : 24 }}
+      >
+        <div className="flex items-center gap-3">
+          <motion.div
+            className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center font-bold text-lg shadow-lg"
+            whileHover={{ scale: 1.05 }}
+          >
+            MY
+          </motion.div>
+          <AnimatePresence>
+            {!isCollapsed && (
+              <motion.span
+                className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+              >
+                DNA
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.div>
+
+      {/* Toggle Button */}
+      <motion.button
+        className="absolute -right-3 top-8 w-6 h-6 bg-slate-700 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-slate-600 transition-colors"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+      </motion.button>
+
+      {/* Navigation Menu */}
+      <div className="flex-1 p-4 space-y-2">
+        {menuItems.map((item, index) => (
+          <motion.button
+            key={item.id}
+            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group relative ${
+              item.active || activeItem === item.id
+                ? "bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-white border border-purple-500/30"
+                : "hover:bg-slate-700/50 text-gray-300 hover:text-white"
+            }`}
+            onClick={() => {
+              setActiveItem(item.id);
+              if (item.href) {
+                navigate(item.href);
+              }
+            }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.05 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <item.icon
+              size={20}
+              className={`${
+                item.active || activeItem === item.id
+                  ? "text-purple-400"
+                  : "text-gray-400 group-hover:text-white"
+              }`}
+            />
+            <AnimatePresence>
+              {!isCollapsed && (
+                <motion.span
+                  className="text-sm font-medium flex-1 text-left"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {item.label}
+                </motion.span>
+              )}
+            </AnimatePresence>
+            {item.badge && !isCollapsed && (
+              <Badge className="bg-red-500 text-white text-xs min-w-[20px] h-5 flex items-center justify-center">
+                {item.badge}
+              </Badge>
+            )}
+            {item.badge && isCollapsed && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+            )}
+          </motion.button>
+        ))}
+
+        {/* Connected Profiles Section */}
+        <AnimatePresence>
+          {!isCollapsed && (
+            <motion.div
+              className="mt-8 pt-6 border-t border-slate-700/50"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
+                Connected Profiles
+              </div>
+              <div className="flex -space-x-2 mb-3 px-2">
+                {[1, 2, 3].map((i) => (
+                  <Avatar key={i} className="w-8 h-8 border-2 border-slate-700">
+                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
+                      U{i}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+              </div>
+              <Button
+                size="sm"
+                className="w-full bg-slate-700 hover:bg-slate-600 text-white border-0 text-xs"
+              >
+                Add Profile
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* AI Assistant Section */}
+        <AnimatePresence>
+          {!isCollapsed && (
+            <motion.div
+              className="mt-6 pt-4 border-t border-slate-700/50"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
+                AI Assistant
+              </div>
+              {toolItems.map((tool, index) => (
+                <motion.button
+                  key={tool.id}
+                  className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700/50 text-gray-300 hover:text-white transition-all duration-200 group text-sm"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + index * 0.05 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <tool.icon
+                    size={16}
+                    className="text-gray-400 group-hover:text-purple-400"
+                  />
+                  <span className="text-left">{tool.label}</span>
+                  <ChevronRight
+                    size={12}
+                    className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity"
+                  />
+                </motion.button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+};
+
 export default function Chatbot() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -68,6 +316,13 @@ export default function Chatbot() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [transcript, setTranscript] = useState([
+    "AI: Hello! I'm ready to help you with genetic analysis.",
+    "User: Can you help me understand my DNA results?",
+    "AI: Of course! I'll analyze your genetic data and provide insights.",
+    "User: What should I look for in the analysis?",
+    "AI: We'll examine key genetic markers and potential health risks.",
+  ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -207,96 +462,104 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <motion.header
-        className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+    <div className="min-h-screen bg-gray-50">
+      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+
+      {/* Main Content */}
+      <motion.div
+        className={`transition-all duration-300 min-h-screen flex flex-col ${
+          isCollapsed ? "ml-20" : "ml-72"
+        }`}
+        animate={{ marginLeft: isCollapsed ? 80 : 288 }}
       >
-        <div className="flex items-center gap-4">
-          <Link to="/dashboard">
-            <Button size="sm" variant="ghost" className="p-2">
-              <ArrowLeft size={20} />
-            </Button>
-          </Link>
-          <div className="flex items-center gap-3">
-            <motion.div
-              className="relative"
-              animate={{
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <Avatar className="w-10 h-10">
-                <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                  <Bot size={20} />
-                </AvatarFallback>
-              </Avatar>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
-            </motion.div>
-            <div>
-              <h1 className="text-lg font-semibold text-gray-900">
-                AI Chatbot
-              </h1>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span>Online</span>
+        {/* Header */}
+        <motion.header
+          className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <motion.div
+                className="relative"
+                animate={{
+                  scale: [1, 1.05, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <Avatar className="w-10 h-10">
+                  <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                    <Bot size={20} />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+              </motion.div>
+              <div>
+                <h1 className="text-lg font-semibold text-gray-900">
+                  AI Chatbot
+                </h1>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span>Online</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200">
-            AI Powered
-          </Badge>
-          <Button size="sm" variant="ghost">
-            <Settings size={20} />
-          </Button>
-          <Button size="sm" variant="ghost">
-            <MoreVertical size={20} />
-          </Button>
-        </div>
-      </motion.header>
+          <div className="flex items-center gap-2">
+            <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200">
+              AI Powered
+            </Badge>
+            <Button size="sm" variant="ghost">
+              <Settings size={20} />
+            </Button>
+            <Button size="sm" variant="ghost">
+              <MoreVertical size={20} />
+            </Button>
+          </div>
+        </motion.header>
 
-      {/* Quick Actions */}
-      <motion.div
-        className="bg-white border-b border-gray-200 px-6 py-3"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          <span className="text-sm text-gray-600 whitespace-nowrap mr-2">
-            Quick Actions:
-          </span>
-          {quickActions.map((action, index) => (
-            <motion.button
-              key={action.id}
-              onClick={() => handleQuickAction(action)}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm whitespace-nowrap transition-colors"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 + index * 0.05 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {action.icon}
-              <span>{action.label}</span>
-            </motion.button>
-          ))}
-        </div>
-      </motion.div>
+        {/* Quick Actions */}
+        <motion.div
+          className="bg-white border-b border-gray-200 px-6 py-3"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="flex items-center gap-2 overflow-x-auto pb-2">
+            <span className="text-sm text-gray-600 whitespace-nowrap mr-2">
+              Quick Actions:
+            </span>
+            {quickActions.map((action, index) => (
+              <motion.button
+                key={action.id}
+                onClick={() => handleQuickAction(action)}
+                className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm whitespace-nowrap transition-colors"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 + index * 0.05 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {action.icon}
+                <span>{action.label}</span>
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
 
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-6 py-6 space-y-6">
+        {/* Main Chat Layout */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left Side - Chat and Transcript */}
+          <div className="flex-1 flex flex-col">
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="max-w-4xl mx-auto px-6 py-6 space-y-6">
           <AnimatePresence>
             {messages.map((message) => (
               <motion.div
@@ -428,99 +691,257 @@ export default function Chatbot() {
             )}
           </AnimatePresence>
 
-          <div ref={messagesEndRef} />
-        </div>
-      </div>
-
-      {/* Input Area */}
-      <motion.div
-        className="bg-white border-t border-gray-200 px-6 py-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-end gap-4">
-            {/* File Upload */}
-            <motion.button
-              className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Paperclip size={20} />
-            </motion.button>
-
-            {/* Input Field */}
-            <div className="flex-1 relative">
-              <Input
-                ref={inputRef}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage(inputValue);
-                  }
-                }}
-                placeholder="Type your message... (Press Enter to send)"
-                className="pr-12 py-3 rounded-xl border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
-                disabled={isTyping}
-              />
-
-              {/* Character count or file indicator */}
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
-                {inputValue.length > 0 && <span>{inputValue.length}</span>}
+                <div ref={messagesEndRef} />
               </div>
             </div>
 
-            {/* Voice Recording */}
-            <motion.button
-              onClick={toggleRecording}
-              className={`p-2 rounded-full transition-all ${
-                isRecording
-                  ? "bg-red-500 text-white"
-                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-              }`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
-              transition={isRecording ? { duration: 1, repeat: Infinity } : {}}
+            {/* Input Area */}
+            <motion.div
+              className="bg-white border-t border-gray-200 px-6 py-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
-              {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
-            </motion.button>
+              <div className="max-w-4xl mx-auto">
+                <div className="flex items-end gap-4">
+                  {/* File Upload */}
+                  <motion.button
+                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Paperclip size={20} />
+                  </motion.button>
 
-            {/* Send Button */}
-            <motion.button
-              onClick={() => handleSendMessage(inputValue)}
-              disabled={!inputValue.trim() || isTyping}
-              className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
+                  {/* Input Field */}
+                  <div className="flex-1 relative">
+                    <Input
+                      ref={inputRef}
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage(inputValue);
+                        }
+                      }}
+                      placeholder="Type your message... (Press Enter to send)"
+                      className="pr-12 py-3 rounded-xl border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
+                      disabled={isTyping}
+                    />
+
+                    {/* Character count or file indicator */}
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
+                      {inputValue.length > 0 && <span>{inputValue.length}</span>}
+                    </div>
+                  </div>
+
+                  {/* Voice Recording */}
+                  <motion.button
+                    onClick={toggleRecording}
+                    className={`p-2 rounded-full transition-all ${
+                      isRecording
+                        ? "bg-red-500 text-white"
+                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                    }`}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
+                    transition={isRecording ? { duration: 1, repeat: Infinity } : {}}
+                  >
+                    {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+                  </motion.button>
+
+                  {/* Send Button */}
+                  <motion.button
+                    onClick={() => handleSendMessage(inputValue)}
+                    disabled={!inputValue.trim() || isTyping}
+                    className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Send size={20} />
+                  </motion.button>
+                </div>
+
+                {/* Input Helpers */}
+                <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-4">
+                    <span>AI is ready to help with genetic analysis</span>
+                    {isRecording && (
+                      <motion.div
+                        className="flex items-center gap-1 text-red-500"
+                        animate={{ opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      >
+                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                        <span>Recording...</span>
+                      </motion.div>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Zap size={12} />
+                    <span>Powered by AI</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Transcript Section */}
+            <motion.div
+              className="bg-gray-100 border-t border-gray-200 p-4 h-48 overflow-y-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <Send size={20} />
-            </motion.button>
+              <div className="max-w-4xl mx-auto">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <FileText size={16} />
+                  Conversation Transcript
+                </h3>
+                <div className="space-y-2">
+                  {transcript.map((line, index) => (
+                    <motion.div
+                      key={index}
+                      className="text-xs text-gray-600 p-2 bg-white rounded border"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      {line}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           </div>
 
-          {/* Input Helpers */}
-          <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
-            <div className="flex items-center gap-4">
-              <span>AI is ready to help with genetic analysis</span>
-              {isRecording && (
-                <motion.div
-                  className="flex items-center gap-1 text-red-500"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 1, repeat: Infinity }}
+          {/* Right Side - Video Container */}
+          <motion.div
+            className="w-96 bg-white border-l border-gray-200 flex flex-col"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            {/* Video Header */}
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                  <Video size={20} className="text-purple-600" />
+                  AI Avatar
+                </h3>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-gray-500">Live</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Video Container */}
+            <div className="flex-1 flex flex-col">
+              <div className="aspect-video bg-gray-900 relative overflow-hidden">
+                <video
+                  autoPlay
+                  muted
+                  controls
+                  playsInline
+                  loop
+                  className="w-full h-full object-cover"
+                  poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzg0IiBoZWlnaHQ9IjIxNiIgdmlld0JveD0iMCAwIDM4NCAyMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzODQiIGhlaWdodD0iMjE2IiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjE5MiIgY3k9IjEwOCIgcj0iMzAiIGZpbGw9IiM2MzY2RjEiLz4KPHN2ZyB4PSIxNzciIHk9IjkzIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+Cjxwb2x5Z29uIHBvaW50cz0iNSAzIDE5IDEyIDUgMjEgNSAzIi8+Cjwvc3ZnPgo8dGV4dCB4PSIxNDIiIHk9IjE4MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjOUNBM0FGIj5DbGljayB0byBwbGF5PC90ZXh0Pgo8L3N2Zz4K"
                 >
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span>Recording...</span>
+                  <source
+                    type="video/mp4"
+                    src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2F84c92a2126f04b12917d149b99d6a13b?alt=media&token=2a038587-3580-43f1-90c1-58c21713e468&apiKey=ad2efc99155b417783200fc7999ced3f"
+                  />
+                  <p className="text-white text-center">
+                    Your browser does not support the video tag.
+                  </p>
+                </video>
+
+                {/* Video Overlay Controls */}
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <Button size="sm" variant="outline" className="bg-black/50 text-white border-white/20 hover:bg-black/70">
+                    <Settings size={16} />
+                  </Button>
+                </div>
+
+                {/* AI Status Indicator */}
+                <motion.div
+                  className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm rounded-lg p-2 flex items-center gap-2"
+                  animate={{
+                    opacity: [0.7, 1, 0.7],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Brain size={16} className="text-purple-400" />
+                  <span className="text-xs text-white">AI Active</span>
                 </motion.div>
-              )}
+              </div>
+
+              {/* Video Controls and Info */}
+              <div className="p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium text-gray-900">AI Assistant</h4>
+                    <p className="text-sm text-gray-500">Ready to help with analysis</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline">
+                      <Play size={16} />
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      <Pause size={16} />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Audio Visualization */}
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="flex items-center justify-center gap-1 h-8">
+                    {Array.from({ length: 20 }, (_, i) => (
+                      <motion.div
+                        key={i}
+                        className="w-1 bg-purple-400 rounded-full"
+                        animate={{
+                          height: [4, 24, 4],
+                          opacity: [0.3, 1, 0.3],
+                        }}
+                        transition={{
+                          duration: 1 + Math.random(),
+                          delay: i * 0.05,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Video Stats */}
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Duration:</span>
+                    <span className="text-gray-900">2:34</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Quality:</span>
+                    <span className="text-gray-900">HD</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Status:</span>
+                    <span className="text-green-600 flex items-center gap-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      Active
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Zap size={12} />
-              <span>Powered by AI</span>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </div>
