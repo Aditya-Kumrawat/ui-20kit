@@ -21,9 +21,11 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "dotenv": "^17.2.0",
     "express": "^4.18.2",
     "lottie-react": "^2.4.1",
+    "react-icons": "^5.5.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
