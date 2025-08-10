@@ -28,58 +28,60 @@ export default function Index() {
   const heroRef = useRef(null);
   const isHeroInView = useInView(heroRef);
   
-  // Parallax effects
-  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
-  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
+  // Subtle parallax effects
+  const heroY = useTransform(scrollY, [0, 500], [0, 50]);
 
   const techStack = [
     { name: "React", icon: SiReact, color: "#61DAFB" },
     { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+    { name: "Express", icon: SiExpress, color: "#000000" },
+    { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+    { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
     { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
     { name: "Python", icon: SiPython, color: "#3776AB" },
     { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
+    { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
     { name: "Docker", icon: SiDocker, color: "#2496ED" },
     { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
     { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
     { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
     { name: "Vercel", icon: SiVercel, color: "#000000" },
     { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
-    { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
   ];
 
   const aiFeatures = [
     {
       title: "Neural Networks",
-      description: "Advanced deep learning models for intelligent automation",
+      description: "Advanced deep learning models for intelligent automation and pattern recognition",
       icon: "🧠",
-      gradient: "from-purple-600 to-blue-600"
+      gradient: "from-purple-100 to-blue-100"
     },
     {
       title: "Computer Vision", 
-      description: "Real-time image and video analysis capabilities",
+      description: "Real-time image and video analysis with state-of-the-art accuracy",
       icon: "👁️",
-      gradient: "from-blue-600 to-cyan-600"
+      gradient: "from-blue-100 to-cyan-100"
     },
     {
       title: "Natural Language",
-      description: "Sophisticated text processing and generation",
+      description: "Sophisticated text processing, understanding, and generation capabilities",
       icon: "💬",
-      gradient: "from-cyan-600 to-teal-600"
+      gradient: "from-cyan-100 to-teal-100"
     },
     {
       title: "Predictive Analytics",
-      description: "Data-driven insights and future predictions",
+      description: "Data-driven insights and future predictions with machine learning",
       icon: "📊",
-      gradient: "from-teal-600 to-green-600"
+      gradient: "from-teal-100 to-green-100"
     }
   ];
 
   useEffect(() => {
     AOS.init({
-      duration: 1000,
+      duration: 800,
       easing: "ease-out-cubic",
       once: true,
-      offset: 100,
+      offset: 50,
     });
   }, []);
 
@@ -97,26 +99,9 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-blue-900/20" />
-        <motion.div
-          className="absolute inset-0 opacity-30"
-          animate={{
-            background: [
-              "radial-gradient(circle at 20% 50%, #7c3aed 0%, transparent 50%)",
-              "radial-gradient(circle at 80% 20%, #3b82f6 0%, transparent 50%)",
-              "radial-gradient(circle at 40% 80%, #06b6d4 0%, transparent 50%)",
-              "radial-gradient(circle at 20% 50%, #7c3aed 0%, transparent 50%)"
-            ]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-        />
-      </div>
-
+    <div className="min-h-screen bg-white text-gray-900" style={{ scrollBehavior: "smooth" }}>
       {/* Navigation Header */}
-      <nav className="relative z-50 border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0">
+      <nav className="border-b border-gray-100 bg-white/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <motion.div
             className="flex items-center justify-between"
@@ -127,14 +112,12 @@ export default function Index() {
             {/* Logo */}
             <motion.div 
               className="flex items-center gap-3"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.02 }}
             >
-              <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/25">
+              <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm">
                 <span className="text-white font-bold text-lg">AI</span>
               </div>
-              <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                FusionAI
-              </span>
+              <span className="font-bold text-xl text-gray-900">FusionAI</span>
             </motion.div>
 
             {/* Navigation Links */}
@@ -143,14 +126,14 @@ export default function Index() {
                 <motion.a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className="text-white/70 hover:text-white font-medium transition-all duration-300 relative group"
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200 relative group"
                   whileHover={{ y: -2 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
                   {item}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 group-hover:w-full transition-all duration-300" />
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300" />
                 </motion.a>
               ))}
             </div>
@@ -159,15 +142,15 @@ export default function Index() {
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
-                className="hidden sm:inline-flex text-white/70 hover:text-white hover:bg-white/10"
+                className="hidden sm:inline-flex text-gray-600 hover:text-gray-900"
               >
                 Sign In
               </Button>
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <Button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 rounded-xl px-6 shadow-lg shadow-purple-500/25">
+                <Button className="bg-gray-900 text-white hover:bg-gray-800 rounded-xl px-6 shadow-sm">
                   Get Started
                 </Button>
               </motion.div>
@@ -179,17 +162,18 @@ export default function Index() {
       {/* Hero Section */}
       <motion.div 
         ref={heroRef}
-        className="relative z-10 py-20"
-        style={{ y: heroY, opacity: heroOpacity }}
+        className="py-20"
+        style={{ backgroundColor: "#e9f4ff", y: heroY }}
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
             <motion.div
               className="space-y-8"
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8 }}
+              data-aos="fade-right"
             >
               <div className="space-y-6">
                 <motion.div
@@ -197,44 +181,31 @@ export default function Index() {
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.2 }}
                 >
-                  <span className="inline-block px-4 py-2 bg-purple-500/20 backdrop-blur-sm border border-purple-500/30 rounded-full text-sm text-purple-300 mb-6">
+                  <span className="inline-block px-4 py-2 bg-blue-100 border border-blue-200 rounded-full text-sm text-blue-700 mb-6 font-medium">
                     🚀 Next-Gen AI Platform
                   </span>
                 </motion.div>
                 
                 <motion.h1 
-                  className="text-6xl lg:text-7xl font-bold leading-tight"
+                  className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
                   initial={{ opacity: 0, y: 30 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.3 }}
                 >
-                  <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                    Unleash
-                  </span>
+                  Unleash Your
                   <br />
-                  <motion.span
-                    className="text-white"
-                    animate={{ 
-                      textShadow: [
-                        "0 0 20px rgba(139, 92, 246, 0.5)",
-                        "0 0 40px rgba(59, 130, 246, 0.5)",
-                        "0 0 20px rgba(139, 92, 246, 0.5)"
-                      ]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    AI Power
-                  </motion.span>
+                  <span className="text-gray-900">AI Potential</span>
+                  <span className="text-gray-400">//</span>
                 </motion.h1>
 
                 <motion.p 
-                  className="text-xl text-white/70 leading-relaxed max-w-lg"
+                  className="text-xl text-gray-600 leading-relaxed max-w-lg"
                   initial={{ opacity: 0, y: 20 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.4 }}
                 >
-                  Transform your ideas into reality with our cutting-edge AI platform. 
-                  Build intelligent applications across web and mobile with unprecedented ease.
+                  Transform your ideas into intelligent applications with our cutting-edge AI platform. 
+                  Build seamlessly across web and mobile platforms.
                 </motion.p>
               </div>
 
@@ -245,20 +216,20 @@ export default function Index() {
                 transition={{ delay: 0.5 }}
               >
                 <motion.div
-                  whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)" }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <Button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-4 text-lg rounded-xl shadow-lg shadow-purple-500/25">
+                  <Button className="bg-gray-900 text-white hover:bg-gray-800 px-8 py-3 text-lg rounded-xl shadow-sm">
                     Start Building
                   </Button>
                 </motion.div>
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <Button
                     variant="outline"
-                    className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg rounded-xl backdrop-blur-sm"
+                    className="border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 text-lg rounded-xl"
                   >
                     Watch Demo
                   </Button>
@@ -266,67 +237,38 @@ export default function Index() {
               </motion.div>
             </motion.div>
 
-            {/* Right Content - AI Visualization */}
+            {/* Right Content - Clean AI Visualization */}
             <motion.div
               className="flex justify-center relative"
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: 30 }}
               animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
+              data-aos="fade-left"
             >
-              {/* Glass Container */}
               <div className="relative w-full max-w-lg">
-                <motion.div
-                  className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl"
-                  animate={{ 
-                    boxShadow: [
-                      "0 25px 50px rgba(139, 92, 246, 0.2)",
-                      "0 25px 50px rgba(59, 130, 246, 0.2)",
-                      "0 25px 50px rgba(139, 92, 246, 0.2)"
-                    ]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  {/* Neural Network Visualization */}
-                  <div className="relative h-64 overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900/50 to-blue-900/50">
-                    {/* Animated Neural Nodes */}
+                <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl">
+                  {/* Clean Neural Network Visualization */}
+                  <div className="relative h-64 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50">
                     <svg className="w-full h-full absolute inset-0" viewBox="0 0 400 250">
                       {/* Connection Lines */}
-                      <motion.g stroke="url(#gradient)" strokeWidth="2" fill="none" opacity="0.6">
-                        <motion.line x1="50" y1="50" x2="150" y2="80" 
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: 1, opacity: 0.6 }}
-                          transition={{ duration: 2, delay: 0.5 }}
-                        />
-                        <motion.line x1="50" y1="125" x2="150" y2="80" 
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: 1, opacity: 0.6 }}
-                          transition={{ duration: 2, delay: 0.7 }}
-                        />
-                        <motion.line x1="50" y1="200" x2="150" y2="170" 
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: 1, opacity: 0.6 }}
-                          transition={{ duration: 2, delay: 0.9 }}
-                        />
-                        <motion.line x1="150" y1="80" x2="250" y2="100" 
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: 1, opacity: 0.6 }}
-                          transition={{ duration: 2, delay: 1.1 }}
-                        />
-                        <motion.line x1="150" y1="170" x2="250" y2="150" 
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: 1, opacity: 0.6 }}
-                          transition={{ duration: 2, delay: 1.3 }}
-                        />
-                        <motion.line x1="250" y1="100" x2="350" y2="125" 
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: 1, opacity: 0.6 }}
-                          transition={{ duration: 2, delay: 1.5 }}
-                        />
-                        <motion.line x1="250" y1="150" x2="350" y2="125" 
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: 1, opacity: 0.6 }}
-                          transition={{ duration: 2, delay: 1.7 }}
-                        />
+                      <motion.g stroke="#6366f1" strokeWidth="2" fill="none" opacity="0.3">
+                        {[
+                          { x1: 50, y1: 50, x2: 150, y2: 80 },
+                          { x1: 50, y1: 125, x2: 150, y2: 80 },
+                          { x1: 50, y1: 200, x2: 150, y2: 170 },
+                          { x1: 150, y1: 80, x2: 250, y2: 100 },
+                          { x1: 150, y1: 170, x2: 250, y2: 150 },
+                          { x1: 250, y1: 100, x2: 350, y2: 125 },
+                          { x1: 250, y1: 150, x2: 350, y2: 125 }
+                        ].map((line, index) => (
+                          <motion.line
+                            key={index}
+                            x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2}
+                            initial={{ pathLength: 0, opacity: 0 }}
+                            animate={{ pathLength: 1, opacity: 0.3 }}
+                            transition={{ duration: 1.5, delay: 0.5 + index * 0.2 }}
+                          />
+                        ))}
                       </motion.g>
                       
                       {/* Neural Nodes */}
@@ -340,50 +282,36 @@ export default function Index() {
                           key={index}
                           cx={node.x}
                           cy={node.y}
-                          r="8"
-                          fill="url(#nodeGradient)"
+                          r="6"
+                          fill="#6366f1"
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ 
                             scale: 1, 
                             opacity: 1,
-                            r: [8, 12, 8]
                           }}
                           transition={{ 
-                            scale: { duration: 0.5, delay: index * 0.2 },
-                            r: { duration: 2, repeat: Infinity, delay: index * 0.3 }
+                            scale: { duration: 0.5, delay: index * 0.1 },
+                            opacity: { duration: 0.5, delay: index * 0.1 }
                           }}
                         />
                       ))}
-                      
-                      {/* Gradients */}
-                      <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#8B5CF6" />
-                          <stop offset="100%" stopColor="#3B82F6" />
-                        </linearGradient>
-                        <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%">
-                          <stop offset="0%" stopColor="#FFFFFF" />
-                          <stop offset="100%" stopColor="#8B5CF6" />
-                        </radialGradient>
-                      </defs>
                     </svg>
                     
                     {/* Floating Data Points */}
-                    {[...Array(6)].map((_, i) => (
+                    {[...Array(4)].map((_, i) => (
                       <motion.div
                         key={i}
-                        className="absolute w-2 h-2 bg-cyan-400 rounded-full"
+                        className="absolute w-2 h-2 bg-blue-400 rounded-full"
                         style={{
                           left: `${20 + Math.random() * 60}%`,
                           top: `${20 + Math.random() * 60}%`,
                         }}
                         animate={{
-                          y: [-10, 10, -10],
-                          opacity: [0.3, 1, 0.3],
-                          scale: [0.8, 1.2, 0.8]
+                          y: [-5, 5, -5],
+                          opacity: [0.4, 1, 0.4],
                         }}
                         transition={{
-                          duration: 2 + Math.random() * 2,
+                          duration: 2 + Math.random(),
                           repeat: Infinity,
                           delay: Math.random() * 2
                         }}
@@ -403,20 +331,14 @@ export default function Index() {
                         className="text-center"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 2 + index * 0.2 }}
+                        transition={{ delay: 1.5 + index * 0.2 }}
                       >
-                        <motion.div
-                          className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
-                        >
-                          {stat.value}
-                        </motion.div>
-                        <div className="text-white/60 text-sm">{stat.label}</div>
+                        <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                        <div className="text-gray-600 text-sm">{stat.label}</div>
                       </motion.div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -424,7 +346,7 @@ export default function Index() {
       </motion.div>
 
       {/* Tech Stack Section with Mobile/PC Mockups */}
-      <div className="relative z-10 bg-black/20 py-20 backdrop-blur-sm border-y border-white/10">
+      <div className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -432,11 +354,12 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Powered by Modern Technology
             </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Built with cutting-edge technologies for seamless web and mobile experiences
             </p>
           </motion.div>
@@ -448,33 +371,35 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
+            data-aos="fade-up"
           >
             {/* Desktop Mockup */}
             <motion.div
-              className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20"
-              whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(139, 92, 246, 0.2)" }}
+              className="bg-gray-50 rounded-3xl p-8 border border-gray-100"
+              whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
+              transition={{ duration: 0.3 }}
             >
-              <div className="bg-slate-800 rounded-2xl p-4 shadow-2xl">
+              <div className="bg-white rounded-2xl p-4 shadow-lg">
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                 </div>
-                <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-lg p-6 h-48">
+                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6 h-48">
                   <motion.div
                     className="space-y-3"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <div className="h-4 bg-gradient-to-r from-purple-400 to-blue-400 rounded w-3/4"></div>
-                    <div className="h-3 bg-white/30 rounded w-1/2"></div>
-                    <div className="h-3 bg-white/20 rounded w-2/3"></div>
+                    <div className="h-4 bg-gradient-to-r from-blue-400 to-purple-400 rounded w-3/4"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-3 bg-gray-100 rounded w-2/3"></div>
                     <div className="grid grid-cols-3 gap-2 mt-4">
                       {[...Array(6)].map((_, i) => (
                         <motion.div
                           key={i}
-                          className="h-8 bg-gradient-to-r from-cyan-400/30 to-blue-400/30 rounded"
+                          className="h-8 bg-blue-100 rounded"
                           initial={{ scale: 0 }}
                           whileInView={{ scale: 1 }}
                           transition={{ delay: 0.7 + i * 0.1 }}
@@ -485,18 +410,19 @@ export default function Index() {
                 </div>
               </div>
               <div className="text-center mt-6">
-                <h3 className="text-xl font-bold text-white mb-2">💻 Web Platform</h3>
-                <p className="text-white/60">Full-featured desktop experience</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">💻 Web Platform</h3>
+                <p className="text-gray-600">Full-featured desktop experience</p>
               </div>
             </motion.div>
 
             {/* Mobile Mockup */}
             <motion.div
-              className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20"
-              whileHover={{ scale: 1.02, boxShadow: "0 25px 50px rgba(59, 130, 246, 0.2)" }}
+              className="bg-gray-50 rounded-3xl p-8 border border-gray-100"
+              whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
+              transition={{ duration: 0.3 }}
             >
-              <div className="bg-slate-800 rounded-3xl p-3 shadow-2xl max-w-xs mx-auto">
-                <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-2xl p-4 h-64">
+              <div className="bg-white rounded-3xl p-3 shadow-lg max-w-xs mx-auto">
+                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-4 h-64">
                   <motion.div
                     className="space-y-4"
                     initial={{ opacity: 0 }}
@@ -504,18 +430,18 @@ export default function Index() {
                     transition={{ delay: 0.5 }}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full"></div>
-                      <div className="h-3 bg-white/40 rounded flex-1"></div>
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                      <div className="h-3 bg-gray-200 rounded flex-1"></div>
                     </div>
                     <div className="space-y-2">
-                      <div className="h-3 bg-white/30 rounded w-full"></div>
-                      <div className="h-3 bg-white/20 rounded w-3/4"></div>
+                      <div className="h-3 bg-gray-200 rounded w-full"></div>
+                      <div className="h-3 bg-gray-100 rounded w-3/4"></div>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       {[...Array(4)].map((_, i) => (
                         <motion.div
                           key={i}
-                          className="h-12 bg-gradient-to-r from-cyan-400/30 to-blue-400/30 rounded-lg"
+                          className="h-12 bg-blue-100 rounded-lg"
                           initial={{ scale: 0 }}
                           whileInView={{ scale: 1 }}
                           transition={{ delay: 0.7 + i * 0.1 }}
@@ -526,27 +452,21 @@ export default function Index() {
                 </div>
               </div>
               <div className="text-center mt-6">
-                <h3 className="text-xl font-bold text-white mb-2">📱 Mobile App</h3>
-                <p className="text-white/60">AI-powered mobile experience</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">📱 Mobile App</h3>
+                <p className="text-gray-600">AI-powered mobile experience</p>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Tech Stack Icons */}
-          <motion.div
-            className="relative overflow-hidden"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-          >
+          {/* Enhanced Tech Stack Animation */}
+          <div className="relative overflow-hidden" data-aos="fade-up">
             <motion.div
               className="flex gap-8 py-8"
               animate={{
-                x: [0, -100 * techStack.length],
+                x: [-100 * techStack.length, 0],
               }}
               transition={{
-                duration: 40,
+                duration: 30,
                 repeat: Infinity,
                 ease: "linear",
               }}
@@ -558,36 +478,43 @@ export default function Index() {
                   <motion.div
                     key={`${tech.name}-${index}`}
                     className="flex flex-col items-center group min-w-[150px]"
-                    whileHover={{ scale: 1.1, y: -10 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    whileHover={{ 
+                      scale: 1.1, 
+                      y: -10,
+                      transition: { type: "spring", stiffness: 300, damping: 20 }
+                    }}
                   >
                     <motion.div
-                      className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-xl border shadow-lg group-hover:shadow-2xl transition-all duration-300"
+                      className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 border-2 bg-white shadow-md group-hover:shadow-xl transition-all duration-300"
                       style={{
-                        borderColor: `${tech.color}30`,
-                        backgroundColor: `${tech.color}10`,
-                        boxShadow: `0 8px 32px ${tech.color}20`
+                        borderColor: `${tech.color}20`,
+                        backgroundColor: `${tech.color}05`,
                       }}
                       whileHover={{
-                        boxShadow: `0 12px 40px ${tech.color}40`,
-                        borderColor: `${tech.color}60`
+                        borderColor: tech.color,
+                        boxShadow: `0 12px 30px ${tech.color}30`
                       }}
                     >
-                      <IconComponent size={32} style={{ color: tech.color }} />
+                      <motion.div
+                        whileHover={{ rotate: 360, scale: 1.2 }}
+                        transition={{ duration: 0.6 }}
+                      >
+                        <IconComponent size={32} style={{ color: tech.color }} />
+                      </motion.div>
                     </motion.div>
-                    <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors">
+                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
                       {tech.name}
                     </span>
                   </motion.div>
                 );
               })}
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
       {/* AI Features Section */}
-      <div className="relative z-10 py-20">
+      <div className="bg-gray-50 py-20">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -595,12 +522,13 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
               🤖 AI-Powered Features
             </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              Harness the power of artificial intelligence with our advanced ML models
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Harness the power of artificial intelligence with our advanced machine learning models
             </p>
           </motion.div>
 
@@ -608,39 +536,40 @@ export default function Index() {
             {aiFeatures.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
+                className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ 
-                  scale: 1.05, 
-                  boxShadow: "0 20px 40px rgba(139, 92, 246, 0.2)",
-                  y: -10
+                  y: -5,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
                 }}
                 viewport={{ once: true }}
+                data-aos="fade-up"
+                data-aos-delay={index * 100}
               >
                 <motion.div
-                  className={`w-16 h-16 rounded-xl bg-gradient-to-r ${feature.gradient} flex items-center justify-center text-2xl mb-4 shadow-lg`}
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.8 }}
+                  className={`w-16 h-16 rounded-xl bg-gradient-to-r ${feature.gradient} flex items-center justify-center text-2xl mb-4 shadow-sm`}
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
                 >
                   {feature.icon}
                 </motion.div>
-                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
                 
-                {/* Progress Animation */}
+                {/* Simple progress indicator */}
                 <motion.div
-                  className="mt-4 h-1 bg-white/10 rounded-full overflow-hidden"
+                  className="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
                 >
                   <motion.div
-                    className={`h-full bg-gradient-to-r ${feature.gradient} rounded-full`}
+                    className="h-full bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"
                     initial={{ width: 0 }}
                     whileInView={{ width: "100%" }}
-                    transition={{ duration: 2, delay: 1 + index * 0.2 }}
+                    transition={{ duration: 1.5, delay: 1 + index * 0.2 }}
                   />
                 </motion.div>
               </motion.div>
@@ -650,7 +579,7 @@ export default function Index() {
       </div>
 
       {/* Experience the Future Section */}
-      <div className="relative z-10 py-20 bg-black/20 backdrop-blur-sm border-y border-white/10">
+      <div className="bg-white py-20">
         <div className="max-w-6xl mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -658,67 +587,69 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            data-aos="fade-up"
           >
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Experience the Future
             </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto mb-12">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
               Join thousands of developers building the next generation of intelligent applications
             </p>
           </motion.div>
 
-          {/* Flowing Menu Section */}
+          {/* Enhanced Flowing Menu Section */}
           <motion.div
-            className="relative overflow-hidden bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20"
+            className="relative overflow-hidden bg-gradient-to-r from-blue-50 via-purple-50 to-cyan-50 rounded-3xl p-8 border border-gray-100"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
+            data-aos="fade-up"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
               {[
                 {
                   title: "AI Development Tools",
-                  description: "Advanced coding environment with AI assistance and real-time collaboration",
+                  description: "Advanced coding environment with AI assistance and real-time collaboration features",
                   icon: "🛠️",
-                  color: "from-purple-500 to-blue-500"
+                  color: "from-blue-500 to-purple-500"
                 },
                 {
                   title: "Neural Networks",
-                  description: "Pre-trained models and custom neural network architectures",
+                  description: "Pre-trained models and custom neural network architectures for any use case",
                   icon: "🧠",
-                  color: "from-blue-500 to-cyan-500"
+                  color: "from-purple-500 to-pink-500"
                 },
                 {
                   title: "ML Operations",
-                  description: "Complete MLOps pipeline with monitoring and deployment automation",
+                  description: "Complete MLOps pipeline with monitoring, deployment, and scaling automation",
                   icon: "⚡",
-                  color: "from-cyan-500 to-teal-500"
+                  color: "from-pink-500 to-orange-500"
                 }
               ].map((item, index) => (
                 <motion.div
                   key={item.title}
-                  className="group bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer"
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 hover:border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 * index }}
                   viewport={{ once: true }}
                 >
                   <motion.div
-                    className={`w-12 h-12 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center text-2xl mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300`}
-                    whileHover={{ rotate: 15, scale: 1.1 }}
+                    className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-gray-200 transition-colors duration-300"
+                    whileHover={{ rotate: 10, scale: 1.1 }}
                   >
                     {item.icon}
                   </motion.div>
-                  <h4 className="text-lg font-semibold text-white mb-3 group-hover:text-purple-300 transition-colors">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-gray-700 transition-colors">
                     {item.title}
                   </h4>
-                  <p className="text-white/60 text-sm leading-relaxed group-hover:text-white/80 transition-colors">
+                  <p className="text-gray-600 text-sm leading-relaxed group-hover:text-gray-700 transition-colors">
                     {item.description}
                   </p>
                   <motion.div
-                    className={`mt-4 text-transparent bg-gradient-to-r ${item.color} bg-clip-text text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2`}
+                    className="mt-4 text-gray-900 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2"
                     initial={{ x: -10 }}
                     whileHover={{ x: 0 }}
                   >
@@ -728,15 +659,15 @@ export default function Index() {
               ))}
             </div>
 
-            {/* Flowing Background Animation */}
+            {/* Subtle background animation */}
             <motion.div
-              className="absolute inset-0 opacity-30 pointer-events-none"
+              className="absolute inset-0 opacity-20 pointer-events-none"
               initial={{ backgroundPosition: "0% 50%" }}
               animate={{ backgroundPosition: "100% 50%" }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               style={{
-                background: "linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.1), transparent, rgba(59, 130, 246, 0.1), transparent, rgba(6, 182, 212, 0.1), transparent)",
-                backgroundSize: "300% 300%"
+                background: "linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent, rgba(147, 51, 234, 0.1), transparent)",
+                backgroundSize: "200% 200%"
               }}
             />
           </motion.div>
@@ -744,30 +675,19 @@ export default function Index() {
       </div>
 
       {/* CTA Section */}
-      <div className="relative z-10 py-20">
+      <div className="bg-gray-50 py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            data-aos="fade-up"
           >
-            <motion.h2 
-              className="text-5xl font-bold mb-6"
-              animate={{ 
-                backgroundPosition: ["0%", "100%", "0%"]
-              }}
-              transition={{ duration: 5, repeat: Infinity }}
-              style={{
-                background: "linear-gradient(45deg, #8B5CF6, #3B82F6, #06B6D4, #8B5CF6)",
-                backgroundSize: "300% 300%",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent"
-              }}
-            >
+            <h2 className="text-5xl font-bold text-gray-900 mb-6">
               Ready to Build the Future?
-            </motion.h2>
-            <p className="text-xl text-white/70 leading-relaxed mb-12">
+            </h2>
+            <p className="text-xl text-gray-600 leading-relaxed mb-12">
               Start your AI journey today and transform your ideas into intelligent applications
             </p>
             
@@ -778,20 +698,20 @@ export default function Index() {
               transition={{ delay: 0.3 }}
             >
               <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)" }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <Button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-4 text-lg rounded-xl shadow-lg shadow-purple-500/25">
+                <Button className="bg-gray-900 text-white hover:bg-gray-800 px-8 py-4 text-lg rounded-xl shadow-sm">
                   Get Started Free
                 </Button>
               </motion.div>
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <Button
                   variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg rounded-xl backdrop-blur-sm"
+                  className="border-gray-300 text-gray-700 hover:bg-gray-100 px-8 py-4 text-lg rounded-xl"
                 >
                   Schedule Demo
                 </Button>
@@ -802,26 +722,24 @@ export default function Index() {
       </div>
 
       {/* Footer */}
-      <div className="relative z-10 border-t border-white/10 bg-black/20 backdrop-blur-sm">
+      <div className="border-t border-gray-100 bg-white">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
                   <span className="text-white font-bold text-lg">AI</span>
                 </div>
-                <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                  FusionAI
-                </span>
+                <span className="font-bold text-xl text-gray-900">FusionAI</span>
               </div>
-              <p className="text-white/60 leading-relaxed max-w-md">
+              <p className="text-gray-600 leading-relaxed max-w-md">
                 Empowering developers to build intelligent applications with cutting-edge AI technology.
               </p>
             </div>
             
             <div>
-              <h4 className="font-semibold text-white mb-4">Platform</h4>
-              <ul className="space-y-2 text-white/60">
+              <h4 className="font-semibold text-gray-900 mb-4">Platform</h4>
+              <ul className="space-y-2 text-gray-600">
                 <li>AI Models</li>
                 <li>Development Tools</li>
                 <li>API Documentation</li>
@@ -830,8 +748,8 @@ export default function Index() {
             </div>
             
             <div>
-              <h4 className="font-semibold text-white mb-4">Company</h4>
-              <ul className="space-y-2 text-white/60">
+              <h4 className="font-semibold text-gray-900 mb-4">Company</h4>
+              <ul className="space-y-2 text-gray-600">
                 <li>About Us</li>
                 <li>Careers</li>
                 <li>Contact</li>
@@ -840,8 +758,8 @@ export default function Index() {
             </div>
           </div>
           
-          <div className="border-t border-white/10 mt-8 pt-8 text-center">
-            <p className="text-white/60 text-sm">
+          <div className="border-t border-gray-100 mt-8 pt-8 text-center">
+            <p className="text-gray-500 text-sm">
               © 2024 FusionAI. All rights reserved. Built with ❤️ for the future.
             </p>
           </div>
