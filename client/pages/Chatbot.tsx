@@ -295,45 +295,30 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   );
 };
 
-// Initialize Vapi with safe wrapper
-const createSafeVapi = () => {
-  // Check if we're in a restricted environment immediately
-  const hostname = window.location.hostname;
-  const isRestrictedEnvironment =
-    hostname.includes('.fly.dev') ||
-    hostname.includes('.builder.io') ||
-    hostname.includes('localhost') ||
-    window.location.protocol === 'file:';
+// Initialize real Vapi - force real API connection
+const createRealVapi = () => {
+  const apiKey = import.meta.env.VITE_VAPI_KEY;
 
-  if (isRestrictedEnvironment) {
-    console.log('🧪 Restricted environment detected - creating mock Vapi instance');
-    // Return a mock Vapi object for restricted environments
-    return {
-      start: async () => { throw new Error('Mock Vapi - use Test Mode'); },
-      stop: async () => { console.log('Mock Vapi stop'); },
-      on: () => { console.log('Mock Vapi event listener'); },
-      removeAllListeners: () => { console.log('Mock Vapi cleanup'); }
-    };
+  if (!apiKey || apiKey === "your_vapi_api_key_here") {
+    console.error('❌ VITE_VAPI_KEY not configured');
+    throw new Error('VITE_VAPI_KEY environment variable is required');
   }
 
-  // Return real Vapi for unrestricted environments
+  console.log('🚀 Initializing REAL Vapi with API key:', apiKey.substring(0, 8) + '...');
+
   try {
-    return new Vapi({
-      apiKey: import.meta.env.VITE_VAPI_KEY,
+    const vapiInstance = new Vapi({
+      apiKey: apiKey,
     });
+    console.log('✅ Real Vapi instance created successfully');
+    return vapiInstance;
   } catch (error) {
-    console.error('Failed to create Vapi instance:', error);
-    // Return mock if Vapi creation fails
-    return {
-      start: async () => { throw new Error('Vapi creation failed - use Test Mode'); },
-      stop: async () => { console.log('Mock Vapi stop'); },
-      on: () => { console.log('Mock Vapi event listener'); },
-      removeAllListeners: () => { console.log('Mock Vapi cleanup'); }
-    };
+    console.error('❌ Failed to create Vapi instance:', error);
+    throw error;
   }
 };
 
-const vapi = createSafeVapi();
+const vapi = createRealVapi();
 
 // Immediate environment detection
 const isRestrictedEnvironment = () => {
