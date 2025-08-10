@@ -345,7 +345,7 @@ export default function Login() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 1.3 + index * 0.1 }}
-                        whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.3)" }}
+                        whileHover={{ scale: 1.05, backgroundColor: "rgba(139,69,193,0.2)" }}
                       >
                         {feature}
                       </motion.span>
