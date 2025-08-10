@@ -314,16 +314,16 @@ const createServerProxiedVapi = () => {
           body: JSON.stringify(config),
         });
 
+        const responseData = await response.json();
+
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Server proxy call failed");
+          throw new Error(responseData.error || "Server proxy call failed");
         }
 
-        const callData = await response.json();
-        console.log("✅ Server proxy call successful:", callData);
+        console.log("✅ Server proxy call successful:", responseData);
 
         // Simulate successful call start
-        return callData;
+        return responseData;
       } catch (error: any) {
         console.error("❌ Server proxy call failed:", error);
         throw new Error(`Server proxy failed: ${error.message}`);
@@ -614,7 +614,7 @@ export default function Chatbot() {
       }
     } catch (error: any) {
       // ANY network error means we should use test mode
-      addDebugLog(`❌ Network test failed: ${error.message}`);
+      addDebugLog(`�� Network test failed: ${error.message}`);
       addDebugLog("🛑 Network restrictions detected - enabling Test Mode");
 
       // Immediately enable test mode
