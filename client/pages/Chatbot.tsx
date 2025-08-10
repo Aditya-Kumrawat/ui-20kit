@@ -349,15 +349,11 @@ export default function Chatbot() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [vapiStatus, setVapiStatus] = useState(
-    isRestrictedEnvironment() ? "test-mode" : "disconnected"
-  );
+  const [vapiStatus, setVapiStatus] = useState("disconnected"); // Force real API mode
   const [vapiError, setVapiError] = useState<string | null>(null);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
-  const [testMode, setTestMode] = useState(isRestrictedEnvironment()); // Auto-enable for restricted environments
-  const [networkStatus, setNetworkStatus] = useState<'unknown' | 'online' | 'offline' | 'restricted'>(
-    isRestrictedEnvironment() ? 'restricted' : 'unknown'
-  );
+  const [testMode, setTestMode] = useState(false); // DISABLED: Force real API usage
+  const [networkStatus, setNetworkStatus] = useState<'unknown' | 'online' | 'offline' | 'restricted'>('unknown');
   const [transcript, setTranscript] = useState([
     "AI: Hello! I'm ready to help you with genetic analysis.",
     "User: Can you help me understand my DNA results?",
@@ -381,7 +377,7 @@ export default function Chatbot() {
   useEffect(() => {
     if (isRestrictedEnvironment()) {
       addDebugLog("🛡️ RESTRICTED ENVIRONMENT DETECTED");
-      addDebugLog("🧪 Test Mode auto-enabled to prevent network errors");
+      addDebugLog("���� Test Mode auto-enabled to prevent network errors");
       addDebugLog(`📍 Hostname: ${window.location.hostname}`);
     } else {
       addDebugLog("�� Unrestricted environment - Vapi API available");
@@ -975,7 +971,7 @@ export default function Chatbot() {
             retryCount++;
             const errorMsg = startError?.message || "Unknown error";
 
-            addDebugLog(`❌ Attempt ${retryCount} failed: ${errorMsg}`);
+            addDebugLog(`��� Attempt ${retryCount} failed: ${errorMsg}`);
 
             if (errorMsg.includes("Failed to fetch") || errorMsg.includes("timeout")) {
               if (retryCount < maxRetries) {
