@@ -828,6 +828,16 @@ export default function Chatbot() {
       return;
     }
 
+    // THIRD: Final safety check before any Vapi operations
+    if (isRestrictedEnvironment()) {
+      addDebugLog("❌ BLOCKED: Attempted Vapi call in restricted environment");
+      addDebugLog("🧪 Forcing Test Mode activation");
+      setTestMode(true);
+      setVapiStatus("test-mode");
+      setVapiError("Network restricted - using Test Mode");
+      return;
+    }
+
     try {
       if (isRecording) {
         addDebugLog("Stopping Vapi recording...");
