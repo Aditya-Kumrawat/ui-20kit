@@ -103,10 +103,7 @@ export default function Index() {
   };
 
   return (
-    <div
-      className="min-h-screen bg-white text-gray-900"
-      style={{ scrollBehavior: "smooth" }}
-    >
+    <div className="min-h-screen bg-white text-gray-900">
       {/* Navigation Header */}
       <nav className="border-b border-gray-100 bg-white/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
