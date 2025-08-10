@@ -1343,7 +1343,7 @@ export default function Chatbot() {
                 {/* Input Helpers */}
                 <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
                   <div className="flex items-center gap-4">
-                    <span>AI is ready to help with genetic analysis</span>
+                    <span className="font-['Poppins',sans-serif] text-sm font-medium">AI is ready to help with genetic analysis</span>
                     <div className="flex items-center gap-2">
                       <div
                         className={`w-2 h-2 rounded-full ${
