@@ -1122,13 +1122,7 @@ export default function Chatbot() {
             <div className="flex-1 overflow-hidden">
               <div className="h-full max-w-4xl mx-auto px-6 py-6">
                 {/* Chat Container with Custom Scrollbar */}
-                <div
-                  className="h-full overflow-y-auto space-y-6 pr-2"
-                  style={{
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none'
-                  }}
-                >
+                <div className="h-full overflow-y-auto space-y-6 pr-2 scrollbar-hide">
                 <AnimatePresence>
                   {messages.map((message) => (
                     <motion.div
