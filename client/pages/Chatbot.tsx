@@ -348,12 +348,6 @@ export default function Chatbot() {
       sender: "ai",
       timestamp: new Date(Date.now() - 60000),
       status: "read",
-      suggestions: [
-        "Analyze my DNA data",
-        "Explain genetic variants",
-        "Generate research report",
-        "Help with data visualization",
-      ],
     },
   ]);
 
