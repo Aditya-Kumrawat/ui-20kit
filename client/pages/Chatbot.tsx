@@ -630,6 +630,16 @@ export default function Chatbot() {
         setVapiError(null);
         setVapiStatus("starting");
 
+        // Check microphone permissions first
+        try {
+          addDebugLog("Requesting microphone permissions...");
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach(track => track.stop()); // Clean up
+          addDebugLog("✅ Microphone permissions granted");
+        } catch (permError: any) {
+          throw new Error(`Microphone permission denied: ${permError.message}`);
+        }
+
         // Configure the assistant for the call
         const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
         const voiceId = import.meta.env.VITE_VAPI_VOICE_ID || "rachel";
@@ -664,7 +674,33 @@ export default function Chatbot() {
           };
         }
 
-        await vapi.start(callConfig);
+        // Retry logic for starting Vapi
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        while (retryCount < maxRetries) {
+          try {
+            addDebugLog(`Attempt ${retryCount + 1}/${maxRetries}: Starting Vapi call...`);
+            await vapi.start(callConfig);
+            break; // Success, exit retry loop
+          } catch (startError: any) {
+            retryCount++;
+            const errorMsg = startError?.message || "Unknown error";
+
+            if (errorMsg.includes("Failed to fetch")) {
+              addDebugLog(`❌ Network error on attempt ${retryCount}: ${errorMsg}`);
+              if (retryCount < maxRetries) {
+                addDebugLog(`⏳ Retrying in 2 seconds...`);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                continue;
+              }
+            }
+
+            // Re-throw the error if it's not a network issue or we've exhausted retries
+            throw startError;
+          }
+        }
+
         setIsRecording(true);
         setVapiStatus("recording");
         videoRef.current?.play();
@@ -672,8 +708,19 @@ export default function Chatbot() {
       }
     } catch (error: any) {
       const errorMessage = error?.message || "Unknown error";
+
+      // Enhanced error categorization
+      let userFriendlyMessage = errorMessage;
+      if (errorMessage.includes("Failed to fetch")) {
+        userFriendlyMessage = "Network connection failed. Please check your internet connection and try again.";
+      } else if (errorMessage.includes("Microphone permission")) {
+        userFriendlyMessage = "Microphone access required. Please allow microphone permissions and try again.";
+      } else if (errorMessage.includes("Invalid API key")) {
+        userFriendlyMessage = "Invalid API key. Please check your Vapi configuration.";
+      }
+
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
-      setVapiError(errorMessage);
+      setVapiError(userFriendlyMessage);
       setVapiStatus("error");
       setIsRecording(false);
       console.error("Vapi error:", error);
