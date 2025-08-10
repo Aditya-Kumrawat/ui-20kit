@@ -79,12 +79,22 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
   try {
     console.log("📞 Creating Vapi call via server proxy");
 
-    const apiKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    const privateKey = process.env.VAPI_PRIVATE_KEY;
+    const publicKey = process.env.VITE_VAPI_PUBLIC_KEY || process.env.VITE_VAPI_KEY;
+    const apiKey = privateKey || publicKey || process.env.VAPI_KEY;
+
     if (!apiKey) {
       console.error("❌ No API key configured for call creation");
       return res.status(500).json({
-        error: "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY environment variable.",
+        error: "Vapi API key not configured on server. Set VAPI_PRIVATE_KEY or VITE_VAPI_PUBLIC_KEY environment variable.",
       });
+    }
+
+    const keyType = privateKey ? "private" : "public";
+    console.log(`📞 Creating call with ${keyType} key`);
+
+    if (keyType === "public") {
+      console.log("⚠️ Using public key for call creation - this may not work for all call types");
     }
 
     // Create call configuration
