@@ -303,7 +303,15 @@ const initializeVapi = () => {
 
   if (!apiKey) {
     console.warn(
-      "⚠️ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables",
+      "⚠️ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables. Note: Use the PUBLIC key for client-side SDK, not the private key.",
+    );
+    return null;
+  }
+
+  // Validate key format (public keys typically start with specific prefixes)
+  if (apiKey.startsWith('sk-') || apiKey.length < 30) {
+    console.error(
+      "❌ Invalid API key format. Make sure you're using the PUBLIC key (not private key) for the Web SDK.",
     );
     return null;
   }
