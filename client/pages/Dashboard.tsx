@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -275,7 +275,7 @@ export default function Dashboard() {
   ];
 
   // Typewriter effect
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentIndex < aiTexts.length) {
       const text = aiTexts[currentIndex];
       let charIndex = 0;
@@ -295,7 +295,7 @@ export default function Dashboard() {
 
       return () => clearInterval(typeInterval);
     }
-  }, [currentIndex]);
+  }, [currentIndex, aiTexts]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -695,7 +695,7 @@ export default function Dashboard() {
                 </div>
               </div>
             </Card>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </div>
