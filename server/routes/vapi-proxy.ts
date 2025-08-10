@@ -9,7 +9,7 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
       body: req.body
     });
 
-    const apiKey = process.env.VITE_VAPI_KEY;
+    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     if (!apiKey) {
       return res.status(500).json({ 
         error: 'Vapi API key not configured on server' 
@@ -54,7 +54,7 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
   try {
     console.log('📞 Creating Vapi call via server proxy');
     
-    const apiKey = process.env.VITE_VAPI_KEY;
+    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     if (!apiKey) {
       return res.status(500).json({ 
         error: 'Vapi API key not configured on server' 
@@ -106,7 +106,7 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
   try {
     console.log('🧪 Testing Vapi connectivity from server...');
     
-    const apiKey = process.env.VITE_VAPI_KEY;
+    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     if (!apiKey) {
       return res.status(500).json({ 
         error: 'Vapi API key not configured on server',
