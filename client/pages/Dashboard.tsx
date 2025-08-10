@@ -363,41 +363,25 @@ export default function Dashboard() {
                 controls
                 playsInline
                 loop
-                preload="auto"
                 className="w-full h-full object-cover"
-                onLoadStart={() => console.log('Video load started')}
-                onLoadedData={(e) => {
-                  console.log('Video data loaded');
-                  const video = e.target as HTMLVideoElement;
-                  video.play().then(() => {
-                    console.log('Video playing successfully');
-                  }).catch((error) => {
-                    console.error('Video play failed:', error);
-                  });
-                }}
-                onError={(e) => {
-                  console.error('Video error:', e);
-                }}
-                onCanPlay={() => {
-                  console.log('Video can play');
-                }}
+                poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSI1NzYiIHZpZXdCb3g9IjAgMCAxMDI0IDU3NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMjQiIGhlaWdodD0iNTc2IiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjUxMiIgY3k9IjI4OCIgcj0iNDAiIGZpbGw9IiM2MzY2RjEiLz4KPHN2ZyB4PSI0OTIiIHk9IjI2OCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgo8cG9seWdvbiBwb2ludHM9IjUgMyAxOSAxMiA1IDIxIDUgMyIvPgo8L3N2Zz4KPHN2ZyB4PSI0MzIiIHk9IjUyNiIgd2lkdGg9IjE2MCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDE2MCAyNCIgZmlsbD0ibm9uZSI+Cjx0ZXh0IHg9IjAiIHk9IjE2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5Q0EzQUYiPkNsaWNrIHRvIHBsYXkgdmlkZW88L3RleHQ+Cjwvc3ZnPgo8L3N2Zz4K"
               >
                 <source
                   type="video/mp4"
-                  src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fe90d29dec205457b9974fb469c4619dc?alt=media&token=5e125eee-ed98-41a3-9416-20ae89b44101&apiKey=ad2efc99155b417783200fc7999ced3f"
+                  src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                 />
-                Your browser does not support the video tag.
+                <source
+                  type="video/mp4"
+                  src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4"
+                />
+                <p className="text-white text-center">Your browser does not support the video tag.</p>
               </video>
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white pointer-events-none">
-                <motion.div
-                  className="text-center"
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 0 }}
-                  transition={{ delay: 2, duration: 1 }}
-                >
-                  <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-2"></div>
-                  <p>Loading video...</p>
-                </motion.div>
+            </div>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">AI Avatar Video Player</p>
+              <div className="flex items-center justify-center gap-2 mt-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-xs text-gray-500">Video ready for interaction</span>
               </div>
             </div>
           </div>
