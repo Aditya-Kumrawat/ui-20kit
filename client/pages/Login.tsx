@@ -92,27 +92,27 @@ export default function Login() {
             
             {/* Left Side - Login Form */}
             <motion.div
-              className="space-y-8"
+              className="w-full max-w-md mx-auto lg:mx-0 space-y-8"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
               {/* Logo/Brand */}
-              <motion.div 
+              <motion.div
                 className="text-center lg:text-left"
                 initial={{ opacity: 0, y: -30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
                 <Link to="/" className="inline-flex items-center gap-3 group">
-                  <motion.div 
-                    className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30"
+                  <motion.div
+                    className="w-12 h-12 bg-purple-100 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-purple-200"
                     whileHover={{ scale: 1.05, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <span className="text-white font-bold text-xl">AI</span>
+                    <span className="text-purple-700 font-bold text-xl">AI</span>
                   </motion.div>
-                  <span className="text-2xl font-bold text-white group-hover:text-blue-200 transition-colors">
+                  <span className="text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
                     FusionAI
                   </span>
                 </Link>
@@ -125,10 +125,10 @@ export default function Login() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+                <h1 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
                   Welcome Back
                 </h1>
-                <p className="text-white/80 text-lg">
+                <p className="text-gray-600 text-lg">
                   Sign in to continue your AI journey
                 </p>
               </motion.div>
