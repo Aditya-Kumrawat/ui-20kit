@@ -248,30 +248,64 @@ export default function Index() {
               </motion.div>
 
               {/* Tech Stack Flowing Animation */}
-              <motion.div 
+              <motion.div
                 className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
               >
                 <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Tech Stack</h3>
-                <div ref={techStackRef} className="flex justify-center items-center gap-6 flex-wrap">
+                <motion.div
+                  ref={techStackRef}
+                  className="flex justify-center items-center gap-6 flex-wrap"
+                  variants={techStackVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
                   {techStack.map((tech, index) => (
                     <motion.div
                       key={tech.name}
                       className="flex flex-col items-center gap-2 p-3 bg-white rounded-xl shadow-md min-w-[80px]"
-                      whileHover={{ 
-                        scale: 1.1, 
+                      variants={techItemVariants}
+                      whileHover={{
+                        scale: 1.1,
                         rotate: 5,
                         boxShadow: "0 10px 20px rgba(0,0,0,0.1)"
                       }}
+                      animate={{
+                        y: [0, -5, 0],
+                        rotate: [0, 2, -2, 0]
+                      }}
+                      transition={{
+                        y: {
+                          duration: 2 + index * 0.2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        },
+                        rotate: {
+                          duration: 3 + index * 0.3,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }
+                      }}
                       style={{ borderLeft: `4px solid ${tech.color}` }}
                     >
-                      <span className="text-2xl">{tech.icon}</span>
+                      <motion.span
+                        className="text-2xl"
+                        animate={{ rotate: [0, 10, -10, 0] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: index * 0.3,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        {tech.icon}
+                      </motion.span>
                       <span className="text-xs font-medium text-gray-700">{tech.name}</span>
                     </motion.div>
                   ))}
-                </div>
+                </motion.div>
               </motion.div>
 
               {/* 3 Flowing Menu Stacked */}
