@@ -160,12 +160,32 @@ export default function Index() {
       </nav>
 
       {/* Hero Section */}
-      <motion.div 
+      <motion.div
         ref={heroRef}
-        className="py-20"
-        style={{ backgroundColor: "#e9f4ff", y: heroY }}
+        className="relative py-20 overflow-hidden"
+        style={{ y: heroY }}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        {/* Background Video */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+            style={{ filter: "brightness(0.7)" }}
+          >
+            <source
+              type="video/mp4"
+              src="https://cdn.builder.io/api/v1/image/assets%2F627a9941e0f84ba9a1e4d483e654346d%2F5bee1870f7d54ea68116a7d3f91cb28e"
+            />
+          </video>
+          {/* Overlay for better text readability */}
+          <div className="absolute inset-0 bg-blue-900/20"></div>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
             <motion.div
