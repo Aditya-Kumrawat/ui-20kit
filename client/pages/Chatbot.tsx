@@ -975,16 +975,9 @@ export default function Chatbot() {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 continue;
               } else {
-                // All retries failed - suggest test mode
-                addDebugLog("🛑 All retries failed - network issues detected");
-                addDebugLog("💡 Auto-enabling Test Mode due to persistent failures");
-
-                setTestMode(true);
-                setVapiStatus("test-mode");
-                setIsRecording(true);
-                videoRef.current?.play();
-                simulateVapiInteraction();
-                return; // Exit early, don't throw error
+                // All retries failed - throw error instead of falling back
+                addDebugLog("🛑 All retries failed - real API required");
+                throw new Error("Failed to connect to Vapi API after multiple attempts. Check network connectivity.");
               }
             }
 
