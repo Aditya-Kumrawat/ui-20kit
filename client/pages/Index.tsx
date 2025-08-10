@@ -201,30 +201,30 @@ export default function Index() {
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.2 }}
                 >
-                  <span className="inline-block px-4 py-2 bg-blue-100 border border-blue-200 rounded-full text-sm text-blue-700 mb-6 font-medium">
+                  <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-sm text-white mb-6 font-medium">
                     🚀 Next-Gen AI Platform
                   </span>
                 </motion.div>
                 
-                <motion.h1 
-                  className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+                <motion.h1
+                  className="text-5xl lg:text-6xl font-bold text-white leading-tight"
                   initial={{ opacity: 0, y: 30 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.3 }}
                 >
                   Unleash Your
                   <br />
-                  <span className="text-gray-900">AI Potential</span>
-                  <span className="text-gray-400">//</span>
+                  <span className="text-white">AI Potential</span>
+                  <span className="text-white/60">//</span>
                 </motion.h1>
 
-                <motion.p 
-                  className="text-xl text-gray-600 leading-relaxed max-w-lg"
+                <motion.p
+                  className="text-xl text-white/80 leading-relaxed max-w-lg"
                   initial={{ opacity: 0, y: 20 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.4 }}
                 >
-                  Transform your ideas into intelligent applications with our cutting-edge AI platform. 
+                  Transform your ideas into intelligent applications with our cutting-edge AI platform.
                   Build seamlessly across web and mobile platforms.
                 </motion.p>
               </div>
@@ -239,7 +239,7 @@ export default function Index() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Button className="bg-gray-900 text-white hover:bg-gray-800 px-8 py-3 text-lg rounded-xl shadow-sm">
+                  <Button className="bg-white text-gray-900 hover:bg-white/90 px-8 py-3 text-lg rounded-xl shadow-sm">
                     Start Building
                   </Button>
                 </motion.div>
@@ -249,7 +249,7 @@ export default function Index() {
                 >
                   <Button
                     variant="outline"
-                    className="border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 text-lg rounded-xl"
+                    className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-3 text-lg rounded-xl"
                   >
                     Watch Demo
                   </Button>
