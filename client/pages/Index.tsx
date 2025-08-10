@@ -78,8 +78,8 @@ export default function Index() {
           </motion.div>
 
           {/* Right Content - 25% space */}
-          <motion.div 
-            className="flex justify-center"
+          <motion.div
+            className="flex flex-col gap-8 items-center"
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -95,6 +95,30 @@ export default function Index() {
               </div>
               <div className="w-80 h-4 bg-gray-800 rounded-b-2xl"></div>
             </div>
+
+            {/* Video beside screen */}
+            <motion.div
+              className="bg-gray-100 rounded-2xl p-4 shadow-lg w-80"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <div className="relative rounded-xl overflow-hidden">
+                <video
+                  autoPlay
+                  muted
+                  controls={false}
+                  playsInline
+                  loop
+                  className="w-full h-auto rounded-xl"
+                >
+                  <source
+                    type="video/mp4"
+                    src="https://cdn.builder.io/o/assets%2F97d222396b864180b315daa44fb39370%2F735210a826a74d11a0bd8ab720719e9d?alt=media&token=c1072c81-8a33-4145-90e6-837bcd367921&apiKey=97d222396b864180b315daa44fb39370"
+                  />
+                </video>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
