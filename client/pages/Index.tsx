@@ -63,8 +63,8 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-white" style={{ scrollBehavior: "smooth" }}>
-      {/* Header */}
-      <div className="border-b border-gray-100">
+      {/* Navigation Header */}
+      <nav className="border-b border-gray-100 bg-white/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <motion.div
             className="flex items-center justify-between"
@@ -72,26 +72,87 @@ export default function Index() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">F7</span>
+            {/* Logo */}
+            <motion.div
+              className="flex items-center gap-3"
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">F7</span>
               </div>
-            </div>
+              <span className="font-bold text-xl text-gray-900">Fusion</span>
+            </motion.div>
 
-            <div className="flex items-center gap-6">
-              <Button
-                variant="ghost"
-                className="text-gray-600 hover:text-gray-900"
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-8">
+              <motion.a
+                href="#home"
+                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
+                whileHover={{ y: -2 }}
+              >
+                Home
+              </motion.a>
+              <motion.a
+                href="#features"
+                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
+                whileHover={{ y: -2 }}
+              >
+                Features
+              </motion.a>
+              <motion.a
+                href="#services"
+                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
+                whileHover={{ y: -2 }}
+              >
+                Services
+              </motion.a>
+              <motion.a
+                href="#about"
+                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
+                whileHover={{ y: -2 }}
+              >
+                About
+              </motion.a>
+              <motion.a
+                href="#contact"
+                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
+                whileHover={{ y: -2 }}
               >
                 Contact
+              </motion.a>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                className="hidden sm:inline-flex text-gray-600 hover:text-gray-900"
+              >
+                Sign In
               </Button>
-              <Button className="bg-gray-900 text-white hover:bg-gray-800 rounded-lg px-6">
-                Menu
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button className="bg-gray-900 text-white hover:bg-gray-800 rounded-lg px-6">
+                  Get Started
+                </Button>
+              </motion.div>
+
+              {/* Mobile Menu Button */}
+              <Button
+                variant="ghost"
+                className="md:hidden p-2"
+                size="sm"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
               </Button>
             </div>
           </motion.div>
         </div>
-      </div>
+      </nav>
 
       {/* Hero Section with #e9f4ff background */}
       <div className="py-20" style={{ backgroundColor: "#e9f4ff" }}>
