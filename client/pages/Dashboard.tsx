@@ -353,30 +353,25 @@ export default function Dashboard() {
           </div>
         </motion.header>
 
-        {/* Avatar Video Section */}
+        {/* Video Section Below Topbar */}
         <div className="flex flex-col relative mt-5">
           <div className="flex gap-5">
-            <div className="flex flex-col relative ml-5 w-full min-h-5 min-w-5">
-              <div className="relative">
-                <video
-                  autoPlay
-                  muted
-                  controls={false}
-                  playsInline
-                  loop
-                  className="w-full h-full object-cover object-center rounded relative flex flex-col ml-5 min-h-5 min-w-5"
-                >
-                  <source
-                    type="video/mp4"
-                    src="https://cdn.builder.io/api/v1/file/assets%2Fad2efc99155b417783200fc7999ced3f%2Fdbdad814ae434e89b1ddbd6db9f2655f"
-                  />
-                </video>
-                <div className="w-full pt-[70.04%] pointer-events-none text-[0]" />
-              </div>
-            </div>
             <div className="flex flex-col w-1/2">
               <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
                 <div className="relative">
+                  <video
+                    autoPlay
+                    muted
+                    controls={false}
+                    playsInline
+                    loop
+                    className="w-full h-full object-cover object-center rounded"
+                  >
+                    <source
+                      type="video/mp4"
+                      src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fe90d29dec205457b9974fb469c4619dc?alt=media&token=5e125eee-ed98-41a3-9416-20ae89b44101&apiKey=ad2efc99155b417783200fc7999ced3f"
+                    />
+                  </video>
                 </div>
               </div>
             </div>
