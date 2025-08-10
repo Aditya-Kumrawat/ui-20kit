@@ -423,32 +423,81 @@ export default function Chatbot() {
   const simulateVapiInteraction = () => {
     if (!testMode) return;
 
-    // Simulate speech recognition
-    setTimeout(() => {
-      const testTranscript = "Can you help me analyze my DNA data?";
-      addDebugLog(`📝 Simulated transcript: ${testTranscript}`);
-      setInputValue(testTranscript);
+    const sampleQuestions = [
+      "Can you help me analyze my DNA data?",
+      "What do my genetic markers tell me about my health?",
+      "How do I interpret my genetic test results?",
+      "Can you explain what genetic variants mean?",
+      "What should I know about my hereditary risks?",
+      "Help me understand my family's genetic history",
+      "What does this genetic report mean for me?"
+    ];
 
-      // Simulate final transcript
+    const aiResponses = [
+      "I'd be happy to help you analyze your DNA data! I can examine genetic markers, identify variants, and provide insights about your genetic profile. What specific aspects would you like me to focus on?",
+      "Your genetic markers provide valuable insights into your health predispositions and ancestry. I can help you understand the significance of different variants and what they mean for your health journey.",
+      "Genetic test results can be complex, but I'm here to make them clear for you! Let me break down the key findings and explain what each marker indicates about your genetic makeup.",
+      "Genetic variants are natural differences in your DNA sequence. Some are beneficial, others neutral, and some may indicate health risks. I'll help you understand which variants are most important for you.",
+      "Understanding hereditary risks is crucial for proactive health management. I can help you identify potential genetic predispositions and suggest appropriate screening or lifestyle modifications.",
+      "Family genetic history provides important context for your results. I can help you understand inheritance patterns and what this means for you and your relatives.",
+      "Your genetic report contains a wealth of information about your health, ancestry, and traits. Let me walk you through the key findings and what they mean in practical terms."
+    ];
+
+    addDebugLog("🎤 Simulating voice recording...");
+    addDebugLog("📻 Listening for speech...");
+
+    // Simulate real-time transcription (partial updates)
+    const selectedQuestion = sampleQuestions[Math.floor(Math.random() * sampleQuestions.length)];
+    const words = selectedQuestion.split(' ');
+    let currentTranscript = '';
+
+    // Simulate partial transcription word by word
+    words.forEach((word, index) => {
       setTimeout(() => {
-        handleSendMessage(testTranscript);
-        setTranscript(prev => [...prev, `User: ${testTranscript}`]);
+        currentTranscript += (index > 0 ? ' ' : '') + word;
+        setInputValue(currentTranscript);
+        addDebugLog(`📝 Partial transcript: "${currentTranscript}"`);
+      }, 200 * (index + 1));
+    });
 
-        // Simulate AI response
-        setTimeout(() => {
-          const aiResponse = "I'd be happy to help you analyze your DNA data! I can examine genetic markers, identify variants, and provide insights about your genetic profile. What specific aspects would you like me to focus on?";
-          addDebugLog(`🤖 Simulated AI response: ${aiResponse}`);
-          setMessages(prev => [...prev, {
-            id: Date.now().toString(),
-            content: aiResponse,
-            sender: "ai" as const,
-            timestamp: new Date(),
-            status: "read" as const,
-          }]);
-          setTranscript(prev => [...prev, `AI: ${aiResponse}`]);
-        }, 2000);
-      }, 1000);
-    }, 500);
+    // Simulate final transcript and AI response
+    setTimeout(() => {
+      addDebugLog(`✅ Final transcript: "${selectedQuestion}"`);
+      setInputValue(''); // Clear input after sending
+      handleSendMessage(selectedQuestion);
+      setTranscript(prev => [...prev, `User: ${selectedQuestion}`]);
+
+      // Simulate AI processing time
+      addDebugLog("🧠 AI processing your request...");
+      setIsTyping(true);
+
+      setTimeout(() => {
+        const selectedResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+        addDebugLog(`🤖 AI response generated: "${selectedResponse.substring(0, 50)}..."`);
+
+        setMessages(prev => [...prev, {
+          id: Date.now().toString(),
+          content: selectedResponse,
+          sender: "ai" as const,
+          timestamp: new Date(),
+          status: "read" as const,
+          suggestions: [
+            "Tell me more details",
+            "What are the next steps?",
+            "Show me specific examples",
+            "Explain the science behind this"
+          ]
+        }]);
+
+        setTranscript(prev => [...prev, `AI: ${selectedResponse}`]);
+        setIsTyping(false);
+
+        // Simulate text-to-speech
+        addDebugLog("🔊 AI speaking response...");
+
+      }, 2000 + Math.random() * 1000); // Variable AI response time
+
+    }, words.length * 200 + 500);
   };
 
   const quickActions: QuickAction[] = [
