@@ -234,18 +234,43 @@ export default function Index() {
                 </motion.div>
 
                 <motion.h1
-                  className="text-5xl lg:text-6xl font-bold text-white leading-tight"
+                  className="text-5xl lg:text-7xl font-black leading-tight"
                   style={{
-                    fontFamily: "'Synera', 'Space Grotesk', sans-serif",
+                    fontFamily: "'Synera', 'Proxima Nova', 'Space Grotesk', sans-serif",
                   }}
                   initial={{ opacity: 0, y: 30 }}
                   animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.3 }}
                 >
-                  Unleash Your
+                  <span className="text-white text-glow">Unleash Your</span>
                   <br />
-                  <span className="text-white">AI Potential</span>
-                  <span className="text-white/60">//</span>
+                  <motion.span
+                    className="animated-text pulse-animation"
+                    animate={{
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    AI Potential
+                  </motion.span>
+                  <motion.span
+                    className="text-yellow-400"
+                    animate={{
+                      opacity: [0.6, 1, 0.6],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    //
+                  </motion.span>
                 </motion.h1>
 
                 <motion.p
