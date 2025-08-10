@@ -38,6 +38,7 @@ interface SidebarProps {
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   const [activeItem, setActiveItem] = useState("home");
+  const navigate = useNavigate();
 
   const menuItems = [
     { id: "home", label: "Homepage", icon: Home, href: "/dashboard" },
