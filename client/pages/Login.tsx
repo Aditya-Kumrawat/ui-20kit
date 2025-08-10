@@ -253,7 +253,7 @@ export default function Login() {
                       <div className="w-full border-t border-white/20"></div>
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="px-4 bg-transparent text-white/60">or continue with</span>
+                      <span className="px-4 bg-white/60 text-gray-600">or continue with</span>
                     </div>
                   </motion.div>
 
@@ -267,7 +267,7 @@ export default function Login() {
                       type="button"
                       onClick={handleGoogleLogin}
                       variant="outline"
-                      className="w-full bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 rounded-xl h-12 font-semibold transition-all duration-300"
+                      className="w-full bg-white/70 backdrop-blur-sm border-purple-200 text-gray-700 hover:bg-white/90 rounded-xl h-12 font-semibold transition-all duration-300"
                     >
                       <FaGoogle className="mr-3 text-lg" />
                       Continue with Google
