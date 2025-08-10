@@ -1452,21 +1452,26 @@ export default function Chatbot() {
 
           {/* Right Side - Video Container */}
           <motion.div
-            className="w-96 bg-white border-l border-gray-200 flex flex-col"
+            className="w-[500px] bg-white border-l border-gray-200 flex flex-col shadow-xl"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             {/* Video Header */}
-            <div className="p-4 border-b border-gray-200">
+            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-blue-50">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  AI Avatar
-                </h3>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-gray-500">
-                    {vapiStatus === "recording" ? "Recording" : "Live"}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 font-['Poppins',sans-serif]">
+                    AI Avatar
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1 font-['Poppins',sans-serif]">Genetic Research Assistant</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full animate-pulse ${
+                    vapiStatus === "recording" ? "bg-red-500" : "bg-green-500"
+                  }`}></div>
+                  <span className="text-sm font-medium text-gray-700 font-['Poppins',sans-serif]">
+                    {vapiStatus === "recording" ? "🎤 Recording" : "👁️ Live"}
                   </span>
                 </div>
               </div>
