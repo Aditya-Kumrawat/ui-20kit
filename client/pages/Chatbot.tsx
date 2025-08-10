@@ -897,6 +897,15 @@ export default function Chatbot() {
                 <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
                   <div className="flex items-center gap-4">
                     <span>AI is ready to help with genetic analysis</span>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${
+                        vapiStatus === "connected" ? "bg-green-500" :
+                        vapiStatus === "recording" ? "bg-red-500 animate-pulse" :
+                        vapiStatus === "error" ? "bg-red-500" :
+                        "bg-gray-400"
+                      }`}></div>
+                      <span className="text-xs capitalize">{vapiStatus}</span>
+                    </div>
                     {isRecording && (
                       <motion.div
                         className="flex items-center gap-1 text-red-500"
@@ -906,6 +915,9 @@ export default function Chatbot() {
                         <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                         <span>Recording...</span>
                       </motion.div>
+                    )}
+                    {vapiError && (
+                      <span className="text-xs text-red-500">Error: {vapiError}</span>
                     )}
                   </div>
                   <div className="flex items-center gap-2">
