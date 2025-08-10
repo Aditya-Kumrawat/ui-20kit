@@ -684,22 +684,7 @@ export default function Chatbot() {
       }
     });
 
-    vapi.on("message", (message: any) => {
-      if (message.type === "transcript" && message.role === "assistant") {
-        addDebugLog(`🤖 AI response: ${message.transcript}`);
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: Date.now().toString(),
-            content: message.transcript,
-            sender: "ai" as const,
-            timestamp: new Date(),
-            status: "read" as const,
-          },
-        ]);
-        setTranscript((prev) => [...prev, `AI: ${message.transcript}`]);
-      }
-    });
+    // AI responses are handled in the consolidated message handler above
 
     // Additional event handlers can be added here
 
