@@ -105,16 +105,30 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
 export const handleVapiTest: RequestHandler = async (req, res) => {
   try {
     console.log('🧪 Testing Vapi connectivity from server...');
-    
+
+    // Check environment variables
     const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    console.log('🔍 Environment check:');
+    console.log('  - VAPI_KEY exists:', !!process.env.VAPI_KEY);
+    console.log('  - VITE_VAPI_KEY exists:', !!process.env.VITE_VAPI_KEY);
+    console.log('  - Final API key length:', apiKey?.length || 0);
+
     if (!apiKey) {
-      return res.status(500).json({ 
+      console.error('❌ No API key found in environment variables');
+      return res.status(500).json({
         error: 'Vapi API key not configured on server',
-        configured: false
+        configured: false,
+        debug: {
+          vapiKeyExists: !!process.env.VAPI_KEY,
+          viteVapiKeyExists: !!process.env.VITE_VAPI_KEY
+        }
       });
     }
 
+    console.log(`🔑 Using API key: ${apiKey.substring(0, 8)}...`);
+
     // Test API key validity
+    console.log('📡 Making request to Vapi API...');
     const testResponse = await fetch('https://api.vapi.ai/assistant', {
       method: 'GET',
       headers: {
@@ -123,24 +137,41 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
       }
     });
 
+    console.log(`📊 Vapi response: ${testResponse.status} ${testResponse.statusText}`);
+
     const success = testResponse.ok || testResponse.status === 404;
-    
-    res.json({
+
+    // Get response body for debugging
+    let responseBody = '';
+    try {
+      const text = await testResponse.text();
+      responseBody = text.substring(0, 200); // First 200 chars
+      console.log('📄 Response body preview:', responseBody);
+    } catch (e) {
+      console.log('📄 Could not read response body');
+    }
+
+    const result = {
       success,
       status: testResponse.status,
-      message: success 
-        ? 'Vapi API connectivity successful from server' 
+      message: success
+        ? 'Vapi API connectivity successful from server'
         : 'Vapi API connectivity failed from server',
       configured: true,
-      apiKeyLength: apiKey.length
-    });
+      apiKeyLength: apiKey.length,
+      responsePreview: responseBody.substring(0, 50)
+    };
+
+    console.log('✅ Test result:', result);
+    res.json(result);
 
   } catch (error: any) {
     console.error('❌ Server-side Vapi test failed:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      error: 'Server-side Vapi test failed', 
+      error: 'Server-side Vapi test failed',
       details: error.message,
+      stack: error.stack?.substring(0, 500),
       configured: false
     });
   }
