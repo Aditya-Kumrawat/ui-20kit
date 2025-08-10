@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { Link } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import {
