@@ -219,23 +219,7 @@ export default function Index() {
               transition={{ duration: 0.8 }}
               data-aos="fade-right"
             >
-              {/* Glass Box Container */}
-              <motion.div
-                className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8 shadow-2xl"
-                style={{
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
-                  backdropFilter: "blur(10px)",
-                  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)"
-                }}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={isHeroInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: 0.1, duration: 0.8 }}
-                whileHover={{
-                  scale: 1.02,
-                  boxShadow: "0 12px 40px 0 rgba(31, 38, 135, 0.5)"
-                }}
-              >
-                <div className="space-y-6">
+              <div className="space-y-6">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
@@ -255,7 +239,7 @@ export default function Index() {
                     animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.3 }}
                   >
-                    <span className="text-white text-glow">Unleash Your</span>
+                    <span className="text-white">Unleash Your</span>
                     <br />
                     <motion.span
                       className="animated-text pulse-animation"
@@ -325,33 +309,32 @@ export default function Index() {
                       web and mobile
                     </span> platforms.
                   </motion.p>
-                </div>
+              </div>
 
+              <motion.div
+                className="flex items-center gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.5 }}
+              >
                 <motion.div
-                  className="flex items-center gap-4 mt-8"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.5 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                  <Button className="bg-white text-gray-900 hover:bg-white/90 px-8 py-3 text-lg rounded-xl shadow-sm">
+                    Start Building
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Button
+                    variant="outline"
+                    className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-3 text-lg rounded-xl"
                   >
-                    <Button className="bg-white text-gray-900 hover:bg-white/90 px-8 py-3 text-lg rounded-xl shadow-sm">
-                      Start Building
-                    </Button>
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Button
-                      variant="outline"
-                      className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-3 text-lg rounded-xl"
-                    >
-                      Watch Demo
-                    </Button>
-                  </motion.div>
+                    Watch Demo
+                  </Button>
                 </motion.div>
               </motion.div>
             </motion.div>
