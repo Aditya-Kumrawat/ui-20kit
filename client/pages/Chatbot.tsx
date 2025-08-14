@@ -382,22 +382,7 @@ export default function Chatbot() {
   const [vapiInitialized, setVapiInitialized] = useState(false);
 
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      content:
-        "Hello! I'm your AI assistant. I can help you with DNA analysis, genetic research, data interpretation, and much more. How can I assist you today?",
-      sender: "ai",
-      timestamp: new Date(Date.now() - 60000),
-      status: "read",
-      suggestions: [
-        "Analyze my DNA data",
-        "Explain genetic variants",
-        "Generate research report",
-        "Help with data visualization",
-      ],
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
