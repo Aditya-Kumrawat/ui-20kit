@@ -719,33 +719,45 @@ export default function Chatbot() {
     });
 
     vapi.on("message", (message: any) => {
-      if (message.type === "transcript") {
-        if (message.role === "user") {
-          addDebugLog(
-            `📝 User transcript: ${message.transcriptType} - ${message.transcript}`,
-          );
-          if (message.transcriptType === "partial") {
-            setInputValue(message.transcript);
-          } else if (message.transcriptType === "final") {
-            addDebugLog(`✅ Final user transcript: ${message.transcript}`);
-            setInputValue(""); // Clear input after final transcript
-            handleSendMessage(message.transcript);
-            setTranscript((prev) => [...prev, `User: ${message.transcript}`]);
+      try {
+        if (message && typeof message === 'object' && message.type === "transcript") {
+          const transcript = message.transcript || "";
+          const transcriptType = message.transcriptType || "unknown";
+          const role = message.role || "unknown";
+
+          if (role === "user") {
+            addDebugLog(
+              `📝 User transcript: ${transcriptType} - ${transcript}`,
+            );
+            if (transcriptType === "partial") {
+              setInputValue(transcript);
+            } else if (transcriptType === "final") {
+              addDebugLog(`✅ Final user transcript: ${transcript}`);
+              setInputValue(""); // Clear input after final transcript
+              handleSendMessage(transcript);
+              setTranscript((prev) => [...prev, `User: ${transcript}`]);
+            }
+          } else if (role === "assistant") {
+            addDebugLog(`🤖 AI response: ${transcript}`);
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: Date.now().toString(),
+                content: transcript,
+                sender: "ai" as const,
+                timestamp: new Date(),
+                status: "read" as const,
+              },
+            ]);
+            setTranscript((prev) => [...prev, `AI: ${transcript}`]);
           }
-        } else if (message.role === "assistant") {
-          addDebugLog(`🤖 AI response: ${message.transcript}`);
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: Date.now().toString(),
-              content: message.transcript,
-              sender: "ai" as const,
-              timestamp: new Date(),
-              status: "read" as const,
-            },
-          ]);
-          setTranscript((prev) => [...prev, `AI: ${message.transcript}`]);
+        } else {
+          // Handle non-transcript messages
+          addDebugLog(`📨 Vapi message: ${JSON.stringify(message, null, 2)}`);
         }
+      } catch (error) {
+        addDebugLog(`❌ Error handling Vapi message: ${error}`);
+        console.error("Error processing Vapi message:", error, message);
       }
     });
 
