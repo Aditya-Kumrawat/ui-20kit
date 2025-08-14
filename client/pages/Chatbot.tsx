@@ -1922,9 +1922,42 @@ export default function Chatbot() {
                     transition={
                       isRecording ? { duration: 1, repeat: Infinity } : {}
                     }
+                    title="Voice Recording"
                   >
                     {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
                   </motion.button>
+
+                  {/* Volume Control */}
+                  <div className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg" title="Audio Volume">
+                    <div className="text-gray-500">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="2.0"
+                      step="0.1"
+                      value={audioVolume}
+                      onChange={(e) => {
+                        const newVolume = parseFloat(e.target.value);
+                        setAudioVolume(newVolume);
+                        if (gainNode) {
+                          gainNode.gain.value = newVolume * 2.0;
+                        }
+                        addDebugLog(`🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`);
+                      }}
+                      className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                      style={{
+                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 2) * 100}%, #e5e7eb ${(audioVolume / 2) * 100}%, #e5e7eb 100%)`
+                      }}
+                    />
+                    <span className="text-xs text-gray-500 min-w-[30px]">
+                      {Math.round(audioVolume * 100)}%
+                    </span>
+                  </div>
 
                   {/* Send Button */}
                   <motion.button
