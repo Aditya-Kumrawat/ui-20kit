@@ -493,7 +493,7 @@ export default function Chatbot() {
   }, []);
 
   // Debug logging function with comprehensive object handling
-  const addDebugLog = (message: string | any) => {
+  const addDebugLog = useCallback((message: string | any) => {
     const timestamp = new Date().toLocaleTimeString();
 
     // Ensure message is properly serialized and never shows [object Object]
@@ -536,7 +536,7 @@ export default function Chatbot() {
     const finalLogMessage = `[${timestamp}] ${logMessage}`;
     console.log(`🔊 VAPI DEBUG: ${finalLogMessage}`);
     setDebugLogs((prev) => [...prev.slice(-9), finalLogMessage]); // Keep last 10 logs
-  };
+  }, []);
 
   // Initial environment check log
   useEffect(() => {
