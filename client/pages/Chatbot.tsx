@@ -801,7 +801,7 @@ export default function Chatbot() {
       // This shouldn't be reached since we have direct connection
       throw new Error("Direct connection failed - missing credentials");
     } catch (error: any) {
-      addDebugLog(`��� Initial connection test failed: ${error.message}`);
+      addDebugLog(`���� Initial connection test failed: ${error.message}`);
 
       // Always try direct connection if we have credentials
       const fallbackPublicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
@@ -948,6 +948,18 @@ export default function Chatbot() {
       if (audioEl) {
         audioEl.volume = audioVolume; // Apply current volume setting
         addDebugLog(`🔊 Audio volume set to ${Math.round(audioVolume * 100)}%`);
+
+        // Connect to Web Audio API for advanced processing
+        if (audioContext && gainNode && audioEl.srcObject) {
+          try {
+            const source = audioContext.createMediaStreamSource(audioEl.srcObject as MediaStream);
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            addDebugLog("🎛️ Audio stream connected to Web Audio API gain node");
+          } catch (webAudioError) {
+            addDebugLog(`⚠️ Web Audio API connection failed: ${webAudioError}`);
+          }
+        }
       }
     });
 
@@ -2021,7 +2033,7 @@ export default function Chatbot() {
                       size="sm"
                       variant="outline"
                       onClick={() => {
-                        addDebugLog("🔍 Manual test triggered...");
+                        addDebugLog("�� Manual test triggered...");
                         setVapiStatus("testing");
                         setVapiError(null);
                         testVapiConnection();
