@@ -958,10 +958,10 @@ export default function Chatbot() {
       try {
         const context = new AudioContext();
         const gain = context.createGain();
-        gain.gain.value = audioVolume * 2.0; // Boost up to 200%
+        gain.gain.value = audioVolume * 3.0; // Boost up to 300%
         setAudioContext(context);
         setGainNode(gain);
-        addDebugLog(`🎚️ Web Audio API gain node created with ${Math.round(gain.gain.value * 50)}% boost`);
+        addDebugLog(`🎚️ Web Audio API gain node created with ${Math.round(gain.gain.value * 33.33)}% boost`);
       } catch (audioError) {
         addDebugLog(`⚠️ Web Audio API setup failed: ${audioError}`);
       }
@@ -1419,8 +1419,7 @@ export default function Chatbot() {
               provider: "11labs",
               voiceId: voiceId,
             },
-            firstMessage:
-              "Hello! I'm your AI assistant. I can help you with DNA analysis and genetic research. How can I assist you today?",
+            firstMessage: null,
           };
         }
 
@@ -1935,20 +1934,20 @@ export default function Chatbot() {
                     <input
                       type="range"
                       min="0.1"
-                      max="2.0"
+                      max="3.0"
                       step="0.1"
                       value={audioVolume}
                       onChange={(e) => {
                         const newVolume = parseFloat(e.target.value);
                         setAudioVolume(newVolume);
                         if (gainNode) {
-                          gainNode.gain.value = newVolume * 2.0;
+                          gainNode.gain.value = newVolume * 3.0;
                         }
                         addDebugLog(`🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`);
                       }}
                       className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                       style={{
-                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 2) * 100}%, #e5e7eb ${(audioVolume / 2) * 100}%, #e5e7eb 100%)`
+                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 3) * 100}%, #e5e7eb ${(audioVolume / 3) * 100}%, #e5e7eb 100%)`
                       }}
                     />
                     <span className="text-xs text-gray-500 min-w-[30px]">
