@@ -750,7 +750,24 @@ export default function Chatbot() {
     });
 
     vapi.on("error", (error: any) => {
-      const errorMessage = error?.message || error?.toString() || "Unknown error";
+      // Properly serialize error objects to avoid "[object Object]" display
+      let errorMessage = "Unknown error";
+
+      try {
+        if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error?.message) {
+          errorMessage = error.message;
+        } else if (error?.toString && typeof error.toString === 'function') {
+          errorMessage = error.toString();
+        } else if (typeof error === 'object') {
+          // Try to extract meaningful info from error object
+          errorMessage = JSON.stringify(error, null, 2);
+        }
+      } catch (e) {
+        errorMessage = "Error parsing error object";
+      }
+
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
 
       // Check for specific error types and provide helpful messages
@@ -762,6 +779,8 @@ export default function Chatbot() {
         userFriendlyMessage = "Authentication failed: Unauthorized access. Please verify your API key.";
       } else if (errorMessage.includes("Failed to fetch") || errorMessage.includes("network")) {
         userFriendlyMessage = "Network error: Unable to connect to Vapi servers. Please check your internet connection.";
+      } else if (errorMessage.includes("[object Object]")) {
+        userFriendlyMessage = "Unknown error occurred. Check debug console for details.";
       }
 
       setVapiError(userFriendlyMessage);
@@ -1024,27 +1043,55 @@ export default function Chatbot() {
         addDebugLog("🎤 Listening for real speech via Vapi...");
       }
     } catch (error: any) {
-      const errorMessage = error?.message || "Unknown error";
+    // Properly serialize error objects to avoid "[object Object]" display
+    let errorMessage = "Unknown error";
 
-      // Enhanced error categorization
-      let userFriendlyMessage = errorMessage;
-      if (errorMessage.includes("Failed to fetch")) {
-        userFriendlyMessage =
-          "Network connection failed. Please check your internet connection and try again.";
-      } else if (errorMessage.includes("Microphone permission")) {
-        userFriendlyMessage =
-          "Microphone access required. Please allow microphone permissions and try again.";
-      } else if (errorMessage.includes("Invalid API key")) {
-        userFriendlyMessage =
-          "Invalid API key. Please check your Vapi configuration.";
+    try {
+      if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.toString && typeof error.toString === 'function') {
+        errorMessage = error.toString();
+      } else if (typeof error === 'object') {
+        // Try to extract meaningful info from error object
+        const errorInfo = {
+          message: error.message,
+          name: error.name,
+          code: error.code,
+          status: error.status
+        };
+        errorMessage = JSON.stringify(errorInfo, null, 2);
       }
-
-      addDebugLog(`❌ Vapi error: ${errorMessage}`);
-      setVapiError(userFriendlyMessage);
-      setVapiStatus("error");
-      setIsRecording(false);
-      console.error("Vapi error:", error);
+    } catch (e) {
+      errorMessage = "Error parsing error object";
     }
+
+    // Enhanced error categorization
+    let userFriendlyMessage = errorMessage;
+    if (errorMessage.includes("Failed to fetch")) {
+      userFriendlyMessage =
+        "Network connection failed. Please check your internet connection and try again.";
+    } else if (errorMessage.includes("Microphone permission")) {
+      userFriendlyMessage =
+        "Microphone access required. Please allow microphone permissions and try again.";
+    } else if (errorMessage.includes("Invalid API key") || errorMessage.includes("Invalid Key")) {
+      userFriendlyMessage =
+        "Invalid API key. Please check your Vapi configuration.";
+    } else if (errorMessage.includes("[object Object]")) {
+      userFriendlyMessage = "Unknown error occurred. Check debug console for details.";
+    }
+
+    addDebugLog(`❌ Vapi error: ${errorMessage}`);
+    setVapiError(userFriendlyMessage);
+    setVapiStatus("error");
+    setIsRecording(false);
+    console.error("Vapi error details:", {
+      originalError: error,
+      serializedMessage: errorMessage,
+      errorType: typeof error
+    });
+  }
   };
 
   const formatTime = (date: Date) => {
