@@ -974,6 +974,14 @@ export default function Chatbot() {
       addDebugLog("📞 Call ended");
       setVapiStatus("call-ended");
       setIsRecording(false);
+
+      // Cleanup Web Audio API resources
+      if (audioContext && audioContext.state !== 'closed') {
+        audioContext.close();
+        setAudioContext(null);
+        setGainNode(null);
+        addDebugLog("🧹 Audio context cleaned up");
+      }
     });
 
     vapiInstance.on("error", (error: any) => {
@@ -1067,7 +1075,7 @@ export default function Chatbot() {
         userFriendlyMessage =
           "Failed to start voice call. This may be due to API key issues or server configuration.";
         addDebugLog(
-          "🔑 Hint: Check that your API keys are correctly configured for both client and server",
+          "��� Hint: Check that your API keys are correctly configured for both client and server",
         );
       } else if (errorMessage.includes("Response body is already used")) {
         userFriendlyMessage =
