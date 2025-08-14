@@ -342,7 +342,7 @@ const initializeVapiExternal = () => {
   }
 
   try {
-    console.log("����� Initializing Vapi Web SDK");
+    console.log("���� Initializing Vapi Web SDK");
     const vapi = new Vapi(publicKey);
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
@@ -1124,21 +1124,40 @@ export default function Chatbot() {
   };
 
   const toggleRecording = async () => {
-    // FORCED REAL API MODE - All safety checks DISABLED
-    addDebugLog("🚀 REAL VAPI API MODE - No restrictions applied");
+    // Enhanced Vapi integration with comprehensive error handling
+    addDebugLog("🚀 Starting Vapi voice recording...");
 
     try {
       if (isRecording) {
         addDebugLog("Stopping Vapi recording...");
-        await vapiInstance.stop();
+        if (vapiInstance) {
+          await vapiInstance.stop();
+        }
         setIsRecording(false);
         setVapiStatus("stopped");
-        videoRef.current?.pause();
+        if (videoRef.current) {
+          videoRef.current.pause();
+        }
         addDebugLog("✅ Vapi stopped successfully");
       } else {
         addDebugLog("Starting Vapi recording...");
         setVapiError(null);
         setVapiStatus("starting");
+
+        // Check environment credentials
+        const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+        const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+
+        if (!publicKey) {
+          throw new Error("Missing VITE_VAPI_PUBLIC_KEY. Please configure your Vapi credentials.");
+        }
+
+        if (!assistantId) {
+          throw new Error("Missing VITE_VAPI_ASSISTANT_ID. Please configure your Vapi assistant.");
+        }
+
+        addDebugLog(`🔑 Using public key: ${publicKey.substring(0, 8)}...`);
+        addDebugLog(`🤖 Using assistant: ${assistantId}`);
 
         // Check microphone permissions with better error handling
         try {
