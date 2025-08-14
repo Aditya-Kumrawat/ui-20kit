@@ -1011,6 +1011,12 @@ export default function Chatbot() {
       if (errorMessage.includes("Invalid Key") || errorMessage.includes("Invalid API key")) {
         userFriendlyMessage = "Authentication failed: Invalid API key. Please check your Vapi configuration.";
         addDebugLog("🔑 Tip: Make sure you're using the correct key type (public key for Web SDK)");
+
+      // Attempt to fix the error by retesting connection
+      setTimeout(() => {
+        addDebugLog("🔄 Attempting to reconnect...");
+        testVapiConnection();
+      }, 2000);
       } else if (errorMessage.includes("unauthorized") || errorMessage.includes("401")) {
         userFriendlyMessage = "Authentication failed: Unauthorized access. Please verify your API key.";
       } else if (errorMessage.includes("Failed to fetch") || errorMessage.includes("network")) {
