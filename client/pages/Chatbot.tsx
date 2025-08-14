@@ -416,6 +416,9 @@ export default function Chatbot() {
     "User: What should I look for in the analysis?",
     "AI: We'll examine key genetic markers and potential health risks.",
   ]);
+  const [audioVolume, setAudioVolume] = useState(1.0); // Volume control state
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [gainNode, setGainNode] = useState<GainNode | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
