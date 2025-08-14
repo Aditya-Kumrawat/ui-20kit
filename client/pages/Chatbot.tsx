@@ -423,12 +423,13 @@ export default function Chatbot() {
 
   // Initialize Vapi Web SDK for browser-based voice calls - moved before useEffect to fix hoisting
   const initializeVapi = useCallback(() => {
-    // Try to get public key first, then fall back to regular key
-    const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
+    // Check for public key specifically
+    const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+    const fallbackKey = import.meta.env.VITE_VAPI_KEY;
 
-    if (!publicKey) {
+    if (!publicKey && !fallbackKey) {
       console.error(
-        "❌ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables.",
+        "❌ No Vapi API key found. Please set VITE_VAPI_PUBLIC_KEY in environment variables.",
       );
       console.error(
         "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
@@ -439,14 +440,30 @@ export default function Chatbot() {
       return null;
     }
 
+    if (!publicKey && fallbackKey) {
+      console.warn(
+        "⚠️ No public key found. Using fallback key, but this may cause authentication issues."
+      );
+      console.warn(
+        "📝 For best results, set VITE_VAPI_PUBLIC_KEY with a public key (pk_...)"
+      );
+    }
+
+    const keyToUse = publicKey || fallbackKey;
+
+    if (!keyToUse) {
+      console.error("❌ No valid API key available");
+      return null;
+    }
+
     // Log key format for debugging (first few characters only)
-    console.log(`🔑 Key format: ${publicKey.substring(0, 8)}... (length: ${publicKey.length})`);
+    console.log(`🔑 Key format: ${keyToUse.substring(0, 8)}... (length: ${keyToUse.length})`);
 
     // Check if this looks like a valid key
-    if (publicKey.length < 20) {
+    if (keyToUse.length < 20) {
       console.error(
         "❌ Vapi API key appears to be too short. Please check your key configuration.",
-        `Length: ${publicKey.length}`
+        `Length: ${keyToUse.length}`
       );
       console.error(
         "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
@@ -455,12 +472,12 @@ export default function Chatbot() {
     }
 
     // Check key format
-    if (!publicKey.startsWith('pk_')) {
+    if (!keyToUse.startsWith('pk_')) {
       console.warn(
         "⚠️ Warning: Web SDK typically requires a PUBLIC key that starts with 'pk_'"
       );
       console.warn(
-        `🔑 Current key format: ${publicKey.substring(0, 8)}...`
+        `🔑 Current key format: ${keyToUse.substring(0, 8)}...`
       );
       console.warn(
         "🔗 Get your public key from: https://dashboard.vapi.ai/account"
@@ -469,7 +486,7 @@ export default function Chatbot() {
 
     try {
       console.log("🚀 Initializing Vapi Web SDK");
-      const vapi = new Vapi(publicKey);
+      const vapi = new Vapi(keyToUse);
       console.log("✅ Vapi Web SDK initialized successfully");
       return vapi;
     } catch (error) {
