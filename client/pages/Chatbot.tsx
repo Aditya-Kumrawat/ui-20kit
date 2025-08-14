@@ -792,10 +792,10 @@ export default function Chatbot() {
       addDebugLog(`❌ Initial connection test failed: ${error.message}`);
 
       // Always try direct connection if we have credentials
-      const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
-      const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+      const fallbackPublicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+      const fallbackAssistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
 
-      if (publicKey && assistantId) {
+      if (fallbackPublicKey && fallbackAssistantId) {
         addDebugLog("⚡ Falling back to direct Vapi Web SDK connection");
         addDebugLog("✅ Credentials available - enabling direct mode");
         setVapiStatus("connected");
