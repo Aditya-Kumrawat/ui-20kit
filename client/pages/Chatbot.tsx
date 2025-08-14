@@ -366,7 +366,9 @@ const initializeVapi = () => {
   }
 };
 
-const vapi = initializeVapi();
+// Initialize Vapi instance only once
+let vapi: any = null;
+let vapiInitialized = false;
 
 // Force enable real API calls - remove all environment restrictions
 const isRestrictedEnvironment = () => {
