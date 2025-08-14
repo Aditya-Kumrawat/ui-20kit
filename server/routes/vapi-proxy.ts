@@ -10,26 +10,33 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
     });
 
     // For server-side API calls, we use the available key
-    const privateKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    const privateKey =
+      process.env.VAPI_PRIVATE_KEY ||
+      process.env.VAPI_KEY ||
+      process.env.VITE_VAPI_KEY;
     if (!privateKey) {
       return res.status(500).json({
-        error: "Vapi API key not configured on server. Please set VAPI_PRIVATE_KEY, VAPI_KEY, or VITE_VAPI_KEY.",
+        error:
+          "Vapi API key not configured on server. Please set VAPI_PRIVATE_KEY, VAPI_KEY, or VITE_VAPI_KEY.",
         debug: {
           vapiPrivateKeyExists: !!process.env.VAPI_PRIVATE_KEY,
           vapiKeyExists: !!process.env.VAPI_KEY,
           viteVapiKeyExists: !!process.env.VITE_VAPI_KEY,
-        }
+        },
       });
     }
 
     // Log the key format for debugging (first few characters only)
-    console.log(`🔑 Using API key: ${privateKey.substring(0, 8)}... (length: ${privateKey.length})`);
-    
+    console.log(
+      `🔑 Using API key: ${privateKey.substring(0, 8)}... (length: ${privateKey.length})`,
+    );
+
     // Basic validation - ensure key has reasonable length
     if (privateKey.length < 20) {
       return res.status(500).json({
-        error: "Vapi API key appears to be too short. Please check your key configuration.",
-        keyLength: privateKey.length
+        error:
+          "Vapi API key appears to be too short. Please check your key configuration.",
+        keyLength: privateKey.length,
       });
     }
 
@@ -98,22 +105,29 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
     console.log("📞 Creating Vapi call via server proxy");
 
     // For server-side API calls, we use the available key
-    const privateKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    const privateKey =
+      process.env.VAPI_PRIVATE_KEY ||
+      process.env.VAPI_KEY ||
+      process.env.VITE_VAPI_KEY;
     if (!privateKey) {
       console.error("❌ No API key configured for call creation");
       return res.status(500).json({
-        error: "Vapi API key not configured on server. Please set VAPI_PRIVATE_KEY, VAPI_KEY, or VITE_VAPI_KEY.",
+        error:
+          "Vapi API key not configured on server. Please set VAPI_PRIVATE_KEY, VAPI_KEY, or VITE_VAPI_KEY.",
       });
     }
 
     // Log the key format for debugging (first few characters only)
-    console.log(`🔑 Using API key: ${privateKey.substring(0, 8)}... (length: ${privateKey.length})`);
-    
+    console.log(
+      `🔑 Using API key: ${privateKey.substring(0, 8)}... (length: ${privateKey.length})`,
+    );
+
     // Basic validation - ensure key has reasonable length
     if (privateKey.length < 20) {
       return res.status(500).json({
-        error: "Vapi API key appears to be too short. Please check your key configuration.",
-        keyLength: privateKey.length
+        error:
+          "Vapi API key appears to be too short. Please check your key configuration.",
+        keyLength: privateKey.length,
       });
     }
 
@@ -206,7 +220,10 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
     console.log("🧪 Testing Vapi connectivity from server...");
 
     // Check environment variables - for server-side we use the available key
-    const privateKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    const privateKey =
+      process.env.VAPI_PRIVATE_KEY ||
+      process.env.VAPI_KEY ||
+      process.env.VITE_VAPI_KEY;
     console.log("🔍 Environment check:");
     console.log("  - VAPI_PRIVATE_KEY exists:", !!process.env.VAPI_PRIVATE_KEY);
     console.log("  - VAPI_KEY exists:", !!process.env.VAPI_KEY);
@@ -216,13 +233,16 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
     if (!privateKey) {
       console.error("❌ No API key found in environment variables");
       return res.status(500).json({
-        error: "Vapi API key not configured on server. Please set VAPI_PRIVATE_KEY with your private key (starts with 'sk_').",
+        error:
+          "Vapi API key not configured on server. Please set VAPI_PRIVATE_KEY with your private key (starts with 'sk_').",
         configured: false,
         instructions: {
           message: "You need to provide valid Vapi API keys:",
-          server: "Set VAPI_PRIVATE_KEY environment variable with your private key (sk_...)",
-          client: "Set VITE_VAPI_PUBLIC_KEY environment variable with your public key (pk_...)",
-          documentation: "Get your keys from https://dashboard.vapi.ai/account"
+          server:
+            "Set VAPI_PRIVATE_KEY environment variable with your private key (sk_...)",
+          client:
+            "Set VITE_VAPI_PUBLIC_KEY environment variable with your public key (pk_...)",
+          documentation: "Get your keys from https://dashboard.vapi.ai/account",
         },
         debug: {
           vapiPrivateKeyExists: !!process.env.VAPI_PRIVATE_KEY,
@@ -232,21 +252,25 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
       });
     }
 
-    console.log(`🔑 Using API key: ${privateKey.substring(0, 8)}... (length: ${privateKey.length})`);
-    
+    console.log(
+      `🔑 Using API key: ${privateKey.substring(0, 8)}... (length: ${privateKey.length})`,
+    );
+
     // Basic validation - ensure key has reasonable length
     if (privateKey.length < 20) {
       console.error("❌ API key appears to be too short");
       return res.status(500).json({
-        error: "Vapi API key appears to be too short. Please check your key configuration.",
+        error:
+          "Vapi API key appears to be too short. Please check your key configuration.",
         configured: false,
         keyLength: privateKey.length,
         instructions: {
           message: "Invalid key format detected",
           required: "Server needs a private key that starts with 'sk_'",
           current: `Key format: ${privateKey.substring(0, 8)}...`,
-          documentation: "Get your private key from https://dashboard.vapi.ai/account"
-        }
+          documentation:
+            "Get your private key from https://dashboard.vapi.ai/account",
+        },
       });
     }
 

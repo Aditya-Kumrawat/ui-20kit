@@ -298,46 +298,45 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 // Initialize Vapi Web SDK for browser-based voice calls
 const initializeVapiExternal = () => {
   // Try to get public key first, then fall back to regular key
-  const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
+  const publicKey =
+    import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
 
   if (!publicKey) {
     console.error(
       "❌ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables.",
     );
     console.error(
-      "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
+      "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'",
     );
-    console.error(
-      "🔗 Get your keys from: https://dashboard.vapi.ai/account"
-    );
+    console.error("🔗 Get your keys from: https://dashboard.vapi.ai/account");
     return null;
   }
 
   // Log key format for debugging (first few characters only)
-  console.log(`🔑 Key format: ${publicKey.substring(0, 8)}... (length: ${publicKey.length})`);
+  console.log(
+    `🔑 Key format: ${publicKey.substring(0, 8)}... (length: ${publicKey.length})`,
+  );
 
   // Check if this looks like a valid key
   if (publicKey.length < 20) {
     console.error(
       "�� Vapi API key appears to be too short. Please check your key configuration.",
-      `Length: ${publicKey.length}`
+      `Length: ${publicKey.length}`,
     );
     console.error(
-      "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
+      "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'",
     );
     return null;
   }
 
   // Check key format
-  if (!publicKey.startsWith('pk_')) {
+  if (!publicKey.startsWith("pk_")) {
     console.warn(
-      "⚠️ Warning: Web SDK typically requires a PUBLIC key that starts with 'pk_'"
+      "⚠️ Warning: Web SDK typically requires a PUBLIC key that starts with 'pk_'",
     );
+    console.warn(`🔑 Current key format: ${publicKey.substring(0, 8)}...`);
     console.warn(
-      `🔑 Current key format: ${publicKey.substring(0, 8)}...`
-    );
-    console.warn(
-      "🔗 Get your public key from: https://dashboard.vapi.ai/account"
+      "🔗 Get your public key from: https://dashboard.vapi.ai/account",
     );
   }
 
@@ -349,10 +348,10 @@ const initializeVapiExternal = () => {
   } catch (error) {
     console.error("�� Failed to initialize Vapi Web SDK:", error);
     // Ensure error is properly logged
-    let errorMsg = 'Unknown initialization error';
+    let errorMsg = "Unknown initialization error";
     if (error instanceof Error) {
       errorMsg = `${error.name}: ${error.message}`;
-    } else if (typeof error === 'object') {
+    } else if (typeof error === "object") {
       try {
         errorMsg = JSON.stringify(error);
       } catch (e) {
@@ -361,7 +360,7 @@ const initializeVapiExternal = () => {
     } else {
       errorMsg = String(error);
     }
-    console.error('Parsed initialization error:', errorMsg);
+    console.error("Parsed initialization error:", errorMsg);
     return null;
   }
 };
@@ -432,20 +431,18 @@ export default function Chatbot() {
         "❌ No Vapi API key found. Please set VITE_VAPI_PUBLIC_KEY in environment variables.",
       );
       console.error(
-        "��� Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
+        "��� Required: Web SDK needs a PUBLIC key that starts with 'pk_'",
       );
-      console.error(
-        "🔗 Get your keys from: https://dashboard.vapi.ai/account"
-      );
+      console.error("🔗 Get your keys from: https://dashboard.vapi.ai/account");
       return null;
     }
 
     if (!publicKey && fallbackKey) {
       console.warn(
-        "⚠️ No public key found. Using fallback key, but this may cause authentication issues."
+        "⚠️ No public key found. Using fallback key, but this may cause authentication issues.",
       );
       console.warn(
-        "📝 For best results, set VITE_VAPI_PUBLIC_KEY with a public key (pk_...)"
+        "📝 For best results, set VITE_VAPI_PUBLIC_KEY with a public key (pk_...)",
       );
     }
 
@@ -457,28 +454,33 @@ export default function Chatbot() {
     }
 
     // Log key format for debugging (first few characters only)
-    console.log(`🔑 Key format: ${keyToUse.substring(0, 8)}... (length: ${keyToUse.length})`);
+    console.log(
+      `🔑 Key format: ${keyToUse.substring(0, 8)}... (length: ${keyToUse.length})`,
+    );
 
     // Check if this looks like a valid key
     if (keyToUse.length < 20) {
       console.error(
         "❌ Vapi API key appears to be too short. Please check your key configuration.",
-        `Length: ${keyToUse.length}`
+        `Length: ${keyToUse.length}`,
       );
       console.error(
-        "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
+        "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'",
       );
       return null;
     }
 
     // Check key format - accept both pk_ format and UUID format
-    if (!keyToUse.startsWith('pk_') && !keyToUse.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+    if (
+      !keyToUse.startsWith("pk_") &&
+      !keyToUse.match(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+      )
+    ) {
       console.warn(
-        "⚠️ Warning: Unrecognized key format. Expected either 'pk_...' or UUID format"
+        "⚠️ Warning: Unrecognized key format. Expected either 'pk_...' or UUID format",
       );
-      console.warn(
-        `🔑 Current key format: ${keyToUse.substring(0, 8)}...`
-      );
+      console.warn(`🔑 Current key format: ${keyToUse.substring(0, 8)}...`);
     } else {
       console.log("✅ Valid key format detected");
     }
@@ -491,10 +493,10 @@ export default function Chatbot() {
     } catch (error) {
       console.error("❌ Failed to initialize Vapi Web SDK:", error);
       // Ensure error is properly logged
-      let errorMsg = 'Unknown initialization error';
+      let errorMsg = "Unknown initialization error";
       if (error instanceof Error) {
         errorMsg = `${error.name}: ${error.message}`;
-      } else if (typeof error === 'object') {
+      } else if (typeof error === "object") {
         try {
           errorMsg = JSON.stringify(error);
         } catch (e) {
@@ -503,7 +505,7 @@ export default function Chatbot() {
       } else {
         errorMsg = String(error);
       }
-      console.error('Parsed initialization error:', errorMsg);
+      console.error("Parsed initialization error:", errorMsg);
       return null;
     }
   }, []);
@@ -515,11 +517,11 @@ export default function Chatbot() {
     // Ensure message is properly serialized and never shows [object Object]
     let logMessage = "";
     try {
-      if (typeof message === 'string') {
+      if (typeof message === "string") {
         logMessage = message;
       } else if (message instanceof Error) {
         logMessage = `Error: ${message.message} (${message.name})`;
-      } else if (typeof message === 'object' && message !== null) {
+      } else if (typeof message === "object" && message !== null) {
         // Force object serialization with detailed approach
         try {
           logMessage = JSON.stringify(message, null, 2);
@@ -529,22 +531,26 @@ export default function Chatbot() {
           for (const key in message) {
             try {
               const value = message[key];
-              props.push(`${key}: ${typeof value === 'object' ? '[Object]' : String(value)}`);
+              props.push(
+                `${key}: ${typeof value === "object" ? "[Object]" : String(value)}`,
+              );
             } catch (e) {
               props.push(`${key}: [Unable to access]`);
             }
           }
-          logMessage = `Object {${props.join(', ')}}`;
+          logMessage = `Object {${props.join(", ")}}`;
         }
       } else {
         logMessage = String(message);
       }
 
       // Final check to prevent [object Object]
-      if (logMessage.includes('[object Object]') || logMessage === '[object Object]') {
+      if (
+        logMessage.includes("[object Object]") ||
+        logMessage === "[object Object]"
+      ) {
         logMessage = `[Unserializable object of type: ${typeof message}]`;
       }
-
     } catch (e) {
       logMessage = `[Error serializing log message: ${e}]`;
     }
@@ -782,9 +788,11 @@ export default function Chatbot() {
         return;
       } else {
         addDebugLog("❌ Missing credentials for direct connection");
-        addDebugLog(`Public Key: ${!!publicKey ? 'Present' : 'Missing'}`);
-        addDebugLog(`Assistant ID: ${!!assistantId ? 'Present' : 'Missing'}`);
-        throw new Error("Missing required Vapi credentials for direct connection");
+        addDebugLog(`Public Key: ${!!publicKey ? "Present" : "Missing"}`);
+        addDebugLog(`Assistant ID: ${!!assistantId ? "Present" : "Missing"}`);
+        throw new Error(
+          "Missing required Vapi credentials for direct connection",
+        );
       }
 
       // This shouldn't be reached since we have direct connection
@@ -858,7 +866,9 @@ export default function Chatbot() {
       if (!newVapi) {
         addDebugLog("❌ Vapi initialization failed - no instance created");
         setVapiStatus("error");
-        setVapiError("Failed to initialize Vapi SDK. Check API key configuration.");
+        setVapiError(
+          "Failed to initialize Vapi SDK. Check API key configuration.",
+        );
         return;
       }
     }
@@ -883,7 +893,11 @@ export default function Chatbot() {
 
     vapiInstance.on("message", (message: any) => {
       try {
-        if (message && typeof message === 'object' && message.type === "transcript") {
+        if (
+          message &&
+          typeof message === "object" &&
+          message.type === "transcript"
+        ) {
           const transcript = message.transcript || "";
           const transcriptType = message.transcriptType || "unknown";
           const role = message.role || "unknown";
@@ -950,7 +964,7 @@ export default function Chatbot() {
         console.error("ERROR TYPE:", typeof error);
         console.error("ERROR CONSTRUCTOR:", error?.constructor?.name);
 
-        if (typeof error === 'string') {
+        if (typeof error === "string") {
           errorMessage = error;
         } else if (error instanceof Error) {
           errorMessage = error.message || error.toString();
@@ -964,14 +978,14 @@ export default function Chatbot() {
         } else if (error?.response) {
           // Handle fetch response errors
           errorMessage = `HTTP ${error.response.status}: ${error.response.statusText}`;
-        } else if (typeof error === 'object' && error !== null) {
+        } else if (typeof error === "object" && error !== null) {
           // Extract all enumerable properties
           const errorObj: any = {};
           for (const key in error) {
             try {
               errorObj[key] = error[key];
             } catch (e) {
-              errorObj[key] = '[Unable to serialize]';
+              errorObj[key] = "[Unable to serialize]";
             }
           }
           errorMessage = JSON.stringify(errorObj, null, 2);
@@ -980,12 +994,14 @@ export default function Chatbot() {
         }
 
         // If we still have [object Object], force a different approach
-        if (errorMessage.includes('[object Object]') || errorMessage === '[object Object]') {
-          errorMessage = `Vapi Error - Type: ${typeof error}, Constructor: ${error?.constructor?.name || 'unknown'}`;
+        if (
+          errorMessage.includes("[object Object]") ||
+          errorMessage === "[object Object]"
+        ) {
+          errorMessage = `Vapi Error - Type: ${typeof error}, Constructor: ${error?.constructor?.name || "unknown"}`;
           if (error?.status) errorMessage += `, Status: ${error.status}`;
           if (error?.code) errorMessage += `, Code: ${error.code}`;
         }
-
       } catch (e) {
         errorMessage = `Error serialization failed: ${e}`;
       }
@@ -997,27 +1013,46 @@ export default function Chatbot() {
 
       // Check for specific error types and provide helpful messages
       let userFriendlyMessage = errorMessage;
-      if (errorMessage.includes("Invalid Key") || errorMessage.includes("Invalid API key")) {
-        userFriendlyMessage = "Authentication failed: Invalid API key. Please check your Vapi configuration.";
-        addDebugLog("🔑 Tip: Make sure you're using the correct key type (public key for Web SDK)");
+      if (
+        errorMessage.includes("Invalid Key") ||
+        errorMessage.includes("Invalid API key")
+      ) {
+        userFriendlyMessage =
+          "Authentication failed: Invalid API key. Please check your Vapi configuration.";
+        addDebugLog(
+          "🔑 Tip: Make sure you're using the correct key type (public key for Web SDK)",
+        );
 
-      // Attempt to fix the error by retesting connection
-      setTimeout(() => {
-        addDebugLog("🔄 Attempting to reconnect...");
-        testVapiConnection();
-      }, 2000);
-      } else if (errorMessage.includes("unauthorized") || errorMessage.includes("401")) {
-        userFriendlyMessage = "Authentication failed: Unauthorized access. Please verify your API key.";
-      } else if (errorMessage.includes("Failed to fetch") || errorMessage.includes("network")) {
-        userFriendlyMessage = "Network error: Unable to connect to Vapi servers. Please check your internet connection.";
+        // Attempt to fix the error by retesting connection
+        setTimeout(() => {
+          addDebugLog("🔄 Attempting to reconnect...");
+          testVapiConnection();
+        }, 2000);
+      } else if (
+        errorMessage.includes("unauthorized") ||
+        errorMessage.includes("401")
+      ) {
+        userFriendlyMessage =
+          "Authentication failed: Unauthorized access. Please verify your API key.";
+      } else if (
+        errorMessage.includes("Failed to fetch") ||
+        errorMessage.includes("network")
+      ) {
+        userFriendlyMessage =
+          "Network error: Unable to connect to Vapi servers. Please check your internet connection.";
       } else if (errorMessage.includes("start-method-error")) {
-        userFriendlyMessage = "Failed to start voice call. This may be due to API key issues or server configuration.";
-        addDebugLog("🔑 Hint: Check that your API keys are correctly configured for both client and server");
+        userFriendlyMessage =
+          "Failed to start voice call. This may be due to API key issues or server configuration.";
+        addDebugLog(
+          "🔑 Hint: Check that your API keys are correctly configured for both client and server",
+        );
       } else if (errorMessage.includes("Response body is already used")) {
-        userFriendlyMessage = "Server configuration error. The response handling needs to be fixed.";
+        userFriendlyMessage =
+          "Server configuration error. The response handling needs to be fixed.";
         addDebugLog("🔧 This is a server-side issue with response handling");
       } else if (errorMessage.includes("[object Object]")) {
-        userFriendlyMessage = "Unknown error occurred. Check debug console for details.";
+        userFriendlyMessage =
+          "Unknown error occurred. Check debug console for details.";
       }
 
       setVapiError(userFriendlyMessage);
@@ -1034,11 +1069,17 @@ export default function Chatbot() {
         const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
 
         if (!publicKey || !assistantId) {
-          throw new Error(`Missing credentials: Public Key: ${!!publicKey}, Assistant ID: ${!!assistantId}`);
+          throw new Error(
+            `Missing credentials: Public Key: ${!!publicKey}, Assistant ID: ${!!assistantId}`,
+          );
         }
 
-        addDebugLog(`✅ Credentials verified - Public Key: ${publicKey.substring(0, 8)}..., Assistant: ${assistantId}`);
-        addDebugLog("⚡ Direct connection mode enabled - bypassing server proxy");
+        addDebugLog(
+          `✅ Credentials verified - Public Key: ${publicKey.substring(0, 8)}..., Assistant: ${assistantId}`,
+        );
+        addDebugLog(
+          "⚡ Direct connection mode enabled - bypassing server proxy",
+        );
 
         // Set connection as ready immediately for direct mode
         setVapiStatus("connected");
@@ -1169,11 +1210,15 @@ export default function Chatbot() {
         const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
 
         if (!publicKey) {
-          throw new Error("Missing VITE_VAPI_PUBLIC_KEY. Please configure your Vapi credentials.");
+          throw new Error(
+            "Missing VITE_VAPI_PUBLIC_KEY. Please configure your Vapi credentials.",
+          );
         }
 
         if (!assistantId) {
-          throw new Error("Missing VITE_VAPI_ASSISTANT_ID. Please configure your Vapi assistant.");
+          throw new Error(
+            "Missing VITE_VAPI_ASSISTANT_ID. Please configure your Vapi assistant.",
+          );
         }
 
         addDebugLog(`🔑 Using public key: ${publicKey.substring(0, 8)}...`);
@@ -1238,7 +1283,9 @@ export default function Chatbot() {
         if (!vapiInstance) {
           // Try to initialize if not already done
           if (!vapiInitialized) {
-            addDebugLog("Attempting to initialize Vapi during recording start...");
+            addDebugLog(
+              "Attempting to initialize Vapi during recording start...",
+            );
             const newVapi = initializeVapi();
             setVapiInstance(newVapi);
             setVapiInitialized(true);
@@ -1258,15 +1305,19 @@ export default function Chatbot() {
         // Additional validation check (using existing publicKey variable)
         if (!publicKey) {
           throw new Error(
-            "No public key configured. The Web SDK requires VITE_VAPI_PUBLIC_KEY. Please set the environment variable."
+            "No public key configured. The Web SDK requires VITE_VAPI_PUBLIC_KEY. Please set the environment variable.",
           );
         }
 
         // Validate key format (either pk_ or UUID format)
-        const isValidFormat = publicKey.startsWith('pk_') || publicKey.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+        const isValidFormat =
+          publicKey.startsWith("pk_") ||
+          publicKey.match(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+          );
         if (!isValidFormat) {
           throw new Error(
-            `Invalid key format. Expected either 'pk_...' or UUID format, but got: ${publicKey.substring(0, 8)}...`
+            `Invalid key format. Expected either 'pk_...' or UUID format, but got: ${publicKey.substring(0, 8)}...`,
           );
         }
 
@@ -1290,11 +1341,11 @@ export default function Chatbot() {
           vapiInstance.on("error", (callError: any) => {
             let errorMsg = "Unknown call error";
             try {
-              if (typeof callError === 'string') {
+              if (typeof callError === "string") {
                 errorMsg = callError;
               } else if (callError?.message) {
                 errorMsg = String(callError.message);
-              } else if (typeof callError === 'object') {
+              } else if (typeof callError === "object") {
                 errorMsg = JSON.stringify(callError, null, 2);
               }
             } catch (e) {
@@ -1306,9 +1357,10 @@ export default function Chatbot() {
             setVapiStatus("error");
             setIsRecording(false);
           });
-
         } catch (listenerError) {
-          addDebugLog(`⚠️ Warning: Could not set up clean listeners: ${listenerError}`);
+          addDebugLog(
+            `⚠️ Warning: Could not set up clean listeners: ${listenerError}`,
+          );
         }
 
         // Configure the assistant for the call (using existing assistantId variable)
@@ -1389,10 +1441,13 @@ export default function Chatbot() {
             }
 
             // Handle specific Vapi SDK errors
-            if (errorMsg.includes("start-method-error") || errorMsg.includes("Response body is already used")) {
+            if (
+              errorMsg.includes("start-method-error") ||
+              errorMsg.includes("Response body is already used")
+            ) {
               addDebugLog("🔧 Detected server-side response handling issue");
               throw new Error(
-                "Server configuration error: Response handling needs to be fixed. This is likely due to API key or server proxy issues."
+                "Server configuration error: Response handling needs to be fixed. This is likely due to API key or server proxy issues.",
               );
             }
 
@@ -1408,55 +1463,59 @@ export default function Chatbot() {
         addDebugLog("🎤 Listening for real speech via Vapi...");
       }
     } catch (error: any) {
-    // Properly serialize error objects to avoid "[object Object]" display
-    let errorMessage = "Unknown error";
+      // Properly serialize error objects to avoid "[object Object]" display
+      let errorMessage = "Unknown error";
 
-    try {
-      if (typeof error === 'string') {
-        errorMessage = error;
-      } else if (error?.message) {
-        errorMessage = error.message;
-      } else if (error?.toString && typeof error.toString === 'function') {
-        errorMessage = error.toString();
-      } else if (typeof error === 'object') {
-        // Try to extract meaningful info from error object
-        const errorInfo = {
-          message: error.message,
-          name: error.name,
-          code: error.code,
-          status: error.status
-        };
-        errorMessage = JSON.stringify(errorInfo, null, 2);
+      try {
+        if (typeof error === "string") {
+          errorMessage = error;
+        } else if (error?.message) {
+          errorMessage = error.message;
+        } else if (error?.toString && typeof error.toString === "function") {
+          errorMessage = error.toString();
+        } else if (typeof error === "object") {
+          // Try to extract meaningful info from error object
+          const errorInfo = {
+            message: error.message,
+            name: error.name,
+            code: error.code,
+            status: error.status,
+          };
+          errorMessage = JSON.stringify(errorInfo, null, 2);
+        }
+      } catch (e) {
+        errorMessage = "Error parsing error object";
       }
-    } catch (e) {
-      errorMessage = "Error parsing error object";
-    }
 
-    // Enhanced error categorization
-    let userFriendlyMessage = errorMessage;
-    if (errorMessage.includes("Failed to fetch")) {
-      userFriendlyMessage =
-        "Network connection failed. Please check your internet connection and try again.";
-    } else if (errorMessage.includes("Microphone permission")) {
-      userFriendlyMessage =
-        "Microphone access required. Please allow microphone permissions and try again.";
-    } else if (errorMessage.includes("Invalid API key") || errorMessage.includes("Invalid Key")) {
-      userFriendlyMessage =
-        "Invalid API key. Please check your Vapi configuration.";
-    } else if (errorMessage.includes("[object Object]")) {
-      userFriendlyMessage = "Unknown error occurred. Check debug console for details.";
-    }
+      // Enhanced error categorization
+      let userFriendlyMessage = errorMessage;
+      if (errorMessage.includes("Failed to fetch")) {
+        userFriendlyMessage =
+          "Network connection failed. Please check your internet connection and try again.";
+      } else if (errorMessage.includes("Microphone permission")) {
+        userFriendlyMessage =
+          "Microphone access required. Please allow microphone permissions and try again.";
+      } else if (
+        errorMessage.includes("Invalid API key") ||
+        errorMessage.includes("Invalid Key")
+      ) {
+        userFriendlyMessage =
+          "Invalid API key. Please check your Vapi configuration.";
+      } else if (errorMessage.includes("[object Object]")) {
+        userFriendlyMessage =
+          "Unknown error occurred. Check debug console for details.";
+      }
 
-    addDebugLog(`❌ Vapi error: ${errorMessage}`);
-    setVapiError(userFriendlyMessage);
-    setVapiStatus("error");
-    setIsRecording(false);
-    console.error("Vapi error details:", {
-      originalError: error,
-      serializedMessage: errorMessage,
-      errorType: typeof error
-    });
-  }
+      addDebugLog(`❌ Vapi error: ${errorMessage}`);
+      setVapiError(userFriendlyMessage);
+      setVapiStatus("error");
+      setIsRecording(false);
+      console.error("Vapi error details:", {
+        originalError: error,
+        serializedMessage: errorMessage,
+        errorType: typeof error,
+      });
+    }
   };
 
   const formatTime = (date: Date) => {
