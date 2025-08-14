@@ -765,18 +765,25 @@ export default function Chatbot() {
       setVapiStatus("testing");
       setVapiError(null);
 
-      // Check if we have a valid public key for direct connection
+      // Direct Vapi Web SDK connection - bypass server proxy
       const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
       const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
 
       if (publicKey && assistantId) {
-        addDebugLog("✅ Valid credentials found - Vapi SDK ready!");
+        addDebugLog("✅ Valid credentials found - Using direct Vapi Web SDK!");
         addDebugLog(`🔑 Public Key: ${publicKey.substring(0, 8)}...`);
         addDebugLog(`🤖 Assistant ID: ${assistantId}`);
+        addDebugLog("⚡ Bypassing server proxy - direct connection mode");
         setVapiStatus("connected");
         setNetworkStatus("online");
+        setVapiError(null);
         addDebugLog("🎤 Ready to start voice recording directly!");
         return;
+      } else {
+        addDebugLog("❌ Missing credentials for direct connection");
+        addDebugLog(`Public Key: ${!!publicKey ? 'Present' : 'Missing'}`);
+        addDebugLog(`Assistant ID: ${!!assistantId ? 'Present' : 'Missing'}`);
+        throw new Error("Missing required Vapi credentials for direct connection");
       }
 
       // Fallback to server proxy test if direct connection not available
