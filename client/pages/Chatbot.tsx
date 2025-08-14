@@ -432,7 +432,7 @@ export default function Chatbot() {
         "❌ No Vapi API key found. Please set VITE_VAPI_PUBLIC_KEY in environment variables.",
       );
       console.error(
-        "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
+        "��� Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
       );
       console.error(
         "🔗 Get your keys from: https://dashboard.vapi.ai/account"
@@ -790,7 +790,7 @@ export default function Chatbot() {
       // This shouldn't be reached since we have direct connection
       throw new Error("Direct connection failed - missing credentials");
     } catch (error: any) {
-      addDebugLog(`❌ Initial connection test failed: ${error.message}`);
+      addDebugLog(`��� Initial connection test failed: ${error.message}`);
 
       // Always try direct connection if we have credentials
       const fallbackPublicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
@@ -1851,8 +1851,8 @@ export default function Chatbot() {
                 {/* Input Helpers */}
                 <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
                   <div className="flex items-center gap-4">
-                    <span className="font-['Poppins',sans-serif] text-sm font-medium">
-                      AI is ready to help with genetic analysis
+                    <span className="font-['Poppins',sans-serif] text-sm font-medium text-green-600">
+                      🎤 Real speech recording ready - Click microphone to talk!
                     </span>
                     <div className="flex items-center gap-2">
                       <div
