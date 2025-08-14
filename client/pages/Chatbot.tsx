@@ -898,6 +898,12 @@ export default function Chatbot() {
         userFriendlyMessage = "Authentication failed: Unauthorized access. Please verify your API key.";
       } else if (errorMessage.includes("Failed to fetch") || errorMessage.includes("network")) {
         userFriendlyMessage = "Network error: Unable to connect to Vapi servers. Please check your internet connection.";
+      } else if (errorMessage.includes("start-method-error")) {
+        userFriendlyMessage = "Failed to start voice call. This may be due to API key issues or server configuration.";
+        addDebugLog("🔑 Hint: Check that your API keys are correctly configured for both client and server");
+      } else if (errorMessage.includes("Response body is already used")) {
+        userFriendlyMessage = "Server configuration error. The response handling needs to be fixed.";
+        addDebugLog("🔧 This is a server-side issue with response handling");
       } else if (errorMessage.includes("[object Object]")) {
         userFriendlyMessage = "Unknown error occurred. Check debug console for details.";
       }
@@ -1150,7 +1156,15 @@ export default function Chatbot() {
               }
             }
 
-            // Re-throw non-network errors immediately
+            // Handle specific Vapi SDK errors
+            if (errorMsg.includes("start-method-error") || errorMsg.includes("Response body is already used")) {
+              addDebugLog("🔧 Detected server-side response handling issue");
+              throw new Error(
+                "Server configuration error: Response handling needs to be fixed. This is likely due to API key or server proxy issues."
+              );
+            }
+
+            // Re-throw other non-network errors immediately
             throw startError;
           }
         }
