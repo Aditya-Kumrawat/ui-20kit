@@ -301,11 +301,14 @@ const initializeVapi = () => {
   const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
 
   if (!publicKey) {
-    console.warn(
-      "⚠️ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY in environment variables.",
+    console.error(
+      "❌ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables.",
     );
-    console.warn(
-      "📝 Note: For best results, use a public key (pk_...) for the Web SDK in production."
+    console.error(
+      "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
+    );
+    console.error(
+      "🔗 Get your keys from: https://dashboard.vapi.ai/account"
     );
     return null;
   }
@@ -319,7 +322,23 @@ const initializeVapi = () => {
       "❌ Vapi API key appears to be too short. Please check your key configuration.",
       `Length: ${publicKey.length}`
     );
+    console.error(
+      "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'"
+    );
     return null;
+  }
+
+  // Check key format
+  if (!publicKey.startsWith('pk_')) {
+    console.warn(
+      "⚠️ Warning: Web SDK typically requires a PUBLIC key that starts with 'pk_'"
+    );
+    console.warn(
+      `🔑 Current key format: ${publicKey.substring(0, 8)}...`
+    );
+    console.warn(
+      "🔗 Get your public key from: https://dashboard.vapi.ai/account"
+    );
   }
 
   try {
