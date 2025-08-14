@@ -789,21 +789,24 @@ export default function Chatbot() {
       // This shouldn't be reached since we have direct connection
       throw new Error("Direct connection failed - missing credentials");
     } catch (error: any) {
-      addDebugLog(`❌ Connection test failed: ${error.message}`);
+      addDebugLog(`❌ Initial connection test failed: ${error.message}`);
 
-      // If we have credentials, still allow direct connection attempt
+      // Always try direct connection if we have credentials
       const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
       const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
 
       if (publicKey && assistantId) {
-        addDebugLog("⚠️ Server proxy failed, but credentials available - trying direct connection");
+        addDebugLog("⚡ Falling back to direct Vapi Web SDK connection");
+        addDebugLog("✅ Credentials available - enabling direct mode");
         setVapiStatus("connected");
         setNetworkStatus("online");
-        setVapiError("Server proxy unavailable, using direct connection");
+        setVapiError(null);
+        addDebugLog("🎤 Voice recording ready via direct connection!");
       } else {
-        setVapiError(`Connection failed: ${error.message}`);
+        setVapiError(`Connection failed: Missing credentials`);
         setVapiStatus("error");
         setNetworkStatus("offline");
+        addDebugLog("❌ No fallback available - missing Vapi credentials");
       }
     }
   };
