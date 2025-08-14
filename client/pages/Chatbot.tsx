@@ -344,10 +344,44 @@ const initializeVapi = () => {
   try {
     console.log("🚀 Initializing Vapi Web SDK");
     const vapi = new Vapi(publicKey);
+
+    // Add immediate error handler to catch any initialization errors
+    vapi.on('error', (initError: any) => {
+      console.error('Vapi SDK Error during initialization:', initError);
+      // Try to extract meaningful error message
+      let errorMsg = 'Unknown initialization error';
+      if (typeof initError === 'string') {
+        errorMsg = initError;
+      } else if (initError?.message) {
+        errorMsg = String(initError.message);
+      } else if (typeof initError === 'object') {
+        try {
+          errorMsg = JSON.stringify(initError);
+        } catch (e) {
+          errorMsg = `Initialization error object (type: ${typeof initError})`;
+        }
+      }
+      console.error('Parsed initialization error:', errorMsg);
+    });
+
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
   } catch (error) {
     console.error("❌ Failed to initialize Vapi Web SDK:", error);
+    // Ensure error is properly logged
+    let errorMsg = 'Unknown initialization error';
+    if (error instanceof Error) {
+      errorMsg = `${error.name}: ${error.message}`;
+    } else if (typeof error === 'object') {
+      try {
+        errorMsg = JSON.stringify(error);
+      } catch (e) {
+        errorMsg = `Error object (type: ${typeof error})`;
+      }
+    } else {
+      errorMsg = String(error);
+    }
+    console.error('Parsed initialization error:', errorMsg);
     return null;
   }
 };
@@ -850,7 +884,7 @@ export default function Chatbot() {
         errorMessage = `Error serialization failed: ${e}`;
       }
 
-      addDebugLog(`�� Vapi error: ${errorMessage}`);
+      addDebugLog(`❌ Vapi error: ${errorMessage}`);
       if (debugInfo) {
         addDebugLog(`🔍 Debug info: ${debugInfo}`);
       }
