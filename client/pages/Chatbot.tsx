@@ -991,7 +991,7 @@ export default function Chatbot() {
 
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
       if (debugInfo) {
-        addDebugLog(`🔍 Debug info: ${debugInfo}`);
+        addDebugLog(`��� Debug info: ${debugInfo}`);
       }
 
       // Check for specific error types and provide helpful messages
@@ -1306,8 +1306,7 @@ export default function Chatbot() {
           addDebugLog(`⚠️ Warning: Could not set up clean listeners: ${listenerError}`);
         }
 
-        // Configure the assistant for the call
-        const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+        // Configure the assistant for the call (using existing assistantId variable)
         const voiceId = import.meta.env.VITE_VAPI_VOICE_ID || "rachel";
 
         let callConfig;
