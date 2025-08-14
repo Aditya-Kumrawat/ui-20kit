@@ -740,14 +740,36 @@ export default function Chatbot() {
     addDebugLog("Setting up Vapi event listeners...");
   }, []);
 
-  // Vapi event listeners (only if not in test mode)
+  // Vapi initialization and event listeners (only if not in test mode)
   useEffect(() => {
     if (testMode) {
       addDebugLog("🧪 Skipping Vapi setup - Test Mode active");
       return;
     }
 
+    // Initialize Vapi only once
+    if (!vapiInitialized && !vapi) {
+      addDebugLog("Initializing Vapi instance...");
+      vapi = initializeVapi();
+      vapiInitialized = true;
+
+      if (!vapi) {
+        addDebugLog("❌ Vapi initialization failed - no instance created");
+        setVapiStatus("error");
+        setVapiError("Failed to initialize Vapi SDK. Check API key configuration.");
+        return;
+      }
+    }
+
+    if (!vapi) {
+      addDebugLog("❌ No Vapi instance available");
+      return;
+    }
+
     addDebugLog("Setting up Vapi event listeners...");
+
+    // Clear any existing listeners to prevent conflicts
+    vapi.removeAllListeners();
 
     vapi.on("speech-start", () => {
       addDebugLog("🎤 Speech started");
