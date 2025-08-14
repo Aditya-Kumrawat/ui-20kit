@@ -53,8 +53,18 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
     console.log("✅ Vapi response status:", vapiResponse.status);
 
     // Read response once and handle both JSON and text cases
-    const responseText = await vapiResponse.text();
+    let responseText;
     let responseData;
+
+    try {
+      responseText = await vapiResponse.text();
+    } catch (readError) {
+      console.error("❌ Failed to read Vapi response:", readError);
+      return res.status(500).json({
+        error: "Failed to read response from Vapi API",
+        details: readError.message,
+      });
+    }
 
     try {
       responseData = JSON.parse(responseText);
@@ -129,8 +139,18 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
     console.log("📞 Vapi call response status:", vapiResponse.status);
 
     // Read response once and handle both JSON and text cases
-    const responseText = await vapiResponse.text();
+    let responseText;
     let responseData;
+
+    try {
+      responseText = await vapiResponse.text();
+    } catch (readError) {
+      console.error("❌ Failed to read Vapi call response:", readError);
+      return res.status(500).json({
+        error: "Failed to read response from Vapi API",
+        details: readError.message,
+      });
+    }
 
     try {
       responseData = JSON.parse(responseText);
@@ -246,17 +266,15 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
 
     const success = testResponse.ok || testResponse.status === 404;
 
-    // Get response body for debugging
+    // Get response body for debugging - read once to avoid clone issues
     let responseBody = "";
     let errorDetails = null;
     try {
-      // Clone the response to avoid consuming the body stream
-      const clonedResponse = testResponse.clone();
-      const text = await clonedResponse.text();
+      const text = await testResponse.text();
       responseBody = text.substring(0, 200); // First 200 chars
       console.log("📄 Response body preview:", responseBody);
 
-      // If there's an error, try to parse it for more details
+      // If there's an error, try to parse the full text for more details
       if (!testResponse.ok) {
         try {
           errorDetails = JSON.parse(text);
@@ -266,7 +284,7 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
         }
       }
     } catch (e) {
-      console.log("📄 Could not read response body");
+      console.log("📄 Could not read response body:", e);
     }
 
     const result = {
