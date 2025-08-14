@@ -933,7 +933,14 @@ export default function Chatbot() {
 
     // Cleanup event listeners
     return () => {
-      vapi.removeAllListeners();
+      if (vapi) {
+        try {
+          vapi.removeAllListeners();
+          addDebugLog("🧝 Cleaned up Vapi event listeners");
+        } catch (error) {
+          console.error("Error cleaning up Vapi listeners:", error);
+        }
+      }
     };
   }, []);
 
