@@ -567,7 +567,7 @@ export default function Chatbot() {
 
   // Test mode - simulate Vapi functionality for testing
   const toggleTestMode = () => {
-    setTestMode(!testMode);
+    setTestMode(false); // Force real speech mode only
     if (!testMode) {
       addDebugLog("��� Test mode enabled - simulating Vapi responses");
       setVapiStatus("test-mode");
@@ -825,7 +825,7 @@ export default function Chatbot() {
       // If we're in a development environment that might have network restrictions
       if (isFlyDev || isBuilder || window.location.protocol === "file:") {
         addDebugLog(
-          "🔍 Restricted environment detected - preemptively enabling Test Mode",
+          "���� Restricted environment detected - preemptively enabling Test Mode",
         );
         return true;
       }
