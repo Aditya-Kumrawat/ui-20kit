@@ -297,26 +297,33 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
 // Initialize Vapi Web SDK for browser-based voice calls
 const initializeVapi = () => {
-  // For Web SDK, we need the public API key (starts with pk_)
-  const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+  // Try to get public key first, then fall back to regular key
+  const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
 
   if (!publicKey) {
     console.warn(
-      "⚠️ Vapi public API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables. Note: Web SDK requires a PUBLIC key (pk_...), not a private key.",
+      "⚠️ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY in environment variables.",
+    );
+    console.warn(
+      "📝 Note: For best results, use a public key (pk_...) for the Web SDK in production."
     );
     return null;
   }
 
-  if (!publicKey.startsWith('pk_')) {
+  // Log key format for debugging (first few characters only)
+  console.log(`🔑 Key format: ${publicKey.substring(0, 8)}... (length: ${publicKey.length})`);
+
+  // Check if this looks like a valid key
+  if (publicKey.length < 20) {
     console.error(
-      "❌ Invalid Vapi public key format. Web SDK requires a public key that starts with 'pk_', but got:",
-      publicKey.substring(0, 8) + '...'
+      "❌ Vapi API key appears to be too short. Please check your key configuration.",
+      `Length: ${publicKey.length}`
     );
     return null;
   }
 
   try {
-    console.log("🚀 Initializing Vapi Web SDK with public key");
+    console.log("🚀 Initializing Vapi Web SDK");
     const vapi = new Vapi(publicKey);
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
@@ -891,7 +898,7 @@ export default function Chatbot() {
         // Check if Vapi SDK is available
         if (!vapi) {
           throw new Error(
-            "Vapi SDK not initialized. Please check your API key configuration.",
+            "Vapi SDK not initialized. Please check your VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY environment variable.",
           );
         }
 
