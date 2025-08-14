@@ -1086,15 +1086,20 @@ export default function Chatbot() {
         }
 
         // Check if Vapi SDK is available and properly initialized
-        if (!vapi) {
+        if (!vapiInstance) {
           // Try to initialize if not already done
           if (!vapiInitialized) {
             addDebugLog("Attempting to initialize Vapi during recording start...");
-            vapi = initializeVapi();
-            vapiInitialized = true;
-          }
+            const newVapi = initializeVapi();
+            setVapiInstance(newVapi);
+            setVapiInitialized(true);
 
-          if (!vapi) {
+            if (!newVapi) {
+              throw new Error(
+                "Vapi SDK not initialized. Please check your VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY environment variable.",
+              );
+            }
+          } else {
             throw new Error(
               "Vapi SDK not initialized. Please check your VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY environment variable.",
             );
