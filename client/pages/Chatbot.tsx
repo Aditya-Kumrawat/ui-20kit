@@ -1250,8 +1250,7 @@ export default function Chatbot() {
           }
         }
 
-        // Additional check for valid public key to prevent 401 errors
-        const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+        // Additional validation check (using existing publicKey variable)
         if (!publicKey) {
           throw new Error(
             "No public key configured. The Web SDK requires VITE_VAPI_PUBLIC_KEY. Please set the environment variable."
