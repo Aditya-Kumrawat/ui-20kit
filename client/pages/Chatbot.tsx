@@ -347,7 +347,7 @@ const initializeVapi = () => {
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
   } catch (error) {
-    console.error("❌ Failed to initialize Vapi Web SDK:", error);
+    console.error("�� Failed to initialize Vapi Web SDK:", error);
     // Ensure error is properly logged
     let errorMsg = 'Unknown initialization error';
     if (error instanceof Error) {
@@ -1082,11 +1082,61 @@ export default function Chatbot() {
           }
         }
 
-        // Check if Vapi SDK is available
+        // Check if Vapi SDK is available and properly initialized
         if (!vapi) {
-          throw new Error(
-            "Vapi SDK not initialized. Please check your VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY environment variable.",
-          );
+          // Try to initialize if not already done
+          if (!vapiInitialized) {
+            addDebugLog("Attempting to initialize Vapi during recording start...");
+            vapi = initializeVapi();
+            vapiInitialized = true;
+          }
+
+          if (!vapi) {
+            throw new Error(
+              "Vapi SDK not initialized. Please check your VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY environment variable.",
+            );
+          }
+        }
+
+        // Ensure Vapi is in a clean state before starting
+        try {
+          addDebugLog("Ensuring Vapi is in clean state...");
+          vapi.removeAllListeners();
+
+          // Re-add essential event listeners for this session
+          vapi.on("call-start", () => {
+            addDebugLog("📞 Call started");
+            setVapiStatus("call-active");
+          });
+
+          vapi.on("call-end", () => {
+            addDebugLog("📞 Call ended");
+            setVapiStatus("call-ended");
+            setIsRecording(false);
+          });
+
+          vapi.on("error", (callError: any) => {
+            let errorMsg = "Unknown call error";
+            try {
+              if (typeof callError === 'string') {
+                errorMsg = callError;
+              } else if (callError?.message) {
+                errorMsg = String(callError.message);
+              } else if (typeof callError === 'object') {
+                errorMsg = JSON.stringify(callError, null, 2);
+              }
+            } catch (e) {
+              errorMsg = "Error parsing call error";
+            }
+
+            addDebugLog(`❌ Call error: ${errorMsg}`);
+            setVapiError(errorMsg);
+            setVapiStatus("error");
+            setIsRecording(false);
+          });
+
+        } catch (listenerError) {
+          addDebugLog(`⚠️ Warning: Could not set up clean listeners: ${listenerError}`);
         }
 
         // Configure the assistant for the call
