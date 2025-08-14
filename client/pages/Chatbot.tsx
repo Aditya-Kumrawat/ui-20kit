@@ -1184,14 +1184,28 @@ export default function Chatbot() {
 
             if (!newVapi) {
               throw new Error(
-                "Vapi SDK not initialized. Please check your VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY environment variable.",
+                "Vapi SDK initialization failed. You need a valid PUBLIC key (pk_...) for the Web SDK. Get your keys from https://dashboard.vapi.ai/account",
               );
             }
           } else {
             throw new Error(
-              "Vapi SDK not initialized. Please check your VITE_VAPI_PUBLIC_KEY or VITE_VAPI_KEY environment variable.",
+              "Vapi SDK not available. Please configure VITE_VAPI_PUBLIC_KEY with a valid public key (pk_...).",
             );
           }
+        }
+
+        // Additional check for key format to prevent 401 errors
+        const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+        if (!publicKey) {
+          throw new Error(
+            "No public key configured. The Web SDK requires VITE_VAPI_PUBLIC_KEY with a public key (pk_...). The current fallback key is causing authentication issues."
+          );
+        }
+
+        if (!publicKey.startsWith('pk_')) {
+          throw new Error(
+            `Invalid key format. Web SDK requires a public key starting with 'pk_', but got: ${publicKey.substring(0, 8)}... Please get your public key from https://dashboard.vapi.ai/account`
+          );
         }
 
         // Ensure Vapi is in a clean state before starting
