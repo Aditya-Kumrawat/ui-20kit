@@ -344,26 +344,6 @@ const initializeVapi = () => {
   try {
     console.log("🚀 Initializing Vapi Web SDK");
     const vapi = new Vapi(publicKey);
-
-    // Add immediate error handler to catch any initialization errors
-    vapi.on('error', (initError: any) => {
-      console.error('Vapi SDK Error during initialization:', initError);
-      // Try to extract meaningful error message
-      let errorMsg = 'Unknown initialization error';
-      if (typeof initError === 'string') {
-        errorMsg = initError;
-      } else if (initError?.message) {
-        errorMsg = String(initError.message);
-      } else if (typeof initError === 'object') {
-        try {
-          errorMsg = JSON.stringify(initError);
-        } catch (e) {
-          errorMsg = `Initialization error object (type: ${typeof initError})`;
-        }
-      }
-      console.error('Parsed initialization error:', errorMsg);
-    });
-
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
   } catch (error) {
