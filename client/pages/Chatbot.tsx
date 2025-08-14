@@ -1901,10 +1901,15 @@ export default function Chatbot() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={testVapiConnection}
+                      onClick={() => {
+                        addDebugLog("🔍 Manual test triggered...");
+                        setVapiStatus("testing");
+                        setVapiError(null);
+                        testVapiConnection();
+                      }}
                       className="h-6 px-2 text-xs"
                     >
-                      Test Real API
+                      Test Connection
                     </Button>
                   </div>
                 </div>
