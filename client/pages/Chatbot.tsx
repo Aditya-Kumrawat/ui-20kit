@@ -786,30 +786,8 @@ export default function Chatbot() {
         throw new Error("Missing required Vapi credentials for direct connection");
       }
 
-      // Fallback to server proxy test if direct connection not available
-      addDebugLog("📡 Testing server proxy connection...");
-      const testResponse = await fetch("/api/vapi/test", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!testResponse.ok) {
-        throw new Error(`Server proxy test failed: ${testResponse.status}`);
-      }
-
-      const testData = await testResponse.json();
-      addDebugLog(`🔍 Server test result: ${JSON.stringify(testData)}`);
-
-      if (testData.success) {
-        addDebugLog("✅ Server-side Vapi proxy: WORKING!");
-        setVapiStatus("connected");
-        setNetworkStatus("online");
-        addDebugLog("🎤 Ready to start voice recording via server proxy!");
-      } else {
-        throw new Error(testData.error || "Server proxy test failed");
-      }
+      // This shouldn't be reached since we have direct connection
+      throw new Error("Direct connection failed - missing credentials");
     } catch (error: any) {
       addDebugLog(`❌ Connection test failed: ${error.message}`);
 
