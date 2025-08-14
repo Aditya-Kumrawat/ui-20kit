@@ -9,10 +9,23 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
       body: req.body,
     });
 
-    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
-    if (!apiKey) {
+    // For server-side API calls, we need the private key (starts with sk_)
+    const privateKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    if (!privateKey) {
       return res.status(500).json({
-        error: "Vapi API key not configured on server",
+        error: "Vapi private API key not configured on server. Please set VAPI_PRIVATE_KEY.",
+        debug: {
+          vapiPrivateKeyExists: !!process.env.VAPI_PRIVATE_KEY,
+          vapiKeyExists: !!process.env.VAPI_KEY,
+          viteVapiKeyExists: !!process.env.VITE_VAPI_KEY,
+        }
+      });
+    }
+
+    if (!privateKey.startsWith('sk_')) {
+      return res.status(500).json({
+        error: "Invalid Vapi private key format. Server requires a private key that starts with 'sk_'",
+        keyFormat: privateKey.substring(0, 3) + '...'
       });
     }
 
@@ -26,7 +39,7 @@ export const handleVapiProxy: RequestHandler = async (req, res) => {
     const vapiResponse = await fetch(vapiUrl, {
       method: req.method,
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${privateKey}`,
         "Content-Type": "application/json",
         "User-Agent": "Vapi-Proxy-Server/1.0",
       },
@@ -70,11 +83,19 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
   try {
     console.log("📞 Creating Vapi call via server proxy");
 
-    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
-    if (!apiKey) {
-      console.error("❌ No API key configured for call creation");
+    // For server-side API calls, we need the private key (starts with sk_)
+    const privateKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    if (!privateKey) {
+      console.error("❌ No private API key configured for call creation");
       return res.status(500).json({
-        error: "Vapi API key not configured on server",
+        error: "Vapi private API key not configured on server. Please set VAPI_PRIVATE_KEY.",
+      });
+    }
+
+    if (!privateKey.startsWith('sk_')) {
+      return res.status(500).json({
+        error: "Invalid Vapi private key format. Server requires a private key that starts with 'sk_'",
+        keyFormat: privateKey.substring(0, 3) + '...'
       });
     }
 
@@ -90,7 +111,7 @@ export const handleVapiCall: RequestHandler = async (req, res) => {
     const vapiResponse = await fetch("https://api.vapi.ai/call", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${privateKey}`,
         "Content-Type": "application/json",
         "User-Agent": "Vapi-Proxy-Server/1.0",
       },
@@ -156,33 +177,44 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
   try {
     console.log("🧪 Testing Vapi connectivity from server...");
 
-    // Check environment variables
-    const apiKey = process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
+    // Check environment variables - for server-side we need private key
+    const privateKey = process.env.VAPI_PRIVATE_KEY || process.env.VAPI_KEY || process.env.VITE_VAPI_KEY;
     console.log("🔍 Environment check:");
+    console.log("  - VAPI_PRIVATE_KEY exists:", !!process.env.VAPI_PRIVATE_KEY);
     console.log("  - VAPI_KEY exists:", !!process.env.VAPI_KEY);
     console.log("  - VITE_VAPI_KEY exists:", !!process.env.VITE_VAPI_KEY);
-    console.log("  - Final API key length:", apiKey?.length || 0);
+    console.log("  - Final private key length:", privateKey?.length || 0);
 
-    if (!apiKey) {
-      console.error("❌ No API key found in environment variables");
+    if (!privateKey) {
+      console.error("❌ No private API key found in environment variables");
       return res.status(500).json({
-        error: "Vapi API key not configured on server",
+        error: "Vapi private API key not configured on server. Please set VAPI_PRIVATE_KEY.",
         configured: false,
         debug: {
+          vapiPrivateKeyExists: !!process.env.VAPI_PRIVATE_KEY,
           vapiKeyExists: !!process.env.VAPI_KEY,
           viteVapiKeyExists: !!process.env.VITE_VAPI_KEY,
         },
       });
     }
 
-    console.log(`🔑 Using API key: ${apiKey.substring(0, 8)}...`);
+    console.log(`🔑 Using private key: ${privateKey.substring(0, 8)}...`);
 
-    // Test API key validity
+    if (!privateKey.startsWith('sk_')) {
+      console.error("❌ Invalid private key format - should start with sk_");
+      return res.status(500).json({
+        error: "Invalid Vapi private key format. Server requires a private key that starts with 'sk_'",
+        configured: false,
+        keyFormat: privateKey.substring(0, 3) + '...'
+      });
+    }
+
+    // Test private API key validity
     console.log("📡 Making request to Vapi API...");
     const testResponse = await fetch("https://api.vapi.ai/assistant", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${privateKey}`,
         "Content-Type": "application/json",
       },
     });
@@ -212,7 +244,7 @@ export const handleVapiTest: RequestHandler = async (req, res) => {
         ? "Vapi API connectivity successful from server"
         : "Vapi API connectivity failed from server",
       configured: true,
-      apiKeyLength: apiKey.length,
+      privateKeyLength: privateKey.length,
       responsePreview: responseBody.substring(0, 50),
     };
 
