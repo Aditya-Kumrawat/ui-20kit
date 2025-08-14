@@ -1633,8 +1633,14 @@ export default function Chatbot() {
             {/* Messages Area - Fixed Height */}
             <div className="h-[500px] overflow-hidden relative">
               <div className="h-full max-w-4xl mx-auto px-6 py-6">
-                {/* Chat Container with Custom Scrollbar */}
-                <div className="h-full overflow-y-auto space-y-6 pr-2 scrollbar-hide">
+                {/* Chat Container with Invisible Scrollbar */}
+                <div
+                  className="h-full overflow-y-auto space-y-6 pr-4"
+                  style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none'
+                  }}
+                >
                   <AnimatePresence>
                     {messages.map((message) => (
                       <motion.div
