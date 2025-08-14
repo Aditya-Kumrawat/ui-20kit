@@ -297,20 +297,27 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
 // Initialize Vapi Web SDK for browser-based voice calls
 const initializeVapi = () => {
-  // For Web SDK, we need the public API key (not private key)
-  const apiKey =
-    import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
+  // For Web SDK, we need the public API key (starts with pk_)
+  const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
 
-  if (!apiKey) {
+  if (!publicKey) {
     console.warn(
-      "⚠️ Vapi API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables",
+      "⚠️ Vapi public API key not found. Please set VITE_VAPI_PUBLIC_KEY in environment variables. Note: Web SDK requires a PUBLIC key (pk_...), not a private key.",
+    );
+    return null;
+  }
+
+  if (!publicKey.startsWith('pk_')) {
+    console.error(
+      "❌ Invalid Vapi public key format. Web SDK requires a public key that starts with 'pk_', but got:",
+      publicKey.substring(0, 8) + '...'
     );
     return null;
   }
 
   try {
-    console.log("🚀 Initializing Vapi Web SDK");
-    const vapi = new Vapi(apiKey);
+    console.log("🚀 Initializing Vapi Web SDK with public key");
+    const vapi = new Vapi(publicKey);
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
   } catch (error) {
