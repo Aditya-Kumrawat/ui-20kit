@@ -342,7 +342,7 @@ const initializeVapiExternal = () => {
   }
 
   try {
-    console.log("🚀 Initializing Vapi Web SDK");
+    console.log("���� Initializing Vapi Web SDK");
     const vapi = new Vapi(publicKey);
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
@@ -471,17 +471,16 @@ export default function Chatbot() {
       return null;
     }
 
-    // Check key format
-    if (!keyToUse.startsWith('pk_')) {
+    // Check key format - accept both pk_ format and UUID format
+    if (!keyToUse.startsWith('pk_') && !keyToUse.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
       console.warn(
-        "⚠️ Warning: Web SDK typically requires a PUBLIC key that starts with 'pk_'"
+        "⚠️ Warning: Unrecognized key format. Expected either 'pk_...' or UUID format"
       );
       console.warn(
         `🔑 Current key format: ${keyToUse.substring(0, 8)}...`
       );
-      console.warn(
-        "🔗 Get your public key from: https://dashboard.vapi.ai/account"
-      );
+    } else {
+      console.log("✅ Valid key format detected");
     }
 
     try {
@@ -1194,17 +1193,19 @@ export default function Chatbot() {
           }
         }
 
-        // Additional check for key format to prevent 401 errors
+        // Additional check for valid public key to prevent 401 errors
         const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
         if (!publicKey) {
           throw new Error(
-            "No public key configured. The Web SDK requires VITE_VAPI_PUBLIC_KEY with a public key (pk_...). The current fallback key is causing authentication issues."
+            "No public key configured. The Web SDK requires VITE_VAPI_PUBLIC_KEY. Please set the environment variable."
           );
         }
 
-        if (!publicKey.startsWith('pk_')) {
+        // Validate key format (either pk_ or UUID format)
+        const isValidFormat = publicKey.startsWith('pk_') || publicKey.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+        if (!isValidFormat) {
           throw new Error(
-            `Invalid key format. Web SDK requires a public key starting with 'pk_', but got: ${publicKey.substring(0, 8)}... Please get your public key from https://dashboard.vapi.ai/account`
+            `Invalid key format. Expected either 'pk_...' or UUID format, but got: ${publicKey.substring(0, 8)}...`
           );
         }
 
