@@ -774,15 +774,15 @@ export default function Chatbot() {
     // Clear any existing listeners to prevent conflicts
     vapiInstance.removeAllListeners();
 
-    vapi.on("speech-start", () => {
+    vapiInstance.on("speech-start", () => {
       addDebugLog("🎤 Speech started");
     });
 
-    vapi.on("speech-end", () => {
+    vapiInstance.on("speech-end", () => {
       addDebugLog("🔇 Speech ended");
     });
 
-    vapi.on("message", (message: any) => {
+    vapiInstance.on("message", (message: any) => {
       try {
         if (message && typeof message === 'object' && message.type === "transcript") {
           const transcript = message.transcript || "";
@@ -829,18 +829,18 @@ export default function Chatbot() {
 
     // Additional event handlers can be added here
 
-    vapi.on("call-start", () => {
+    vapiInstance.on("call-start", () => {
       addDebugLog("📞 Call started");
       setVapiStatus("call-active");
     });
 
-    vapi.on("call-end", () => {
+    vapiInstance.on("call-end", () => {
       addDebugLog("📞 Call ended");
       setVapiStatus("call-ended");
       setIsRecording(false);
     });
 
-    vapi.on("error", (error: any) => {
+    vapiInstance.on("error", (error: any) => {
       // Comprehensive error serialization to fix [object Object] issue
       let errorMessage = "Unknown error";
       let debugInfo = "";
@@ -893,7 +893,7 @@ export default function Chatbot() {
 
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
       if (debugInfo) {
-        addDebugLog(`�� Debug info: ${debugInfo}`);
+        addDebugLog(`🔍 Debug info: ${debugInfo}`);
       }
 
       // Check for specific error types and provide helpful messages
@@ -938,7 +938,7 @@ export default function Chatbot() {
     return () => {
       if (vapi) {
         try {
-          vapi.removeAllListeners();
+          vapiInstance.removeAllListeners();
           addDebugLog("🧝 Cleaned up Vapi event listeners");
         } catch (error) {
           console.error("Error cleaning up Vapi listeners:", error);
@@ -1020,7 +1020,7 @@ export default function Chatbot() {
     try {
       if (isRecording) {
         addDebugLog("Stopping Vapi recording...");
-        await vapi.stop();
+        await vapiInstance.stop();
         setIsRecording(false);
         setVapiStatus("stopped");
         videoRef.current?.pause();
@@ -1104,21 +1104,21 @@ export default function Chatbot() {
         // Ensure Vapi is in a clean state before starting
         try {
           addDebugLog("Ensuring Vapi is in clean state...");
-          vapi.removeAllListeners();
+          vapiInstance.removeAllListeners();
 
           // Re-add essential event listeners for this session
-          vapi.on("call-start", () => {
+          vapiInstance.on("call-start", () => {
             addDebugLog("📞 Call started");
             setVapiStatus("call-active");
           });
 
-          vapi.on("call-end", () => {
+          vapiInstance.on("call-end", () => {
             addDebugLog("📞 Call ended");
             setVapiStatus("call-ended");
             setIsRecording(false);
           });
 
-          vapi.on("error", (callError: any) => {
+          vapiInstance.on("error", (callError: any) => {
             let errorMsg = "Unknown call error";
             try {
               if (typeof callError === 'string') {
@@ -1188,7 +1188,7 @@ export default function Chatbot() {
             );
 
             // Add timeout to Vapi start call
-            const startPromise = vapi.start(callConfig);
+            const startPromise = vapiInstance.start(callConfig);
             const timeoutPromise = new Promise((_, reject) =>
               setTimeout(() => reject(new Error("Vapi start timeout")), 15000),
             );
