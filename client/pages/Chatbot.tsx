@@ -319,7 +319,7 @@ const initializeVapiExternal = () => {
   // Check if this looks like a valid key
   if (publicKey.length < 20) {
     console.error(
-      "❌ Vapi API key appears to be too short. Please check your key configuration.",
+      "�� Vapi API key appears to be too short. Please check your key configuration.",
       `Length: ${publicKey.length}`
     );
     console.error(
@@ -1634,13 +1634,7 @@ export default function Chatbot() {
             <div className="h-[500px] overflow-hidden relative">
               <div className="h-full max-w-4xl mx-auto px-6 py-6">
                 {/* Chat Container with Invisible Scrollbar */}
-                <div
-                  className="h-full overflow-y-auto space-y-6 pr-4"
-                  style={{
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none'
-                  }}
-                >
+                <div className="h-full overflow-y-auto space-y-6 pr-4 scrollbar-hide">
                   <AnimatePresence>
                     {messages.map((message) => (
                       <motion.div
