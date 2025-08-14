@@ -1871,8 +1871,8 @@ export default function Chatbot() {
                       <span className="text-xs capitalize font-['Poppins',sans-serif] font-medium">
                         {vapiStatus.replace("-", " ")}
                       </span>
-                      <span className="text-xs px-1 rounded bg-purple-100 text-purple-700">
-                        Real API
+                      <span className="text-xs px-1 rounded bg-green-100 text-green-700 font-bold animate-pulse">
+                        🎤 REAL SPEECH
                       </span>
                     </div>
                     {isRecording && (
