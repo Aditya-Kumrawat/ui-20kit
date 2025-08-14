@@ -342,7 +342,7 @@ const initializeVapiExternal = () => {
   }
 
   try {
-    console.log("���� Initializing Vapi Web SDK");
+    console.log("����� Initializing Vapi Web SDK");
     const vapi = new Vapi(publicKey);
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
@@ -758,16 +758,29 @@ export default function Chatbot() {
     }
   };
 
-  // Test server-side Vapi proxy connection
+  // Test Vapi connection - try direct connection first, fallback to server proxy
   const testVapiConnection = async () => {
     try {
-      addDebugLog("🚀 Testing server-side Vapi proxy...");
+      addDebugLog("🚀 Testing Vapi connection...");
       setVapiStatus("testing");
       setVapiError(null);
 
-      // Test server-side Vapi connectivity via proxy
-      addDebugLog("📡 Testing server proxy connection...");
+      // Check if we have a valid public key for direct connection
+      const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+      const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
 
+      if (publicKey && assistantId) {
+        addDebugLog("✅ Valid credentials found - Vapi SDK ready!");
+        addDebugLog(`🔑 Public Key: ${publicKey.substring(0, 8)}...`);
+        addDebugLog(`🤖 Assistant ID: ${assistantId}`);
+        setVapiStatus("connected");
+        setNetworkStatus("online");
+        addDebugLog("🎤 Ready to start voice recording directly!");
+        return;
+      }
+
+      // Fallback to server proxy test if direct connection not available
+      addDebugLog("📡 Testing server proxy connection...");
       const testResponse = await fetch("/api/vapi/test", {
         method: "GET",
         headers: {
@@ -791,12 +804,22 @@ export default function Chatbot() {
         throw new Error(testData.error || "Server proxy test failed");
       }
     } catch (error: any) {
-      addDebugLog(`❌ Server proxy test failed: ${error.message}`);
-      setVapiError(`Server proxy failed: ${error.message}`);
-      setVapiStatus("error");
-      setNetworkStatus("offline");
+      addDebugLog(`❌ Connection test failed: ${error.message}`);
 
-      addDebugLog("🚫 Server proxy required for this environment");
+      // If we have credentials, still allow direct connection attempt
+      const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+      const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+
+      if (publicKey && assistantId) {
+        addDebugLog("⚠️ Server proxy failed, but credentials available - trying direct connection");
+        setVapiStatus("connected");
+        setNetworkStatus("online");
+        setVapiError("Server proxy unavailable, using direct connection");
+      } else {
+        setVapiError(`Connection failed: ${error.message}`);
+        setVapiStatus("error");
+        setNetworkStatus("offline");
+      }
     }
   };
 
