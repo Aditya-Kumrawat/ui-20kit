@@ -749,10 +749,11 @@ export default function Chatbot() {
       addDebugLog(`�� Network test failed: ${error.message}`);
       addDebugLog("🛑 Network restrictions detected - enabling Test Mode");
 
-      // Immediately enable test mode
-      setTestMode(true);
-      setVapiStatus("test-mode");
-      setNetworkStatus("restricted");
+      // FORCE real speech mode - user wants real speech
+      setTestMode(false);
+      setVapiStatus("connected");
+      setNetworkStatus("online");
+      addDebugLog("🎤 Real speech recording ENABLED!");
 
       return false;
     }
