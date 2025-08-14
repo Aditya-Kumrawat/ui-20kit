@@ -731,8 +731,21 @@ export default function Chatbot() {
     });
 
     vapi.on("error", (error: any) => {
-      addDebugLog(`❌ Vapi error: ${error.message || error}`);
-      setVapiError(error.message || "Unknown error");
+      const errorMessage = error?.message || error?.toString() || "Unknown error";
+      addDebugLog(`❌ Vapi error: ${errorMessage}`);
+
+      // Check for specific error types and provide helpful messages
+      let userFriendlyMessage = errorMessage;
+      if (errorMessage.includes("Invalid Key") || errorMessage.includes("Invalid API key")) {
+        userFriendlyMessage = "Authentication failed: Invalid API key. Please check your Vapi configuration.";
+        addDebugLog("🔑 Tip: Make sure you're using the correct key type (public key for Web SDK)");
+      } else if (errorMessage.includes("unauthorized") || errorMessage.includes("401")) {
+        userFriendlyMessage = "Authentication failed: Unauthorized access. Please verify your API key.";
+      } else if (errorMessage.includes("Failed to fetch") || errorMessage.includes("network")) {
+        userFriendlyMessage = "Network error: Unable to connect to Vapi servers. Please check your internet connection.";
+      }
+
+      setVapiError(userFriendlyMessage);
       setVapiStatus("error");
     });
 
