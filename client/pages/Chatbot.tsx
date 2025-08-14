@@ -1140,8 +1140,12 @@ export default function Chatbot() {
   };
 
   const toggleRecording = async () => {
-    // Enhanced Vapi integration with comprehensive error handling
-    addDebugLog("🚀 Starting Vapi voice recording...");
+    // REAL SPEECH MODE - User wants real speech, not test mode
+    addDebugLog("🎤 Starting REAL Vapi voice recording - NO test mode!");
+
+    // Force real speech mode
+    setTestMode(false);
+    setVapiStatus("starting");
 
     try {
       if (isRecording) {
