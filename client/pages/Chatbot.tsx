@@ -403,12 +403,27 @@ export default function Chatbot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Debug logging function
-  const addDebugLog = (message: string) => {
+  // Debug logging function with proper object handling
+  const addDebugLog = (message: string | any) => {
     const timestamp = new Date().toLocaleTimeString();
-    const logMessage = `[${timestamp}] ${message}`;
-    console.log(`🔊 VAPI DEBUG: ${logMessage}`);
-    setDebugLogs((prev) => [...prev.slice(-9), logMessage]); // Keep last 10 logs
+
+    // Ensure message is properly serialized
+    let logMessage = "";
+    try {
+      if (typeof message === 'string') {
+        logMessage = message;
+      } else if (typeof message === 'object' && message !== null) {
+        logMessage = JSON.stringify(message, null, 2);
+      } else {
+        logMessage = String(message);
+      }
+    } catch (e) {
+      logMessage = "[Error serializing log message]";
+    }
+
+    const finalLogMessage = `[${timestamp}] ${logMessage}`;
+    console.log(`🔊 VAPI DEBUG: ${finalLogMessage}`);
+    setDebugLogs((prev) => [...prev.slice(-9), finalLogMessage]); // Keep last 10 logs
   };
 
   // Initial environment check log
