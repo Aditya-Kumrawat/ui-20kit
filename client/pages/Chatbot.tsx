@@ -1035,16 +1035,32 @@ export default function Chatbot() {
       setVapiStatus("error");
     });
 
-    // Test connection on component mount with safe fallback
+    // Comprehensive initialization and connection test
     const initializeVapiConnection = async () => {
       try {
+        addDebugLog("🚀 Starting comprehensive Vapi initialization...");
+
+        // Check environment first
+        const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+        const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+
+        if (!publicKey || !assistantId) {
+          throw new Error(`Missing credentials: Public Key: ${!!publicKey}, Assistant ID: ${!!assistantId}`);
+        }
+
+        addDebugLog(`✅ Credentials verified - Public Key: ${publicKey.substring(0, 8)}..., Assistant: ${assistantId}`);
+
         await testVapiConnection();
+        addDebugLog("✅ Vapi initialization completed successfully!");
       } catch (error: any) {
         addDebugLog(`❌ Initialization failed: ${error.message}`);
-        addDebugLog("🧪 Falling back to Test Mode");
-        setTestMode(true);
-        setVapiStatus("test-mode");
-        setNetworkStatus("restricted");
+        addDebugLog("⚠️ Will retry connection in 3 seconds...");
+
+        // Auto-retry after 3 seconds
+        setTimeout(() => {
+          addDebugLog("🔄 Retrying Vapi initialization...");
+          initializeVapiConnection();
+        }, 3000);
       }
     };
 
