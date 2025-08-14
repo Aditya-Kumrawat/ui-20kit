@@ -341,7 +341,7 @@ const initializeVapiExternal = () => {
   }
 
   try {
-    console.log("���� Initializing Vapi Web SDK");
+    console.log("����� Initializing Vapi Web SDK");
     const vapi = new Vapi(publicKey);
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
@@ -943,11 +943,31 @@ export default function Chatbot() {
 
     // AI responses are handled in the consolidated message handler above
 
+    // Audio volume boosting - Direct SDK approach
+    vapiInstance.on("audio", (audioEl: HTMLAudioElement) => {
+      if (audioEl) {
+        audioEl.volume = audioVolume; // Apply current volume setting
+        addDebugLog(`🔊 Audio volume set to ${Math.round(audioVolume * 100)}%`);
+      }
+    });
+
     // Additional event handlers can be added here
 
     vapiInstance.on("call-start", () => {
       addDebugLog("📞 Call started");
       setVapiStatus("call-active");
+
+      // Setup Web Audio API for advanced volume control
+      try {
+        const context = new AudioContext();
+        const gain = context.createGain();
+        gain.gain.value = audioVolume * 2.0; // Boost up to 200%
+        setAudioContext(context);
+        setGainNode(gain);
+        addDebugLog(`🎚️ Web Audio API gain node created with ${Math.round(gain.gain.value * 50)}% boost`);
+      } catch (audioError) {
+        addDebugLog(`⚠️ Web Audio API setup failed: ${audioError}`);
+      }
     });
 
     vapiInstance.on("call-end", () => {
