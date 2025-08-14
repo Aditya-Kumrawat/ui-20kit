@@ -1016,7 +1016,7 @@ export default function Chatbot() {
         }
       }
     };
-  }, [testMode, vapiInstance, vapiInitialized, addDebugLog]);
+  }, [testMode, vapiInstance, vapiInitialized]);
 
   const handleSendMessage = (content: string) => {
     if (!content.trim()) return;
