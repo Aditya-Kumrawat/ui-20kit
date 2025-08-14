@@ -403,22 +403,45 @@ export default function Chatbot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Debug logging function with proper object handling
+  // Debug logging function with comprehensive object handling
   const addDebugLog = (message: string | any) => {
     const timestamp = new Date().toLocaleTimeString();
 
-    // Ensure message is properly serialized
+    // Ensure message is properly serialized and never shows [object Object]
     let logMessage = "";
     try {
       if (typeof message === 'string') {
         logMessage = message;
+      } else if (message instanceof Error) {
+        logMessage = `Error: ${message.message} (${message.name})`;
       } else if (typeof message === 'object' && message !== null) {
-        logMessage = JSON.stringify(message, null, 2);
+        // Force object serialization with detailed approach
+        try {
+          logMessage = JSON.stringify(message, null, 2);
+        } catch (jsonError) {
+          // If JSON.stringify fails, manually extract properties
+          const props: string[] = [];
+          for (const key in message) {
+            try {
+              const value = message[key];
+              props.push(`${key}: ${typeof value === 'object' ? '[Object]' : String(value)}`);
+            } catch (e) {
+              props.push(`${key}: [Unable to access]`);
+            }
+          }
+          logMessage = `Object {${props.join(', ')}}`;
+        }
       } else {
         logMessage = String(message);
       }
+
+      // Final check to prevent [object Object]
+      if (logMessage.includes('[object Object]') || logMessage === '[object Object]') {
+        logMessage = `[Unserializable object of type: ${typeof message}]`;
+      }
+
     } catch (e) {
-      logMessage = "[Error serializing log message]";
+      logMessage = `[Error serializing log message: ${e}]`;
     }
 
     const finalLogMessage = `[${timestamp}] ${logMessage}`;
@@ -430,7 +453,7 @@ export default function Chatbot() {
   useEffect(() => {
     if (isRestrictedEnvironment()) {
       addDebugLog("🛡️ RESTRICTED ENVIRONMENT DETECTED");
-      addDebugLog("����� Test Mode auto-enabled to prevent network errors");
+      addDebugLog("���� Test Mode auto-enabled to prevent network errors");
       addDebugLog(`📍 Hostname: ${window.location.hostname}`);
     } else {
       addDebugLog("�� Unrestricted environment - Vapi API available");
@@ -827,7 +850,7 @@ export default function Chatbot() {
         errorMessage = `Error serialization failed: ${e}`;
       }
 
-      addDebugLog(`❌ Vapi error: ${errorMessage}`);
+      addDebugLog(`�� Vapi error: ${errorMessage}`);
       if (debugInfo) {
         addDebugLog(`🔍 Debug info: ${debugInfo}`);
       }
