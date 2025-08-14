@@ -991,7 +991,7 @@ export default function Chatbot() {
     });
 
     // Test connection on component mount with safe fallback
-    const initializeVapi = async () => {
+    const initializeVapiConnection = async () => {
       try {
         await testVapiConnection();
       } catch (error: any) {
@@ -1003,7 +1003,7 @@ export default function Chatbot() {
       }
     };
 
-    initializeVapi();
+    initializeVapiConnection();
 
     // Cleanup event listeners
     return () => {
