@@ -366,9 +366,7 @@ const initializeVapi = () => {
   }
 };
 
-// Initialize Vapi instance only once
-let vapi: any = null;
-let vapiInitialized = false;
+// This will be moved inside the component
 
 // Force enable real API calls - remove all environment restrictions
 const isRestrictedEnvironment = () => {
@@ -380,6 +378,10 @@ const isRestrictedEnvironment = () => {
 };
 
 export default function Chatbot() {
+  // Vapi instance state - moved inside component to fix hoisting
+  const [vapiInstance, setVapiInstance] = useState<any>(null);
+  const [vapiInitialized, setVapiInitialized] = useState(false);
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -748,12 +750,13 @@ export default function Chatbot() {
     }
 
     // Initialize Vapi only once
-    if (!vapiInitialized && !vapi) {
+    if (!vapiInitialized && !vapiInstance) {
       addDebugLog("Initializing Vapi instance...");
-      vapi = initializeVapi();
-      vapiInitialized = true;
+      const newVapi = initializeVapi();
+      setVapiInstance(newVapi);
+      setVapiInitialized(true);
 
-      if (!vapi) {
+      if (!newVapi) {
         addDebugLog("❌ Vapi initialization failed - no instance created");
         setVapiStatus("error");
         setVapiError("Failed to initialize Vapi SDK. Check API key configuration.");
@@ -761,7 +764,7 @@ export default function Chatbot() {
       }
     }
 
-    if (!vapi) {
+    if (!vapiInstance) {
       addDebugLog("❌ No Vapi instance available");
       return;
     }
@@ -769,7 +772,7 @@ export default function Chatbot() {
     addDebugLog("Setting up Vapi event listeners...");
 
     // Clear any existing listeners to prevent conflicts
-    vapi.removeAllListeners();
+    vapiInstance.removeAllListeners();
 
     vapi.on("speech-start", () => {
       addDebugLog("🎤 Speech started");
@@ -890,7 +893,7 @@ export default function Chatbot() {
 
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
       if (debugInfo) {
-        addDebugLog(`🔍 Debug info: ${debugInfo}`);
+        addDebugLog(`�� Debug info: ${debugInfo}`);
       }
 
       // Check for specific error types and provide helpful messages
