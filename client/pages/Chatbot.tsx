@@ -430,7 +430,7 @@ export default function Chatbot() {
   useEffect(() => {
     if (isRestrictedEnvironment()) {
       addDebugLog("🛡️ RESTRICTED ENVIRONMENT DETECTED");
-      addDebugLog("���� Test Mode auto-enabled to prevent network errors");
+      addDebugLog("����� Test Mode auto-enabled to prevent network errors");
       addDebugLog(`📍 Hostname: ${window.location.hostname}`);
     } else {
       addDebugLog("�� Unrestricted environment - Vapi API available");
@@ -777,25 +777,60 @@ export default function Chatbot() {
     });
 
     vapi.on("error", (error: any) => {
-      // Properly serialize error objects to avoid "[object Object]" display
+      // Comprehensive error serialization to fix [object Object] issue
       let errorMessage = "Unknown error";
+      let debugInfo = "";
 
       try {
+        // Log the raw error for debugging
+        console.error("RAW VAPI ERROR:", error);
+        console.error("ERROR TYPE:", typeof error);
+        console.error("ERROR CONSTRUCTOR:", error?.constructor?.name);
+
         if (typeof error === 'string') {
           errorMessage = error;
+        } else if (error instanceof Error) {
+          errorMessage = error.message || error.toString();
+          debugInfo = `Name: ${error.name}, Stack: ${error.stack?.substring(0, 100)}`;
         } else if (error?.message) {
-          errorMessage = error.message;
-        } else if (error?.toString && typeof error.toString === 'function') {
-          errorMessage = error.toString();
-        } else if (typeof error === 'object') {
-          // Try to extract meaningful info from error object
-          errorMessage = JSON.stringify(error, null, 2);
+          errorMessage = String(error.message);
+        } else if (error?.error) {
+          errorMessage = String(error.error);
+        } else if (error?.data) {
+          errorMessage = JSON.stringify(error.data);
+        } else if (error?.response) {
+          // Handle fetch response errors
+          errorMessage = `HTTP ${error.response.status}: ${error.response.statusText}`;
+        } else if (typeof error === 'object' && error !== null) {
+          // Extract all enumerable properties
+          const errorObj: any = {};
+          for (const key in error) {
+            try {
+              errorObj[key] = error[key];
+            } catch (e) {
+              errorObj[key] = '[Unable to serialize]';
+            }
+          }
+          errorMessage = JSON.stringify(errorObj, null, 2);
+        } else {
+          errorMessage = String(error);
         }
+
+        // If we still have [object Object], force a different approach
+        if (errorMessage.includes('[object Object]') || errorMessage === '[object Object]') {
+          errorMessage = `Vapi Error - Type: ${typeof error}, Constructor: ${error?.constructor?.name || 'unknown'}`;
+          if (error?.status) errorMessage += `, Status: ${error.status}`;
+          if (error?.code) errorMessage += `, Code: ${error.code}`;
+        }
+
       } catch (e) {
-        errorMessage = "Error parsing error object";
+        errorMessage = `Error serialization failed: ${e}`;
       }
 
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
+      if (debugInfo) {
+        addDebugLog(`🔍 Debug info: ${debugInfo}`);
+      }
 
       // Check for specific error types and provide helpful messages
       let userFriendlyMessage = errorMessage;
