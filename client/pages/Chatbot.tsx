@@ -296,7 +296,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 };
 
 // Initialize Vapi Web SDK for browser-based voice calls
-const initializeVapi = () => {
+const initializeVapiExternal = () => {
   // Try to get public key first, then fall back to regular key
   const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || import.meta.env.VITE_VAPI_KEY;
 
