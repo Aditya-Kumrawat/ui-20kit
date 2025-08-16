@@ -1950,7 +1950,7 @@ export default function Chatbot() {
                     <input
                       type="range"
                       min="0.1"
-                      max="5.0"
+                      max="4.0"
                       step="0.1"
                       value={audioVolume}
                       onChange={(e) => {
