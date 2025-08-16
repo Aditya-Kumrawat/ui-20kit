@@ -19,6 +19,8 @@ import {
   LogOut,
   Edit,
   Star,
+  Camera,
+  Cpu,
 } from "lucide-react";
 
 interface FloatingSidebarProps {
