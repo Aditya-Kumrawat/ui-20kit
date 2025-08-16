@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
+import { FloatingTopBar } from "@/components/FloatingTopBar";
 import Vapi from "@vapi-ai/web";
 import {
   Send,
@@ -934,6 +935,7 @@ export default function Chatbot() {
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />
+      <FloatingTopBar isCollapsed={isCollapsed} />
 
       {/* Main Content */}
       <motion.div
