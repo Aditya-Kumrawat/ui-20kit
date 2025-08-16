@@ -83,7 +83,7 @@ export default function Dashboard() {
       revenue: 245000,
       growth: 15.2,
       color: "#8b5cf6",
-      position: { x: 150, y: 120 }
+      position: { x: 150, y: 120 },
     },
     {
       region: "Europe",
@@ -91,7 +91,7 @@ export default function Dashboard() {
       revenue: 189000,
       growth: 12.8,
       color: "#06b6d4",
-      position: { x: 420, y: 100 }
+      position: { x: 420, y: 100 },
     },
     {
       region: "Asia Pacific",
@@ -99,7 +99,7 @@ export default function Dashboard() {
       revenue: 298000,
       growth: 22.5,
       color: "#10b981",
-      position: { x: 650, y: 150 }
+      position: { x: 650, y: 150 },
     },
     {
       region: "South America",
@@ -107,7 +107,7 @@ export default function Dashboard() {
       revenue: 78000,
       growth: 8.3,
       color: "#f59e0b",
-      position: { x: 220, y: 250 }
+      position: { x: 220, y: 250 },
     },
     {
       region: "Africa",
@@ -115,8 +115,8 @@ export default function Dashboard() {
       revenue: 52000,
       growth: 18.7,
       color: "#ef4444",
-      position: { x: 480, y: 220 }
-    }
+      position: { x: 480, y: 220 },
+    },
   ];
 
   const [hoveredRegion, setHoveredRegion] = useState(null);
@@ -175,7 +175,8 @@ export default function Dashboard() {
               <div
                 className="flex flex-col relative mt-5 h-[365px] bg-cover bg-center bg-no-repeat border-none rounded-lg"
                 style={{
-                  backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F447cf80127094586a85dadd4107e395f%2Fa5359b0377cc4ba3acdc5b61c68211a2)",
+                  backgroundImage:
+                    "url(https://cdn.builder.io/api/v1/image/assets%2F447cf80127094586a85dadd4107e395f%2Fa5359b0377cc4ba3acdc5b61c68211a2)",
                 }}
               >
                 <div className="flex flex-col relative mt-5 h-[321px] pt-[120px]" />
@@ -187,7 +188,8 @@ export default function Dashboard() {
                       Business Analytics
                     </h2>
                     <p className="text-white/90 text-sm dashboard-text">
-                      Monitor your business performance with real-time insights and comprehensive data visualization.
+                      Monitor your business performance with real-time insights
+                      and comprehensive data visualization.
                     </p>
                   </div>
                 </div>
@@ -278,9 +280,7 @@ export default function Dashboard() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.4 }}
             >
-              <h3
-                className="text-xl font-bold text-gray-900 mb-6 dashboard-title"
-              >
+              <h3 className="text-xl font-bold text-gray-900 mb-6 dashboard-title">
                 Revenue & Orders Trend
               </h3>
               <motion.div
@@ -300,36 +300,68 @@ export default function Dashboard() {
                     }}
                   >
                     <defs>
-                      <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1}/>
+                      <linearGradient
+                        id="revenueGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="#8b5cf6"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#8b5cf6"
+                          stopOpacity={0.1}
+                        />
                       </linearGradient>
-                      <linearGradient id="ordersGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1}/>
+                      <linearGradient
+                        id="ordersGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="#06b6d4"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#06b6d4"
+                          stopOpacity={0.1}
+                        />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="#e5e7eb"
+                      opacity={0.5}
+                    />
                     <XAxis
                       dataKey="month"
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fontSize: 12, fill: '#6b7280' }}
+                      tick={{ fontSize: 12, fill: "#6b7280" }}
                     />
                     <YAxis
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fontSize: 12, fill: '#6b7280' }}
+                      tick={{ fontSize: 12, fill: "#6b7280" }}
                     />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '12px',
-                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-                        backdropFilter: 'blur(10px)',
+                        backgroundColor: "rgba(255, 255, 255, 0.95)",
+                        border: "none",
+                        borderRadius: "12px",
+                        boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
+                        backdropFilter: "blur(10px)",
                       }}
-                      labelStyle={{ color: '#374151', fontWeight: '600' }}
+                      labelStyle={{ color: "#374151", fontWeight: "600" }}
                     />
                     <Area
                       type="monotone"
@@ -337,12 +369,12 @@ export default function Dashboard() {
                       stroke="#8b5cf6"
                       strokeWidth={3}
                       fill="url(#revenueGradient)"
-                      dot={{ fill: '#8b5cf6', strokeWidth: 0, r: 4 }}
+                      dot={{ fill: "#8b5cf6", strokeWidth: 0, r: 4 }}
                       activeDot={{
                         r: 6,
-                        stroke: '#8b5cf6',
+                        stroke: "#8b5cf6",
                         strokeWidth: 2,
-                        fill: '#ffffff'
+                        fill: "#ffffff",
                       }}
                     />
                   </AreaChart>
@@ -385,13 +417,14 @@ export default function Dashboard() {
                     alt="World Map"
                     className="w-full h-full object-cover rounded-xl"
                     style={{
-                      filter: 'hue-rotate(200deg) saturate(1.2) contrast(1.1) brightness(1.05)',
+                      filter:
+                        "hue-rotate(200deg) saturate(1.2) contrast(1.1) brightness(1.05)",
                     }}
                     onError={(e) => {
                       // Fallback to OpenStreetMap static image
-                      e.target.src = 'https://tile.openstreetmap.org/0/0/0.png';
-                      e.target.style.transform = 'scale(4)';
-                      e.target.style.transformOrigin = 'center';
+                      e.target.src = "https://tile.openstreetmap.org/0/0/0.png";
+                      e.target.style.transform = "scale(4)";
+                      e.target.style.transformOrigin = "center";
                     }}
                   />
 
@@ -401,18 +434,23 @@ export default function Dashboard() {
                     alt="World Map Fallback"
                     className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-0"
                     style={{
-                      filter: 'hue-rotate(200deg) saturate(1.2) contrast(1.1) brightness(1.05)',
+                      filter:
+                        "hue-rotate(200deg) saturate(1.2) contrast(1.1) brightness(1.05)",
                     }}
                     onLoad={(e) => {
                       // Show this as backup if primary fails
                       const primaryImg = e.target.previousElementSibling;
-                      if (primaryImg && primaryImg.complete && primaryImg.naturalWidth === 0) {
-                        e.target.style.opacity = '1';
+                      if (
+                        primaryImg &&
+                        primaryImg.complete &&
+                        primaryImg.naturalWidth === 0
+                      ) {
+                        e.target.style.opacity = "1";
                       }
                     }}
                     onError={(e) => {
                       // Final fallback: Use a data URL with world map
-                      e.target.style.display = 'none';
+                      e.target.style.display = "none";
                       const container = e.target.parentElement;
                       container.innerHTML = `
                         <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center">
@@ -434,14 +472,18 @@ export default function Dashboard() {
                         radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
                         radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.1) 0%, transparent 50%)
                       `,
-                      mixBlendMode: 'overlay'
+                      mixBlendMode: "overlay",
                     }}
                   />
 
                   {/* Map title overlay */}
                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-md">
-                    <h4 className="text-sm font-semibold text-gray-800">Global Coverage</h4>
-                    <p className="text-xs text-gray-600">Real-time worldwide data</p>
+                    <h4 className="text-sm font-semibold text-gray-800">
+                      Global Coverage
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      Real-time worldwide data
+                    </p>
                   </div>
 
                   {/* Coordinates grid overlay for authenticity */}
@@ -452,7 +494,7 @@ export default function Dashboard() {
                         linear-gradient(to right, rgba(255,255,255,0.3) 1px, transparent 1px),
                         linear-gradient(to bottom, rgba(255,255,255,0.3) 1px, transparent 1px)
                       `,
-                      backgroundSize: '80px 40px'
+                      backgroundSize: "80px 40px",
                     }}
                   />
                 </div>
@@ -470,9 +512,17 @@ export default function Dashboard() {
                   className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200/50"
                   whileHover={{ scale: 1.02 }}
                 >
-                  <h4 className="text-lg font-bold text-purple-800 mb-2">Global Reach</h4>
-                  <p className="text-2xl font-bold text-purple-900">{mapData.reduce((sum, region) => sum + region.customers, 0).toLocaleString()}</p>
-                  <p className="text-sm text-purple-600">Total Customers Worldwide</p>
+                  <h4 className="text-lg font-bold text-purple-800 mb-2">
+                    Global Reach
+                  </h4>
+                  <p className="text-2xl font-bold text-purple-900">
+                    {mapData
+                      .reduce((sum, region) => sum + region.customers, 0)
+                      .toLocaleString()}
+                  </p>
+                  <p className="text-sm text-purple-600">
+                    Total Customers Worldwide
+                  </p>
                 </motion.div>
 
                 {/* Total Revenue */}
@@ -480,9 +530,20 @@ export default function Dashboard() {
                   className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200/50"
                   whileHover={{ scale: 1.02 }}
                 >
-                  <h4 className="text-lg font-bold text-blue-800 mb-2">Global Revenue</h4>
-                  <p className="text-2xl font-bold text-blue-900">${(mapData.reduce((sum, region) => sum + region.revenue, 0) / 1000).toFixed(0)}K</p>
-                  <p className="text-sm text-blue-600">Combined Revenue Stream</p>
+                  <h4 className="text-lg font-bold text-blue-800 mb-2">
+                    Global Revenue
+                  </h4>
+                  <p className="text-2xl font-bold text-blue-900">
+                    $
+                    {(
+                      mapData.reduce((sum, region) => sum + region.revenue, 0) /
+                      1000
+                    ).toFixed(0)}
+                    K
+                  </p>
+                  <p className="text-sm text-blue-600">
+                    Combined Revenue Stream
+                  </p>
                 </motion.div>
 
                 {/* Average Growth */}
@@ -490,9 +551,20 @@ export default function Dashboard() {
                   className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200/50"
                   whileHover={{ scale: 1.02 }}
                 >
-                  <h4 className="text-lg font-bold text-green-800 mb-2">Growth Rate</h4>
-                  <p className="text-2xl font-bold text-green-900">+{(mapData.reduce((sum, region) => sum + region.growth, 0) / mapData.length).toFixed(1)}%</p>
-                  <p className="text-sm text-green-600">Average Global Growth</p>
+                  <h4 className="text-lg font-bold text-green-800 mb-2">
+                    Growth Rate
+                  </h4>
+                  <p className="text-2xl font-bold text-green-900">
+                    +
+                    {(
+                      mapData.reduce((sum, region) => sum + region.growth, 0) /
+                      mapData.length
+                    ).toFixed(1)}
+                    %
+                  </p>
+                  <p className="text-sm text-green-600">
+                    Average Global Growth
+                  </p>
                 </motion.div>
               </motion.div>
 
@@ -517,11 +589,15 @@ export default function Dashboard() {
                         className="w-3 h-3 rounded-full shadow-sm"
                         style={{ backgroundColor: region.color }}
                       />
-                      <div className="text-xs font-medium text-gray-800">{region.region}</div>
+                      <div className="text-xs font-medium text-gray-800">
+                        {region.region}
+                      </div>
                     </div>
                     <div className="text-xs text-gray-600">
                       <div>{region.customers.toLocaleString()} customers</div>
-                      <div className="text-green-600 font-medium">+{region.growth}% growth</div>
+                      <div className="text-green-600 font-medium">
+                        +{region.growth}% growth
+                      </div>
                     </div>
                   </motion.div>
                 ))}

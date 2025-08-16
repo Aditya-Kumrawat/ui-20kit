@@ -69,7 +69,12 @@ export default function Analytics() {
   // Performance metrics data
   const performanceData = [
     { metric: "Conversion Rate", value: 85, target: 90, color: "#8b5cf6" },
-    { metric: "Customer Satisfaction", value: 92, target: 95, color: "#10b981" },
+    {
+      metric: "Customer Satisfaction",
+      value: 92,
+      target: 95,
+      color: "#10b981",
+    },
     { metric: "Page Load Speed", value: 78, target: 85, color: "#06b6d4" },
     { metric: "Mobile Optimization", value: 96, target: 98, color: "#f59e0b" },
   ];
@@ -138,7 +143,10 @@ export default function Analytics() {
                   </button>
                 ))}
               </div>
-              <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white">
+              <Button
+                size="sm"
+                className="bg-purple-500 hover:bg-purple-600 text-white"
+              >
                 <Download size={16} className="mr-2" />
                 Export
               </Button>
@@ -154,10 +162,34 @@ export default function Analytics() {
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           {[
-            { title: "Total Revenue", value: "$487,239", change: "+12.5%", trending: "up", color: "purple" },
-            { title: "Active Users", value: "24,568", change: "+8.2%", trending: "up", color: "blue" },
-            { title: "Conversion Rate", value: "3.24%", change: "-0.3%", trending: "down", color: "green" },
-            { title: "Avg. Order Value", value: "$89.50", change: "+5.1%", trending: "up", color: "orange" },
+            {
+              title: "Total Revenue",
+              value: "$487,239",
+              change: "+12.5%",
+              trending: "up",
+              color: "purple",
+            },
+            {
+              title: "Active Users",
+              value: "24,568",
+              change: "+8.2%",
+              trending: "up",
+              color: "blue",
+            },
+            {
+              title: "Conversion Rate",
+              value: "3.24%",
+              change: "-0.3%",
+              trending: "down",
+              color: "green",
+            },
+            {
+              title: "Avg. Order Value",
+              value: "$89.50",
+              change: "+5.1%",
+              trending: "up",
+              color: "orange",
+            },
           ].map((metric, index) => (
             <motion.div
               key={metric.title}
@@ -166,20 +198,32 @@ export default function Analytics() {
               transition={{ duration: 0.2 }}
             >
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-br from-${metric.color}-50 to-${metric.color}-100`}>
+                <div
+                  className={`p-3 rounded-xl bg-gradient-to-br from-${metric.color}-50 to-${metric.color}-100`}
+                >
                   {metric.trending === "up" ? (
-                    <TrendingUp className={`w-6 h-6 text-${metric.color}-600`} />
+                    <TrendingUp
+                      className={`w-6 h-6 text-${metric.color}-600`}
+                    />
                   ) : (
-                    <TrendingDown className={`w-6 h-6 text-${metric.color}-600`} />
+                    <TrendingDown
+                      className={`w-6 h-6 text-${metric.color}-600`}
+                    />
                   )}
                 </div>
-                <span className={`text-sm font-medium px-2 py-1 rounded-full ${
-                  metric.trending === "up" ? "text-green-600 bg-green-50" : "text-red-600 bg-red-50"
-                }`}>
+                <span
+                  className={`text-sm font-medium px-2 py-1 rounded-full ${
+                    metric.trending === "up"
+                      ? "text-green-600 bg-green-50"
+                      : "text-red-600 bg-red-50"
+                  }`}
+                >
                   {metric.change}
                 </span>
               </div>
-              <h3 className="text-sm font-medium text-gray-600 mb-1">{metric.title}</h3>
+              <h3 className="text-sm font-medium text-gray-600 mb-1">
+                {metric.title}
+              </h3>
               <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
             </motion.div>
           ))}
@@ -195,7 +239,9 @@ export default function Analytics() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-900">Monthly Revenue</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                Monthly Revenue
+              </h3>
               <BarChart3 className="w-6 h-6 text-purple-600" />
             </div>
             <div className="h-80">
@@ -203,22 +249,37 @@ export default function Analytics() {
                 <BarChart data={monthlyRevenueData}>
                   <defs>
                     <linearGradient id="revenueBar" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.9}/>
-                      <stop offset="95%" stopColor="#c4b5fd" stopOpacity={0.7}/>
+                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.9} />
+                      <stop
+                        offset="95%"
+                        stopColor="#c4b5fd"
+                        stopOpacity={0.7}
+                      />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
-                  <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#6b7280' }} />
-                  <YAxis tick={{ fontSize: 12, fill: '#6b7280' }} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#e5e7eb"
+                    opacity={0.5}
+                  />
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fontSize: 12, fill: "#6b7280" }}
+                  />
+                  <YAxis tick={{ fontSize: 12, fill: "#6b7280" }} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                      border: 'none',
-                      borderRadius: '12px',
-                      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                      backgroundColor: "rgba(255, 255, 255, 0.95)",
+                      border: "none",
+                      borderRadius: "12px",
+                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
                     }}
                   />
-                  <Bar dataKey="revenue" fill="url(#revenueBar)" radius={[4, 4, 0, 0]} />
+                  <Bar
+                    dataKey="revenue"
+                    fill="url(#revenueBar)"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -232,7 +293,9 @@ export default function Analytics() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-900">Category Performance</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                Category Performance
+              </h3>
               <Activity className="w-6 h-6 text-blue-600" />
             </div>
             <div className="space-y-4">
@@ -245,17 +308,22 @@ export default function Analytics() {
                   transition={{ delay: 0.4 + index * 0.1 }}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">{category.category}</span>
+                    <span className="text-sm font-medium text-gray-700">
+                      {category.category}
+                    </span>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-gray-900">
                         ${(category.sales / 1000).toFixed(0)}K
                       </span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        category.growth > 0 
-                          ? "text-green-600 bg-green-50" 
-                          : "text-red-600 bg-red-50"
-                      }`}>
-                        {category.growth > 0 ? "+" : ""}{category.growth}%
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full ${
+                          category.growth > 0
+                            ? "text-green-600 bg-green-50"
+                            : "text-red-600 bg-red-50"
+                        }`}
+                      >
+                        {category.growth > 0 ? "+" : ""}
+                        {category.growth}%
                       </span>
                     </div>
                   </div>
@@ -263,7 +331,7 @@ export default function Analytics() {
                     <motion.div
                       className="h-full rounded-full"
                       style={{
-                        background: `linear-gradient(90deg, ${category.color}99, ${category.color})`
+                        background: `linear-gradient(90deg, ${category.color}99, ${category.color})`,
                       }}
                       initial={{ width: 0 }}
                       animate={{ width: `${(category.sales / 67000) * 100}%` }}
@@ -286,7 +354,9 @@ export default function Analytics() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-900">Traffic Sources</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                Traffic Sources
+              </h3>
               <PieChartIcon className="w-6 h-6 text-green-600" />
             </div>
             <div className="h-80">
@@ -306,10 +376,10 @@ export default function Analytics() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                      border: 'none',
-                      borderRadius: '12px',
-                      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                      backgroundColor: "rgba(255, 255, 255, 0.95)",
+                      border: "none",
+                      borderRadius: "12px",
+                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
                     }}
                   />
                 </PieChart>
@@ -323,7 +393,9 @@ export default function Analytics() {
                     style={{ backgroundColor: source.color }}
                   />
                   <span className="text-xs text-gray-600">{source.name}</span>
-                  <span className="text-xs font-medium text-gray-900">{source.value}%</span>
+                  <span className="text-xs font-medium text-gray-900">
+                    {source.value}%
+                  </span>
                 </div>
               ))}
             </div>
@@ -337,19 +409,25 @@ export default function Analytics() {
             transition={{ duration: 0.6, delay: 0.5 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-900">Performance Metrics</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                Performance Metrics
+              </h3>
               <TrendingUp className="w-6 h-6 text-orange-600" />
             </div>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <RadialBarChart data={performanceData} innerRadius="10%" outerRadius="80%">
+                <RadialBarChart
+                  data={performanceData}
+                  innerRadius="10%"
+                  outerRadius="80%"
+                >
                   <RadialBar dataKey="value" cornerRadius={10} fill="#8b5cf6" />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                      border: 'none',
-                      borderRadius: '12px',
-                      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                      backgroundColor: "rgba(255, 255, 255, 0.95)",
+                      border: "none",
+                      borderRadius: "12px",
+                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
                     }}
                   />
                 </RadialBarChart>
@@ -357,11 +435,18 @@ export default function Analytics() {
             </div>
             <div className="space-y-3">
               {performanceData.map((metric, index) => (
-                <div key={metric.metric} className="flex items-center justify-between">
+                <div
+                  key={metric.metric}
+                  className="flex items-center justify-between"
+                >
                   <span className="text-sm text-gray-600">{metric.metric}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-gray-900">{metric.value}%</span>
-                    <span className="text-xs text-gray-500">/ {metric.target}%</span>
+                    <span className="text-sm font-bold text-gray-900">
+                      {metric.value}%
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      / {metric.target}%
+                    </span>
                   </div>
                 </div>
               ))}
@@ -377,31 +462,52 @@ export default function Analytics() {
           transition={{ duration: 0.6, delay: 0.6 }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-gray-900">24-Hour Activity</h3>
+            <h3 className="text-xl font-bold text-gray-900">
+              24-Hour Activity
+            </h3>
             <Activity className="w-6 h-6 text-purple-600" />
           </div>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={hourlyData}>
                 <defs>
-                  <linearGradient id="usersGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1}/>
+                  <linearGradient
+                    id="usersGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1} />
                   </linearGradient>
-                  <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1}/>
+                  <linearGradient
+                    id="revenueGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
-                <XAxis dataKey="hour" tick={{ fontSize: 12, fill: '#6b7280' }} />
-                <YAxis tick={{ fontSize: 12, fill: '#6b7280' }} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#e5e7eb"
+                  opacity={0.5}
+                />
+                <XAxis
+                  dataKey="hour"
+                  tick={{ fontSize: 12, fill: "#6b7280" }}
+                />
+                <YAxis tick={{ fontSize: 12, fill: "#6b7280" }} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    border: 'none',
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                    backgroundColor: "rgba(255, 255, 255, 0.95)",
+                    border: "none",
+                    borderRadius: "12px",
+                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
                   }}
                 />
                 <Area
@@ -416,7 +522,7 @@ export default function Analytics() {
                   dataKey="revenue"
                   stroke="#06b6d4"
                   strokeWidth={3}
-                  dot={{ fill: '#06b6d4', strokeWidth: 0, r: 4 }}
+                  dot={{ fill: "#06b6d4", strokeWidth: 0, r: 4 }}
                 />
               </AreaChart>
             </ResponsiveContainer>

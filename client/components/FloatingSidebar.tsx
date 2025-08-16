@@ -98,7 +98,7 @@ export const FloatingSidebar = ({
 
   // Update active index when location changes
   useEffect(() => {
-    const currentIndex = menuItems.findIndex(item => isActive(item.href));
+    const currentIndex = menuItems.findIndex((item) => isActive(item.href));
     setActiveIndex(currentIndex !== -1 ? currentIndex : -1);
   }, [location.pathname]);
 
@@ -155,12 +155,12 @@ export const FloatingSidebar = ({
             initial={false}
             animate={{
               y: activeIndex >= 0 ? activeIndex * 52 : 0, // 48px height + 4px gap
-              opacity: activeIndex >= 0 ? 1 : 0
+              opacity: activeIndex >= 0 ? 1 : 0,
             }}
             transition={{
               type: "spring",
               stiffness: 300,
-              damping: 30
+              damping: 30,
             }}
           />
           {menuItems.map((item, index) => (
