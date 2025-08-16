@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
+import { FloatingTopBar } from "@/components/FloatingTopBar";
 import {
   Camera,
   Upload,
@@ -99,6 +100,7 @@ export default function ComputerVision() {
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />
+      <FloatingTopBar />
 
       {/* Main Content */}
       <motion.div
