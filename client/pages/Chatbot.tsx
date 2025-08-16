@@ -64,12 +64,7 @@ interface QuickAction {
   prompt: string;
 }
 
-interface SidebarProps {
-  isCollapsed: boolean;
-  setIsCollapsed: (collapsed: boolean) => void;
-}
-
-const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
+export default function Chatbot() {
   const [activeItem, setActiveItem] = useState("chatbot");
   const navigate = useNavigate();
 
@@ -982,7 +977,7 @@ export default function Chatbot() {
         if (audioEl && !audioEl.paused) {
           if (audioEl.volume !== Math.min(audioVolume, 1.0)) {
             audioEl.volume = Math.min(audioVolume, 1.0);
-            addDebugLog(`🔧 Volume corrected back to ${Math.round(audioEl.volume * 100)}%`);
+            addDebugLog(`��� Volume corrected back to ${Math.round(audioEl.volume * 100)}%`);
           }
         } else {
           clearInterval(volumeMonitor);
