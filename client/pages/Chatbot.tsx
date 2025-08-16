@@ -946,7 +946,7 @@ export default function Chatbot() {
         <div className="flex-1 flex overflow-hidden p-4">
           {/* Floating Glass Chat Container */}
           <motion.div
-            className="mr-80 bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden"
+            className={`${isCollapsed ? "mr-76" : "mr-80"} bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transition-all duration-300`}
             style={{ height: "calc(100vh - 2rem)" }}
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
