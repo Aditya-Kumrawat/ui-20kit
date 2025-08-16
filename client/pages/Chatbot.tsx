@@ -148,7 +148,7 @@ export default function Chatbot() {
   const [vapiInstance, setVapiInstance] = useState<any>(null);
   const [vapiInitialized, setVapiInitialized] = useState(false);
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [messages, setMessages] = useState<Message[]>([]);
 
   const [inputValue, setInputValue] = useState("");

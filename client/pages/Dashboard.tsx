@@ -23,7 +23,7 @@ import {
 } from "recharts";
 
 export default function Dashboard() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const dashboardStats = [
     {

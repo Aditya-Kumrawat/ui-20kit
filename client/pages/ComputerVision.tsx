@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 export default function ComputerVision() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [selectedModel, setSelectedModel] = useState("image-classification");
   const [isProcessing, setIsProcessing] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);

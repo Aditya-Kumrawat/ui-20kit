@@ -33,7 +33,7 @@ import {
 } from "lucide-react";
 
 export default function Analytics() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
 
   // Bar chart data with gradients
