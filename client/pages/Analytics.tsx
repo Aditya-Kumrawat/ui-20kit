@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
+import { FloatingTopBar } from "@/components/FloatingTopBar";
 import {
   BarChart,
   Bar,
@@ -105,6 +106,7 @@ export default function Analytics() {
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />
+      <FloatingTopBar />
 
       {/* Main Content */}
       <motion.div
