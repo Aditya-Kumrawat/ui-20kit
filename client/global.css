@@ -127,6 +127,29 @@
   h6 {
     font-family: "Synera", "Proxima Nova", "Space Grotesk", sans-serif;
   }
+
+  /* Dashboard specific font overrides */
+  .dashboard-page {
+    font-family: "Poppins", sans-serif;
+  }
+
+  .dashboard-page h1,
+  .dashboard-page h2,
+  .dashboard-page h3,
+  .dashboard-page h4,
+  .dashboard-page h5,
+  .dashboard-page h6 {
+    font-family: "Montserrat", sans-serif;
+  }
+
+  /* Dashboard component specific styles */
+  .dashboard-title {
+    font-family: "Montserrat", sans-serif;
+  }
+
+  .dashboard-text {
+    font-family: "Poppins", sans-serif;
+  }
 }
 
 @layer components {
