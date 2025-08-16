@@ -69,10 +69,10 @@ export default function Dashboard() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>
+              <h1 className="text-3xl font-bold text-gray-900 dashboard-title">
                 Dashboard Overview
               </h1>
-              <p className="text-gray-600 mt-1" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <p className="text-gray-600 mt-1 dashboard-text">
                 Welcome back! Here's what's happening with your business today.
               </p>
             </div>
