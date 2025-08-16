@@ -347,11 +347,13 @@ export default function Dashboard() {
                       axisLine={false}
                       tickLine={false}
                       tick={{ fontSize: 12, fill: "#6b7280" }}
+                      type="category"
                     />
                     <YAxis
                       axisLine={false}
                       tickLine={false}
                       tick={{ fontSize: 12, fill: "#6b7280" }}
+                      type="number"
                     />
                     <Tooltip
                       contentStyle={{
