@@ -280,26 +280,20 @@ export default function Dashboard() {
                       }}
                       labelStyle={{ color: '#374151', fontWeight: '600' }}
                     />
-                    <motion.g
-                      initial={{ pathLength: 0 }}
-                      animate={{ pathLength: 1 }}
-                      transition={{ duration: 2, delay: 0.8 }}
-                    >
-                      <Area
-                        type="monotone"
-                        dataKey="revenue"
-                        stroke="#8b5cf6"
-                        strokeWidth={3}
-                        fill="url(#revenueGradient)"
-                        dot={{ fill: '#8b5cf6', strokeWidth: 0, r: 4 }}
-                        activeDot={{
-                          r: 6,
-                          stroke: '#8b5cf6',
-                          strokeWidth: 2,
-                          fill: '#ffffff'
-                        }}
-                      />
-                    </motion.g>
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="#8b5cf6"
+                      strokeWidth={3}
+                      fill="url(#revenueGradient)"
+                      dot={{ fill: '#8b5cf6', strokeWidth: 0, r: 4 }}
+                      activeDot={{
+                        r: 6,
+                        stroke: '#8b5cf6',
+                        strokeWidth: 2,
+                        fill: '#ffffff'
+                      }}
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
