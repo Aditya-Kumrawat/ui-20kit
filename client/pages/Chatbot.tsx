@@ -448,7 +448,7 @@ export default function Chatbot() {
           const startAudio = () => {
             if (context.state === "suspended") {
               context.resume();
-              addDebugLog("�� Audio context resumed");
+              addDebugLog("🔊 Audio context resumed");
             }
           };
 
@@ -954,7 +954,7 @@ export default function Chatbot() {
               opacity: 1,
               y: 0,
               scale: 1,
-              marginRight: isCollapsed ? 304 : 320
+              marginRight: isCollapsed ? 296 : 304
             }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
