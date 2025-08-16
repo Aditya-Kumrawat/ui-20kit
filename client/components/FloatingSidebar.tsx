@@ -82,6 +82,12 @@ export const FloatingSidebar = ({
       icon: Brain,
       href: "/dashboard/chatbot",
     },
+    {
+      id: "computer-vision",
+      label: "Computer Vision",
+      icon: Camera,
+      href: "/dashboard/computer-vision",
+    },
   ];
 
   const isActive = (href: string) => {
