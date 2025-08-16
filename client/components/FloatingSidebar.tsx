@@ -111,9 +111,15 @@ export const FloatingSidebar = ({
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       {/* Glass effect floating sidebar */}
-      <div className="h-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+      <div className={`h-full backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden transition-all duration-300 ${
+        isCollapsed
+          ? "bg-gray-900/95 border border-gray-700/50"
+          : "bg-white/80 border border-white/20"
+      }`}>
         {/* Logo Section */}
-        <motion.div className="p-4 border-b border-gray-200/50" initial={false}>
+        <motion.div className={`p-4 border-b transition-colors duration-300 ${
+          isCollapsed ? "border-gray-700/50" : "border-gray-200/50"
+        }`} initial={false}>
           <div className="flex items-center gap-3">
             <motion.div
               className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center font-bold text-sm shadow-lg text-white"
@@ -124,7 +130,9 @@ export const FloatingSidebar = ({
             <AnimatePresence>
               {!isCollapsed && (
                 <motion.span
-                  className="text-lg font-bold text-gray-800 dashboard-title"
+                  className={`text-lg font-bold dashboard-title transition-colors duration-300 ${
+                    isCollapsed ? "text-white" : "text-gray-800"
+                  }`}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
