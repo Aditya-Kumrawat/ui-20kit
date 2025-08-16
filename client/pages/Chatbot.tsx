@@ -1136,7 +1136,7 @@ export default function Chatbot() {
                         <Brain size={16} />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-white/20">
+                    <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/40 shadow-gray-200/30">
                       <div className="flex items-center gap-1">
                         {[0, 1, 2].map((i) => (
                           <motion.div
