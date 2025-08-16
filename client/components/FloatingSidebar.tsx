@@ -184,8 +184,10 @@ export const FloatingSidebar = ({
               key={item.id}
               className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group relative z-10 ${
                 isActive(item.href)
-                  ? "text-purple-600"
-                  : "hover:bg-gray-100/30 text-gray-600 hover:text-gray-800"
+                  ? isCollapsed ? "text-purple-400" : "text-purple-600"
+                  : isCollapsed
+                    ? "hover:bg-gray-800/50 text-gray-300 hover:text-white"
+                    : "hover:bg-gray-100/30 text-gray-600 hover:text-gray-800"
               }`}
               onClick={() => navigate(item.href)}
               initial={{ opacity: 0, x: -20 }}
