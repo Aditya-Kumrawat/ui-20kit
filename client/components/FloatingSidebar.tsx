@@ -200,8 +200,10 @@ export const FloatingSidebar = ({
                 size={18}
                 className={`${
                   isActive(item.href)
-                    ? "text-purple-500"
-                    : "text-gray-500 group-hover:text-gray-700"
+                    ? isCollapsed ? "text-purple-400" : "text-purple-500"
+                    : isCollapsed
+                      ? "text-gray-400 group-hover:text-gray-200"
+                      : "text-gray-500 group-hover:text-gray-700"
                 }`}
               />
               <AnimatePresence>
