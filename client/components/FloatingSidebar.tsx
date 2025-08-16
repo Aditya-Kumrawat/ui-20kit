@@ -176,7 +176,7 @@ export const FloatingSidebar = ({
             initial={false}
             animate={{
               y: activeIndex >= 0 ? activeIndex * 52 : 0, // 48px height + 4px gap
-              opacity: activeIndex >= 0 ? 1 : 0,
+              opacity: activeIndex >= 0 && !isCollapsed ? 1 : 0,
             }}
             transition={{
               type: "spring",
