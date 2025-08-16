@@ -175,7 +175,7 @@ export const FloatingSidebar = ({
             }`}
             initial={false}
             animate={{
-              y: activeIndex >= 0 ? activeIndex * 50 : 0, // Adjusted for better visual alignment
+              y: activeIndex >= 0 ? activeIndex * 48 : 0, // Moved up slightly for better alignment
               opacity: activeIndex >= 0 ? 1 : 0,
             }}
             transition={{
