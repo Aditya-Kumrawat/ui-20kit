@@ -226,7 +226,7 @@ export default function Chatbot() {
         "⚠️ No public key found. Using fallback key, but this may cause authentication issues.",
       );
       console.warn(
-        "📝 For best results, set VITE_VAPI_PUBLIC_KEY with a public key (pk_...)",
+        "��� For best results, set VITE_VAPI_PUBLIC_KEY with a public key (pk_...)",
       );
     }
 
@@ -1006,11 +1006,23 @@ export default function Chatbot() {
         </motion.header>
 
         {/* Main Chat Container */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Chat Messages Area */}
-          <div className="flex-1 flex flex-col mr-80">
-            {/* Messages Container */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 flex overflow-hidden p-6">
+          {/* Floating Glass Chat Container */}
+          <motion.div
+            className="flex-1 mr-80 bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden"
+            initial={{ opacity: 0, y: 20, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            {/* Chat Messages Area */}
+            <div className="flex-1 flex flex-col h-full">
+              {/* Messages Container with Gradient Background */}
+              <div
+                className="flex-1 overflow-y-auto p-8 space-y-6"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.6) 50%, rgba(248, 250, 252, 0.9) 100%)'
+                }}
+              >
               <AnimatePresence initial={false}>
                 {messages.map((message, index) => (
                   <motion.div
@@ -1150,8 +1162,8 @@ export default function Chatbot() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input Area */}
-            <div className="border-t border-white/20 bg-white/80 backdrop-blur-lg p-6">
+              {/* Input Area with Enhanced Glass Effect */}
+              <div className="border-t border-white/30 bg-gradient-to-r from-white/70 via-gray-50/60 to-white/80 backdrop-blur-lg p-6 shadow-inner">
               {/* Quick Actions */}
               <div className="mb-4">
                 <div className="flex flex-wrap gap-2">
@@ -1311,8 +1323,9 @@ export default function Chatbot() {
                   </div>
                 </motion.div>
               )}
+              </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Hidden video element for Vapi */}
