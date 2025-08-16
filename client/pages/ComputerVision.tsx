@@ -24,6 +24,20 @@ export default function ComputerVision() {
   const [confidence, setConfidence] = useState(0);
   const fileInputRef = useRef(null);
 
+  // Sample predictions for recommendations
+  const samplePredictions = {
+    "image-classification": [
+      { label: "Golden Retriever", confidence: 0.94, description: "High confidence detection of a Golden Retriever breed" },
+      { label: "Dog", confidence: 0.92, description: "General canine classification" },
+      { label: "Domestic Animal", confidence: 0.88, description: "Categorized as household pet" },
+    ],
+    "object-detection": [
+      { label: "Person", confidence: 0.96, description: "Human figure detected in image", bbox: [120, 80, 200, 300] },
+      { label: "Car", confidence: 0.89, description: "Vehicle identified in background", bbox: [300, 150, 500, 280] },
+      { label: "Building", confidence: 0.75, description: "Architectural structure visible", bbox: [50, 20, 400, 250] },
+    ],
+  };
+
   // ML Models configuration
   const mlModels = [
     {
@@ -72,13 +86,21 @@ export default function ComputerVision() {
   const processImage = useCallback(() => {
     setIsProcessing(true);
     setConfidence(0);
+    setResults(null);
 
-    // Simulate ML processing
-    setTimeout(() => {
-      setIsProcessing(false);
-      alert('Image processing complete!');
-    }, 2000);
-  }, []);
+    // Simulate ML processing with progress
+    const interval = setInterval(() => {
+      setConfidence(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setIsProcessing(false);
+          setResults(samplePredictions[selectedModel] || []);
+          return 100;
+        }
+        return prev + 2;
+      });
+    }, 50);
+  }, [selectedModel]);
 
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -289,6 +311,84 @@ export default function ComputerVision() {
                 </div>
               </div>
             </div>
+
+            {/* Results Area */}
+            {(uploadedImage || isProcessing || results) && (
+              <motion.div
+                className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Camera className="w-6 h-6 text-green-600" />
+                  <h3 className="text-xl font-bold text-gray-900">Analysis Results</h3>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Image Preview */}
+                  {uploadedImage && (
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-gray-700">Input Image</h4>
+                      <div className="relative rounded-lg overflow-hidden">
+                        <img
+                          src={uploadedImage}
+                          alt="Uploaded"
+                          className="w-full h-48 object-cover"
+                        />
+                        {isProcessing && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <div className="text-center text-white">
+                              <Activity className="w-8 h-8 mx-auto mb-2 animate-spin" />
+                              <p>Processing...</p>
+                              <div className="w-32 mx-auto mt-2 bg-white/20 rounded-full h-2">
+                                <div
+                                  className="bg-white h-2 rounded-full transition-all duration-300"
+                                  style={{ width: `${confidence}%` }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Recommendations */}
+                  {results && (
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-gray-700">Recommendations & Predictions</h4>
+                      <div className="space-y-3">
+                        {results.map((result, index) => (
+                          <motion.div
+                            key={index}
+                            className="p-4 bg-white/60 rounded-lg border border-white/30"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="font-medium text-gray-800">{result.label}</span>
+                              <span className="text-sm font-bold text-purple-600">
+                                {(result.confidence * 100).toFixed(1)}%
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-3">{result.description}</p>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div
+                                className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500"
+                                style={{ width: `${result.confidence * 100}%` }}
+                              />
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
 
           </motion.div>
         </div>
