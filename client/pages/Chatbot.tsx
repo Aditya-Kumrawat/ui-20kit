@@ -1388,22 +1388,22 @@ export default function Chatbot() {
 
           {/* Interactive Controls */}
           <div className="p-4 space-y-4">
-            {/* Voice Visualizer */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-gray-200 shadow-md">
+            {/* Voice Visualizer - Fixed Size */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-gray-200 shadow-md h-32">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm font-bold text-gray-800">Voice Activity</span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 h-8">
                   {[...Array(5)].map((_, i) => (
                     <motion.div
                       key={i}
                       className="w-1.5 bg-gradient-to-t from-blue-500 to-purple-500 rounded-full"
                       animate={{
-                        height: vapiStatus === "call-active" ?
+                        height: hasAudioOutput ?
                           [6, Math.random() * 20 + 12, 6] : 6
                       }}
                       transition={{
                         duration: 0.5 + Math.random() * 0.5,
-                        repeat: vapiStatus === "call-active" ? Infinity : 0,
+                        repeat: hasAudioOutput ? Infinity : 0,
                         delay: i * 0.1
                       }}
                     />
@@ -1411,15 +1411,15 @@ export default function Chatbot() {
                 </div>
               </div>
 
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 gap-4 text-xs">
-                <div className="text-center bg-white rounded-lg p-2 border border-gray-200">
+              {/* Quick Stats - Fixed Layout */}
+              <div className="grid grid-cols-2 gap-4 text-xs h-16">
+                <div className="text-center bg-white rounded-lg p-2 border border-gray-200 flex flex-col justify-center">
                   <div className="text-gray-600 font-medium">Duration</div>
                   <div className="text-gray-900 font-bold text-sm">
-                    {vapiStatus === "call-active" ? "0:32" : "0:00"}
+                    {formatDuration(callDuration)}
                   </div>
                 </div>
-                <div className="text-center bg-white rounded-lg p-2 border border-gray-200">
+                <div className="text-center bg-white rounded-lg p-2 border border-gray-200 flex flex-col justify-center">
                   <div className="text-gray-600 font-medium">Quality</div>
                   <div className="text-green-600 font-bold text-sm">HD</div>
                 </div>
