@@ -1604,7 +1604,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-['Poppins',sans-serif]">
+    <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
       {/* Main Content */}
