@@ -1275,25 +1275,25 @@ export default function Chatbot() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="h-full bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 overflow-hidden">
+        <div className="h-full bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
           {/* Header */}
-          <div className="p-4 border-b border-white/20">
+          <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50 rounded-t-2xl">
             <div className="flex items-center gap-3">
               <motion.div
-                className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center"
+                className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
                 animate={{
                   scale: vapiStatus === "call-active" ? [1, 1.1, 1] : 1,
                   boxShadow: vapiStatus === "call-active" ?
-                    ["0 0 0 0 rgba(168, 85, 247, 0.7)", "0 0 0 10px rgba(168, 85, 247, 0)", "0 0 0 0 rgba(168, 85, 247, 0)"] :
-                    "0 0 0 0 rgba(168, 85, 247, 0)"
+                    ["0 0 0 0 rgba(59, 130, 246, 0.7)", "0 0 0 10px rgba(59, 130, 246, 0)", "0 0 0 0 rgba(59, 130, 246, 0)"] :
+                    "0 4px 14px 0 rgba(0, 0, 0, 0.1)"
                 }}
                 transition={{ duration: 1.5, repeat: vapiStatus === "call-active" ? Infinity : 0 }}
               >
-                <Bot size={16} className="text-white" />
+                <Bot size={18} className="text-white" />
               </motion.div>
               <div>
-                <h3 className="text-sm font-semibold text-white">Voice Assistant</h3>
-                <p className="text-xs text-white/70">
+                <h3 className="text-sm font-bold text-gray-800">Voice Assistant</h3>
+                <p className="text-xs text-gray-600">
                   {vapiStatus === "call-active" ? "Listening..." : "Ready to talk"}
                 </p>
               </div>
@@ -1303,7 +1303,7 @@ export default function Chatbot() {
           {/* Video Section */}
           <div className="p-4">
             <motion.div
-              className="relative rounded-xl overflow-hidden bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-sm border border-white/20"
+              className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 border-2 border-gray-200 shadow-lg"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
@@ -1321,21 +1321,21 @@ export default function Chatbot() {
               </video>
 
               {/* Overlay for interaction */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl" />
 
               {/* Voice status indicator */}
               <motion.div
-                className="absolute top-3 right-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm rounded-full px-3 py-1"
+                className="absolute top-3 right-3 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-md border border-gray-200"
                 animate={{
-                  opacity: vapiStatus === "call-active" ? [0.7, 1, 0.7] : 0.7
+                  opacity: vapiStatus === "call-active" ? [0.9, 1, 0.9] : 0.9
                 }}
                 transition={{ duration: 1.5, repeat: vapiStatus === "call-active" ? Infinity : 0 }}
               >
-                <div className={`w-2 h-2 rounded-full ${
-                  vapiStatus === "call-active" ? "bg-green-400" :
-                  vapiStatus === "error" ? "bg-red-400" : "bg-yellow-400"
+                <div className={`w-2.5 h-2.5 rounded-full ${
+                  vapiStatus === "call-active" ? "bg-green-500" :
+                  vapiStatus === "error" ? "bg-red-500" : "bg-blue-500"
                 }`} />
-                <span className="text-xs text-white font-medium">
+                <span className="text-xs text-gray-800 font-semibold">
                   {vapiStatus === "call-active" ? "Live" :
                    vapiStatus === "error" ? "Error" : "Ready"}
                 </span>
@@ -1346,17 +1346,17 @@ export default function Chatbot() {
           {/* Interactive Controls */}
           <div className="p-4 space-y-4">
             {/* Voice Visualizer */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium text-white">Voice Activity</span>
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-gray-200 shadow-md">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm font-bold text-gray-800">Voice Activity</span>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <motion.div
                       key={i}
-                      className="w-1 bg-gradient-to-t from-purple-400 to-pink-400 rounded-full"
+                      className="w-1.5 bg-gradient-to-t from-blue-500 to-purple-500 rounded-full"
                       animate={{
                         height: vapiStatus === "call-active" ?
-                          [4, Math.random() * 20 + 10, 4] : 4
+                          [6, Math.random() * 20 + 12, 6] : 6
                       }}
                       transition={{
                         duration: 0.5 + Math.random() * 0.5,
@@ -1369,55 +1369,55 @@ export default function Chatbot() {
               </div>
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="text-center">
-                  <div className="text-white/70">Duration</div>
-                  <div className="text-white font-medium">
+              <div className="grid grid-cols-2 gap-4 text-xs">
+                <div className="text-center bg-white rounded-lg p-2 border border-gray-200">
+                  <div className="text-gray-600 font-medium">Duration</div>
+                  <div className="text-gray-900 font-bold text-sm">
                     {vapiStatus === "call-active" ? "0:32" : "0:00"}
                   </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-white/70">Quality</div>
-                  <div className="text-green-400 font-medium">HD</div>
+                <div className="text-center bg-white rounded-lg p-2 border border-gray-200">
+                  <div className="text-gray-600 font-medium">Quality</div>
+                  <div className="text-green-600 font-bold text-sm">HD</div>
                 </div>
               </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <motion.button
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg py-3 px-4 font-medium flex items-center justify-center gap-2 hover:from-purple-600 hover:to-pink-600 transition-all"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl py-3 px-4 font-bold flex items-center justify-center gap-2 hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg border-2 border-transparent hover:border-blue-300"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={toggleRecording}
               >
                 {isRecording ? (
                   <>
-                    <MicOff size={16} />
+                    <MicOff size={18} />
                     Stop Voice Chat
                   </>
                 ) : (
                   <>
-                    <Mic size={16} />
+                    <Mic size={18} />
                     Start Voice Chat
                   </>
                 )}
               </motion.button>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3">
                 <motion.button
-                  className="bg-white/10 backdrop-blur-sm text-white rounded-lg py-2 px-3 text-sm hover:bg-white/20 transition-all border border-white/20"
+                  className="bg-white text-gray-700 rounded-xl py-3 px-3 text-sm hover:bg-gray-50 transition-all border-2 border-gray-200 hover:border-blue-300 shadow-md flex items-center justify-center"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Settings size={14} className="mx-auto" />
+                  <Settings size={16} />
                 </motion.button>
                 <motion.button
-                  className="bg-white/10 backdrop-blur-sm text-white rounded-lg py-2 px-3 text-sm hover:bg-white/20 transition-all border border-white/20"
+                  className="bg-white text-gray-700 rounded-xl py-3 px-3 text-sm hover:bg-gray-50 transition-all border-2 border-gray-200 hover:border-purple-300 shadow-md flex items-center justify-center"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Activity size={14} className="mx-auto" />
+                  <Activity size={16} />
                 </motion.button>
               </div>
             </div>
@@ -1425,10 +1425,10 @@ export default function Chatbot() {
 
           {/* Debug Info (if in test mode) */}
           {testMode && (
-            <div className="p-4 border-t border-white/20">
-              <div className="bg-black/20 backdrop-blur-sm rounded-lg p-3">
-                <div className="text-xs text-white/70 mb-2">Debug Mode</div>
-                <div className="text-xs text-white font-mono">
+            <div className="p-4 border-t border-gray-200">
+              <div className="bg-gray-100 rounded-xl p-3 border-2 border-gray-200">
+                <div className="text-xs text-gray-600 font-semibold mb-2">Debug Mode</div>
+                <div className="text-xs text-gray-800 font-mono bg-white rounded-lg p-2 border border-gray-200">
                   Status: {vapiStatus}
                 </div>
               </div>
