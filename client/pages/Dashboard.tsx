@@ -435,28 +435,70 @@ export default function Dashboard() {
                 </div>
               </motion.div>
 
-              {/* Map Legend */}
+              {/* Enhanced Business Metrics */}
               <motion.div
-                className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4"
+                className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
               >
+                {/* Total Global Reach */}
+                <motion.div
+                  className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200/50"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <h4 className="text-lg font-bold text-purple-800 mb-2">Global Reach</h4>
+                  <p className="text-2xl font-bold text-purple-900">{mapData.reduce((sum, region) => sum + region.customers, 0).toLocaleString()}</p>
+                  <p className="text-sm text-purple-600">Total Customers Worldwide</p>
+                </motion.div>
+
+                {/* Total Revenue */}
+                <motion.div
+                  className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200/50"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <h4 className="text-lg font-bold text-blue-800 mb-2">Global Revenue</h4>
+                  <p className="text-2xl font-bold text-blue-900">${(mapData.reduce((sum, region) => sum + region.revenue, 0) / 1000).toFixed(0)}K</p>
+                  <p className="text-sm text-blue-600">Combined Revenue Stream</p>
+                </motion.div>
+
+                {/* Average Growth */}
+                <motion.div
+                  className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200/50"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <h4 className="text-lg font-bold text-green-800 mb-2">Growth Rate</h4>
+                  <p className="text-2xl font-bold text-green-900">+{(mapData.reduce((sum, region) => sum + region.growth, 0) / mapData.length).toFixed(1)}%</p>
+                  <p className="text-sm text-green-600">Average Global Growth</p>
+                </motion.div>
+              </motion.div>
+
+              {/* Regional Breakdown */}
+              <motion.div
+                className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.7, duration: 0.5 }}
+              >
                 {mapData.map((region, index) => (
                   <motion.div
                     key={region.region}
-                    className="flex items-center space-x-3 p-3 rounded-lg bg-white/40 hover:bg-white/60 transition-all duration-300 cursor-pointer"
-                    whileHover={{ scale: 1.02 }}
-                    onMouseEnter={() => setHoveredRegion(region)}
-                    onMouseLeave={() => setHoveredRegion(null)}
+                    className="bg-white/50 backdrop-blur-sm rounded-lg p-3 border border-white/30 hover:bg-white/70 transition-all duration-300"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.8 + index * 0.1 }}
                   >
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: region.color }}
-                    />
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">{region.region}</div>
-                      <div className="text-xs text-gray-600">{region.customers.toLocaleString()} customers</div>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div
+                        className="w-3 h-3 rounded-full shadow-sm"
+                        style={{ backgroundColor: region.color }}
+                      />
+                      <div className="text-xs font-medium text-gray-800">{region.region}</div>
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      <div>{region.customers.toLocaleString()} customers</div>
+                      <div className="text-green-600 font-medium">+{region.growth}% growth</div>
                     </div>
                   </motion.div>
                 ))}
