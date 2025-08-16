@@ -265,8 +265,16 @@ export default function Analytics() {
                   <XAxis
                     dataKey="month"
                     tick={{ fontSize: 12, fill: "#6b7280" }}
+                    axisLine={true}
+                    tickLine={true}
+                    type="category"
                   />
-                  <YAxis tick={{ fontSize: 12, fill: "#6b7280" }} />
+                  <YAxis
+                    tick={{ fontSize: 12, fill: "#6b7280" }}
+                    axisLine={true}
+                    tickLine={true}
+                    type="number"
+                  />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "rgba(255, 255, 255, 0.95)",
@@ -500,8 +508,16 @@ export default function Analytics() {
                 <XAxis
                   dataKey="hour"
                   tick={{ fontSize: 12, fill: "#6b7280" }}
+                  axisLine={true}
+                  tickLine={true}
+                  type="category"
                 />
-                <YAxis tick={{ fontSize: 12, fill: "#6b7280" }} />
+                <YAxis
+                  tick={{ fontSize: 12, fill: "#6b7280" }}
+                  axisLine={true}
+                  tickLine={true}
+                  type="number"
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "rgba(255, 255, 255, 0.95)",
