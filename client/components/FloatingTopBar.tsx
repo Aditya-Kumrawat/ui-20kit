@@ -15,7 +15,9 @@ interface FloatingTopBarProps {
   isCollapsed?: boolean;
 }
 
-export const FloatingTopBar = ({ isCollapsed = false }: FloatingTopBarProps) => {
+export const FloatingTopBar = ({
+  isCollapsed = false,
+}: FloatingTopBarProps) => {
   return (
     <motion.div
       className={`fixed top-4 right-4 z-40 transition-all duration-300 ${

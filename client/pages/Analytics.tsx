@@ -101,7 +101,13 @@ export default function Analytics() {
   ];
 
   return (
-    <div className="dashboard-page min-h-screen" style={{ background: 'linear-gradient(135deg, #f0f0f0 0%, #f5f5f5 50%, #ebebeb 100%)' }}>
+    <div
+      className="dashboard-page min-h-screen"
+      style={{
+        background:
+          "linear-gradient(135deg, #f0f0f0 0%, #f5f5f5 50%, #ebebeb 100%)",
+      }}
+    >
       <FloatingSidebar
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}

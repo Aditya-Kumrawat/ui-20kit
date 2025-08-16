@@ -26,14 +26,41 @@ export default function ComputerVision() {
   // Sample predictions for recommendations
   const samplePredictions = {
     "image-classification": [
-      { label: "Golden Retriever", confidence: 0.94, description: "High confidence detection of a Golden Retriever breed" },
-      { label: "Dog", confidence: 0.92, description: "General canine classification" },
-      { label: "Domestic Animal", confidence: 0.88, description: "Categorized as household pet" },
+      {
+        label: "Golden Retriever",
+        confidence: 0.94,
+        description: "High confidence detection of a Golden Retriever breed",
+      },
+      {
+        label: "Dog",
+        confidence: 0.92,
+        description: "General canine classification",
+      },
+      {
+        label: "Domestic Animal",
+        confidence: 0.88,
+        description: "Categorized as household pet",
+      },
     ],
     "object-detection": [
-      { label: "Person", confidence: 0.96, description: "Human figure detected in image", bbox: [120, 80, 200, 300] },
-      { label: "Car", confidence: 0.89, description: "Vehicle identified in background", bbox: [300, 150, 500, 280] },
-      { label: "Building", confidence: 0.75, description: "Architectural structure visible", bbox: [50, 20, 400, 250] },
+      {
+        label: "Person",
+        confidence: 0.96,
+        description: "Human figure detected in image",
+        bbox: [120, 80, 200, 300],
+      },
+      {
+        label: "Car",
+        confidence: 0.89,
+        description: "Vehicle identified in background",
+        bbox: [300, 150, 500, 280],
+      },
+      {
+        label: "Building",
+        confidence: 0.75,
+        description: "Architectural structure visible",
+        bbox: [50, 20, 400, 250],
+      },
     ],
   };
 
@@ -61,11 +88,9 @@ export default function ComputerVision() {
     },
   ];
 
-
-
   const handleFileUpload = useCallback((event) => {
     const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target.result);
@@ -82,7 +107,7 @@ export default function ComputerVision() {
 
     // Simulate ML processing with progress
     const interval = setInterval(() => {
-      setConfidence(prev => {
+      setConfidence((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsProcessing(false);
@@ -126,7 +151,6 @@ export default function ComputerVision() {
           </div>
         </motion.header>
 
-
         {/* Available Models Section */}
         <motion.div
           className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30 mb-6"
@@ -136,7 +160,9 @@ export default function ComputerVision() {
         >
           <div className="flex items-center gap-3 mb-6">
             <Brain className="w-6 h-6 text-purple-600" />
-            <h3 className="text-xl font-bold text-gray-900">Available Models</h3>
+            <h3 className="text-xl font-bold text-gray-900">
+              Available Models
+            </h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -159,25 +185,37 @@ export default function ComputerVision() {
                     className="w-16 h-16 rounded-lg flex items-center justify-center"
                     style={{ backgroundColor: `${model.color}20` }}
                   >
-                    <model.icon style={{ color: model.color }} className="w-8 h-8" />
+                    <model.icon
+                      style={{ color: model.color }}
+                      className="w-8 h-8"
+                    />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-gray-900 mb-1">{model.name}</h4>
-                    <p className="text-sm text-gray-600 mb-2">{model.description}</p>
+                    <h4 className="font-semibold text-gray-900 mb-1">
+                      {model.name}
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {model.description}
+                    </p>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500">{model.type}</span>
+                      <span className="text-xs text-gray-500">
+                        {model.type}
+                      </span>
                       <span
                         className={`text-xs px-2 py-1 rounded-full ${
                           model.status === "active"
                             ? "bg-green-100 text-green-600"
                             : model.status === "training"
-                            ? "bg-yellow-100 text-yellow-600"
-                            : "bg-blue-100 text-blue-600"
+                              ? "bg-yellow-100 text-yellow-600"
+                              : "bg-blue-100 text-blue-600"
                         }`}
                       >
                         {model.status}
                       </span>
-                      <span className="text-sm font-bold" style={{ color: model.color }}>
+                      <span
+                        className="text-sm font-bold"
+                        style={{ color: model.color }}
+                      >
                         {model.accuracy}%
                       </span>
                     </div>
@@ -190,7 +228,6 @@ export default function ComputerVision() {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
-
           {/* Upload & Processing Area */}
           <motion.div
             className="space-y-6"
@@ -202,7 +239,9 @@ export default function ComputerVision() {
             <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
               <div className="flex items-center gap-3 mb-6">
                 <Camera className="w-6 h-6 text-blue-600" />
-                <h3 className="text-xl font-bold text-gray-900">Image Processing</h3>
+                <h3 className="text-xl font-bold text-gray-900">
+                  Image Processing
+                </h3>
               </div>
 
               {/* Upload Zone */}
@@ -240,9 +279,11 @@ export default function ComputerVision() {
               <div className="mt-6 p-4 bg-white/50 rounded-xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h5 className="font-semibold text-gray-900">Selected Model:</h5>
+                    <h5 className="font-semibold text-gray-900">
+                      Selected Model:
+                    </h5>
                     <p className="text-gray-600">
-                      {mlModels.find(m => m.id === selectedModel)?.name}
+                      {mlModels.find((m) => m.id === selectedModel)?.name}
                     </p>
                   </div>
                   <Button
@@ -252,9 +293,14 @@ export default function ComputerVision() {
                     className="bg-purple-500 hover:bg-purple-600 text-white"
                   >
                     {isProcessing ? (
-                      <><Activity className="w-4 h-4 mr-2 animate-spin" /> Processing</>
+                      <>
+                        <Activity className="w-4 h-4 mr-2 animate-spin" />{" "}
+                        Processing
+                      </>
                     ) : (
-                      <><Zap className="w-4 h-4 mr-2" /> Analyze</>
+                      <>
+                        <Zap className="w-4 h-4 mr-2" /> Analyze
+                      </>
                     )}
                   </Button>
                 </div>
@@ -272,14 +318,18 @@ export default function ComputerVision() {
               >
                 <div className="flex items-center gap-3 mb-6">
                   <Camera className="w-6 h-6 text-green-600" />
-                  <h3 className="text-xl font-bold text-gray-900">Analysis Results</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Analysis Results
+                  </h3>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Image Preview */}
                   {uploadedImage && (
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-700">Input Image</h4>
+                      <h4 className="font-semibold text-gray-700">
+                        Input Image
+                      </h4>
                       <div className="relative rounded-lg overflow-hidden">
                         <img
                           src={uploadedImage}
@@ -307,7 +357,9 @@ export default function ComputerVision() {
                   {/* Recommendations */}
                   {results && (
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-700">Recommendations & Predictions</h4>
+                      <h4 className="font-semibold text-gray-700">
+                        Recommendations & Predictions
+                      </h4>
                       <div className="space-y-3">
                         {results.map((result, index) => (
                           <motion.div
@@ -318,12 +370,16 @@ export default function ComputerVision() {
                             transition={{ delay: index * 0.1 }}
                           >
                             <div className="flex items-center justify-between mb-2">
-                              <span className="font-medium text-gray-800">{result.label}</span>
+                              <span className="font-medium text-gray-800">
+                                {result.label}
+                              </span>
                               <span className="text-sm font-bold text-purple-600">
                                 {(result.confidence * 100).toFixed(1)}%
                               </span>
                             </div>
-                            <p className="text-sm text-gray-600 mb-3">{result.description}</p>
+                            <p className="text-sm text-gray-600 mb-3">
+                              {result.description}
+                            </p>
                             <div className="w-full bg-gray-200 rounded-full h-2">
                               <div
                                 className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500"
@@ -338,10 +394,8 @@ export default function ComputerVision() {
                 </div>
               </motion.div>
             )}
-
           </motion.div>
         </div>
-
       </motion.div>
     </div>
   );
