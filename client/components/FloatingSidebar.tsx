@@ -91,9 +91,7 @@ export const FloatingSidebar = ({
   // Update active index when location changes
   useEffect(() => {
     const currentIndex = menuItems.findIndex(item => isActive(item.href));
-    if (currentIndex !== -1) {
-      setActiveIndex(currentIndex);
-    }
+    setActiveIndex(currentIndex !== -1 ? currentIndex : -1);
   }, [location.pathname]);
 
   return (
