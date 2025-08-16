@@ -136,7 +136,6 @@ export default function Dashboard() {
         className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"} pt-28 p-6`}
         animate={{ marginLeft: isCollapsed ? 80 : 272 }}
       >
-        <div className="flex flex-col relative mt-5 h-auto pb-7" />
         {/* Header */}
         <motion.header
           className="mb-8"
@@ -155,28 +154,6 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center gap-4" />
           </div>
-          <div className="flex flex-col relative mt-5 h-auto pb-7">
-            <div className="flex flex-col relative mt-5 h-auto pb-7">
-              <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
-                <div className="relative">
-                  <video
-                    autoPlay={true}
-                    muted={true}
-                    controls={false}
-                    playsInline={true}
-                    loop={true}
-                    className="w-full h-full object-cover object-center rounded-sm relative flex flex-col mt-5 min-h-5 min-w-5"
-                  >
-                    <source
-                      type="video/mp4"
-                      src="https://cdn.builder.io/o/assets%2F3ef4243ecdf248dabd75417d35606fac%2F54bd8a0dcac741cabf36c1fc34c597e2?alt=media&token=818fd446-695f-4cd6-bc85-3c16a794da63&apiKey=3ef4243ecdf248dabd75417d35606fac"
-                    />
-                  </video>
-                  <div className="w-full pt-[70.04048582995948%] pointer-events-none text-[0px]" />
-                </div>
-              </div>
-            </div>
-          </div>
         </motion.header>
 
         {/* Two Column Layout with Image and Stats */}
@@ -188,18 +165,16 @@ export default function Dashboard() {
                 className="flex flex-col relative mt-5 h-[365px] bg-cover bg-center bg-no-repeat border-none rounded-2xl"
                 style={{
                   backgroundImage:
-                    "url(https://cdn.builder.io/api/v1/image/assets%2F447cf80127094586a85dadd4107e395f%2Fa5359b0377cc4ba3acdc5b61c68211a2)",
+                    "url(https://cdn.builder.io/api/v1/file/assets%2F3ef4243ecdf248dabd75417d35606fac%2F54bd8a0dcac741cabf36c1fc34c597e2)",
                 }}
               >
-                <div className="flex flex-col relative mt-5 h-[321px] pt-[120px]" />
-
                 {/* Transparent glass overlay with text at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black/20 backdrop-blur-sm rounded-b-lg p-6">
+                <div className="absolute bottom-0 left-0 right-0 bg-white/20 backdrop-blur-sm rounded-b-lg p-6">
                   <div className="text-left">
-                    <h2 className="text-2xl font-bold text-white mb-2 dashboard-title">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2 dashboard-title">
                       Business Analytics
                     </h2>
-                    <p className="text-white/90 text-sm dashboard-text">
+                    <p className="text-gray-600 text-sm dashboard-text">
                       Monitor your business performance with real-time insights
                       and comprehensive data visualization.
                     </p>
