@@ -370,69 +370,153 @@ export default function Dashboard() {
             </div>
 
             <div className="relative">
-              {/* Real World Map with Enhanced Styling */}
+              {/* SVG World Map */}
               <motion.div
-                className="relative h-96 rounded-xl overflow-hidden shadow-lg"
+                className="relative h-96 rounded-xl overflow-hidden shadow-lg bg-gradient-to-br from-blue-50 to-indigo-100"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
-                <div className="relative w-full h-full">
-                  <iframe
-                    src="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                      borderRadius: '12px',
-                      filter: 'hue-rotate(200deg) saturate(0.8) brightness(1.1) contrast(1.2)',
-                    }}
-                    title="World Map"
+                <svg
+                  viewBox="0 0 1000 500"
+                  className="w-full h-full"
+                  style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+                >
+                  <defs>
+                    <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#4f46e5" />
+                      <stop offset="100%" stopColor="#7c3aed" />
+                    </linearGradient>
+                    <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#10b981" />
+                      <stop offset="100%" stopColor="#059669" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Ocean Background */}
+                  <rect width="1000" height="500" fill="url(#oceanGradient)" />
+
+                  {/* North America */}
+                  <motion.path
+                    d="M 100 100 Q 120 80 160 90 L 200 85 Q 240 80 280 95 L 320 100 Q 360 90 400 110 L 420 115 Q 450 105 480 120 L 480 180 Q 450 170 420 175 L 400 180 Q 360 175 320 185 L 280 190 Q 240 185 200 195 L 160 200 Q 120 195 100 210 Z"
+                    fill="url(#landGradient)"
+                    stroke="#065f46"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 2, delay: 1 }}
+                    className="hover:fill-green-400 transition-colors cursor-pointer"
                   />
 
-                  {/* Alternative: Use CartoDB Dark Matter style */}
-                  <iframe
-                    src="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                      borderRadius: '12px',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      mixBlendMode: 'multiply',
-                      opacity: 0
-                    }}
-                    title="World Map Dark"
+                  {/* South America */}
+                  <motion.path
+                    d="M 180 220 Q 200 210 240 220 L 280 225 Q 300 220 320 235 L 340 240 Q 360 235 380 250 L 380 320 Q 360 310 340 315 L 320 320 Q 300 315 280 325 L 240 330 Q 200 325 180 340 Z"
+                    fill="url(#landGradient)"
+                    stroke="#065f46"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 2, delay: 1.2 }}
+                    className="hover:fill-green-400 transition-colors cursor-pointer"
                   />
 
-                  {/* Use a better styled OpenStreetMap */}
-                  <iframe
-                    src="https://www.openstreetmap.org/export/embed.html?bbox=-180%2C-85%2C180%2C85&layer=mapnik"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                      borderRadius: '12px',
-                      filter: 'sepia(0.1) hue-rotate(200deg) saturate(0.9) brightness(1.05) contrast(1.1)',
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                    }}
-                    title="World Map"
+                  {/* Europe */}
+                  <motion.path
+                    d="M 480 90 Q 500 85 530 95 L 560 92 Q 580 88 600 98 L 620 100 Q 640 95 660 105 L 660 150 Q 640 145 620 150 L 600 155 Q 580 150 560 160 L 530 165 Q 500 160 480 170 Z"
+                    fill="url(#landGradient)"
+                    stroke="#065f46"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 2, delay: 1.4 }}
+                    className="hover:fill-green-400 transition-colors cursor-pointer"
                   />
 
-                  {/* Gradient overlay for better aesthetics */}
-                  <div
-                    className="absolute inset-0 rounded-xl pointer-events-none"
-                    style={{
-                      background: `
-                        radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 70%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
-                        linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%)
-                      `
-                    }}
+                  {/* Africa */}
+                  <motion.path
+                    d="M 500 180 Q 530 175 570 185 L 600 182 Q 620 178 640 188 L 660 190 Q 680 185 700 195 L 700 280 Q 680 275 660 280 L 640 285 Q 620 280 600 290 L 570 295 Q 530 290 500 300 Z"
+                    fill="url(#landGradient)"
+                    stroke="#065f46"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 2, delay: 1.6 }}
+                    className="hover:fill-green-400 transition-colors cursor-pointer"
                   />
-                </div>
+
+                  {/* Asia */}
+                  <motion.path
+                    d="M 700 80 Q 750 75 800 85 L 850 82 Q 880 78 910 88 L 940 90 Q 960 85 980 95 L 980 180 Q 960 175 940 180 L 910 185 Q 880 180 850 190 L 800 195 Q 750 190 700 200 Z"
+                    fill="url(#landGradient)"
+                    stroke="#065f46"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 2, delay: 1.8 }}
+                    className="hover:fill-green-400 transition-colors cursor-pointer"
+                  />
+
+                  {/* Australia */}
+                  <motion.path
+                    d="M 780 350 Q 810 345 850 355 L 880 352 Q 900 348 920 358 L 920 390 Q 900 385 880 390 L 850 395 Q 810 390 780 400 Z"
+                    fill="url(#landGradient)"
+                    stroke="#065f46"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 2, delay: 2 }}
+                    className="hover:fill-green-400 transition-colors cursor-pointer"
+                  />
+
+                  {/* Decorative Elements */}
+                  <motion.circle
+                    cx="150"
+                    cy="400"
+                    r="3"
+                    fill="#fbbf24"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 2.5, duration: 0.5 }}
+                  />
+                  <motion.circle
+                    cx="300"
+                    cy="420"
+                    r="2"
+                    fill="#fbbf24"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 2.7, duration: 0.5 }}
+                  />
+                  <motion.circle
+                    cx="450"
+                    cy="380"
+                    r="2.5"
+                    fill="#fbbf24"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 2.9, duration: 0.5 }}
+                  />
+
+                  {/* Grid lines for professional look */}
+                  <defs>
+                    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1"/>
+                    </pattern>
+                  </defs>
+                  <rect width="1000" height="500" fill="url(#grid)" opacity="0.3" />
+                </svg>
+
+                {/* Gradient overlay for better aesthetics */}
+                <div
+                  className="absolute inset-0 rounded-xl pointer-events-none"
+                  style={{
+                    background: `
+                      radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 70% 70%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                      linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%)
+                    `
+                  }}
+                />
               </motion.div>
 
               {/* Enhanced Business Metrics */}
