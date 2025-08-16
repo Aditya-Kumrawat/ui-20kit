@@ -146,8 +146,8 @@ export const FloatingSidebar = ({
             className="absolute left-3 w-[calc(100%-24px)] h-12 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-200/50 rounded-xl pointer-events-none"
             initial={false}
             animate={{
-              y: activeIndex * 52, // 48px height + 4px gap
-              opacity: menuItems.some(item => isActive(item.href)) ? 1 : 0
+              y: activeIndex >= 0 ? activeIndex * 52 : 0, // 48px height + 4px gap
+              opacity: activeIndex >= 0 ? 1 : 0
             }}
             transition={{
               type: "spring",
