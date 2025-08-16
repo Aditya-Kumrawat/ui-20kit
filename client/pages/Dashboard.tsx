@@ -128,7 +128,7 @@ export default function Dashboard() {
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />
-      <FloatingTopBar />
+      <FloatingTopBar isCollapsed={isCollapsed} />
 
       {/* Main Content */}
       <motion.div
