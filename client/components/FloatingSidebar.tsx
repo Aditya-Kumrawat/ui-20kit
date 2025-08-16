@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,7 @@ export const FloatingSidebar = ({
 }: FloatingSidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const menuItems = [
     { id: "home", label: "Dashboard", icon: Home, href: "/dashboard" },
@@ -87,6 +88,14 @@ export const FloatingSidebar = ({
     );
   };
 
+  // Update active index when location changes
+  useEffect(() => {
+    const currentIndex = menuItems.findIndex(item => isActive(item.href));
+    if (currentIndex !== -1) {
+      setActiveIndex(currentIndex);
+    }
+  }, [location.pathname]);
+
   return (
     <motion.div
       className={`fixed left-4 top-4 bottom-4 ${
@@ -133,14 +142,28 @@ export const FloatingSidebar = ({
         </motion.button>
 
         {/* Navigation Menu */}
-        <div className="flex-1 p-3 space-y-1">
+        <div className="flex-1 p-3 space-y-1 relative">
+          {/* Moving active indicator */}
+          <motion.div
+            className="absolute left-3 w-[calc(100%-24px)] h-12 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-200/50 rounded-xl pointer-events-none"
+            initial={false}
+            animate={{
+              y: activeIndex * 52, // 48px height + 4px gap
+              opacity: menuItems.some(item => isActive(item.href)) ? 1 : 0
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30
+            }}
+          />
           {menuItems.map((item, index) => (
             <motion.button
               key={item.id}
-              className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group relative ${
+              className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group relative z-10 ${
                 isActive(item.href)
-                  ? "bg-gradient-to-r from-purple-500/10 to-blue-500/10 text-purple-600 border border-purple-200/50"
-                  : "hover:bg-gray-100/50 text-gray-600 hover:text-gray-800"
+                  ? "text-purple-600"
+                  : "hover:bg-gray-100/30 text-gray-600 hover:text-gray-800"
               }`}
               onClick={() => navigate(item.href)}
               initial={{ opacity: 0, x: -20 }}
