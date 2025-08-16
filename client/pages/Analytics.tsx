@@ -100,7 +100,7 @@ export default function Analytics() {
   ];
 
   return (
-    <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="dashboard-page min-h-screen" style={{ backgroundColor: '#f0f0f0' }}>
       <FloatingSidebar
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
@@ -193,7 +193,7 @@ export default function Analytics() {
           ].map((metric, index) => (
             <motion.div
               key={metric.title}
-              className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
+              className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 border border-white/30"
               whileHover={{ y: -4, scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
