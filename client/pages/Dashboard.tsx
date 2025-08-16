@@ -108,6 +108,18 @@ export default function Dashboard() {
                 }}
               >
                 <div className="flex flex-col relative mt-5 h-[321px] pt-[120px]" />
+
+                {/* Transparent glass overlay with text at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 bg-black/20 backdrop-blur-sm rounded-b-lg p-6">
+                  <div className="text-left">
+                    <h2 className="text-2xl font-bold text-white mb-2 dashboard-title">
+                      Business Analytics
+                    </h2>
+                    <p className="text-white/90 text-sm dashboard-text">
+                      Monitor your business performance with real-time insights and comprehensive data visualization.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
