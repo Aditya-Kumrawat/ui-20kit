@@ -96,72 +96,91 @@ export default function Dashboard() {
           </div>
         </motion.header>
 
-        {/* Glass Effect Stats Cards - 2x2 Grid */}
-        <motion.div
-          className="grid grid-cols-2 gap-6 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          {dashboardStats.map((stat, index) => (
-            <motion.div
-              key={stat.title}
-              className="group relative"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + index * 0.1 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-            >
-              {/* Glass effect card with soft off-white background */}
-              <div className="relative bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30 overflow-hidden">
-                {/* Soft lift effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-2xl"></div>
-                <div
-                  className="absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300"
-                  style={{
-                    background: `linear-gradient(135deg, ${stat.color.split(" ")[1]}, ${stat.color.split(" ")[3]})`,
-                  }}
-                ></div>
-
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-4">
-                    <div
-                      className={`p-3 rounded-xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
-                    >
-                      <stat.icon
-                        size={24}
-                        className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}
-                      />
-                    </div>
-                    <div className="text-right">
-                      <p
-                        className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full"
-                        style={{ fontFamily: "Poppins, sans-serif" }}
-                      >
-                        {stat.change}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3
-                      className="text-sm font-medium text-gray-600 mb-1"
-                      style={{ fontFamily: "Poppins, sans-serif" }}
-                    >
-                      {stat.title}
-                    </h3>
-                    <p
-                      className="text-2xl font-bold text-gray-900"
-                      style={{ fontFamily: "Montserrat, sans-serif" }}
-                    >
-                      {stat.value}
-                    </p>
-                  </div>
-                </div>
+        {/* Two Column Layout with Image and Stats */}
+        <div className="mb-8">
+          <div className="flex gap-5 max-lg:flex-col max-lg:gap-0">
+            {/* Left Column - Image */}
+            <div className="flex flex-col w-1/2 max-lg:w-full">
+              <div
+                className="flex flex-col relative mt-5 h-[365px] bg-cover bg-center bg-no-repeat border-none rounded-lg"
+                style={{
+                  backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F447cf80127094586a85dadd4107e395f%2Fa5359b0377cc4ba3acdc5b61c68211a2)",
+                }}
+              >
+                <div className="flex flex-col relative mt-5 h-[321px] pt-[120px]" />
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            </div>
+
+            {/* Right Column - Dashboard Stats */}
+            <div className="flex flex-col w-1/2 ml-5 max-lg:w-full max-lg:ml-0">
+              <motion.div
+                className="grid grid-cols-2 gap-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                {dashboardStats.map((stat, index) => (
+                  <motion.div
+                    key={stat.title}
+                    className="group relative"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + index * 0.1 }}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                  >
+                    {/* Glass effect card with soft off-white background */}
+                    <div className="relative bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30 overflow-hidden">
+                      {/* Soft lift effect */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-2xl"></div>
+                      <div
+                        className="absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300"
+                        style={{
+                          background: `linear-gradient(135deg, ${stat.color.split(" ")[1]}, ${stat.color.split(" ")[3]})`,
+                        }}
+                      ></div>
+
+                      <div className="relative z-10">
+                        <div className="flex items-center justify-between mb-4">
+                          <div
+                            className={`p-3 rounded-xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
+                          >
+                            <stat.icon
+                              size={24}
+                              className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}
+                            />
+                          </div>
+                          <div className="text-right">
+                            <p
+                              className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full"
+                              style={{ fontFamily: "Poppins, sans-serif" }}
+                            >
+                              {stat.change}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h3
+                            className="text-sm font-medium text-gray-600 mb-1"
+                            style={{ fontFamily: "Poppins, sans-serif" }}
+                          >
+                            {stat.title}
+                          </h3>
+                          <p
+                            className="text-2xl font-bold text-gray-900"
+                            style={{ fontFamily: "Montserrat, sans-serif" }}
+                          >
+                            {stat.value}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </div>
 
         {/* Additional Content Section */}
         <motion.div
