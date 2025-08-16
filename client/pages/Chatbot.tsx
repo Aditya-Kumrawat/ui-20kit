@@ -510,6 +510,14 @@ export default function Chatbot() {
             }
           } else if (role === "assistant") {
             addDebugLog(`🤖 AI response: ${transcript}`);
+
+            // Trigger voice activity when assistant speaks
+            setHasAudioOutput(true);
+            // Keep the audio output flag active for a short time to show visual feedback
+            setTimeout(() => {
+              setHasAudioOutput(false);
+            }, 3000);
+
             setMessages((prev) => [
               ...prev,
               {
