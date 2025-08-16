@@ -39,7 +39,7 @@ export default function ComputerVision() {
       id: "image-classification",
       name: "Image Classification",
       icon: ImageIcon,
-      description: "Classify objects and scenes in images using deep neural networks",
+      description: "Classify objects and scenes in images",
       accuracy: 94.2,
       type: "Computer Vision",
       status: "active",
@@ -49,51 +49,11 @@ export default function ComputerVision() {
       id: "object-detection",
       name: "Object Detection",
       icon: Target,
-      description: "Detect and locate multiple objects within images with bounding boxes",
+      description: "Detect and locate objects in images",
       accuracy: 89.7,
       type: "Computer Vision",
       status: "active",
       color: "#06b6d4",
-    },
-    {
-      id: "face-recognition",
-      name: "Face Recognition",
-      icon: Eye,
-      description: "Identify and verify faces with advanced facial recognition algorithms",
-      accuracy: 97.1,
-      type: "Biometric AI",
-      status: "active",
-      color: "#10b981",
-    },
-    {
-      id: "text-extraction",
-      name: "OCR Text Extraction",
-      icon: FileText,
-      description: "Extract text from images and documents using optical character recognition",
-      accuracy: 91.8,
-      type: "Document AI",
-      status: "active",
-      color: "#f59e0b",
-    },
-    {
-      id: "sentiment-analysis",
-      name: "Sentiment Analysis",
-      icon: Brain,
-      description: "Analyze emotions and sentiment from text and facial expressions",
-      accuracy: 88.5,
-      type: "NLP + CV",
-      status: "training",
-      color: "#ef4444",
-    },
-    {
-      id: "video-analysis",
-      name: "Video Analysis",
-      icon: Video,
-      description: "Real-time video processing for motion detection and activity recognition",
-      accuracy: 86.3,
-      type: "Video AI",
-      status: "beta",
-      color: "#8b5cf6",
     },
   ];
 
@@ -242,7 +202,7 @@ export default function ComputerVision() {
             <h3 className="text-xl font-bold text-gray-900">Available Models</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {mlModels.map((model, index) => (
               <motion.div
                 key={model.id}
@@ -257,35 +217,34 @@ export default function ComputerVision() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
               >
-                <div className="text-center">
+                <div className="flex items-center gap-4">
                   <div
-                    className="w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center"
+                    className="w-16 h-16 rounded-lg flex items-center justify-center"
                     style={{ backgroundColor: `${model.color}20` }}
                   >
-                    <model.icon style={{ color: model.color }} className="w-6 h-6" />
+                    <model.icon style={{ color: model.color }} className="w-8 h-8" />
                   </div>
-                  <h4 className="font-semibold text-gray-900 text-sm mb-1">{model.name}</h4>
-                  <div className="flex flex-col items-center gap-1 mb-3">
-                    <span className="text-xs text-gray-600">{model.type}</span>
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        model.status === "active"
-                          ? "bg-green-100 text-green-600"
-                          : model.status === "training"
-                          ? "bg-yellow-100 text-yellow-600"
-                          : "bg-blue-100 text-blue-600"
-                      }`}
-                    >
-                      {model.status}
-                    </span>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900 mb-1">{model.name}</h4>
+                    <p className="text-sm text-gray-600 mb-2">{model.description}</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500">{model.type}</span>
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full ${
+                          model.status === "active"
+                            ? "bg-green-100 text-green-600"
+                            : model.status === "training"
+                            ? "bg-yellow-100 text-yellow-600"
+                            : "bg-blue-100 text-blue-600"
+                        }`}
+                      >
+                        {model.status}
+                      </span>
+                      <span className="text-sm font-bold" style={{ color: model.color }}>
+                        {model.accuracy}%
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-center mb-2">
-                    <span className="text-sm font-bold" style={{ color: model.color }}>
-                      {model.accuracy}%
-                    </span>
-                    <div className="text-xs text-gray-500">accuracy</div>
-                  </div>
-                  <Progress value={model.accuracy} className="h-2" />
                 </div>
               </motion.div>
             ))}
