@@ -7,21 +7,12 @@ import {
   Camera,
   Upload,
   Download,
-  Play,
-  Pause,
-  RotateCcw,
   Zap,
   Brain,
-  Eye,
-  Scan,
   Image as ImageIcon,
-  Video,
-  FileText,
   Activity,
   Target,
   Cpu,
-  Database,
-  TrendingUp,
 } from "lucide-react";
 
 export default function ComputerVision() {
@@ -57,24 +48,6 @@ export default function ComputerVision() {
     },
   ];
 
-  // Fake predictions for demo
-  const samplePredictions = {
-    "image-classification": [
-      { label: "Golden Retriever", confidence: 0.94 },
-      { label: "Labrador", confidence: 0.87 },
-      { label: "Dog", confidence: 0.92 },
-    ],
-    "object-detection": [
-      { label: "Person", confidence: 0.96, bbox: [120, 80, 200, 300] },
-      { label: "Car", confidence: 0.89, bbox: [300, 150, 500, 280] },
-      { label: "Tree", confidence: 0.75, bbox: [50, 20, 150, 200] },
-    ],
-    "face-recognition": [
-      { label: "Face Detected", confidence: 0.97, features: 68 },
-      { label: "Age Estimation", confidence: 0.85, value: "25-30 years" },
-      { label: "Gender", confidence: 0.92, value: "Male" },
-    ],
-  };
 
   // Performance metrics
   const performanceMetrics = [
@@ -99,20 +72,13 @@ export default function ComputerVision() {
   const processImage = useCallback(() => {
     setIsProcessing(true);
     setConfidence(0);
-    
-    // Simulate ML processing with progress
-    const interval = setInterval(() => {
-      setConfidence(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsProcessing(false);
-          setResults(samplePredictions[selectedModel] || []);
-          return 100;
-        }
-        return prev + 2;
-      });
-    }, 50);
-  }, [selectedModel]);
+
+    // Simulate ML processing
+    setTimeout(() => {
+      setIsProcessing(false);
+      alert('Image processing complete!');
+    }, 2000);
+  }, []);
 
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
