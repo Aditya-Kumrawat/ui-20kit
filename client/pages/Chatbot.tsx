@@ -401,9 +401,10 @@ export default function Chatbot() {
     "User: What should I look for in the analysis?",
     "AI: We'll examine key genetic markers and potential health risks.",
   ]);
-  const [audioVolume, setAudioVolume] = useState(1.0); // Volume control state
+  const [audioVolume, setAudioVolume] = useState(2.0); // Volume control state - start at 200%
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [gainNode, setGainNode] = useState<GainNode | null>(null);
+  const [compressor, setCompressor] = useState<DynamicsCompressorNode | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -934,13 +935,18 @@ export default function Chatbot() {
         audioEl.volume = audioVolume; // Apply current volume setting
         addDebugLog(`🔊 Audio volume set to ${Math.round(audioVolume * 100)}%`);
 
-        // Connect to Web Audio API for advanced processing
-        if (audioContext && gainNode && audioEl.srcObject) {
+        // Connect to Web Audio API for aggressive processing
+        if (audioContext && gainNode && compressor && audioEl.srcObject) {
           try {
             const source = audioContext.createMediaStreamSource(audioEl.srcObject as MediaStream);
-            source.connect(gainNode);
+
+            // Audio processing chain: source -> compressor -> gain -> destination
+            source.connect(compressor);
+            compressor.connect(gainNode);
             gainNode.connect(audioContext.destination);
-            addDebugLog("🎛️ Audio stream connected to Web Audio API gain node");
+
+            addDebugLog("🎛️ Audio stream connected: Source -> Compressor -> Gain -> Output");
+            addDebugLog(`🔊 Total amplification: ${Math.round(audioVolume * 500)}% with compression`);
           } catch (webAudioError) {
             addDebugLog(`⚠️ Web Audio API connection failed: ${webAudioError}`);
           }
@@ -954,14 +960,30 @@ export default function Chatbot() {
       addDebugLog("📞 Call started");
       setVapiStatus("call-active");
 
-      // Setup Web Audio API for advanced volume control
+      // Setup Web Audio API for aggressive volume control
       try {
         const context = new AudioContext();
+
+        // Create audio processing chain: compressor -> gain -> destination
         const gain = context.createGain();
-        gain.gain.value = audioVolume * 3.0; // Boost up to 300%
+        const comp = context.createDynamicsCompressor();
+
+        // Configure compressor for volume boosting
+        comp.threshold.setValueAtTime(-24, context.currentTime); // Lower threshold
+        comp.knee.setValueAtTime(30, context.currentTime); // Smoother compression
+        comp.ratio.setValueAtTime(12, context.currentTime); // High compression ratio
+        comp.attack.setValueAtTime(0.003, context.currentTime); // Fast attack
+        comp.release.setValueAtTime(0.25, context.currentTime); // Quick release
+
+        // Aggressive gain boost up to 500%
+        gain.gain.value = audioVolume * 5.0;
+
         setAudioContext(context);
         setGainNode(gain);
-        addDebugLog(`🎚️ Web Audio API gain node created with ${Math.round(gain.gain.value * 33.33)}% boost`);
+        setCompressor(comp);
+
+        addDebugLog(`🎚️ Audio processing chain created: Compressor + ${Math.round(gain.gain.value * 20)}% gain boost`);
+        addDebugLog(`🔊 Compressor settings: threshold=-24dB, ratio=12:1, knee=30dB`);
       } catch (audioError) {
         addDebugLog(`⚠️ Web Audio API setup failed: ${audioError}`);
       }
@@ -977,7 +999,8 @@ export default function Chatbot() {
         audioContext.close();
         setAudioContext(null);
         setGainNode(null);
-        addDebugLog("🧹 Audio context cleaned up");
+        setCompressor(null);
+        addDebugLog("🧹 Audio context and compressor cleaned up");
       }
     });
 
@@ -1934,20 +1957,20 @@ export default function Chatbot() {
                     <input
                       type="range"
                       min="0.1"
-                      max="3.0"
+                      max="5.0"
                       step="0.1"
                       value={audioVolume}
                       onChange={(e) => {
                         const newVolume = parseFloat(e.target.value);
                         setAudioVolume(newVolume);
                         if (gainNode) {
-                          gainNode.gain.value = newVolume * 3.0;
+                          gainNode.gain.value = newVolume * 5.0;
                         }
                         addDebugLog(`🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`);
                       }}
                       className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                       style={{
-                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 3) * 100}%, #e5e7eb ${(audioVolume / 3) * 100}%, #e5e7eb 100%)`
+                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 5) * 100}%, #e5e7eb ${(audioVolume / 5) * 100}%, #e5e7eb 100%)`
                       }}
                     />
                     <span className="text-xs text-gray-500 min-w-[30px]">
