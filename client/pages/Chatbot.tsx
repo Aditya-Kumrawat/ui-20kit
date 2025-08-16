@@ -888,6 +888,7 @@ export default function Chatbot() {
 
         setIsRecording(true);
         setVapiStatus("recording");
+        setCallStartTime(new Date());
         videoRef.current?.play();
         addDebugLog("🎉 Vapi Web SDK call started successfully!");
         addDebugLog("🎤 Listening for real speech via Vapi...");
