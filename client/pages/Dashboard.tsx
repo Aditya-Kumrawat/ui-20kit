@@ -346,13 +346,10 @@ export default function Dashboard() {
                       interval="preserveStartEnd"
                       tickCount={5}
                       minTickGap={5}
-                      angle={0}
-                      textAnchor="middle"
                       height={60}
                       orientation="bottom"
                       mirror={false}
                       reversed={false}
-                      includeHidden={false}
                       hide={false}
                     />
                     <YAxis
@@ -367,13 +364,10 @@ export default function Dashboard() {
                       scale="auto"
                       tickCount={5}
                       minTickGap={5}
-                      angle={0}
-                      textAnchor="end"
                       width={60}
                       orientation="left"
                       mirror={false}
                       reversed={false}
-                      includeHidden={false}
                       hide={false}
                     />
                     <Tooltip
@@ -445,9 +439,10 @@ export default function Dashboard() {
                     }}
                     onError={(e) => {
                       // Fallback to OpenStreetMap static image
-                      e.target.src = "https://tile.openstreetmap.org/0/0/0.png";
-                      e.target.style.transform = "scale(4)";
-                      e.target.style.transformOrigin = "center";
+                      const target = e.target as HTMLImageElement;
+                      target.src = "https://tile.openstreetmap.org/0/0/0.png";
+                      target.style.transform = "scale(4)";
+                      target.style.transformOrigin = "center";
                     }}
                   />
 
@@ -462,27 +457,31 @@ export default function Dashboard() {
                     }}
                     onLoad={(e) => {
                       // Show this as backup if primary fails
-                      const primaryImg = e.target.previousElementSibling;
+                      const target = e.target as HTMLImageElement;
+                      const primaryImg = target.previousElementSibling as HTMLImageElement | null;
                       if (
                         primaryImg &&
                         primaryImg.complete &&
                         primaryImg.naturalWidth === 0
                       ) {
-                        e.target.style.opacity = "1";
+                        target.style.opacity = "1";
                       }
                     }}
                     onError={(e) => {
                       // Final fallback: Use a data URL with world map
-                      e.target.style.display = "none";
-                      const container = e.target.parentElement;
-                      container.innerHTML = `
-                        <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center">
-                          <div class="text-center text-white">
-                            <h3 class="text-xl font-bold mb-2">World Map</h3>
-                            <p class="text-sm opacity-90">Global Business Analytics</p>
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = "none";
+                      const container = target.parentElement;
+                      if (container) {
+                        container.innerHTML = `
+                          <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center">
+                            <div class="text-center text-white">
+                              <h3 class="text-xl font-bold mb-2">World Map</h3>
+                              <p class="text-sm opacity-90">Global Business Analytics</p>
+                            </div>
                           </div>
-                        </div>
-                      `;
+                        `;
+                      }
                     }}
                   />
 
