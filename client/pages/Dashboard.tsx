@@ -135,6 +135,7 @@ export default function Dashboard() {
         className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"} pt-28 p-6`}
         animate={{ marginLeft: isCollapsed ? 80 : 272 }}
       >
+        <div className="flex flex-col relative mt-5 h-auto pb-7" />
         {/* Header */}
         <motion.header
           className="mb-8"
@@ -151,21 +152,7 @@ export default function Dashboard() {
                 Welcome back! Here's what's happening with your business today.
               </p>
             </div>
-            <div className="flex items-center gap-4">
-              <motion.div className="relative" whileHover={{ scale: 1.05 }}>
-                <Button size="sm" variant="ghost" className="relative">
-                  <Bell size={20} />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
-                </Button>
-              </motion.div>
-              <Button
-                size="sm"
-                className="bg-purple-500 hover:bg-purple-600 text-white"
-              >
-                <Search size={16} className="mr-2" />
-                Search
-              </Button>
-            </div>
+            <div className="flex items-center gap-4" />
           </div>
         </motion.header>
 
