@@ -59,6 +59,22 @@ export default function Dashboard() {
     },
   ];
 
+  // Chart data for the interactive graph
+  const chartData = [
+    { month: "Jan", revenue: 45000, orders: 120 },
+    { month: "Feb", revenue: 52000, orders: 145 },
+    { month: "Mar", revenue: 48000, orders: 130 },
+    { month: "Apr", revenue: 61000, orders: 180 },
+    { month: "May", revenue: 55000, orders: 165 },
+    { month: "Jun", revenue: 67000, orders: 200 },
+    { month: "Jul", revenue: 72000, orders: 220 },
+    { month: "Aug", revenue: 69000, orders: 195 },
+    { month: "Sep", revenue: 78000, orders: 240 },
+    { month: "Oct", revenue: 84000, orders: 260 },
+    { month: "Nov", revenue: 79000, orders: 235 },
+    { month: "Dec", revenue: 89000, orders: 285 },
+  ];
+
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <FloatingSidebar
