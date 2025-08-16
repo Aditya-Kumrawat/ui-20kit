@@ -166,24 +166,6 @@ export const FloatingSidebar = ({
 
         {/* Navigation Menu */}
         <div className="flex-1 p-3 space-y-1 relative">
-          {/* Moving active indicator */}
-          <motion.div
-            className={`absolute rounded-xl pointer-events-none transition-all duration-300 ${
-              isCollapsed
-                ? "left-1 w-14 h-12 bg-gradient-to-r from-purple-400/30 to-blue-400/30 border border-purple-400/50 shadow-lg"
-                : "left-3 w-[calc(100%-24px)] h-12 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-200/50"
-            }`}
-            initial={false}
-            animate={{
-              y: activeIndex >= 0 ? activeIndex * 48 : 0, // Moved up slightly for better alignment
-              opacity: activeIndex >= 0 ? 1 : 0,
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 30,
-            }}
-          />
           {menuItems.map((item, index) => (
             <motion.button
               key={item.id}
