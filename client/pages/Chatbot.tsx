@@ -408,6 +408,12 @@ export default function Chatbot() {
       // Method 1: Direct element volume control (persistent)
       audioEl.volume = Math.min(audioVolume, 1.0); // Keep element volume at max 100%
       audioEl.muted = false;
+      setHasAudioOutput(true); // Set audio output flag
+
+      // Start video when audio is received
+      if (assistantVideoRef.current) {
+        assistantVideoRef.current.play();
+      }
 
       addDebugLog(
         `🔊 Direct audio volume: ${Math.round(audioEl.volume * 100)}%`,
