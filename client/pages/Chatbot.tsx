@@ -226,7 +226,7 @@ export default function Chatbot() {
         "⚠️ No public key found. Using fallback key, but this may cause authentication issues.",
       );
       console.warn(
-        "��� For best results, set VITE_VAPI_PUBLIC_KEY with a public key (pk_...)",
+        "📝 For best results, set VITE_VAPI_PUBLIC_KEY with a public key (pk_...)",
       );
     }
 
@@ -1057,10 +1057,10 @@ export default function Chatbot() {
                       }`}
                     >
                       <div
-                        className={`relative p-4 rounded-2xl shadow-sm ${
+                        className={`relative p-5 rounded-2xl shadow-lg ${
                           message.sender === "user"
-                            ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white ml-12"
-                            : "bg-white/80 backdrop-blur-sm text-gray-800 mr-12 border border-white/20"
+                            ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white ml-12 shadow-blue-200/50"
+                            : "bg-white/90 backdrop-blur-md text-gray-800 mr-12 border border-white/40 shadow-gray-200/30"
                         }`}
                       >
                         <p className="text-sm leading-relaxed dashboard-text">
