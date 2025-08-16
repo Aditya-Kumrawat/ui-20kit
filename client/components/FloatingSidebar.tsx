@@ -175,7 +175,7 @@ export const FloatingSidebar = ({
             }`}
             initial={false}
             animate={{
-              y: activeIndex >= 0 ? activeIndex * 48 + (activeIndex * 4) : 0, // Button height (48px) + gap (4px between each)
+              y: activeIndex >= 0 ? activeIndex * 50 : 0, // Adjusted for better visual alignment
               opacity: activeIndex >= 0 ? 1 : 0,
             }}
             transition={{
