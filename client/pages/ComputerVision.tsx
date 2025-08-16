@@ -6,13 +6,11 @@ import { FloatingSidebar } from "@/components/FloatingSidebar";
 import {
   Camera,
   Upload,
-  Download,
   Zap,
   Brain,
   Image as ImageIcon,
   Activity,
   Target,
-  Cpu,
 } from "lucide-react";
 
 export default function ComputerVision() {
@@ -63,13 +61,6 @@ export default function ComputerVision() {
   ];
 
 
-  // Performance metrics
-  const performanceMetrics = [
-    { name: "Total Predictions", value: "1,248,592", change: "+12.5%", color: "#8b5cf6" },
-    { name: "Average Accuracy", value: "92.1%", change: "+2.3%", color: "#10b981" },
-    { name: "Processing Speed", value: "0.3s", change: "-15.2%", color: "#06b6d4" },
-    { name: "Active Models", value: "6", change: "+1", color: "#f59e0b" },
-  ];
 
   const handleFileUpload = useCallback((event) => {
     const file = event.target.files[0];
