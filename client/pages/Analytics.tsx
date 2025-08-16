@@ -128,12 +128,12 @@ export default function Analytics() {
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex bg-white/60 backdrop-blur-sm rounded-lg p-1 border border-white/30">
+              <div className="flex bg-white/60 backdrop-blur-sm rounded-2xl p-1 border border-white/30">
                 {["7d", "30d", "90d", "1y"].map((period) => (
                   <button
                     key={period}
                     onClick={() => setSelectedPeriod(period)}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                    className={`px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                       selectedPeriod === period
                         ? "bg-purple-500 text-white shadow-sm"
                         : "text-gray-600 hover:text-gray-900"
@@ -193,13 +193,13 @@ export default function Analytics() {
           ].map((metric, index) => (
             <motion.div
               key={metric.title}
-              className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 border border-white/30"
+              className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 border border-white/30"
               whileHover={{ y: -4, scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
               <div className="flex items-center justify-between mb-4">
                 <div
-                  className={`p-3 rounded-xl bg-gradient-to-br from-${metric.color}-50 to-${metric.color}-100`}
+                  className={`p-3 rounded-2xl bg-gradient-to-br from-${metric.color}-50 to-${metric.color}-100`}
                 >
                   {metric.trending === "up" ? (
                     <TrendingUp
@@ -233,7 +233,7 @@ export default function Analytics() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Monthly Revenue Bar Chart */}
           <motion.div
-            className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
+            className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30"
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -295,7 +295,7 @@ export default function Analytics() {
 
           {/* Category Performance */}
           <motion.div
-            className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
+            className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30"
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -356,7 +356,7 @@ export default function Analytics() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Traffic Sources Pie Chart */}
           <motion.div
-            className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
+            className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -411,7 +411,7 @@ export default function Analytics() {
 
           {/* Performance Metrics Radial Chart */}
           <motion.div
-            className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
+            className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -464,7 +464,7 @@ export default function Analytics() {
 
         {/* Hourly Activity Line Chart */}
         <motion.div
-          className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
+          className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
