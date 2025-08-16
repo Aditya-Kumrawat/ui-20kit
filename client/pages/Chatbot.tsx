@@ -165,11 +165,11 @@ export default function Chatbot() {
     "unknown" | "online" | "offline" | "restricted"
   >("unknown");
   const [transcript, setTranscript] = useState([
-    "AI: Hello! I'm ready to help you with genetic analysis.",
-    "User: Can you help me understand my DNA results?",
-    "AI: Of course! I'll analyze your genetic data and provide insights.",
-    "User: What should I look for in the analysis?",
-    "AI: We'll examine key genetic markers and potential health risks.",
+    "AI: Hello! I'm your AI assistant. How can I help you today?",
+    "User: Can you help me with my questions?",
+    "AI: Absolutely! I'm here to assist you with various tasks and questions.",
+    "User: What can you help me with?",
+    "AI: I can help with research, analysis, writing, coding, and much more!",
   ]);
   const [audioVolume, setAudioVolume] = useState(2.5); // Volume control state - start at 250%
 
@@ -676,11 +676,11 @@ export default function Chatbot() {
     setTimeout(
       () => {
         const aiResponses = [
-          "I understand you're looking for genetic analysis. Let me process this information and provide you with detailed insights.",
-          "Based on your request, I can help you analyze the genetic patterns. Would you like me to focus on specific variants or provide a comprehensive overview?",
-          "Great question! Let me break down the genetic data for you. I'll analyze the key markers and provide actionable insights.",
-          "I can assist with that analysis. Let me examine the genetic sequence and identify any significant patterns or variants.",
-          "Perfect! I'll help you interpret this genetic information. Would you like me to generate visualizations or focus on specific aspects?",
+          "I understand your request. Let me process this information and provide you with helpful insights.",
+          "Based on your question, I can help you find the information you need. Would you like me to provide a detailed explanation or a quick overview?",
+          "Great question! Let me break this down for you and provide clear, actionable insights.",
+          "I can definitely assist with that. Let me analyze your request and provide you with relevant information.",
+          "Perfect! I'm here to help. Would you like me to provide examples, explanations, or specific guidance?",
         ];
 
         const randomResponse =
@@ -693,8 +693,8 @@ export default function Chatbot() {
           timestamp: new Date(),
           status: "read",
           suggestions: [
-            "Show me detailed analysis",
-            "Create visualization",
+            "Tell me more about this",
+            "Show me examples",
             "Export results",
             "Explain methodology",
           ],
@@ -717,40 +717,40 @@ export default function Chatbot() {
 
   const quickActions: QuickAction[] = [
     {
-      id: "analyze",
-      label: "Analyze Data",
-      icon: <Database size={16} />,
-      prompt: "Help me analyze my genetic data",
+      id: "help",
+      label: "Get Help",
+      icon: <Brain size={16} />,
+      prompt: "How can you help me today?",
     },
     {
       id: "explain",
       label: "Explain",
-      icon: <Brain size={16} />,
-      prompt: "Explain this genetic concept to me",
+      icon: <MessageSquare size={16} />,
+      prompt: "Can you explain this concept to me?",
     },
     {
-      id: "visualize",
-      label: "Visualize",
-      icon: <ImageIcon size={16} />,
-      prompt: "Create a visualization of my data",
+      id: "research",
+      label: "Research",
+      icon: <Search size={16} />,
+      prompt: "Help me research this topic",
+    },
+    {
+      id: "write",
+      label: "Write",
+      icon: <FileText size={16} />,
+      prompt: "Help me write something",
     },
     {
       id: "code",
-      label: "Generate Code",
+      label: "Code",
       icon: <Code size={16} />,
-      prompt: "Generate code for genetic analysis",
+      prompt: "Help me with coding",
     },
     {
-      id: "report",
-      label: "Create Report",
-      icon: <FileText size={16} />,
-      prompt: "Generate a research report",
-    },
-    {
-      id: "insights",
-      label: "Get Insights",
+      id: "ideas",
+      label: "Ideas",
       icon: <Sparkles size={16} />,
-      prompt: "Provide insights about my genetic profile",
+      prompt: "Give me some creative ideas",
     },
   ];
 
@@ -871,7 +871,7 @@ export default function Chatbot() {
                 {
                   role: "system",
                   content:
-                    "You are a helpful AI assistant specializing in DNA analysis, genetic research, and data interpretation. Keep your responses concise and informative. You can help with genetic analysis, data visualization, research reports, and explaining genetic variants.",
+                    "You are a helpful AI assistant. Keep your responses concise and informative. You can help with various tasks including research, writing, coding, analysis, and answering questions on a wide range of topics.",
                 },
               ],
             },
