@@ -6,7 +6,6 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
-import { FloatingTopBar } from "@/components/FloatingTopBar";
 import Vapi from "@vapi-ai/web";
 import {
   Send,
@@ -935,13 +934,12 @@ export default function Chatbot() {
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />
-      <FloatingTopBar isCollapsed={isCollapsed} />
 
       {/* Main Content */}
       <motion.div
         className={`transition-all duration-300 min-h-screen flex flex-col ${
           isCollapsed ? "ml-20" : "ml-72"
-        } pt-28 pr-4`}
+        } pr-4`}
         animate={{ marginLeft: isCollapsed ? 80 : 272 }}
       >
         {/* Main Chat Container */}
