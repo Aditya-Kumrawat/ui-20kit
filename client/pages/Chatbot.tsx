@@ -928,28 +928,43 @@ export default function Chatbot() {
 
     // AI responses are handled in the consolidated message handler above
 
-    // Audio volume boosting - Direct SDK approach
+    // Audio volume boosting - Simple and effective approach
     vapiInstance.on("audio", (audioEl: HTMLAudioElement) => {
-      if (audioEl) {
-        audioEl.volume = audioVolume; // Apply current volume setting
-        addDebugLog(`🔊 Audio volume set to ${Math.round(audioVolume * 100)}%`);
+      if (!audioEl || !audioEl.srcObject) return;
 
-        // Connect to Web Audio API for aggressive processing
-        if (audioContext && gainNode && compressor && audioEl.srcObject) {
-          try {
-            const source = audioContext.createMediaStreamSource(audioEl.srcObject as MediaStream);
+      addDebugLog(`🔊 Processing Vapi audio stream with ${Math.round(audioVolume * 100)}% boost`);
 
-            // Audio processing chain: source -> compressor -> gain -> destination
-            source.connect(compressor);
-            compressor.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            addDebugLog("🎛️ Audio stream connected: Source -> Compressor -> Gain -> Output");
-            addDebugLog(`🔊 Total amplification: ${Math.round(audioVolume * 500)}% with compression`);
-          } catch (webAudioError) {
-            addDebugLog(`⚠️ Web Audio API connection failed: ${webAudioError}`);
-          }
+      try {
+        // Create Web Audio context if not exists
+        if (!audioContext) {
+          const context = new (window.AudioContext || (window as any).webkitAudioContext)();
+          const gain = context.createGain();
+          gain.gain.value = audioVolume; // Direct volume boost
+          setAudioContext(context);
+          setGainNode(gain);
+          addDebugLog(`🎚️ Audio context created with ${Math.round(audioVolume * 100)}% gain`);
         }
+
+        // Route Vapi audio through gain node for volume boost
+        if (audioContext && gainNode) {
+          const source = audioContext.createMediaStreamSource(audioEl.srcObject as MediaStream);
+          source.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          addDebugLog("🎛️ Vapi audio routed: Stream -> GainNode -> Output");
+
+          // Resume context on user interaction (browser requirement)
+          const resumeAudio = () => {
+            if (audioContext.state === "suspended") {
+              audioContext.resume();
+              addDebugLog("🔊 Audio context resumed");
+            }
+          };
+          document.addEventListener("click", resumeAudio, { once: true });
+          document.addEventListener("touchstart", resumeAudio, { once: true });
+        }
+      } catch (audioError) {
+        addDebugLog(`❌ Audio processing failed: ${audioError}`);
       }
     });
 
