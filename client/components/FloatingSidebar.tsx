@@ -91,6 +91,11 @@ export const FloatingSidebar = ({
   ];
 
   const isActive = (href: string) => {
+    // Exact match for root dashboard path
+    if (href === "/dashboard") {
+      return location.pathname === "/dashboard";
+    }
+    // For other paths, use exact match or sub-paths
     return (
       location.pathname === href || location.pathname.startsWith(href + "/")
     );
@@ -163,10 +168,10 @@ export const FloatingSidebar = ({
         <div className="flex-1 p-3 space-y-1 relative">
           {/* Moving active indicator */}
           <motion.div
-            className={`absolute left-3 w-[calc(100%-24px)] h-12 rounded-xl pointer-events-none transition-all duration-300 ${
+            className={`absolute rounded-xl pointer-events-none transition-all duration-300 ${
               isCollapsed
-                ? "bg-gradient-to-r from-purple-400/20 to-blue-400/20 border border-purple-400/30"
-                : "bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-200/50"
+                ? "left-1 w-14 h-12 bg-gradient-to-r from-purple-400/30 to-blue-400/30 border border-purple-400/50 shadow-lg"
+                : "left-3 w-[calc(100%-24px)] h-12 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-200/50"
             }`}
             initial={false}
             animate={{
