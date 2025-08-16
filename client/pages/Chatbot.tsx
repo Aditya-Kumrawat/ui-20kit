@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { FloatingSidebar } from "@/components/FloatingSidebar";
 import Vapi from "@vapi-ai/web";
 import {
   Send,
