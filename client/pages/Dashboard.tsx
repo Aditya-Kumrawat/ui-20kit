@@ -370,95 +370,69 @@ export default function Dashboard() {
             </div>
 
             <div className="relative">
-              {/* Real World Map using OpenStreetMap */}
+              {/* Real World Map with Enhanced Styling */}
               <motion.div
                 className="relative h-96 rounded-xl overflow-hidden shadow-lg"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
-                <iframe
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=-180%2C-85%2C180%2C85&layer=mapnik"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    border: 'none',
-                    borderRadius: '12px'
-                  }}
-                  title="World Map"
-                />
-
-                {/* Overlay with data points */}
-                <div className="absolute inset-0 pointer-events-none">
-                  {mapData.map((region, index) => (
-                    <motion.div
-                      key={region.region}
-                      className="absolute"
-                      style={{
-                        left: `${(region.position.x / 800) * 100}%`,
-                        top: `${(region.position.y / 400) * 100}%`,
-                        transform: 'translate(-50%, -50%)'
-                      }}
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 0.9 }}
-                      transition={{ delay: 1.2 + index * 0.2, duration: 0.5 }}
-                    >
-                      <motion.div
-                        className="relative cursor-pointer pointer-events-auto"
-                        whileHover={{ scale: 1.2 }}
-                        onMouseEnter={() => setHoveredRegion(region)}
-                        onMouseLeave={() => setHoveredRegion(null)}
-                      >
-                        <div
-                          className="w-4 h-4 rounded-full shadow-lg"
-                          style={{ backgroundColor: region.color }}
-                        />
-                        <motion.div
-                          className="absolute inset-0 rounded-full border-2 opacity-60"
-                          style={{ borderColor: region.color }}
-                          animate={{ scale: [1, 2, 1] }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                          }}
-                        />
-                      </motion.div>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Hover Tooltip */}
-                {hoveredRegion && (
-                  <motion.div
-                    className="absolute bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-gray-200 pointer-events-none z-10"
+                <div className="relative w-full h-full">
+                  <iframe
+                    src="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
                     style={{
-                      left: `${(hoveredRegion.position.x / 800) * 100}%`,
-                      top: `${(hoveredRegion.position.y / 400) * 100 - 20}%`,
-                      transform: 'translate(-50%, -100%)'
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      borderRadius: '12px',
+                      filter: 'hue-rotate(200deg) saturate(0.8) brightness(1.1) contrast(1.2)',
                     }}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <h4 className="font-bold text-gray-900 mb-2">{hoveredRegion.region}</h4>
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Customers:</span>
-                        <span className="font-medium">{hoveredRegion.customers.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Revenue:</span>
-                        <span className="font-medium">${hoveredRegion.revenue.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Growth:</span>
-                        <span className="font-medium text-green-600">+{hoveredRegion.growth}%</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
+                    title="World Map"
+                  />
+
+                  {/* Alternative: Use CartoDB Dark Matter style */}
+                  <iframe
+                    src="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      borderRadius: '12px',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      mixBlendMode: 'multiply',
+                      opacity: 0
+                    }}
+                    title="World Map Dark"
+                  />
+
+                  {/* Use a better styled OpenStreetMap */}
+                  <iframe
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=-180%2C-85%2C180%2C85&layer=mapnik"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      borderRadius: '12px',
+                      filter: 'sepia(0.1) hue-rotate(200deg) saturate(0.9) brightness(1.05) contrast(1.1)',
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                    }}
+                    title="World Map"
+                  />
+
+                  {/* Gradient overlay for better aesthetics */}
+                  <div
+                    className="absolute inset-0 rounded-xl pointer-events-none"
+                    style={{
+                      background: `
+                        radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                        linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%)
+                      `
+                    }}
+                  />
+                </div>
               </motion.div>
 
               {/* Map Legend */}
