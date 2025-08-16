@@ -133,7 +133,7 @@ export default function Dashboard() {
       {/* Main Content */}
       <motion.div
         className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"} p-6`}
-        animate={{ marginLeft: isCollapsed ? 80 : 288 }}
+        animate={{ marginLeft: isCollapsed ? 80 : 272 }}
       >
         {/* Header */}
         <motion.header
