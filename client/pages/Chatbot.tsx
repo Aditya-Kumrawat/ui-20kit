@@ -1370,7 +1370,7 @@ export default function Chatbot() {
           });
 
           vapiInstance.on("call-end", () => {
-            addDebugLog("📞 Call ended");
+            addDebugLog("�� Call ended");
             setVapiStatus("call-ended");
             setIsRecording(false);
           });
@@ -1963,7 +1963,7 @@ export default function Chatbot() {
                       }}
                       className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                       style={{
-                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 5) * 100}%, #e5e7eb ${(audioVolume / 5) * 100}%, #e5e7eb 100%)`
+                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`
                       }}
                     />
                     <span className="text-xs text-gray-500 min-w-[30px]">
