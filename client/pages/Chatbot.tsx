@@ -64,233 +64,6 @@ interface QuickAction {
   prompt: string;
 }
 
-export default function Chatbot() {
-  const [activeItem, setActiveItem] = useState("chatbot");
-  const navigate = useNavigate();
-
-  const menuItems = [
-    { id: "home", label: "Homepage", icon: Home, href: "/dashboard" },
-    {
-      id: "statistics",
-      label: "Statistics",
-      icon: BarChart3,
-      href: "/dashboard/stats",
-    },
-    {
-      id: "analytics",
-      label: "Analytics",
-      icon: PieChart,
-      href: "/dashboard/analytics",
-    },
-    {
-      id: "appointments",
-      label: "Appointments",
-      icon: Calendar,
-      href: "/dashboard/appointments",
-    },
-    {
-      id: "messages",
-      label: "Messages",
-      icon: MessageSquare,
-      href: "/dashboard/messages",
-      badge: 2,
-    },
-    { id: "ai", label: "AI Assistant", icon: Brain, href: "/dashboard/ai" },
-    {
-      id: "chatbot",
-      label: "Chatbot",
-      icon: MessageSquare,
-      href: "/dashboard/chatbot",
-      active: true,
-    },
-    {
-      id: "community",
-      label: "Community",
-      icon: Users,
-      href: "/dashboard/community",
-    },
-  ];
-
-  const toolItems = [
-    { id: "dna", label: "DNA Profile", icon: Activity },
-    { id: "scanner", label: "Genetic Scanner", icon: Search },
-    { id: "analysis", label: "General Analysis", icon: Target },
-  ];
-
-  return (
-    <motion.div
-      className={`fixed left-0 top-0 h-full bg-gradient-to-b from-slate-900 to-slate-800 text-white z-50 shadow-2xl ${
-        isCollapsed ? "w-20" : "w-72"
-      }`}
-      animate={{ width: isCollapsed ? 80 : 288 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-    >
-      {/* Logo Section */}
-      <motion.div
-        className="p-6 border-b border-slate-700/50"
-        initial={false}
-        animate={{ paddingLeft: isCollapsed ? 24 : 24 }}
-      >
-        <div className="flex items-center gap-3">
-          <motion.div
-            className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center font-bold text-lg shadow-lg"
-            whileHover={{ scale: 1.05 }}
-          >
-            MY
-          </motion.div>
-          <AnimatePresence>
-            {!isCollapsed && (
-              <motion.span
-                className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-              >
-                DNA
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
-      {/* Toggle Button */}
-      <motion.button
-        className="absolute -right-3 top-8 w-6 h-6 bg-slate-700 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-slate-600 transition-colors"
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-      </motion.button>
-
-      {/* Navigation Menu */}
-      <div className="flex-1 p-4 space-y-2">
-        {menuItems.map((item, index) => (
-          <motion.button
-            key={item.id}
-            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group relative ${
-              item.active || activeItem === item.id
-                ? "bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-white border border-purple-500/30"
-                : "hover:bg-slate-700/50 text-gray-300 hover:text-white"
-            }`}
-            onClick={() => {
-              setActiveItem(item.id);
-              if (item.href) {
-                navigate(item.href);
-              }
-            }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05 }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <item.icon
-              size={20}
-              className={`${
-                item.active || activeItem === item.id
-                  ? "text-purple-400"
-                  : "text-gray-400 group-hover:text-white"
-              }`}
-            />
-            <AnimatePresence>
-              {!isCollapsed && (
-                <motion.span
-                  className="text-sm font-medium flex-1 text-left"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {item.label}
-                </motion.span>
-              )}
-            </AnimatePresence>
-            {item.badge && !isCollapsed && (
-              <Badge className="bg-red-500 text-white text-xs min-w-[20px] h-5 flex items-center justify-center">
-                {item.badge}
-              </Badge>
-            )}
-            {item.badge && isCollapsed && (
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
-            )}
-          </motion.button>
-        ))}
-
-        {/* Connected Profiles Section */}
-        <AnimatePresence>
-          {!isCollapsed && (
-            <motion.div
-              className="mt-8 pt-6 border-t border-slate-700/50"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
-                Connected Profiles
-              </div>
-              <div className="flex -space-x-2 mb-3 px-2">
-                {[1, 2, 3].map((i) => (
-                  <Avatar key={i} className="w-8 h-8 border-2 border-slate-700">
-                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
-                      U{i}
-                    </AvatarFallback>
-                  </Avatar>
-                ))}
-              </div>
-              <Button
-                size="sm"
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white border-0 text-xs"
-              >
-                Add Profile
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* AI Assistant Section */}
-        <AnimatePresence>
-          {!isCollapsed && (
-            <motion.div
-              className="mt-6 pt-4 border-t border-slate-700/50"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-            >
-              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
-                AI Assistant
-              </div>
-              {toolItems.map((tool, index) => (
-                <motion.button
-                  key={tool.id}
-                  className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700/50 text-gray-300 hover:text-white transition-all duration-200 group text-sm"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <tool.icon
-                    size={16}
-                    className="text-gray-400 group-hover:text-purple-400"
-                  />
-                  <span className="text-left">{tool.label}</span>
-                  <ChevronRight
-                    size={12}
-                    className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity"
-                  />
-                </motion.button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.div>
-  );
-};
-
 // Initialize Vapi Web SDK for browser-based voice calls
 const initializeVapiExternal = () => {
   // Try to get public key first, then fall back to regular key
@@ -316,7 +89,7 @@ const initializeVapiExternal = () => {
   // Check if this looks like a valid key
   if (publicKey.length < 20) {
     console.error(
-      "�� Vapi API key appears to be too short. Please check your key configuration.",
+      "❌ Vapi API key appears to be too short. Please check your key configuration.",
       `Length: ${publicKey.length}`,
     );
     console.error(
@@ -337,12 +110,12 @@ const initializeVapiExternal = () => {
   }
 
   try {
-    console.log("����� Initializing Vapi Web SDK");
+    console.log("🚀 Initializing Vapi Web SDK");
     const vapi = new Vapi(publicKey);
     console.log("✅ Vapi Web SDK initialized successfully");
     return vapi;
   } catch (error) {
-    console.error("�� Failed to initialize Vapi Web SDK:", error);
+    console.error("❌ Failed to initialize Vapi Web SDK:", error);
     // Ensure error is properly logged
     let errorMsg = "Unknown initialization error";
     if (error instanceof Error) {
@@ -360,8 +133,6 @@ const initializeVapiExternal = () => {
     return null;
   }
 };
-
-// This will be moved inside the component
 
 // Force enable real API calls - remove all environment restrictions
 const isRestrictedEnvironment = () => {
@@ -416,7 +187,7 @@ export default function Chatbot() {
         "❌ No Vapi API key found. Please set VITE_VAPI_PUBLIC_KEY in environment variables.",
       );
       console.error(
-        "��� Required: Web SDK needs a PUBLIC key that starts with 'pk_'",
+        "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'",
       );
       console.error("🔗 Get your keys from: https://dashboard.vapi.ai/account");
       return null;
@@ -549,10 +320,10 @@ export default function Chatbot() {
   useEffect(() => {
     if (isRestrictedEnvironment()) {
       addDebugLog("🛡️ RESTRICTED ENVIRONMENT DETECTED");
-      addDebugLog("���� Test Mode auto-enabled to prevent network errors");
+      addDebugLog("🧪 Test Mode auto-enabled to prevent network errors");
       addDebugLog(`📍 Hostname: ${window.location.hostname}`);
     } else {
-      addDebugLog("�� Unrestricted environment - Vapi API available");
+      addDebugLog("🌍 Unrestricted environment - Vapi API available");
     }
   }, []);
 
@@ -560,279 +331,13 @@ export default function Chatbot() {
   const toggleTestMode = () => {
     setTestMode(false); // Force real speech mode only
     if (!testMode) {
-      addDebugLog("��� Test mode enabled - simulating Vapi responses");
+      addDebugLog("🧪 Test mode enabled - simulating Vapi responses");
       setVapiStatus("test-mode");
     } else {
       addDebugLog("🔧 Test mode disabled - using real Vapi");
       setVapiStatus("disconnected");
     }
   };
-
-  const simulateVapiInteraction = () => {
-    if (!testMode) return;
-
-    const sampleQuestions = [
-      "Can you help me analyze my DNA data?",
-      "What do my genetic markers tell me about my health?",
-      "How do I interpret my genetic test results?",
-      "Can you explain what genetic variants mean?",
-      "What should I know about my hereditary risks?",
-      "Help me understand my family's genetic history",
-      "What does this genetic report mean for me?",
-    ];
-
-    const aiResponses = [
-      "I'd be happy to help you analyze your DNA data! I can examine genetic markers, identify variants, and provide insights about your genetic profile. What specific aspects would you like me to focus on?",
-      "Your genetic markers provide valuable insights into your health predispositions and ancestry. I can help you understand the significance of different variants and what they mean for your health journey.",
-      "Genetic test results can be complex, but I'm here to make them clear for you! Let me break down the key findings and explain what each marker indicates about your genetic makeup.",
-      "Genetic variants are natural differences in your DNA sequence. Some are beneficial, others neutral, and some may indicate health risks. I'll help you understand which variants are most important for you.",
-      "Understanding hereditary risks is crucial for proactive health management. I can help you identify potential genetic predispositions and suggest appropriate screening or lifestyle modifications.",
-      "Family genetic history provides important context for your results. I can help you understand inheritance patterns and what this means for you and your relatives.",
-      "Your genetic report contains a wealth of information about your health, ancestry, and traits. Let me walk you through the key findings and what they mean in practical terms.",
-    ];
-
-    addDebugLog("🎤 Simulating voice recording...");
-    addDebugLog("📻 Listening for speech...");
-
-    // Simulate real-time transcription (partial updates)
-    const selectedQuestion =
-      sampleQuestions[Math.floor(Math.random() * sampleQuestions.length)];
-    const words = selectedQuestion.split(" ");
-    let currentTranscript = "";
-
-    // Simulate partial transcription word by word
-    words.forEach((word, index) => {
-      setTimeout(
-        () => {
-          currentTranscript += (index > 0 ? " " : "") + word;
-          setInputValue(currentTranscript);
-          addDebugLog(`📝 Partial transcript: "${currentTranscript}"`);
-        },
-        200 * (index + 1),
-      );
-    });
-
-    // Simulate final transcript and AI response
-    setTimeout(
-      () => {
-        addDebugLog(`✅ Final transcript: "${selectedQuestion}"`);
-        setInputValue(""); // Clear input after sending
-        handleSendMessage(selectedQuestion);
-        setTranscript((prev) => [...prev, `User: ${selectedQuestion}`]);
-
-        // Simulate AI processing time
-        addDebugLog("🧠 AI processing your request...");
-        setIsTyping(true);
-
-        setTimeout(
-          () => {
-            const selectedResponse =
-              aiResponses[Math.floor(Math.random() * aiResponses.length)];
-            addDebugLog(
-              `🤖 AI response generated: "${selectedResponse.substring(0, 50)}..."`,
-            );
-
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: Date.now().toString(),
-                content: selectedResponse,
-                sender: "ai" as const,
-                timestamp: new Date(),
-                status: "read" as const,
-                suggestions: [
-                  "Tell me more details",
-                  "What are the next steps?",
-                  "Show me specific examples",
-                  "Explain the science behind this",
-                ],
-              },
-            ]);
-
-            setTranscript((prev) => [...prev, `AI: ${selectedResponse}`]);
-            setIsTyping(false);
-
-            // Simulate text-to-speech
-            addDebugLog("🔊 AI speaking response...");
-          },
-          2000 + Math.random() * 1000,
-        ); // Variable AI response time
-      },
-      words.length * 200 + 500,
-    );
-  };
-
-  const quickActions: QuickAction[] = [
-    {
-      id: "analyze",
-      label: "Analyze Data",
-      icon: <Database size={16} />,
-      prompt: "Help me analyze my genetic data",
-    },
-    {
-      id: "explain",
-      label: "Explain",
-      icon: <Brain size={16} />,
-      prompt: "Explain this genetic concept to me",
-    },
-    {
-      id: "visualize",
-      label: "Visualize",
-      icon: <ImageIcon size={16} />,
-      prompt: "Create a visualization of my data",
-    },
-    {
-      id: "code",
-      label: "Generate Code",
-      icon: <Code size={16} />,
-      prompt: "Generate code for genetic analysis",
-    },
-    {
-      id: "report",
-      label: "Create Report",
-      icon: <FileText size={16} />,
-      prompt: "Generate a research report",
-    },
-    {
-      id: "insights",
-      label: "Get Insights",
-      icon: <Sparkles size={16} />,
-      prompt: "Provide insights about my genetic profile",
-    },
-  ];
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  // Safe network connectivity test with immediate fallback
-  const testNetworkConnectivity = async () => {
-    try {
-      addDebugLog("📡 Testing basic network connectivity...");
-
-      // First try a simple, safe test
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); // Short 3s timeout
-
-      const response = await fetch("https://httpbin.org/get", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (response.ok) {
-        addDebugLog("✅ Basic network connectivity: OK");
-        return true;
-      } else {
-        addDebugLog(`⚠️ Network test returned: ${response.status}`);
-        return false;
-      }
-    } catch (error: any) {
-      // ANY network error means we should use test mode
-      addDebugLog(`�� Network test failed: ${error.message}`);
-      addDebugLog("🛑 Network restrictions detected - enabling Test Mode");
-
-      // FORCE real speech mode - user wants real speech
-      setTestMode(false);
-      setVapiStatus("connected");
-      setNetworkStatus("online");
-      addDebugLog("🎤 Real speech recording ENABLED!");
-
-      return false;
-    }
-  };
-
-  // Test Vapi connection - try direct connection first, fallback to server proxy
-  const testVapiConnection = async () => {
-    try {
-      addDebugLog("🚀 Testing Vapi connection...");
-      setVapiStatus("testing");
-      setVapiError(null);
-
-      // Direct Vapi Web SDK connection - bypass server proxy
-      const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
-      const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
-
-      if (publicKey && assistantId) {
-        addDebugLog("✅ Valid credentials found - Using direct Vapi Web SDK!");
-        addDebugLog(`🔑 Public Key: ${publicKey.substring(0, 8)}...`);
-        addDebugLog(`🤖 Assistant ID: ${assistantId}`);
-        addDebugLog("⚡ Bypassing server proxy - direct connection mode");
-        setVapiStatus("connected");
-        setNetworkStatus("online");
-        setVapiError(null);
-        addDebugLog("🎤 Ready to start voice recording directly!");
-        return;
-      } else {
-        addDebugLog("❌ Missing credentials for direct connection");
-        addDebugLog(`Public Key: ${!!publicKey ? "Present" : "Missing"}`);
-        addDebugLog(`Assistant ID: ${!!assistantId ? "Present" : "Missing"}`);
-        throw new Error(
-          "Missing required Vapi credentials for direct connection",
-        );
-      }
-
-      // This shouldn't be reached since we have direct connection
-      throw new Error("Direct connection failed - missing credentials");
-    } catch (error: any) {
-      addDebugLog(`���� Initial connection test failed: ${error.message}`);
-
-      // Always try direct connection if we have credentials
-      const fallbackPublicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
-      const fallbackAssistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
-
-      if (fallbackPublicKey && fallbackAssistantId) {
-        addDebugLog("⚡ Falling back to direct Vapi Web SDK connection");
-        addDebugLog("✅ Credentials available - enabling direct mode");
-        setVapiStatus("connected");
-        setNetworkStatus("online");
-        setVapiError(null);
-        addDebugLog("🎤 Voice recording ready via direct connection!");
-      } else {
-        setVapiError(`Connection failed: Missing credentials`);
-        setVapiStatus("error");
-        setNetworkStatus("offline");
-        addDebugLog("❌ No fallback available - missing Vapi credentials");
-      }
-    }
-  };
-
-  // Environment detection
-  useEffect(() => {
-    // Check if we're in a restricted environment
-    const isRestrictedEnvironment = () => {
-      // Check for common restricted environment indicators
-      const hostname = window.location.hostname;
-      const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
-      const isFlyDev = hostname.includes(".fly.dev");
-      const isBuilder = hostname.includes("builder.io");
-
-      // If we're in a development environment that might have network restrictions
-      if (isFlyDev || isBuilder || window.location.protocol === "file:") {
-        addDebugLog(
-          "���� Restricted environment detected - preemptively enabling Test Mode",
-        );
-        return true;
-      }
-
-      return false;
-    };
-
-    // Force real Vapi mode - disable automatic test mode detection
-    addDebugLog(
-      "🚀 Real Vapi mode enabled - skipping test mode auto-detection",
-    );
-
-    addDebugLog("Setting up Vapi event listeners...");
-  }, []);
 
   // Vapi initialization and event listeners (only if not in test mode)
   useEffect(() => {
@@ -867,6 +372,67 @@ export default function Chatbot() {
 
     // Clear any existing listeners to prevent conflicts
     vapiInstance.removeAllListeners();
+
+    // Audio volume boosting - Persistent approach with both methods
+    vapiInstance.on("audio", (audioEl: HTMLAudioElement) => {
+      if (!audioEl) return;
+      
+      // Method 1: Direct element volume control (persistent)
+      audioEl.volume = Math.min(audioVolume, 1.0); // Keep element volume at max 100%
+      audioEl.muted = false;
+      
+      addDebugLog(`🔊 Direct audio volume: ${Math.round(audioEl.volume * 100)}%`);
+      
+      // Method 2: Web Audio API for additional boost (only once per stream)
+      if (audioEl.srcObject && !audioProcessed) {
+        try {
+          const context = new (window.AudioContext || (window as any).webkitAudioContext)();
+          const gain = context.createGain();
+          gain.gain.value = audioVolume; // Apply full boost through gain
+          
+          const source = context.createMediaStreamSource(audioEl.srcObject as MediaStream);
+          source.connect(gain);
+          gain.connect(context.destination);
+          
+          setAudioContext(context);
+          setGainNode(gain);
+          setAudioProcessed(true);
+          
+          addDebugLog(`🎚️ Web Audio boost: ${Math.round(audioVolume * 100)}% applied`);
+          
+          // Ensure audio context starts
+          const startAudio = () => {
+            if (context.state === "suspended") {
+              context.resume();
+              addDebugLog("🔊 Audio context resumed");
+            }
+          };
+          
+          // Try to start immediately
+          startAudio();
+          
+          // Also set up for user interaction
+          document.addEventListener("click", startAudio, { once: true });
+          document.addEventListener("touchstart", startAudio, { once: true });
+          
+        } catch (audioError) {
+          addDebugLog(`❌ Web Audio failed, using direct volume only: ${audioError}`);
+        }
+      }
+      
+      // Continuous volume monitoring and correction
+      const volumeMonitor = setInterval(() => {
+        if (audioEl && !audioEl.paused) {
+          if (audioEl.volume !== Math.min(audioVolume, 1.0)) {
+            audioEl.volume = Math.min(audioVolume, 1.0);
+            addDebugLog(`🔧 Volume corrected back to ${Math.round(audioEl.volume * 100)}%`);
+          }
+        } else {
+          clearInterval(volumeMonitor);
+        }
+      }, 500); // Check every 500ms
+      
+    });
 
     vapiInstance.on("speech-start", () => {
       addDebugLog("🎤 Speech started");
@@ -923,71 +489,6 @@ export default function Chatbot() {
       }
     });
 
-    // AI responses are handled in the consolidated message handler above
-
-    // Audio volume boosting - Persistent approach with both methods
-    vapiInstance.on("audio", (audioEl: HTMLAudioElement) => {
-      if (!audioEl) return;
-
-      // Method 1: Direct element volume control (persistent)
-      audioEl.volume = Math.min(audioVolume, 1.0); // Keep element volume at max 100%
-      audioEl.muted = false;
-
-      addDebugLog(`🔊 Direct audio volume: ${Math.round(audioEl.volume * 100)}%`);
-
-      // Method 2: Web Audio API for additional boost (only once per stream)
-      if (audioEl.srcObject && !audioProcessed) {
-        try {
-          const context = new (window.AudioContext || (window as any).webkitAudioContext)();
-          const gain = context.createGain();
-          gain.gain.value = audioVolume; // Apply full boost through gain
-
-          const source = context.createMediaStreamSource(audioEl.srcObject as MediaStream);
-          source.connect(gain);
-          gain.connect(context.destination);
-
-          setAudioContext(context);
-          setGainNode(gain);
-          setAudioProcessed(true);
-
-          addDebugLog(`🎚️ Web Audio boost: ${Math.round(audioVolume * 100)}% applied`);
-
-          // Ensure audio context starts
-          const startAudio = () => {
-            if (context.state === "suspended") {
-              context.resume();
-              addDebugLog("🔊 Audio context resumed");
-            }
-          };
-
-          // Try to start immediately
-          startAudio();
-
-          // Also set up for user interaction
-          document.addEventListener("click", startAudio, { once: true });
-          document.addEventListener("touchstart", startAudio, { once: true });
-
-        } catch (audioError) {
-          addDebugLog(`❌ Web Audio failed, using direct volume only: ${audioError}`);
-        }
-      }
-
-      // Continuous volume monitoring and correction
-      const volumeMonitor = setInterval(() => {
-        if (audioEl && !audioEl.paused) {
-          if (audioEl.volume !== Math.min(audioVolume, 1.0)) {
-            audioEl.volume = Math.min(audioVolume, 1.0);
-            addDebugLog(`��� Volume corrected back to ${Math.round(audioEl.volume * 100)}%`);
-          }
-        } else {
-          clearInterval(volumeMonitor);
-        }
-      }, 500); // Check every 500ms
-
-    });
-
-    // Additional event handlers can be added here
-
     vapiInstance.on("call-start", () => {
       addDebugLog("📞 Call started");
       setVapiStatus("call-active");
@@ -998,7 +499,7 @@ export default function Chatbot() {
       addDebugLog("📞 Call ended");
       setVapiStatus("call-ended");
       setIsRecording(false);
-
+      
       // Cleanup Web Audio API resources
       if (audioContext && audioContext.state !== 'closed') {
         audioContext.close();
@@ -1064,7 +565,7 @@ export default function Chatbot() {
 
       addDebugLog(`❌ Vapi error: ${errorMessage}`);
       if (debugInfo) {
-        addDebugLog(`��� Debug info: ${debugInfo}`);
+        addDebugLog(`🔍 Debug info: ${debugInfo}`);
       }
 
       // Check for specific error types and provide helpful messages
@@ -1078,84 +579,11 @@ export default function Chatbot() {
         addDebugLog(
           "🔑 Tip: Make sure you're using the correct key type (public key for Web SDK)",
         );
-
-        // Attempt to fix the error by retesting connection
-        setTimeout(() => {
-          addDebugLog("🔄 Attempting to reconnect...");
-          testVapiConnection();
-        }, 2000);
-      } else if (
-        errorMessage.includes("unauthorized") ||
-        errorMessage.includes("401")
-      ) {
-        userFriendlyMessage =
-          "Authentication failed: Unauthorized access. Please verify your API key.";
-      } else if (
-        errorMessage.includes("Failed to fetch") ||
-        errorMessage.includes("network")
-      ) {
-        userFriendlyMessage =
-          "Network error: Unable to connect to Vapi servers. Please check your internet connection.";
-      } else if (errorMessage.includes("start-method-error")) {
-        userFriendlyMessage =
-          "Failed to start voice call. This may be due to API key issues or server configuration.";
-        addDebugLog(
-          "��� Hint: Check that your API keys are correctly configured for both client and server",
-        );
-      } else if (errorMessage.includes("Response body is already used")) {
-        userFriendlyMessage =
-          "Server configuration error. The response handling needs to be fixed.";
-        addDebugLog("🔧 This is a server-side issue with response handling");
-      } else if (errorMessage.includes("[object Object]")) {
-        userFriendlyMessage =
-          "Unknown error occurred. Check debug console for details.";
       }
 
       setVapiError(userFriendlyMessage);
       setVapiStatus("error");
     });
-
-    // Comprehensive initialization and connection test
-    const initializeVapiConnection = async () => {
-      try {
-        addDebugLog("🚀 Starting comprehensive Vapi initialization...");
-
-        // Check environment first
-        const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
-        const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
-
-        if (!publicKey || !assistantId) {
-          throw new Error(
-            `Missing credentials: Public Key: ${!!publicKey}, Assistant ID: ${!!assistantId}`,
-          );
-        }
-
-        addDebugLog(
-          `✅ Credentials verified - Public Key: ${publicKey.substring(0, 8)}..., Assistant: ${assistantId}`,
-        );
-        addDebugLog(
-          "⚡ Direct connection mode enabled - bypassing server proxy",
-        );
-
-        // Set connection as ready immediately for direct mode
-        setVapiStatus("connected");
-        setNetworkStatus("online");
-        setVapiError(null);
-        addDebugLog("✅ Vapi initialization completed successfully!");
-        addDebugLog("🎤 Voice recording is ready to use!");
-      } catch (error: any) {
-        addDebugLog(`❌ Initialization failed: ${error.message}`);
-        addDebugLog("⚠️ Will retry connection in 3 seconds...");
-
-        // Auto-retry after 3 seconds
-        setTimeout(() => {
-          addDebugLog("🔄 Retrying Vapi initialization...");
-          initializeVapiConnection();
-        }, 3000);
-      }
-    };
-
-    initializeVapiConnection();
 
     // Cleanup event listeners
     return () => {
@@ -1228,6 +656,53 @@ export default function Chatbot() {
     );
   };
 
+  const quickActions: QuickAction[] = [
+    {
+      id: "analyze",
+      label: "Analyze Data",
+      icon: <Database size={16} />,
+      prompt: "Help me analyze my genetic data",
+    },
+    {
+      id: "explain",
+      label: "Explain",
+      icon: <Brain size={16} />,
+      prompt: "Explain this genetic concept to me",
+    },
+    {
+      id: "visualize",
+      label: "Visualize",
+      icon: <ImageIcon size={16} />,
+      prompt: "Create a visualization of my data",
+    },
+    {
+      id: "code",
+      label: "Generate Code",
+      icon: <Code size={16} />,
+      prompt: "Generate code for genetic analysis",
+    },
+    {
+      id: "report",
+      label: "Create Report",
+      icon: <FileText size={16} />,
+      prompt: "Generate a research report",
+    },
+    {
+      id: "insights",
+      label: "Get Insights",
+      icon: <Sparkles size={16} />,
+      prompt: "Provide insights about my genetic profile",
+    },
+  ];
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const handleQuickAction = (action: QuickAction) => {
     handleSendMessage(action.prompt);
   };
@@ -1280,40 +755,9 @@ export default function Chatbot() {
         addDebugLog(`🔑 Using public key: ${publicKey.substring(0, 8)}...`);
         addDebugLog(`🤖 Using assistant: ${assistantId}`);
 
-        // Check microphone permissions with better error handling
+        // Check microphone permissions
         try {
           addDebugLog("Checking microphone permissions...");
-
-          // First check if getUserMedia is available
-          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            addDebugLog(
-              "⚠️ MediaDevices API not available - browser/environment limitation",
-            );
-            throw new Error(
-              "Microphone access not available in this environment. Please try opening the app directly in your browser.",
-            );
-          }
-
-          // Check permissions policy
-          if (typeof navigator.permissions !== "undefined") {
-            try {
-              const permission = await navigator.permissions.query({
-                name: "microphone" as PermissionName,
-              });
-              if (permission.state === "denied") {
-                throw new Error(
-                  "Microphone access denied by browser settings. Please enable microphone permissions and reload the page.",
-                );
-              }
-            } catch (e) {
-              // Permissions API might not be fully supported, continue with getUserMedia
-              addDebugLog(
-                "⚠️ Permissions API check failed, trying direct access...",
-              );
-            }
-          }
-
-          addDebugLog("Requesting microphone permissions...");
           const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
           });
@@ -1322,17 +766,7 @@ export default function Chatbot() {
         } catch (permError: any) {
           const errorMsg = permError.message || "Permission denied";
           addDebugLog(`❌ Microphone access failed: ${errorMsg}`);
-
-          if (
-            errorMsg.includes("Permission denied") ||
-            errorMsg.includes("not allowed")
-          ) {
-            throw new Error(
-              "Microphone access blocked. This may be due to browser security settings or iframe restrictions. Please open the app directly in your browser and allow microphone access.",
-            );
-          } else {
-            throw new Error(`Microphone error: ${errorMsg}`);
-          }
+          throw new Error(`Microphone error: ${errorMsg}`);
         }
 
         // Check if Vapi SDK is available and properly initialized
@@ -1358,68 +792,7 @@ export default function Chatbot() {
           }
         }
 
-        // Additional validation check (using existing publicKey variable)
-        if (!publicKey) {
-          throw new Error(
-            "No public key configured. The Web SDK requires VITE_VAPI_PUBLIC_KEY. Please set the environment variable.",
-          );
-        }
-
-        // Validate key format (either pk_ or UUID format)
-        const isValidFormat =
-          publicKey.startsWith("pk_") ||
-          publicKey.match(
-            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-          );
-        if (!isValidFormat) {
-          throw new Error(
-            `Invalid key format. Expected either 'pk_...' or UUID format, but got: ${publicKey.substring(0, 8)}...`,
-          );
-        }
-
-        // Ensure Vapi is in a clean state before starting
-        try {
-          addDebugLog("Ensuring Vapi is in clean state...");
-          vapiInstance.removeAllListeners();
-
-          // Re-add essential event listeners for this session
-          vapiInstance.on("call-start", () => {
-            addDebugLog("📞 Call started");
-            setVapiStatus("call-active");
-          });
-
-          vapiInstance.on("call-end", () => {
-            addDebugLog("�� Call ended");
-            setVapiStatus("call-ended");
-            setIsRecording(false);
-          });
-
-          vapiInstance.on("error", (callError: any) => {
-            let errorMsg = "Unknown call error";
-            try {
-              if (typeof callError === "string") {
-                errorMsg = callError;
-              } else if (callError?.message) {
-                errorMsg = String(callError.message);
-              } else if (typeof callError === "object") {
-                errorMsg = JSON.stringify(callError, null, 2);
-              }
-            } catch (e) {
-              errorMsg = "Error parsing call error";
-            }
-
-            addDebugLog(`❌ Call error: ${errorMsg}`);
-            setVapiError(errorMsg);
-            setVapiStatus("error");
-            setIsRecording(false);
-          });
-        } catch (listenerError) {
-          addDebugLog(
-            `⚠️ Warning: Could not set up clean listeners: ${listenerError}`,
-          );
-        }
-
-        // Configure the assistant for the call (using existing assistantId variable)
+        // Configure the assistant for the call
         const voiceId = import.meta.env.VITE_VAPI_VOICE_ID || "rachel";
 
         let callConfig;
@@ -1458,65 +831,9 @@ export default function Chatbot() {
           };
         }
 
-        // Retry logic for starting Vapi with automatic fallback
-        let retryCount = 0;
-        const maxRetries = 2; // Reduced retries to fail faster
-        let lastError;
-
-        while (retryCount < maxRetries) {
-          try {
-            addDebugLog(
-              `Attempt ${retryCount + 1}/${maxRetries}: Starting Vapi call...`,
-            );
-
-            // Add timeout to Vapi start call
-            const startPromise = vapiInstance.start(callConfig);
-            const timeoutPromise = new Promise((_, reject) =>
-              setTimeout(() => reject(new Error("Vapi start timeout")), 15000),
-            );
-
-            await Promise.race([startPromise, timeoutPromise]);
-            addDebugLog("✅ Vapi call started successfully");
-            break; // Success, exit retry loop
-          } catch (startError: any) {
-            lastError = startError;
-            retryCount++;
-            const errorMsg = startError?.message || "Unknown error";
-
-            addDebugLog(`��� Attempt ${retryCount} failed: ${errorMsg}`);
-
-            if (
-              errorMsg.includes("Failed to fetch") ||
-              errorMsg.includes("timeout")
-            ) {
-              if (retryCount < maxRetries) {
-                addDebugLog(`⏳ Retrying in 1 second...`);
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                continue;
-              } else {
-                // All retries failed - throw error instead of falling back
-                addDebugLog("🛑 All retries failed - real API required");
-                throw new Error(
-                  "Failed to connect to Vapi API after multiple attempts. Check network connectivity.",
-                );
-              }
-            }
-
-            // Handle specific Vapi SDK errors
-            if (
-              errorMsg.includes("start-method-error") ||
-              errorMsg.includes("Response body is already used")
-            ) {
-              addDebugLog("🔧 Detected server-side response handling issue");
-              throw new Error(
-                "Server configuration error: Response handling needs to be fixed. This is likely due to API key or server proxy issues.",
-              );
-            }
-
-            // Re-throw other non-network errors immediately
-            throw startError;
-          }
-        }
+        // Start Vapi call
+        await vapiInstance.start(callConfig);
+        addDebugLog("✅ Vapi call started successfully");
 
         setIsRecording(true);
         setVapiStatus("recording");
@@ -1525,7 +842,7 @@ export default function Chatbot() {
         addDebugLog("🎤 Listening for real speech via Vapi...");
       }
     } catch (error: any) {
-      // Properly serialize error objects to avoid "[object Object]" display
+      // Handle errors
       let errorMessage = "Unknown error";
 
       try {
@@ -1536,72 +853,22 @@ export default function Chatbot() {
         } else if (error?.toString && typeof error.toString === "function") {
           errorMessage = error.toString();
         } else if (typeof error === "object") {
-          // Try to extract meaningful info from error object
-          const errorInfo = {
-            message: error.message,
-            name: error.name,
-            code: error.code,
-            status: error.status,
-          };
-          errorMessage = JSON.stringify(errorInfo, null, 2);
+          errorMessage = JSON.stringify(error, null, 2);
         }
       } catch (e) {
         errorMessage = "Error parsing error object";
       }
 
-      // Enhanced error categorization
-      let userFriendlyMessage = errorMessage;
-      if (errorMessage.includes("Failed to fetch")) {
-        userFriendlyMessage =
-          "Network connection failed. Please check your internet connection and try again.";
-      } else if (errorMessage.includes("Microphone permission")) {
-        userFriendlyMessage =
-          "Microphone access required. Please allow microphone permissions and try again.";
-      } else if (
-        errorMessage.includes("Invalid API key") ||
-        errorMessage.includes("Invalid Key")
-      ) {
-        userFriendlyMessage =
-          "Invalid API key. Please check your Vapi configuration.";
-      } else if (errorMessage.includes("[object Object]")) {
-        userFriendlyMessage =
-          "Unknown error occurred. Check debug console for details.";
-      }
-
-      addDebugLog(`❌ Vapi error: ${errorMessage}`);
-      setVapiError(userFriendlyMessage);
+      addDebugLog(`❌ Recording failed: ${errorMessage}`);
+      setVapiError(errorMessage);
       setVapiStatus("error");
       setIsRecording(false);
-      console.error("Vapi error details:", {
-        originalError: error,
-        serializedMessage: errorMessage,
-        errorType: typeof error,
-      });
-    }
-  };
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
-
-  const getStatusIcon = (status?: string) => {
-    switch (status) {
-      case "sending":
-        return <Clock size={12} className="text-gray-400" />;
-      case "sent":
-        return <CheckCheck size={12} className="text-gray-400" />;
-      case "delivered":
-        return <CheckCheck size={12} className="text-blue-500" />;
-      case "read":
-        return <CheckCheck size={12} className="text-blue-600" />;
-      default:
-        return null;
     }
   };
 
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <FloatingSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
       {/* Main Content */}
       <motion.div
@@ -1612,23 +879,17 @@ export default function Chatbot() {
       >
         {/* Header */}
         <motion.header
-          className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between"
+          className="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 px-6 py-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
               <motion.div
                 className="relative"
-                animate={{
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Avatar className="w-10 h-10">
                   <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
@@ -1638,646 +899,333 @@ export default function Chatbot() {
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
               </motion.div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">
+                <h1 className="text-lg font-semibold text-gray-900 dashboard-title">
                   AI Chatbot
                 </h1>
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span>Online</span>
-                </div>
+                <p className="text-sm text-gray-600 dashboard-text">
+                  Powered by Vapi - Voice & Text AI Assistant
+                </p>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-2">
-            <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200">
-              AI Powered
-            </Badge>
-            <Button size="sm" variant="ghost">
-              <Settings size={20} />
-            </Button>
-            <Button size="sm" variant="ghost">
-              <MoreVertical size={20} />
-            </Button>
-          </div>
-        </motion.header>
-
-        {/* Real API Status Banner */}
-        {vapiStatus === "connected" && (
-          <motion.div
-            className="bg-green-100 border-b border-green-200 px-6 py-3"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                <div>
-                  <span className="text-sm font-medium text-green-800">
-                    Real Vapi API Connected
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      vapiStatus === "connected" || vapiStatus === "call-active"
+                        ? "bg-green-500 animate-pulse"
+                        : vapiStatus === "error"
+                        ? "bg-red-500"
+                        : "bg-yellow-500"
+                    }`}
+                  ></div>
+                  <span className="text-gray-600 dashboard-text">
+                    {vapiStatus === "connected" || vapiStatus === "call-active"
+                      ? "Connected"
+                      : vapiStatus === "error"
+                      ? "Error"
+                      : "Connecting..."}
                   </span>
-                  <p className="text-xs text-green-700">
-                    Voice assistant is ready for real-time conversations.
-                  </p>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        )}
 
-        {vapiStatus === "error" && (
-          <motion.div
-            className="bg-red-100 border-b border-red-200 px-6 py-3"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                <div>
-                  <span className="text-sm font-medium text-red-800">
-                    API Connection Failed
-                  </span>
-                  <p className="text-xs text-red-700">
-                    {vapiError ||
-                      "Unable to connect to Vapi API. Check your configuration."}
-                  </p>
-                </div>
-              </div>
               <Button
                 size="sm"
                 variant="outline"
-                onClick={testVapiConnection}
-                className="bg-red-50 border-red-300 text-red-800 hover:bg-red-100"
+                className="border-gray-200 hover:bg-gray-50"
               >
-                Retry Connection
+                <Settings size={16} className="mr-2" />
+                Settings
               </Button>
             </div>
-          </motion.div>
-        )}
-
-        {/* Quick Actions */}
-        <motion.div
-          className="bg-white border-b border-gray-200 px-6 py-3"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <div className="flex items-center gap-2 overflow-x-auto pb-2">
-            <span className="text-sm text-gray-600 whitespace-nowrap mr-2">
-              Quick Actions:
-            </span>
-            {quickActions.map((action, index) => (
-              <motion.button
-                key={action.id}
-                onClick={() => handleQuickAction(action)}
-                className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm whitespace-nowrap transition-colors"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 + index * 0.05 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {action.icon}
-                <span>{action.label}</span>
-              </motion.button>
-            ))}
           </div>
-        </motion.div>
+        </motion.header>
 
-        {/* Main Chat Layout */}
+        {/* Main Chat Container */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Left Side - Chat and Transcript */}
+          {/* Chat Messages Area */}
           <div className="flex-1 flex flex-col">
-            {/* Messages Area - Fixed Height */}
-            <div className="h-[500px] overflow-hidden relative">
-              <div className="h-full max-w-4xl mx-auto px-6 py-6">
-                {/* Chat Container with Invisible Scrollbar */}
-                <div className="h-full overflow-y-auto space-y-6 pr-4 scrollbar-hide">
-                  <AnimatePresence>
-                    {messages.map((message) => (
-                      <motion.div
-                        key={message.id}
-                        className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        transition={{ duration: 0.3 }}
+            {/* Messages Container */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <AnimatePresence initial={false}>
+                {messages.map((message, index) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className={`flex items-start gap-3 ${
+                      message.sender === "user" ? "flex-row-reverse" : ""
+                    }`}
+                  >
+                    <Avatar className="w-8 h-8 flex-shrink-0">
+                      <AvatarFallback
+                        className={`${
+                          message.sender === "user"
+                            ? "bg-gradient-to-r from-blue-500 to-cyan-500"
+                            : "bg-gradient-to-r from-purple-500 to-pink-500"
+                        } text-white text-sm`}
                       >
+                        {message.sender === "user" ? (
+                          <User size={16} />
+                        ) : (
+                          <Brain size={16} />
+                        )}
+                      </AvatarFallback>
+                    </Avatar>
+
+                    <div
+                      className={`flex-1 max-w-3xl ${
+                        message.sender === "user" ? "text-right" : ""
+                      }`}
+                    >
+                      <div
+                        className={`relative p-4 rounded-2xl shadow-sm ${
+                          message.sender === "user"
+                            ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white ml-12"
+                            : "bg-white/80 backdrop-blur-sm text-gray-800 mr-12 border border-white/20"
+                        }`}
+                      >
+                        <p className="text-sm leading-relaxed dashboard-text">
+                          {message.content}
+                        </p>
+
                         <div
-                          className={`flex items-start gap-3 max-w-[70%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}
+                          className={`mt-2 flex items-center gap-2 text-xs ${
+                            message.sender === "user"
+                              ? "text-blue-100 justify-end"
+                              : "text-gray-500"
+                          }`}
                         >
-                          {/* Avatar */}
+                          <Clock size={12} />
+                          <span>
+                            {message.timestamp.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                          {message.status === "read" && (
+                            <CheckCheck size={12} />
+                          )}
+                        </div>
+                      </div>
+
+                      {/* AI Suggestions */}
+                      {message.sender === "ai" && message.suggestions && (
+                        <motion.div
+                          className="mt-3 flex flex-wrap gap-2"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.5 }}
+                        >
+                          {message.suggestions.map((suggestion, suggestionIndex) => (
+                            <motion.button
+                              key={suggestionIndex}
+                              onClick={() => handleSuggestionClick(suggestion)}
+                              className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full hover:from-purple-200 hover:to-pink-200 transition-all duration-200 border border-purple-200/50 dashboard-text"
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.6 + suggestionIndex * 0.1 }}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              {suggestion}
+                            </motion.button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              {/* Typing Indicator */}
+              <AnimatePresence>
+                {isTyping && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="flex items-start gap-3"
+                  >
+                    <Avatar className="w-8 h-8">
+                      <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                        <Brain size={16} />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-white/20">
+                      <div className="flex items-center gap-1">
+                        {[0, 1, 2].map((i) => (
                           <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: 0.1 }}
-                          >
-                            <Avatar className="w-8 h-8">
-                              {message.sender === "user" ? (
-                                <AvatarFallback className="bg-blue-100 text-blue-700">
-                                  <User size={16} />
-                                </AvatarFallback>
-                              ) : (
-                                <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                                  <Brain size={16} />
-                                </AvatarFallback>
-                              )}
-                            </Avatar>
-                          </motion.div>
+                            key={i}
+                            className="w-2 h-2 bg-purple-400 rounded-full"
+                            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                            transition={{
+                              duration: 1,
+                              repeat: Infinity,
+                              delay: i * 0.2,
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-                          {/* Message Content */}
-                          <div
-                            className={`space-y-1 ${message.sender === "user" ? "text-right" : ""}`}
-                          >
-                            <motion.div
-                              className={`inline-block px-4 py-3 rounded-2xl ${
-                                message.sender === "user"
-                                  ? "bg-blue-600 text-white"
-                                  : "bg-white border border-gray-200 text-gray-900"
-                              }`}
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{ delay: 0.2 }}
-                            >
-                              <p className="text-sm leading-relaxed font-['Poppins',sans-serif]">
-                                {message.content}
-                              </p>
-                            </motion.div>
-
-                            {/* Message Info */}
-                            <div
-                              className={`flex items-center gap-2 text-xs text-gray-500 ${message.sender === "user" ? "justify-end" : ""}`}
-                            >
-                              <span>{formatTime(message.timestamp)}</span>
-                              {message.sender === "user" &&
-                                getStatusIcon(message.status)}
-                            </div>
-
-                            {/* Suggestions */}
-                            {message.suggestions && message.sender === "ai" && (
-                              <motion.div
-                                className="flex flex-wrap gap-2 mt-3"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                              >
-                                {message.suggestions.map(
-                                  (suggestion, index) => (
-                                    <motion.button
-                                      key={index}
-                                      onClick={() =>
-                                        handleSuggestionClick(suggestion)
-                                      }
-                                      className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors"
-                                      initial={{ opacity: 0, scale: 0.8 }}
-                                      animate={{ opacity: 1, scale: 1 }}
-                                      transition={{ delay: 0.6 + index * 0.1 }}
-                                      whileHover={{ scale: 1.05 }}
-                                      whileTap={{ scale: 0.95 }}
-                                    >
-                                      {suggestion}
-                                    </motion.button>
-                                  ),
-                                )}
-                              </motion.div>
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-
-                  {/* Typing Indicator */}
-                  <AnimatePresence>
-                    {isTyping && (
-                      <motion.div
-                        className="flex justify-start"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className="flex items-start gap-3 max-w-[70%]">
-                          <Avatar className="w-8 h-8">
-                            <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                              <Brain size={16} />
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
-                            <div className="flex items-center gap-1">
-                              {[0, 1, 2].map((i) => (
-                                <motion.div
-                                  key={i}
-                                  className="w-2 h-2 bg-gray-400 rounded-full"
-                                  animate={{
-                                    scale: [1, 1.2, 1],
-                                    opacity: [0.5, 1, 0.5],
-                                  }}
-                                  transition={{
-                                    duration: 1,
-                                    delay: i * 0.2,
-                                    repeat: Infinity,
-                                    ease: "easeInOut",
-                                  }}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <div ref={messagesEndRef} />
-                </div>
-              </div>
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
-            <motion.div
-              className="bg-white border-t border-gray-200 px-6 py-6 shadow-lg"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <div className="max-w-4xl mx-auto">
-                <div className="flex items-end gap-4">
-                  {/* File Upload */}
-                  <motion.button
-                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Paperclip size={20} />
-                  </motion.button>
-
-                  {/* Input Field */}
-                  <div className="flex-1 relative">
-                    <Input
-                      ref={inputRef}
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSendMessage(inputValue);
-                        }
-                      }}
-                      placeholder="Type your message... (Press Enter to send)"
-                      className="pr-12 py-3 rounded-xl border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
-                      disabled={isTyping}
-                    />
-
-                    {/* Character count or file indicator */}
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
-                      {inputValue.length > 0 && (
-                        <span>{inputValue.length}</span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Voice Recording */}
-                  <motion.button
-                    onClick={toggleRecording}
-                    className={`p-2 rounded-full transition-all ${
-                      isRecording
-                        ? "bg-red-500 text-white"
-                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                    }`}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
-                    transition={
-                      isRecording ? { duration: 1, repeat: Infinity } : {}
-                    }
-                    title="Voice Recording"
-                  >
-                    {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
-                  </motion.button>
-
-                  {/* Volume Control */}
-                  <div className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg" title="Audio Volume">
-                    <div className="text-gray-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <input
-                      type="range"
-                      min="0.1"
-                      max="4.0"
-                      step="0.1"
-                      value={audioVolume}
-                      onChange={(e) => {
-                        const newVolume = parseFloat(e.target.value);
-                        setAudioVolume(newVolume);
-                        if (gainNode) {
-                          gainNode.gain.value = newVolume;
-                        }
-                        addDebugLog(`🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`);
-                      }}
-                      className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                      style={{
-                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`
-                      }}
-                    />
-                    <span className="text-xs text-gray-500 min-w-[30px]">
-                      {Math.round(audioVolume * 100)}%
-                    </span>
-                  </div>
-
-                  {/* Send Button */}
-                  <motion.button
-                    onClick={() => handleSendMessage(inputValue)}
-                    disabled={!inputValue.trim() || isTyping}
-                    className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Send size={20} />
-                  </motion.button>
-                </div>
-
-                {/* Input Helpers */}
-                <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
-                  <div className="flex items-center gap-4">
-                    <span className="font-['Poppins',sans-serif] text-sm font-medium text-green-600">
-                      🎤 Real speech recording ready - Click microphone to talk!
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-2 h-2 rounded-full ${
-                          vapiStatus === "connected"
-                            ? "bg-green-500"
-                            : vapiStatus === "recording"
-                              ? "bg-red-500 animate-pulse"
-                              : vapiStatus === "error"
-                                ? "bg-red-500"
-                                : vapiStatus === "testing"
-                                  ? "bg-yellow-500 animate-pulse"
-                                  : "bg-gray-400"
-                        }`}
-                      ></div>
-                      <span className="text-xs capitalize font-['Poppins',sans-serif] font-medium">
-                        {vapiStatus.replace("-", " ")}
-                      </span>
-                      <span className="text-xs px-1 rounded bg-green-100 text-green-700 font-bold animate-pulse">
-                        🎤 REAL SPEECH
-                      </span>
-                    </div>
-                    {isRecording && (
-                      <motion.div
-                        className="flex items-center gap-1 text-red-500"
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 1, repeat: Infinity }}
-                      >
-                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                        <span>Recording...</span>
-                      </motion.div>
-                    )}
-                    {vapiError && (
-                      <span className="text-xs text-red-500">
-                        Error: {vapiError}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Zap size={12} />
-                    <span>Powered by Real Vapi AI</span>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        addDebugLog("�� Manual test triggered...");
-                        setVapiStatus("testing");
-                        setVapiError(null);
-                        testVapiConnection();
-                      }}
-                      className="h-6 px-2 text-xs"
+            <div className="border-t border-white/20 bg-white/80 backdrop-blur-lg p-6">
+              {/* Quick Actions */}
+              <div className="mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {quickActions.map((action, index) => (
+                    <motion.button
+                      key={action.id}
+                      onClick={() => handleQuickAction(action)}
+                      className="flex items-center gap-2 px-3 py-2 text-xs bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200/50 dashboard-text"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      Test Connection
-                    </Button>
-                  </div>
+                      {action.icon}
+                      {action.label}
+                    </motion.button>
+                  ))}
                 </div>
               </div>
-            </motion.div>
 
-            {/* Debug Panel */}
-            {debugLogs.length > 0 && (
-              <motion.div
-                className="bg-gray-900 text-green-400 border-t border-gray-200 p-4 h-32 overflow-y-auto font-mono text-xs"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <div className="max-w-4xl mx-auto">
-                  <h3 className="text-green-300 font-semibold mb-2 flex items-center gap-2">
-                    <Zap size={14} />
-                    Vapi Debug Console
-                  </h3>
-                  <div className="space-y-1">
-                    {debugLogs.map((log, index) => (
-                      <div key={index} className="text-green-400">
+              {/* Input Controls */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 relative">
+                  <Input
+                    ref={inputRef}
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage(inputValue);
+                      }
+                    }}
+                    placeholder="Type your message or use voice..."
+                    className="pr-12 bg-white/90 border-white/30 backdrop-blur-sm focus:bg-white focus:border-purple-300 transition-all dashboard-text"
+                  />
+
+                  {/* Character count or file indicator */}
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
+                    {inputValue.length > 0 && <span>{inputValue.length}</span>}
+                  </div>
+                </div>
+
+                {/* Voice Recording */}
+                <motion.button
+                  onClick={toggleRecording}
+                  className={`p-2 rounded-full transition-all ${
+                    isRecording
+                      ? "bg-red-500 text-white"
+                      : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                  }`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
+                  transition={
+                    isRecording ? { duration: 1, repeat: Infinity } : {}
+                  }
+                  title="Voice Recording"
+                >
+                  {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+                </motion.button>
+
+                {/* Volume Control */}
+                <div className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg" title="Audio Volume">
+                  <div className="text-gray-500">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="range"
+                    min="0.1"
+                    max="4.0"
+                    step="0.1"
+                    value={audioVolume}
+                    onChange={(e) => {
+                      const newVolume = parseFloat(e.target.value);
+                      setAudioVolume(newVolume);
+                      if (gainNode) {
+                        gainNode.gain.value = newVolume;
+                      }
+                      addDebugLog(`🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`);
+                    }}
+                    className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                    style={{
+                      background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`
+                    }}
+                  />
+                  <span className="text-xs text-gray-500 min-w-[30px] dashboard-text">
+                    {Math.round(audioVolume * 100)}%
+                  </span>
+                </div>
+
+                {/* Send Button */}
+                <motion.button
+                  onClick={() => handleSendMessage(inputValue)}
+                  disabled={!inputValue.trim() || isTyping}
+                  className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Send size={20} />
+                </motion.button>
+              </div>
+
+              {/* Error Display */}
+              {vapiError && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg"
+                >
+                  <p className="text-sm text-red-700 dashboard-text">{vapiError}</p>
+                </motion.div>
+              )}
+
+              {/* Debug Logs */}
+              {debugLogs.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-lg max-h-32 overflow-y-auto"
+                >
+                  <div className="text-xs text-gray-600 space-y-1 dashboard-text">
+                    {debugLogs.slice(-5).map((log, index) => (
+                      <div key={index} className="font-mono">
                         {log}
                       </div>
                     ))}
                   </div>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Transcript Section */}
-            <motion.div
-              className="bg-gray-100 border-t border-gray-200 p-4 h-48 overflow-y-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="max-w-4xl mx-auto">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                  <FileText size={16} />
-                  Conversation Transcript
-                </h3>
-                <div className="space-y-2">
-                  {transcript.map((line, index) => (
-                    <motion.div
-                      key={index}
-                      className="text-xs text-gray-600 p-2 bg-white rounded border"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      {line}
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+                </motion.div>
+              )}
+            </div>
           </div>
-
-          {/* Right Side - Video Container */}
-          <motion.div
-            className="w-[350px] bg-white border-l border-gray-200 flex flex-col shadow-xl"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            {/* Video Header */}
-            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-blue-50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 font-['Poppins',sans-serif]">
-                    AI Avatar
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1 font-['Poppins',sans-serif]">
-                    Genetic Research Assistant
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-3 h-3 rounded-full animate-pulse ${
-                      vapiStatus === "recording" ? "bg-red-500" : "bg-green-500"
-                    }`}
-                  ></div>
-                  <span className="text-sm font-medium text-gray-700 font-['Poppins',sans-serif]">
-                    {vapiStatus === "recording" ? "🎤 Recording" : "👁️ Live"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Video Container - Maximized */}
-            <div className="flex-1 p-4">
-              <div className="relative w-full h-full min-h-[400px] bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl overflow-hidden shadow-2xl">
-                <video
-                  ref={videoRef}
-                  autoPlay={true}
-                  muted={true}
-                  controls={false}
-                  playsInline={true}
-                  loop={true}
-                  className="w-full h-full object-cover"
-                >
-                  <source
-                    type="video/mp4"
-                    src="https://cdn.builder.io/o/assets%2F2d06e16d643b4c26a7274cfb607b5ae9%2F1933a4afdc3240f493211f92f8a5bbc4%2Fcompressed?apiKey=2d06e16d643b4c26a7274cfb607b5ae9&token=1933a4afdc3240f493211f92f8a5bbc4&alt=media&optimized=true"
-                  />
-                </video>
-
-                {/* Video Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
-
-                {/* Recording Indicator */}
-                {vapiStatus === "recording" && (
-                  <motion.div
-                    className="absolute top-4 right-4 flex items-center gap-2 bg-red-500/90 text-white px-3 py-2 rounded-full backdrop-blur-sm"
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                  >
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium font-['Poppins',sans-serif]">
-                      REC
-                    </span>
-                  </motion.div>
-                )}
-              </div>
-            </div>
-            {/* Video Controls and Info */}
-            <div className="p-6 border-t border-gray-200 bg-gray-50">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-bold text-gray-900 font-['Poppins',sans-serif]">
-                      AI Assistant
-                    </h4>
-                    <p className="text-sm text-gray-600 font-['Poppins',sans-serif]">
-                      Ready to analyze your genetic data
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="hover:bg-purple-50"
-                    >
-                      <Play size={16} />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="hover:bg-purple-50"
-                    >
-                      <Pause size={16} />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Audio Visualization */}
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <div className="flex items-center justify-center gap-1 h-8">
-                    {Array.from({ length: 20 }, (_, i) => (
-                      <motion.div
-                        key={i}
-                        className="w-1 bg-purple-400 rounded-full"
-                        animate={{
-                          height: [4, 24, 4],
-                          opacity: [0.3, 1, 0.3],
-                        }}
-                        transition={{
-                          duration: 1 + Math.random(),
-                          delay: i * 0.05,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Video Stats */}
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-['Poppins',sans-serif]">
-                      Status:
-                    </span>
-                    <span className="text-green-600 flex items-center gap-2 font-semibold font-['Poppins',sans-serif]">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      Connected
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-['Poppins',sans-serif]">
-                      Response Time:
-                    </span>
-                    <span className="font-semibold text-purple-600 font-['Poppins',sans-serif]">
-                      &lt; 200ms
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-['Poppins',sans-serif]">
-                      Quality:
-                    </span>
-                    <span className="font-semibold text-blue-600 font-['Poppins',sans-serif]">
-                      4K HD
-                    </span>
-                  </div>
-                  <div className="pt-3 border-t border-gray-200">
-                    <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-                      <Sparkles size={14} className="text-purple-500" />
-                      <span className="font-medium font-['Poppins',sans-serif]">
-                        Powered by Advanced AI
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
+
+        {/* Hidden video element for Vapi */}
+        <video
+          ref={videoRef}
+          className="hidden"
+          autoPlay
+          muted
+          playsInline
+        />
       </motion.div>
     </div>
   );
