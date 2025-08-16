@@ -173,7 +173,7 @@ export default function Dashboard() {
             {/* Left Column - Image */}
             <div className="flex flex-col w-1/2 max-lg:w-full">
               <div
-                className="flex flex-col relative mt-5 h-[365px] bg-cover bg-center bg-no-repeat border-none rounded-lg"
+                className="flex flex-col relative mt-5 h-[365px] bg-cover bg-center bg-no-repeat border-none rounded-2xl"
                 style={{
                   backgroundImage:
                     "url(https://cdn.builder.io/api/v1/image/assets%2F447cf80127094586a85dadd4107e395f%2Fa5359b0377cc4ba3acdc5b61c68211a2)",
@@ -214,9 +214,9 @@ export default function Dashboard() {
                     whileHover={{ y: -8, scale: 1.02 }}
                   >
                     {/* Glass effect card with soft off-white background */}
-                    <div className="relative bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30 overflow-hidden">
+                    <div className="relative bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30 overflow-hidden">
                       {/* Soft lift effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-2xl"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-3xl"></div>
                       <div
                         className="absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300"
                         style={{
@@ -227,7 +227,7 @@ export default function Dashboard() {
                       <div className="relative z-10">
                         <div className="flex items-center justify-between mb-4">
                           <div
-                            className={`p-3 rounded-xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
+                            className={`p-3 rounded-2xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
                           >
                             <stat.icon
                               size={24}
@@ -274,7 +274,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
+          <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -393,7 +393,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
+          <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-gray-900 dashboard-title">
                 Global Business Presence
@@ -406,7 +406,7 @@ export default function Dashboard() {
             <div className="relative">
               {/* Real Geological World Map */}
               <motion.div
-                className="relative h-96 rounded-xl overflow-hidden shadow-lg"
+                className="relative h-96 rounded-2xl overflow-hidden shadow-lg"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
@@ -417,7 +417,7 @@ export default function Dashboard() {
                   <img
                     src="https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/img/data/world.png"
                     alt="World Map"
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover rounded-2xl"
                     style={{
                       filter:
                         "hue-rotate(200deg) saturate(1.2) contrast(1.1) brightness(1.05)",
@@ -434,7 +434,7 @@ export default function Dashboard() {
                   <img
                     src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/-180,-85,180,85/800x400?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
                     alt="World Map Fallback"
-                    className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-0"
+                    className="absolute inset-0 w-full h-full object-cover rounded-2xl opacity-0"
                     style={{
                       filter:
                         "hue-rotate(200deg) saturate(1.2) contrast(1.1) brightness(1.05)",
@@ -455,7 +455,7 @@ export default function Dashboard() {
                       e.target.style.display = "none";
                       const container = e.target.parentElement;
                       container.innerHTML = `
-                        <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center">
+                        <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center">
                           <div class="text-center text-white">
                             <h3 class="text-xl font-bold mb-2">World Map</h3>
                             <p class="text-sm opacity-90">Global Business Analytics</p>
@@ -467,7 +467,7 @@ export default function Dashboard() {
 
                   {/* Enhanced overlay with subtle styling */}
                   <div
-                    className="absolute inset-0 rounded-xl pointer-events-none"
+                    className="absolute inset-0 rounded-2xl pointer-events-none"
                     style={{
                       background: `
                         linear-gradient(45deg, rgba(139, 92, 246, 0.15) 0%, transparent 30%, transparent 70%, rgba(6, 182, 212, 0.15) 100%),
@@ -479,7 +479,7 @@ export default function Dashboard() {
                   />
 
                   {/* Map title overlay */}
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-md">
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-2xl px-3 py-2 shadow-md">
                     <h4 className="text-sm font-semibold text-gray-800">
                       Global Coverage
                     </h4>
@@ -490,7 +490,7 @@ export default function Dashboard() {
 
                   {/* Coordinates grid overlay for authenticity */}
                   <div
-                    className="absolute inset-0 rounded-xl pointer-events-none opacity-20"
+                    className="absolute inset-0 rounded-2xl pointer-events-none opacity-20"
                     style={{
                       backgroundImage: `
                         linear-gradient(to right, rgba(255,255,255,0.3) 1px, transparent 1px),
@@ -511,7 +511,7 @@ export default function Dashboard() {
               >
                 {/* Total Global Reach */}
                 <motion.div
-                  className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200/50"
+                  className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 border border-purple-200/50"
                   whileHover={{ scale: 1.02 }}
                 >
                   <h4 className="text-lg font-bold text-purple-800 mb-2">
@@ -529,7 +529,7 @@ export default function Dashboard() {
 
                 {/* Total Revenue */}
                 <motion.div
-                  className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200/50"
+                  className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200/50"
                   whileHover={{ scale: 1.02 }}
                 >
                   <h4 className="text-lg font-bold text-blue-800 mb-2">
@@ -550,7 +550,7 @@ export default function Dashboard() {
 
                 {/* Average Growth */}
                 <motion.div
-                  className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200/50"
+                  className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200/50"
                   whileHover={{ scale: 1.02 }}
                 >
                   <h4 className="text-lg font-bold text-green-800 mb-2">
@@ -580,7 +580,7 @@ export default function Dashboard() {
                 {mapData.map((region, index) => (
                   <motion.div
                     key={region.region}
-                    className="bg-white/50 backdrop-blur-sm rounded-lg p-3 border border-white/30 hover:bg-white/70 transition-all duration-300"
+                    className="bg-white/50 backdrop-blur-sm rounded-2xl p-3 border border-white/30 hover:bg-white/70 transition-all duration-300"
                     whileHover={{ scale: 1.02, y: -2 }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -617,7 +617,7 @@ export default function Dashboard() {
         >
           {/* Recent Activity */}
           <div className="lg:col-span-2">
-            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
+            <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
               <h3
                 className="text-lg font-semibold text-gray-900 mb-4"
                 style={{ fontFamily: "Montserrat, sans-serif" }}
@@ -649,7 +649,7 @@ export default function Dashboard() {
                 ].map((activity, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/40 transition-colors"
+                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/40 transition-colors"
                   >
                     <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                     <div className="flex-1">
@@ -677,7 +677,7 @@ export default function Dashboard() {
 
           {/* Quick Stats */}
           <div className="space-y-6">
-            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
+            <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
               <h3
                 className="text-lg font-semibold text-gray-900 mb-4"
                 style={{ fontFamily: "Montserrat, sans-serif" }}
