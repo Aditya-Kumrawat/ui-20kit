@@ -973,34 +973,7 @@ export default function Chatbot() {
     vapiInstance.on("call-start", () => {
       addDebugLog("📞 Call started");
       setVapiStatus("call-active");
-
-      // Setup Web Audio API for aggressive volume control
-      try {
-        const context = new AudioContext();
-
-        // Create audio processing chain: compressor -> gain -> destination
-        const gain = context.createGain();
-        const comp = context.createDynamicsCompressor();
-
-        // Configure compressor for volume boosting
-        comp.threshold.setValueAtTime(-24, context.currentTime); // Lower threshold
-        comp.knee.setValueAtTime(30, context.currentTime); // Smoother compression
-        comp.ratio.setValueAtTime(12, context.currentTime); // High compression ratio
-        comp.attack.setValueAtTime(0.003, context.currentTime); // Fast attack
-        comp.release.setValueAtTime(0.25, context.currentTime); // Quick release
-
-        // Aggressive gain boost up to 500%
-        gain.gain.value = audioVolume * 5.0;
-
-        setAudioContext(context);
-        setGainNode(gain);
-        setCompressor(comp);
-
-        addDebugLog(`🎚️ Audio processing chain created: Compressor + ${Math.round(gain.gain.value * 20)}% gain boost`);
-        addDebugLog(`🔊 Compressor settings: threshold=-24dB, ratio=12:1, knee=30dB`);
-      } catch (audioError) {
-        addDebugLog(`⚠️ Web Audio API setup failed: ${audioError}`);
-      }
+      addDebugLog("🎧 Audio processing will be handled on audio stream");
     });
 
     vapiInstance.on("call-end", () => {
