@@ -942,7 +942,7 @@ export default function Chatbot() {
         className={`transition-all duration-300 min-h-screen flex flex-col ${
           isCollapsed ? "ml-20" : "ml-72"
         } pr-4`}
-        animate={{ marginLeft: isCollapsed ? 80 : 288 }}
+        animate={{ marginLeft: isCollapsed ? 80 : 272 }}
       >
         {/* Main Chat Container */}
         <div className="flex-1 flex overflow-hidden p-4">
