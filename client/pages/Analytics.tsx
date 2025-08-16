@@ -106,7 +106,7 @@ export default function Analytics() {
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />
-      <FloatingTopBar />
+      <FloatingTopBar isCollapsed={isCollapsed} />
 
       {/* Main Content */}
       <motion.div
