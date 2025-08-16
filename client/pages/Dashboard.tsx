@@ -237,7 +237,12 @@ export default function Dashboard() {
               >
                 Revenue & Orders Trend
               </h3>
-              <div className="h-80">
+              <motion.div
+                className="h-80"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+              >
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
                     data={chartData}
@@ -296,7 +301,7 @@ export default function Dashboard() {
                     />
                   </AreaChart>
                 </ResponsiveContainer>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </motion.div>
