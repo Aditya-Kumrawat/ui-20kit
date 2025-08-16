@@ -352,7 +352,7 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Interactive World Map Section */}
+        {/* Real Geographical World Map Section */}
         <motion.div
           className="mb-8"
           initial={{ opacity: 0, y: 40 }}
@@ -370,148 +370,72 @@ export default function Dashboard() {
             </div>
 
             <div className="relative">
-              {/* World Map SVG */}
+              {/* Real World Map using OpenStreetMap */}
               <motion.div
-                className="relative h-96 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl overflow-hidden"
+                className="relative h-96 rounded-xl overflow-hidden shadow-lg"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
-                <svg
-                  viewBox="0 0 800 400"
-                  className="w-full h-full"
-                  style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))' }}
-                >
-                  {/* World Map Continents */}
-                  <motion.path
-                    d="M100 80 Q200 60 300 90 L350 85 Q400 80 450 95 L500 100 Q550 90 600 110 L650 115 Q700 105 750 120 L750 180 Q700 170 650 175 L600 180 Q550 175 500 185 L450 190 Q400 185 350 195 L300 200 Q200 195 100 210 Z"
-                    fill="#e2e8f0"
-                    stroke="#cbd5e1"
-                    strokeWidth="1"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{ duration: 2, delay: 1 }}
-                  />
+                <iframe
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=-180%2C-85%2C180%2C85&layer=mapnik"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    borderRadius: '12px'
+                  }}
+                  title="World Map"
+                />
 
-                  {/* North America */}
-                  <motion.path
-                    d="M80 100 Q150 80 220 110 L250 105 Q280 100 310 115 L340 120 Q370 110 400 125 L420 130 Q450 120 480 135 L480 190 Q450 180 420 185 L400 190 Q370 185 340 195 L310 200 Q280 195 250 205 L220 210 Q150 205 80 220 Z"
-                    fill="#ddd6fe"
-                    stroke="#8b5cf6"
-                    strokeWidth="2"
-                    className="cursor-pointer transition-all duration-300"
-                    whileHover={{ scale: 1.05, fill: "#c4b5fd" }}
-                    onMouseEnter={() => setHoveredRegion(mapData[0])}
-                    onMouseLeave={() => setHoveredRegion(null)}
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, delay: 1.2 }}
-                  />
-
-                  {/* Europe */}
-                  <motion.path
-                    d="M380 90 Q420 85 460 95 L480 92 Q500 88 520 98 L540 100 Q560 95 580 105 L580 150 Q560 145 540 150 L520 155 Q500 150 480 160 L460 165 Q420 160 380 170 Z"
-                    fill="#cffafe"
-                    stroke="#06b6d4"
-                    strokeWidth="2"
-                    className="cursor-pointer transition-all duration-300"
-                    whileHover={{ scale: 1.05, fill: "#a7f3d0" }}
-                    onMouseEnter={() => setHoveredRegion(mapData[1])}
-                    onMouseLeave={() => setHoveredRegion(null)}
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, delay: 1.4 }}
-                  />
-
-                  {/* Asia Pacific */}
-                  <motion.path
-                    d="M580 120 Q630 115 680 125 L700 122 Q720 118 740 128 L760 130 Q780 125 800 135 L800 200 Q780 195 760 200 L740 205 Q720 200 700 210 L680 215 Q630 210 580 220 Z"
-                    fill="#d1fae5"
-                    stroke="#10b981"
-                    strokeWidth="2"
-                    className="cursor-pointer transition-all duration-300"
-                    whileHover={{ scale: 1.05, fill: "#a7f3d0" }}
-                    onMouseEnter={() => setHoveredRegion(mapData[2])}
-                    onMouseLeave={() => setHoveredRegion(null)}
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, delay: 1.6 }}
-                  />
-
-                  {/* South America */}
-                  <motion.path
-                    d="M180 240 Q220 235 260 245 L280 242 Q300 238 320 248 L340 250 Q360 245 380 255 L380 320 Q360 315 340 320 L320 325 Q300 320 280 330 L260 335 Q220 330 180 340 Z"
-                    fill="#fef3c7"
-                    stroke="#f59e0b"
-                    strokeWidth="2"
-                    className="cursor-pointer transition-all duration-300"
-                    whileHover={{ scale: 1.05, fill: "#fde68a" }}
-                    onMouseEnter={() => setHoveredRegion(mapData[3])}
-                    onMouseLeave={() => setHoveredRegion(null)}
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, delay: 1.8 }}
-                  />
-
-                  {/* Africa */}
-                  <motion.path
-                    d="M420 200 Q460 195 500 205 L520 202 Q540 198 560 208 L580 210 Q600 205 620 215 L620 280 Q600 275 580 280 L560 285 Q540 280 520 290 L500 295 Q460 290 420 300 Z"
-                    fill="#fee2e2"
-                    stroke="#ef4444"
-                    strokeWidth="2"
-                    className="cursor-pointer transition-all duration-300"
-                    whileHover={{ scale: 1.05, fill: "#fecaca" }}
-                    onMouseEnter={() => setHoveredRegion(mapData[4])}
-                    onMouseLeave={() => setHoveredRegion(null)}
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, delay: 2 }}
-                  />
-
-                  {/* Animated Data Points */}
+                {/* Overlay with data points */}
+                <div className="absolute inset-0 pointer-events-none">
                   {mapData.map((region, index) => (
-                    <motion.g key={region.region}>
-                      <motion.circle
-                        cx={region.position.x}
-                        cy={region.position.y}
-                        r="8"
-                        fill={region.color}
-                        className="cursor-pointer"
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 0.8 }}
-                        transition={{ delay: 2.2 + index * 0.2, duration: 0.5 }}
-                        whileHover={{ scale: 1.5, opacity: 1 }}
+                    <motion.div
+                      key={region.region}
+                      className="absolute"
+                      style={{
+                        left: `${(region.position.x / 800) * 100}%`,
+                        top: `${(region.position.y / 400) * 100}%`,
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 0.9 }}
+                      transition={{ delay: 1.2 + index * 0.2, duration: 0.5 }}
+                    >
+                      <motion.div
+                        className="relative cursor-pointer pointer-events-auto"
+                        whileHover={{ scale: 1.2 }}
                         onMouseEnter={() => setHoveredRegion(region)}
                         onMouseLeave={() => setHoveredRegion(null)}
-                      />
-                      <motion.circle
-                        cx={region.position.x}
-                        cy={region.position.y}
-                        r="15"
-                        fill="none"
-                        stroke={region.color}
-                        strokeWidth="2"
-                        opacity="0.4"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: [1, 1.5, 1] }}
-                        transition={{
-                          delay: 2.4 + index * 0.2,
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      />
-                    </motion.g>
+                      >
+                        <div
+                          className="w-4 h-4 rounded-full shadow-lg"
+                          style={{ backgroundColor: region.color }}
+                        />
+                        <motion.div
+                          className="absolute inset-0 rounded-full border-2 opacity-60"
+                          style={{ borderColor: region.color }}
+                          animate={{ scale: [1, 2, 1] }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      </motion.div>
+                    </motion.div>
                   ))}
-                </svg>
+                </div>
 
                 {/* Hover Tooltip */}
                 {hoveredRegion && (
                   <motion.div
-                    className="absolute bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-gray-200 pointer-events-none"
+                    className="absolute bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-gray-200 pointer-events-none z-10"
                     style={{
-                      left: hoveredRegion.position.x - 50,
-                      top: hoveredRegion.position.y - 80,
+                      left: `${(hoveredRegion.position.x / 800) * 100}%`,
+                      top: `${(hoveredRegion.position.y / 400) * 100 - 20}%`,
+                      transform: 'translate(-50%, -100%)'
                     }}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -542,7 +466,7 @@ export default function Dashboard() {
                 className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.5, duration: 0.5 }}
+                transition={{ delay: 1.5, duration: 0.5 }}
               >
                 {mapData.map((region, index) => (
                   <motion.div
