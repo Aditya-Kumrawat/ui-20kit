@@ -106,7 +106,7 @@ export const FloatingSidebar = ({
     <motion.div
       className={`fixed left-4 top-4 bottom-4 ${
         isCollapsed ? "w-16" : "w-64"
-      } z-50`}
+      } z-50 max-h-screen`}
       animate={{ width: isCollapsed ? 64 : 256 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
