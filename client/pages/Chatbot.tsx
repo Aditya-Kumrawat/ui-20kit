@@ -940,129 +940,13 @@ export default function Chatbot() {
         } pr-4`}
         animate={{ marginLeft: isCollapsed ? 80 : 288 }}
       >
-        {/* Enhanced Header */}
-        <motion.header
-          className="bg-gradient-to-r from-white/95 via-gray-50/90 to-white/95 backdrop-blur-xl shadow-lg border-b border-white/30 px-8 py-6"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <motion.div
-                className="relative"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-600 via-purple-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-xl">
-                  <Bot size={24} className="text-white" />
-                </div>
-                <motion.div
-                  className={`absolute -bottom-1 -right-1 w-5 h-5 border-3 border-white rounded-full shadow-md ${
-                    vapiStatus === "connected" || vapiStatus === "call-active"
-                      ? "bg-green-500"
-                      : vapiStatus === "error"
-                        ? "bg-red-500"
-                        : "bg-yellow-500"
-                  }`}
-                  animate={{
-                    scale: vapiStatus === "call-active" ? [1, 1.2, 1] : 1
-                  }}
-                  transition={{
-                    duration: 1,
-                    repeat: vapiStatus === "call-active" ? Infinity : 0
-                  }}
-                />
-              </motion.div>
-              <div>
-                <motion.h1
-                  className="text-2xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent dashboard-title"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  AI Assistant
-                </motion.h1>
-                <motion.div
-                  className="flex items-center gap-3 mt-1"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <span className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200">
-                    Powered by VAPI
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`w-2.5 h-2.5 rounded-full ${
-                        vapiStatus === "connected" || vapiStatus === "call-active"
-                          ? "bg-green-500 animate-pulse"
-                          : vapiStatus === "error"
-                            ? "bg-red-500"
-                            : "bg-amber-500 animate-pulse"
-                      }`}
-                    />
-                    <span className="text-sm font-medium text-gray-700">
-                      {vapiStatus === "connected" || vapiStatus === "call-active"
-                        ? "Online"
-                        : vapiStatus === "error"
-                          ? "Offline"
-                          : "Connecting..."}
-                    </span>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-
-            <motion.div
-              className="flex items-center gap-4"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              {/* Voice Call Status */}
-              {isRecording && (
-                <motion.div
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-100 to-pink-100 text-red-700 rounded-xl border border-red-200"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                >
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                  <span className="text-sm font-semibold">Recording</span>
-                  <span className="text-sm">{formatDuration(callDuration)}</span>
-                </motion.div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="flex items-center gap-3">
-                <motion.button
-                  className="p-3 bg-white/80 hover:bg-white/90 rounded-xl shadow-md border border-gray-200/50 transition-all group"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Bell size={18} className="text-gray-600 group-hover:text-blue-600 transition-colors" />
-                </motion.button>
-
-                <motion.button
-                  className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl shadow-lg font-medium transition-all"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Settings size={16} />
-                  Settings
-                </motion.button>
-              </div>
-            </motion.div>
-          </div>
-        </motion.header>
 
         {/* Main Chat Container */}
-        <div className="flex-1 flex overflow-hidden p-6">
+        <div className="flex-1 flex overflow-hidden p-4">
           {/* Floating Glass Chat Container */}
           <motion.div
             className="mr-80 bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden"
-            style={{ height: 'calc(100vh - 8rem)' }}
+            style={{ height: 'calc(100vh - 2rem)' }}
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -1392,7 +1276,7 @@ export default function Chatbot() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="h-full bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+        <div className="h-full bg-white/95 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
           {/* Header */}
           <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50 rounded-t-2xl">
             <div className="flex items-center gap-3">
