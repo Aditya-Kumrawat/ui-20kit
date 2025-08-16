@@ -219,6 +219,94 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Interactive Animated Graph Section */}
+        <motion.div
+          className="mb-8"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.4 }}
+            >
+              <h3
+                className="text-xl font-bold text-gray-900 mb-6 dashboard-title"
+              >
+                Revenue & Orders Trend
+              </h3>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    data={chartData}
+                    margin={{
+                      top: 20,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <defs>
+                      <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1}/>
+                      </linearGradient>
+                      <linearGradient id="ordersGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
+                    <XAxis
+                      dataKey="month"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 12, fill: '#6b7280' }}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 12, fill: '#6b7280' }}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        border: 'none',
+                        borderRadius: '12px',
+                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                        backdropFilter: 'blur(10px)',
+                      }}
+                      labelStyle={{ color: '#374151', fontWeight: '600' }}
+                    />
+                    <motion.g
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 2, delay: 0.8 }}
+                    >
+                      <Area
+                        type="monotone"
+                        dataKey="revenue"
+                        stroke="#8b5cf6"
+                        strokeWidth={3}
+                        fill="url(#revenueGradient)"
+                        dot={{ fill: '#8b5cf6', strokeWidth: 0, r: 4 }}
+                        activeDot={{
+                          r: 6,
+                          stroke: '#8b5cf6',
+                          strokeWidth: 2,
+                          fill: '#ffffff'
+                        }}
+                      />
+                    </motion.g>
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
         {/* Additional Content Section */}
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-3 gap-6"
