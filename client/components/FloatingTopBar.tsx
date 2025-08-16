@@ -11,10 +11,16 @@ import {
   LogOut,
 } from "lucide-react";
 
-export const FloatingTopBar = () => {
+interface FloatingTopBarProps {
+  isCollapsed?: boolean;
+}
+
+export const FloatingTopBar = ({ isCollapsed = false }: FloatingTopBarProps) => {
   return (
     <motion.div
-      className="fixed top-4 left-80 right-4 z-40"
+      className={`fixed top-4 right-4 z-40 transition-all duration-300 ${
+        isCollapsed ? "left-20" : "left-80"
+      }`}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
