@@ -20,16 +20,31 @@ interface SidebarProviderProps {
 export const SidebarProvider: React.FC<SidebarProviderProps> = ({
   children,
 }) => {
-  // Initialize state from localStorage or default to true (collapsed)
-  const [isCollapsed, setIsCollapsedState] = useState<boolean>(() => {
-    const saved = localStorage.getItem("sidebar-collapsed");
-    return saved !== null ? JSON.parse(saved) : true;
-  });
+  // Initialize state with default value first, then update from localStorage
+  const [isCollapsed, setIsCollapsedState] = useState<boolean>(true);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Load from localStorage after component mounts
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("sidebar-collapsed");
+      if (saved !== null) {
+        setIsCollapsedState(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.warn("Failed to load sidebar state from localStorage:", error);
+    }
+    setIsInitialized(true);
+  }, []);
 
   // Persist state changes to localStorage
   const setIsCollapsed = (collapsed: boolean) => {
     setIsCollapsedState(collapsed);
-    localStorage.setItem("sidebar-collapsed", JSON.stringify(collapsed));
+    try {
+      localStorage.setItem("sidebar-collapsed", JSON.stringify(collapsed));
+    } catch (error) {
+      console.warn("Failed to save sidebar state to localStorage:", error);
+    }
   };
 
   const value: SidebarContextType = {
