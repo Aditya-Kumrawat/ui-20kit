@@ -986,8 +986,7 @@ export default function Chatbot() {
         audioContext.close();
         setAudioContext(null);
         setGainNode(null);
-        setCompressor(null);
-        addDebugLog("🧹 Audio context and compressor cleaned up");
+        addDebugLog("🧹 Audio context cleaned up");
       }
     });
 
