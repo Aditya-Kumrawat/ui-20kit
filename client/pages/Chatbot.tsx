@@ -886,7 +886,7 @@ export default function Chatbot() {
       <motion.div
         className={`transition-all duration-300 min-h-screen flex flex-col ${
           isCollapsed ? "ml-20" : "ml-72"
-        }`}
+        } pr-4`}
         animate={{ marginLeft: isCollapsed ? 80 : 288 }}
       >
         {/* Header */}
@@ -957,7 +957,7 @@ export default function Chatbot() {
         {/* Main Chat Container */}
         <div className="flex-1 flex overflow-hidden">
           {/* Chat Messages Area */}
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col mr-80">
             {/* Messages Container */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               <AnimatePresence initial={false}>
@@ -1266,6 +1266,175 @@ export default function Chatbot() {
 
         {/* Hidden video element for Vapi */}
         <video ref={videoRef} className="hidden" autoPlay muted playsInline />
+      </motion.div>
+
+      {/* Right Panel - Voice Assistant */}
+      <motion.div
+        className="fixed right-4 top-4 bottom-4 w-72 z-40"
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <div className="h-full bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 overflow-hidden">
+          {/* Header */}
+          <div className="p-4 border-b border-white/20">
+            <div className="flex items-center gap-3">
+              <motion.div
+                className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center"
+                animate={{
+                  scale: vapiStatus === "call-active" ? [1, 1.1, 1] : 1,
+                  boxShadow: vapiStatus === "call-active" ?
+                    ["0 0 0 0 rgba(168, 85, 247, 0.7)", "0 0 0 10px rgba(168, 85, 247, 0)", "0 0 0 0 rgba(168, 85, 247, 0)"] :
+                    "0 0 0 0 rgba(168, 85, 247, 0)"
+                }}
+                transition={{ duration: 1.5, repeat: vapiStatus === "call-active" ? Infinity : 0 }}
+              >
+                <Bot size={16} className="text-white" />
+              </motion.div>
+              <div>
+                <h3 className="text-sm font-semibold text-white">Voice Assistant</h3>
+                <p className="text-xs text-white/70">
+                  {vapiStatus === "call-active" ? "Listening..." : "Ready to talk"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Video Section */}
+          <div className="p-4">
+            <motion.div
+              className="relative rounded-xl overflow-hidden bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-sm border border-white/20"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-48 object-cover rounded-xl"
+              >
+                <source
+                  src="https://cdn.builder.io/o/assets%2Fa35bd991f0e541aa931714571cb88c16%2Ff399aac4c02c41bdac297eb7996352fe?alt=media&token=c1bbf4ed-04bb-45b1-957e-f7ca03620265&apiKey=a35bd991f0e541aa931714571cb88c16"
+                  type="video/mp4"
+                />
+              </video>
+
+              {/* Overlay for interaction */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
+
+              {/* Voice status indicator */}
+              <motion.div
+                className="absolute top-3 right-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm rounded-full px-3 py-1"
+                animate={{
+                  opacity: vapiStatus === "call-active" ? [0.7, 1, 0.7] : 0.7
+                }}
+                transition={{ duration: 1.5, repeat: vapiStatus === "call-active" ? Infinity : 0 }}
+              >
+                <div className={`w-2 h-2 rounded-full ${
+                  vapiStatus === "call-active" ? "bg-green-400" :
+                  vapiStatus === "error" ? "bg-red-400" : "bg-yellow-400"
+                }`} />
+                <span className="text-xs text-white font-medium">
+                  {vapiStatus === "call-active" ? "Live" :
+                   vapiStatus === "error" ? "Error" : "Ready"}
+                </span>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Interactive Controls */}
+          <div className="p-4 space-y-4">
+            {/* Voice Visualizer */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-medium text-white">Voice Activity</span>
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="w-1 bg-gradient-to-t from-purple-400 to-pink-400 rounded-full"
+                      animate={{
+                        height: vapiStatus === "call-active" ?
+                          [4, Math.random() * 20 + 10, 4] : 4
+                      }}
+                      transition={{
+                        duration: 0.5 + Math.random() * 0.5,
+                        repeat: vapiStatus === "call-active" ? Infinity : 0,
+                        delay: i * 0.1
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Stats */}
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="text-center">
+                  <div className="text-white/70">Duration</div>
+                  <div className="text-white font-medium">
+                    {vapiStatus === "call-active" ? "0:32" : "0:00"}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-white/70">Quality</div>
+                  <div className="text-green-400 font-medium">HD</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="space-y-2">
+              <motion.button
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg py-3 px-4 font-medium flex items-center justify-center gap-2 hover:from-purple-600 hover:to-pink-600 transition-all"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={toggleRecording}
+              >
+                {isRecording ? (
+                  <>
+                    <MicOff size={16} />
+                    Stop Voice Chat
+                  </>
+                ) : (
+                  <>
+                    <Mic size={16} />
+                    Start Voice Chat
+                  </>
+                )}
+              </motion.button>
+
+              <div className="grid grid-cols-2 gap-2">
+                <motion.button
+                  className="bg-white/10 backdrop-blur-sm text-white rounded-lg py-2 px-3 text-sm hover:bg-white/20 transition-all border border-white/20"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Settings size={14} className="mx-auto" />
+                </motion.button>
+                <motion.button
+                  className="bg-white/10 backdrop-blur-sm text-white rounded-lg py-2 px-3 text-sm hover:bg-white/20 transition-all border border-white/20"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Activity size={14} className="mx-auto" />
+                </motion.button>
+              </div>
+            </div>
+          </div>
+
+          {/* Debug Info (if in test mode) */}
+          {testMode && (
+            <div className="p-4 border-t border-white/20">
+              <div className="bg-black/20 backdrop-blur-sm rounded-lg p-3">
+                <div className="text-xs text-white/70 mb-2">Debug Mode</div>
+                <div className="text-xs text-white font-mono">
+                  Status: {vapiStatus}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </motion.div>
     </div>
   );
