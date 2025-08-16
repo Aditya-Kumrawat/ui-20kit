@@ -954,7 +954,7 @@ export default function Chatbot() {
               opacity: 1,
               y: 0,
               scale: 1,
-              marginRight: isCollapsed ? 296 : 304
+              marginRight: isCollapsed ? 280 : 288
             }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
