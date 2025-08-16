@@ -404,6 +404,7 @@ export default function Chatbot() {
   const [audioVolume, setAudioVolume] = useState(2.5); // Volume control state - start at 250%
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [gainNode, setGainNode] = useState<GainNode | null>(null);
+  const [audioProcessed, setAudioProcessed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -928,44 +929,65 @@ export default function Chatbot() {
 
     // AI responses are handled in the consolidated message handler above
 
-    // Audio volume boosting - Simple and effective approach
+    // Audio volume boosting - Persistent approach with both methods
     vapiInstance.on("audio", (audioEl: HTMLAudioElement) => {
-      if (!audioEl || !audioEl.srcObject) return;
+      if (!audioEl) return;
 
-      addDebugLog(`🔊 Processing Vapi audio stream with ${Math.round(audioVolume * 100)}% boost`);
+      // Method 1: Direct element volume control (persistent)
+      audioEl.volume = Math.min(audioVolume, 1.0); // Keep element volume at max 100%
+      audioEl.muted = false;
 
-      try {
-        // Create Web Audio context if not exists
-        if (!audioContext) {
+      addDebugLog(`🔊 Direct audio volume: ${Math.round(audioEl.volume * 100)}%`);
+
+      // Method 2: Web Audio API for additional boost (only once per stream)
+      if (audioEl.srcObject && !audioProcessed) {
+        try {
           const context = new (window.AudioContext || (window as any).webkitAudioContext)();
           const gain = context.createGain();
-          gain.gain.value = audioVolume; // Direct volume boost
+          gain.gain.value = audioVolume; // Apply full boost through gain
+
+          const source = context.createMediaStreamSource(audioEl.srcObject as MediaStream);
+          source.connect(gain);
+          gain.connect(context.destination);
+
           setAudioContext(context);
           setGainNode(gain);
-          addDebugLog(`🎚️ Audio context created with ${Math.round(audioVolume * 100)}% gain`);
-        }
+          setAudioProcessed(true);
 
-        // Route Vapi audio through gain node for volume boost
-        if (audioContext && gainNode) {
-          const source = audioContext.createMediaStreamSource(audioEl.srcObject as MediaStream);
-          source.connect(gainNode);
-          gainNode.connect(audioContext.destination);
+          addDebugLog(`🎚️ Web Audio boost: ${Math.round(audioVolume * 100)}% applied`);
 
-          addDebugLog("🎛️ Vapi audio routed: Stream -> GainNode -> Output");
-
-          // Resume context on user interaction (browser requirement)
-          const resumeAudio = () => {
-            if (audioContext.state === "suspended") {
-              audioContext.resume();
+          // Ensure audio context starts
+          const startAudio = () => {
+            if (context.state === "suspended") {
+              context.resume();
               addDebugLog("🔊 Audio context resumed");
             }
           };
-          document.addEventListener("click", resumeAudio, { once: true });
-          document.addEventListener("touchstart", resumeAudio, { once: true });
+
+          // Try to start immediately
+          startAudio();
+
+          // Also set up for user interaction
+          document.addEventListener("click", startAudio, { once: true });
+          document.addEventListener("touchstart", startAudio, { once: true });
+
+        } catch (audioError) {
+          addDebugLog(`❌ Web Audio failed, using direct volume only: ${audioError}`);
         }
-      } catch (audioError) {
-        addDebugLog(`❌ Audio processing failed: ${audioError}`);
       }
+
+      // Continuous volume monitoring and correction
+      const volumeMonitor = setInterval(() => {
+        if (audioEl && !audioEl.paused) {
+          if (audioEl.volume !== Math.min(audioVolume, 1.0)) {
+            audioEl.volume = Math.min(audioVolume, 1.0);
+            addDebugLog(`🔧 Volume corrected back to ${Math.round(audioEl.volume * 100)}%`);
+          }
+        } else {
+          clearInterval(volumeMonitor);
+        }
+      }, 500); // Check every 500ms
+
     });
 
     // Additional event handlers can be added here
