@@ -179,7 +179,9 @@ export default function Chatbot() {
     if (isRecording && callStartTime) {
       interval = setInterval(() => {
         const now = new Date();
-        const duration = Math.floor((now.getTime() - callStartTime.getTime()) / 1000);
+        const duration = Math.floor(
+          (now.getTime() - callStartTime.getTime()) / 1000,
+        );
         setCallDuration(duration);
       }, 1000);
     } else {
@@ -194,7 +196,7 @@ export default function Chatbot() {
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [gainNode, setGainNode] = useState<GainNode | null>(null);
@@ -940,13 +942,12 @@ export default function Chatbot() {
         } pr-4`}
         animate={{ marginLeft: isCollapsed ? 80 : 288 }}
       >
-
         {/* Main Chat Container */}
         <div className="flex-1 flex overflow-hidden p-4">
           {/* Floating Glass Chat Container */}
           <motion.div
             className="mr-80 bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden"
-            style={{ height: 'calc(100vh - 2rem)' }}
+            style={{ height: "calc(100vh - 2rem)" }}
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -957,309 +958,312 @@ export default function Chatbot() {
               <div
                 className="flex-1 overflow-y-auto p-8 space-y-6 min-h-0"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.6) 50%, rgba(248, 250, 252, 0.9) 100%)'
+                  background:
+                    "linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.6) 50%, rgba(248, 250, 252, 0.9) 100%)",
                 }}
               >
-              <AnimatePresence initial={false}>
-                {messages.map((message, index) => (
-                  <motion.div
-                    key={message.id}
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className={`flex items-start gap-3 ${
-                      message.sender === "user" ? "flex-row-reverse" : ""
-                    }`}
-                  >
-                    <Avatar className="w-8 h-8 flex-shrink-0">
-                      <AvatarFallback
-                        className={`${
-                          message.sender === "user"
-                            ? "bg-gradient-to-r from-blue-500 to-cyan-500"
-                            : "bg-gradient-to-r from-purple-500 to-pink-500"
-                        } text-white text-sm`}
-                      >
-                        {message.sender === "user" ? (
-                          <User size={16} />
-                        ) : (
-                          <Brain size={16} />
-                        )}
-                      </AvatarFallback>
-                    </Avatar>
-
-                    <div
-                      className={`flex-1 max-w-3xl ${
-                        message.sender === "user" ? "text-right" : ""
+                <AnimatePresence initial={false}>
+                  {messages.map((message, index) => (
+                    <motion.div
+                      key={message.id}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      className={`flex items-start gap-3 ${
+                        message.sender === "user" ? "flex-row-reverse" : ""
                       }`}
                     >
+                      <Avatar className="w-8 h-8 flex-shrink-0">
+                        <AvatarFallback
+                          className={`${
+                            message.sender === "user"
+                              ? "bg-gradient-to-r from-blue-500 to-cyan-500"
+                              : "bg-gradient-to-r from-purple-500 to-pink-500"
+                          } text-white text-sm`}
+                        >
+                          {message.sender === "user" ? (
+                            <User size={16} />
+                          ) : (
+                            <Brain size={16} />
+                          )}
+                        </AvatarFallback>
+                      </Avatar>
+
                       <div
-                        className={`relative p-5 rounded-2xl shadow-lg ${
-                          message.sender === "user"
-                            ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white ml-12 shadow-blue-200/50"
-                            : "bg-white/90 backdrop-blur-md text-gray-800 mr-12 border border-white/40 shadow-gray-200/30"
+                        className={`flex-1 max-w-3xl ${
+                          message.sender === "user" ? "text-right" : ""
                         }`}
                       >
-                        <p className="text-sm leading-relaxed dashboard-text">
-                          {message.content}
-                        </p>
-
                         <div
-                          className={`mt-2 flex items-center gap-2 text-xs ${
+                          className={`relative p-5 rounded-2xl shadow-lg ${
                             message.sender === "user"
-                              ? "text-blue-100 justify-end"
-                              : "text-gray-500"
+                              ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white ml-12 shadow-blue-200/50"
+                              : "bg-white/90 backdrop-blur-md text-gray-800 mr-12 border border-white/40 shadow-gray-200/30"
                           }`}
                         >
-                          <Clock size={12} />
-                          <span>
-                            {message.timestamp.toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </span>
-                          {message.status === "read" && (
-                            <CheckCheck size={12} />
-                          )}
+                          <p className="text-sm leading-relaxed dashboard-text">
+                            {message.content}
+                          </p>
+
+                          <div
+                            className={`mt-2 flex items-center gap-2 text-xs ${
+                              message.sender === "user"
+                                ? "text-blue-100 justify-end"
+                                : "text-gray-500"
+                            }`}
+                          >
+                            <Clock size={12} />
+                            <span>
+                              {message.timestamp.toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                            {message.status === "read" && (
+                              <CheckCheck size={12} />
+                            )}
+                          </div>
+                        </div>
+
+                        {/* AI Suggestions */}
+                        {message.sender === "ai" && message.suggestions && (
+                          <motion.div
+                            className="mt-3 flex flex-wrap gap-2"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                          >
+                            {message.suggestions.map(
+                              (suggestion, suggestionIndex) => (
+                                <motion.button
+                                  key={suggestionIndex}
+                                  onClick={() =>
+                                    handleSuggestionClick(suggestion)
+                                  }
+                                  className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full hover:from-purple-200 hover:to-pink-200 transition-all duration-200 border border-purple-200/50 dashboard-text"
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{
+                                    delay: 0.6 + suggestionIndex * 0.1,
+                                  }}
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                >
+                                  {suggestion}
+                                </motion.button>
+                              ),
+                            )}
+                          </motion.div>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+
+                {/* Typing Indicator */}
+                <AnimatePresence>
+                  {isTyping && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      className="flex items-start gap-3"
+                    >
+                      <Avatar className="w-8 h-8">
+                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                          <Brain size={16} />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/40 shadow-gray-200/30">
+                        <div className="flex items-center gap-1">
+                          {[0, 1, 2].map((i) => (
+                            <motion.div
+                              key={i}
+                              className="w-2 h-2 bg-purple-400 rounded-full"
+                              animate={{
+                                scale: [1, 1.2, 1],
+                                opacity: [0.5, 1, 0.5],
+                              }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                delay: i * 0.2,
+                              }}
+                            />
+                          ))}
                         </div>
                       </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                      {/* AI Suggestions */}
-                      {message.sender === "ai" && message.suggestions && (
-                        <motion.div
-                          className="mt-3 flex flex-wrap gap-2"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.5 }}
-                        >
-                          {message.suggestions.map(
-                            (suggestion, suggestionIndex) => (
-                              <motion.button
-                                key={suggestionIndex}
-                                onClick={() =>
-                                  handleSuggestionClick(suggestion)
-                                }
-                                className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full hover:from-purple-200 hover:to-pink-200 transition-all duration-200 border border-purple-200/50 dashboard-text"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{
-                                  delay: 0.6 + suggestionIndex * 0.1,
-                                }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                              >
-                                {suggestion}
-                              </motion.button>
-                            ),
-                          )}
-                        </motion.div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-
-              {/* Typing Indicator */}
-              <AnimatePresence>
-                {isTyping && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="flex items-start gap-3"
-                  >
-                    <Avatar className="w-8 h-8">
-                      <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                        <Brain size={16} />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/40 shadow-gray-200/30">
-                      <div className="flex items-center gap-1">
-                        {[0, 1, 2].map((i) => (
-                          <motion.div
-                            key={i}
-                            className="w-2 h-2 bg-purple-400 rounded-full"
-                            animate={{
-                              scale: [1, 1.2, 1],
-                              opacity: [0.5, 1, 0.5],
-                            }}
-                            transition={{
-                              duration: 1,
-                              repeat: Infinity,
-                              delay: i * 0.2,
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <div ref={messagesEndRef} />
-            </div>
+                <div ref={messagesEndRef} />
+              </div>
 
               {/* Input Area with Enhanced Glass Effect */}
               <div className="border-t border-white/30 bg-gradient-to-r from-white/70 via-gray-50/60 to-white/80 backdrop-blur-lg p-6 shadow-inner">
-              {/* Quick Actions */}
-              <div className="mb-4">
-                <div className="flex flex-wrap gap-2">
-                  {quickActions.map((action, index) => (
-                    <motion.button
-                      key={action.id}
-                      onClick={() => handleQuickAction(action)}
-                      className="flex items-center gap-2 px-3 py-2 text-xs bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200/50 dashboard-text"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {action.icon}
-                      {action.label}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Input Controls */}
-              <div className="flex items-center gap-3">
-                <div className="flex-1 relative">
-                  <Input
-                    ref={inputRef}
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage(inputValue);
-                      }
-                    }}
-                    placeholder="Type your message or use voice..."
-                    className="pr-12 bg-white/90 border-white/30 backdrop-blur-sm focus:bg-white focus:border-purple-300 transition-all dashboard-text"
-                  />
-
-                  {/* Character count or file indicator */}
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
-                    {inputValue.length > 0 && <span>{inputValue.length}</span>}
-                  </div>
-                </div>
-
-                {/* Voice Recording */}
-                <motion.button
-                  onClick={toggleRecording}
-                  className={`p-2 rounded-full transition-all ${
-                    isRecording
-                      ? "bg-red-500 text-white"
-                      : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                  }`}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
-                  transition={
-                    isRecording ? { duration: 1, repeat: Infinity } : {}
-                  }
-                  title="Voice Recording"
-                >
-                  {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
-                </motion.button>
-
-                {/* Volume Control */}
-                <div
-                  className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg"
-                  title="Audio Volume"
-                >
-                  <div className="text-gray-500">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M11 5L6 9H2V15H6L11 19V5Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="range"
-                    min="0.1"
-                    max="4.0"
-                    step="0.1"
-                    value={audioVolume}
-                    onChange={(e) => {
-                      const newVolume = parseFloat(e.target.value);
-                      setAudioVolume(newVolume);
-                      if (gainNode) {
-                        gainNode.gain.value = newVolume;
-                      }
-                      addDebugLog(
-                        `🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`,
-                      );
-                    }}
-                    className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                    style={{
-                      background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`,
-                    }}
-                  />
-                  <span className="text-xs text-gray-500 min-w-[30px] dashboard-text">
-                    {Math.round(audioVolume * 100)}%
-                  </span>
-                </div>
-
-                {/* Send Button */}
-                <motion.button
-                  onClick={() => handleSendMessage(inputValue)}
-                  disabled={!inputValue.trim() || isTyping}
-                  className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Send size={20} />
-                </motion.button>
-              </div>
-
-              {/* Error Display */}
-              {vapiError && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg"
-                >
-                  <p className="text-sm text-red-700 dashboard-text">
-                    {vapiError}
-                  </p>
-                </motion.div>
-              )}
-
-              {/* Debug Logs */}
-              {debugLogs.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-lg max-h-32 overflow-y-auto"
-                >
-                  <div className="text-xs text-gray-600 space-y-1 dashboard-text">
-                    {debugLogs.slice(-5).map((log, index) => (
-                      <div key={index} className="font-mono">
-                        {log}
-                      </div>
+                {/* Quick Actions */}
+                <div className="mb-4">
+                  <div className="flex flex-wrap gap-2">
+                    {quickActions.map((action, index) => (
+                      <motion.button
+                        key={action.id}
+                        onClick={() => handleQuickAction(action)}
+                        className="flex items-center gap-2 px-3 py-2 text-xs bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200/50 dashboard-text"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.05 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {action.icon}
+                        {action.label}
+                      </motion.button>
                     ))}
                   </div>
-                </motion.div>
-              )}
+                </div>
+
+                {/* Input Controls */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 relative">
+                    <Input
+                      ref={inputRef}
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage(inputValue);
+                        }
+                      }}
+                      placeholder="Type your message or use voice..."
+                      className="pr-12 bg-white/90 border-white/30 backdrop-blur-sm focus:bg-white focus:border-purple-300 transition-all dashboard-text"
+                    />
+
+                    {/* Character count or file indicator */}
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
+                      {inputValue.length > 0 && (
+                        <span>{inputValue.length}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Voice Recording */}
+                  <motion.button
+                    onClick={toggleRecording}
+                    className={`p-2 rounded-full transition-all ${
+                      isRecording
+                        ? "bg-red-500 text-white"
+                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                    }`}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
+                    transition={
+                      isRecording ? { duration: 1, repeat: Infinity } : {}
+                    }
+                    title="Voice Recording"
+                  >
+                    {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+                  </motion.button>
+
+                  {/* Volume Control */}
+                  <div
+                    className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg"
+                    title="Audio Volume"
+                  >
+                    <div className="text-gray-500">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11 5L6 9H2V15H6L11 19V5Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="4.0"
+                      step="0.1"
+                      value={audioVolume}
+                      onChange={(e) => {
+                        const newVolume = parseFloat(e.target.value);
+                        setAudioVolume(newVolume);
+                        if (gainNode) {
+                          gainNode.gain.value = newVolume;
+                        }
+                        addDebugLog(
+                          `🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`,
+                        );
+                      }}
+                      className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                      style={{
+                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`,
+                      }}
+                    />
+                    <span className="text-xs text-gray-500 min-w-[30px] dashboard-text">
+                      {Math.round(audioVolume * 100)}%
+                    </span>
+                  </div>
+
+                  {/* Send Button */}
+                  <motion.button
+                    onClick={() => handleSendMessage(inputValue)}
+                    disabled={!inputValue.trim() || isTyping}
+                    className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Send size={20} />
+                  </motion.button>
+                </div>
+
+                {/* Error Display */}
+                {vapiError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg"
+                  >
+                    <p className="text-sm text-red-700 dashboard-text">
+                      {vapiError}
+                    </p>
+                  </motion.div>
+                )}
+
+                {/* Debug Logs */}
+                {debugLogs.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-lg max-h-32 overflow-y-auto"
+                  >
+                    <div className="text-xs text-gray-600 space-y-1 dashboard-text">
+                      {debugLogs.slice(-5).map((log, index) => (
+                        <div key={index} className="font-mono">
+                          {log}
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
               </div>
             </div>
           </motion.div>
@@ -1284,18 +1288,30 @@ export default function Chatbot() {
                 className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
                 animate={{
                   scale: vapiStatus === "call-active" ? [1, 1.1, 1] : 1,
-                  boxShadow: vapiStatus === "call-active" ?
-                    ["0 0 0 0 rgba(59, 130, 246, 0.7)", "0 0 0 10px rgba(59, 130, 246, 0)", "0 0 0 0 rgba(59, 130, 246, 0)"] :
-                    "0 4px 14px 0 rgba(0, 0, 0, 0.1)"
+                  boxShadow:
+                    vapiStatus === "call-active"
+                      ? [
+                          "0 0 0 0 rgba(59, 130, 246, 0.7)",
+                          "0 0 0 10px rgba(59, 130, 246, 0)",
+                          "0 0 0 0 rgba(59, 130, 246, 0)",
+                        ]
+                      : "0 4px 14px 0 rgba(0, 0, 0, 0.1)",
                 }}
-                transition={{ duration: 1.5, repeat: vapiStatus === "call-active" ? Infinity : 0 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: vapiStatus === "call-active" ? Infinity : 0,
+                }}
               >
                 <Bot size={18} className="text-white" />
               </motion.div>
               <div>
-                <h3 className="text-sm font-bold text-gray-800">Voice Assistant</h3>
+                <h3 className="text-sm font-bold text-gray-800">
+                  Voice Assistant
+                </h3>
                 <p className="text-xs text-gray-600">
-                  {vapiStatus === "call-active" ? "Listening..." : "Ready to talk"}
+                  {vapiStatus === "call-active"
+                    ? "Listening..."
+                    : "Ready to talk"}
                 </p>
               </div>
             </div>
@@ -1328,17 +1344,28 @@ export default function Chatbot() {
               <motion.div
                 className="absolute top-3 right-3 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-md border border-gray-200"
                 animate={{
-                  opacity: vapiStatus === "call-active" ? [0.9, 1, 0.9] : 0.9
+                  opacity: vapiStatus === "call-active" ? [0.9, 1, 0.9] : 0.9,
                 }}
-                transition={{ duration: 1.5, repeat: vapiStatus === "call-active" ? Infinity : 0 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: vapiStatus === "call-active" ? Infinity : 0,
+                }}
               >
-                <div className={`w-2.5 h-2.5 rounded-full ${
-                  vapiStatus === "call-active" ? "bg-green-500" :
-                  vapiStatus === "error" ? "bg-red-500" : "bg-blue-500"
-                }`} />
+                <div
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    vapiStatus === "call-active"
+                      ? "bg-green-500"
+                      : vapiStatus === "error"
+                        ? "bg-red-500"
+                        : "bg-blue-500"
+                  }`}
+                />
                 <span className="text-xs text-gray-800 font-semibold">
-                  {vapiStatus === "call-active" ? "Live" :
-                   vapiStatus === "error" ? "Error" : "Ready"}
+                  {vapiStatus === "call-active"
+                    ? "Live"
+                    : vapiStatus === "error"
+                      ? "Error"
+                      : "Ready"}
                 </span>
               </motion.div>
             </motion.div>
@@ -1349,20 +1376,23 @@ export default function Chatbot() {
             {/* Voice Visualizer - Fixed Size */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-gray-200 shadow-md h-36">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-bold text-gray-800">Voice Activity</span>
+                <span className="text-sm font-bold text-gray-800">
+                  Voice Activity
+                </span>
                 <div className="flex items-center gap-1 h-8">
                   {[...Array(5)].map((_, i) => (
                     <motion.div
                       key={i}
                       className="w-1.5 bg-gradient-to-t from-blue-500 to-purple-500 rounded-full"
                       animate={{
-                        height: hasAudioOutput ?
-                          [6, Math.random() * 20 + 12, 6] : 6
+                        height: hasAudioOutput
+                          ? [6, Math.random() * 20 + 12, 6]
+                          : 6,
                       }}
                       transition={{
                         duration: 0.5 + Math.random() * 0.5,
                         repeat: hasAudioOutput ? Infinity : 0,
-                        delay: i * 0.1
+                        delay: i * 0.1,
                       }}
                     />
                   ))}
@@ -1428,7 +1458,9 @@ export default function Chatbot() {
           {testMode && (
             <div className="p-4 border-t border-gray-200">
               <div className="bg-gray-100 rounded-xl p-3 border-2 border-gray-200">
-                <div className="text-xs text-gray-600 font-semibold mb-2">Debug Mode</div>
+                <div className="text-xs text-gray-600 font-semibold mb-2">
+                  Debug Mode
+                </div>
                 <div className="text-xs text-gray-800 font-mono bg-white rounded-lg p-2 border border-gray-200">
                   Status: {vapiStatus}
                 </div>
