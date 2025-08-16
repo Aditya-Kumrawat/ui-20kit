@@ -130,53 +130,9 @@ export default function ComputerVision() {
                 Advanced machine learning models for image and video analysis
               </p>
             </div>
-            <div className="flex items-center gap-4">
-              <Button
-                size="sm"
-                variant="outline"
-                className="bg-white/60 backdrop-blur-sm border-white/30"
-              >
-                <Download size={16} className="mr-2" />
-                Export Models
-              </Button>
-              <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white">
-                <Cpu size={16} className="mr-2" />
-                Train New Model
-              </Button>
-            </div>
           </div>
         </motion.header>
 
-        {/* Performance Metrics */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          {performanceMetrics.map((metric, index) => (
-            <motion.div
-              key={metric.name}
-              className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
-              whileHover={{ y: -4, scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div
-                  className="p-3 rounded-xl"
-                  style={{ backgroundColor: `${metric.color}20` }}
-                >
-                  <Activity style={{ color: metric.color }} className="w-6 h-6" />
-                </div>
-                <span className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                  {metric.change}
-                </span>
-              </div>
-              <h3 className="text-sm font-medium text-gray-600 mb-1">{metric.name}</h3>
-              <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
-            </motion.div>
-          ))}
-        </motion.div>
 
         {/* Available Models Section */}
         <motion.div
