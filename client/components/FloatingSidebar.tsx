@@ -147,7 +147,11 @@ export const FloatingSidebar = ({
 
         {/* Toggle Button */}
         <motion.button
-          className="absolute -right-3 top-6 w-6 h-6 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 shadow-lg hover:bg-white transition-colors border border-gray-200/50"
+          className={`absolute -right-3 top-6 w-6 h-6 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+            isCollapsed
+              ? "bg-gray-800/90 text-gray-300 hover:bg-gray-700 border border-gray-600/50"
+              : "bg-white/90 text-gray-600 hover:bg-white border border-gray-200/50"
+          }`}
           onClick={() => setIsCollapsed(!isCollapsed)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -159,7 +163,11 @@ export const FloatingSidebar = ({
         <div className="flex-1 p-3 space-y-1 relative">
           {/* Moving active indicator */}
           <motion.div
-            className="absolute left-3 w-[calc(100%-24px)] h-12 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-200/50 rounded-xl pointer-events-none"
+            className={`absolute left-3 w-[calc(100%-24px)] h-12 rounded-xl pointer-events-none transition-all duration-300 ${
+              isCollapsed
+                ? "bg-gradient-to-r from-purple-400/20 to-blue-400/20 border border-purple-400/30"
+                : "bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-200/50"
+            }`}
             initial={false}
             animate={{
               y: activeIndex >= 0 ? activeIndex * 52 : 0, // 48px height + 4px gap
