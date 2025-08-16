@@ -338,7 +338,7 @@ export default function Dashboard() {
                       allowDataOverflow={false}
                       allowDecimals={true}
                       allowDuplicatedCategory={true}
-                      domain={['dataMin', 'dataMax']}
+                      domain={["dataMin", "dataMax"]}
                       scale="auto"
                       interval="preserveStartEnd"
                       tickCount={5}
@@ -357,7 +357,7 @@ export default function Dashboard() {
                       allowDataOverflow={false}
                       allowDecimals={true}
                       allowDuplicatedCategory={true}
-                      domain={['dataMin', 'dataMax']}
+                      domain={["dataMin", "dataMax"]}
                       scale="auto"
                       tickCount={5}
                       minTickGap={5}
@@ -455,7 +455,8 @@ export default function Dashboard() {
                     onLoad={(e) => {
                       // Show this as backup if primary fails
                       const target = e.target as HTMLImageElement;
-                      const primaryImg = target.previousElementSibling as HTMLImageElement | null;
+                      const primaryImg =
+                        target.previousElementSibling as HTMLImageElement | null;
                       if (
                         primaryImg &&
                         primaryImg.complete &&

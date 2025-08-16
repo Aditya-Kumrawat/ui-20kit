@@ -153,12 +153,13 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "system-welcome",
-      content: "👋 Hello! I'm your AI assistant. I can help you with various tasks, answer questions, and have conversations. You can type your message below or use the voice assistant panel on the right to talk with me. How can I assist you today?",
+      content:
+        "👋 Hello! I'm your AI assistant. I can help you with various tasks, answer questions, and have conversations. You can type your message below or use the voice assistant panel on the right to talk with me. How can I assist you today?",
       sender: "ai",
       timestamp: new Date(),
       status: "delivered",
-      type: "text"
-    }
+      type: "text",
+    },
   ]);
 
   const [inputValue, setInputValue] = useState("");
@@ -963,7 +964,7 @@ export default function Chatbot() {
               opacity: 1,
               y: 0,
               scale: 1,
-              marginRight: isCollapsed ? 280 : 288
+              marginRight: isCollapsed ? 280 : 288,
             }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >

@@ -116,15 +116,20 @@ export const FloatingSidebar = ({
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       {/* Glass effect floating sidebar */}
-      <div className={`h-full backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden transition-all duration-300 ${
-        isCollapsed
-          ? "bg-gray-900/95 border border-gray-700/50"
-          : "bg-white/80 border border-white/20"
-      }`}>
+      <div
+        className={`h-full backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden transition-all duration-300 ${
+          isCollapsed
+            ? "bg-gray-900/95 border border-gray-700/50"
+            : "bg-white/80 border border-white/20"
+        }`}
+      >
         {/* Logo Section */}
-        <motion.div className={`p-4 border-b transition-colors duration-300 ${
-          isCollapsed ? "border-gray-700/50" : "border-gray-200/50"
-        }`} initial={false}>
+        <motion.div
+          className={`p-4 border-b transition-colors duration-300 ${
+            isCollapsed ? "border-gray-700/50" : "border-gray-200/50"
+          }`}
+          initial={false}
+        >
           <div className="flex items-center gap-3">
             <motion.div
               className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center font-bold text-sm shadow-lg text-white"
@@ -191,7 +196,9 @@ export const FloatingSidebar = ({
                 size={isCollapsed ? 20 : 18}
                 className={`transition-all duration-200 ${
                   isActive(item.href)
-                    ? isCollapsed ? "text-white" : "text-purple-500"
+                    ? isCollapsed
+                      ? "text-white"
+                      : "text-purple-500"
                     : isCollapsed
                       ? "text-gray-400 group-hover:text-gray-200"
                       : "text-gray-500 group-hover:text-gray-700"
@@ -224,7 +231,9 @@ export const FloatingSidebar = ({
               {/* Badge dot for collapsed state */}
               {item.badge && isCollapsed && !isActive(item.href) && (
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-[8px] text-white font-bold">{item.badge > 9 ? '9+' : item.badge}</span>
+                  <span className="text-[8px] text-white font-bold">
+                    {item.badge > 9 ? "9+" : item.badge}
+                  </span>
                 </div>
               )}
             </motion.button>
