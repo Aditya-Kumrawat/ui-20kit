@@ -401,10 +401,9 @@ export default function Chatbot() {
     "User: What should I look for in the analysis?",
     "AI: We'll examine key genetic markers and potential health risks.",
   ]);
-  const [audioVolume, setAudioVolume] = useState(2.0); // Volume control state - start at 200%
+  const [audioVolume, setAudioVolume] = useState(2.5); // Volume control state - start at 250%
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [gainNode, setGainNode] = useState<GainNode | null>(null);
-  const [compressor, setCompressor] = useState<DynamicsCompressorNode | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
