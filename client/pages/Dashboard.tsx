@@ -156,26 +156,24 @@ export default function Dashboard() {
             <div className="flex items-center gap-4" />
           </div>
           <div className="flex flex-col relative mt-5 h-auto pb-7">
-            <div className="flex flex-col relative mt-5 w-full">
-              <div className="relative w-full">
-                <video
-                  autoPlay={true}
-                  muted={true}
-                  controls={false}
-                  playsInline={true}
-                  loop={true}
-                  className="w-full rounded-lg"
-                  style={{ height: "400px", width: "100%" }}
-                  onError={(e) => console.error("Video error:", e)}
-                  onLoadStart={() => console.log("Video loading started")}
-                  onCanPlay={() => console.log("Video can play")}
-                >
-                  <source
-                    type="video/mp4"
-                    src="https://cdn.builder.io/o/assets%2F3ef4243ecdf248dabd75417d35606fac%2F54bd8a0dcac741cabf36c1fc34c597e2?alt=media&token=818fd446-695f-4cd6-bc85-3c16a794da63&apiKey=3ef4243ecdf248dabd75417d35606fac"
-                  />
-                  Your browser does not support the video tag.
-                </video>
+            <div className="flex flex-col relative mt-5 h-auto pb-7">
+              <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
+                <div className="relative">
+                  <video
+                    autoPlay={true}
+                    muted={true}
+                    controls={false}
+                    playsInline={true}
+                    loop={true}
+                    className="w-full h-full object-cover object-center rounded-sm relative flex flex-col mt-5 min-h-5 min-w-5"
+                  >
+                    <source
+                      type="video/mp4"
+                      src="https://cdn.builder.io/o/assets%2F3ef4243ecdf248dabd75417d35606fac%2F54bd8a0dcac741cabf36c1fc34c597e2?alt=media&token=818fd446-695f-4cd6-bc85-3c16a794da63&apiKey=3ef4243ecdf248dabd75417d35606fac"
+                    />
+                  </video>
+                  <div className="w-full pt-[70.04048582995948%] pointer-events-none text-[0px]" />
+                </div>
               </div>
             </div>
           </div>
