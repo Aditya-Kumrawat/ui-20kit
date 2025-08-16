@@ -26,23 +26,65 @@ interface FloatingSidebarProps {
   setIsCollapsed: (collapsed: boolean) => void;
 }
 
-export const FloatingSidebar = ({ isCollapsed, setIsCollapsed }: FloatingSidebarProps) => {
+export const FloatingSidebar = ({
+  isCollapsed,
+  setIsCollapsed,
+}: FloatingSidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const menuItems = [
     { id: "home", label: "Dashboard", icon: Home, href: "/dashboard" },
-    { id: "analytics", label: "Analytics", icon: BarChart3, href: "/dashboard/analytics" },
-    { id: "products", label: "Products", icon: Package, href: "/dashboard/products" },
-    { id: "orders", label: "Orders", icon: ShoppingCart, href: "/dashboard/orders", badge: 5 },
-    { id: "customers", label: "Customers", icon: Users, href: "/dashboard/customers" },
-    { id: "messages", label: "Messages", icon: MessageSquare, href: "/dashboard/messages", badge: 3 },
-    { id: "calendar", label: "Calendar", icon: Calendar, href: "/dashboard/calendar" },
-    { id: "chatbot", label: "AI Chat", icon: Brain, href: "/dashboard/chatbot" },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: BarChart3,
+      href: "/dashboard/analytics",
+    },
+    {
+      id: "products",
+      label: "Products",
+      icon: Package,
+      href: "/dashboard/products",
+    },
+    {
+      id: "orders",
+      label: "Orders",
+      icon: ShoppingCart,
+      href: "/dashboard/orders",
+      badge: 5,
+    },
+    {
+      id: "customers",
+      label: "Customers",
+      icon: Users,
+      href: "/dashboard/customers",
+    },
+    {
+      id: "messages",
+      label: "Messages",
+      icon: MessageSquare,
+      href: "/dashboard/messages",
+      badge: 3,
+    },
+    {
+      id: "calendar",
+      label: "Calendar",
+      icon: Calendar,
+      href: "/dashboard/calendar",
+    },
+    {
+      id: "chatbot",
+      label: "AI Chat",
+      icon: Brain,
+      href: "/dashboard/chatbot",
+    },
   ];
 
   const isActive = (href: string) => {
-    return location.pathname === href || location.pathname.startsWith(href + "/");
+    return (
+      location.pathname === href || location.pathname.startsWith(href + "/")
+    );
   };
 
   return (
@@ -56,10 +98,7 @@ export const FloatingSidebar = ({ isCollapsed, setIsCollapsed }: FloatingSidebar
       {/* Glass effect floating sidebar */}
       <div className="h-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 overflow-hidden">
         {/* Logo Section */}
-        <motion.div
-          className="p-4 border-b border-gray-200/50"
-          initial={false}
-        >
+        <motion.div className="p-4 border-b border-gray-200/50" initial={false}>
           <div className="flex items-center gap-3">
             <motion.div
               className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center font-bold text-sm shadow-lg text-white"
@@ -169,11 +208,15 @@ export const FloatingSidebar = ({ isCollapsed, setIsCollapsed }: FloatingSidebar
                       john@example.com
                     </p>
                   </div>
-                  <Button size="sm" variant="ghost" className="w-8 h-8 p-0 hover:bg-white/50">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="w-8 h-8 p-0 hover:bg-white/50"
+                  >
                     <Edit size={14} />
                   </Button>
                 </div>
-                
+
                 {/* User Stats */}
                 <div className="grid grid-cols-2 gap-2 text-center">
                   <div className="bg-white/60 rounded-lg p-2">
@@ -189,7 +232,10 @@ export const FloatingSidebar = ({ isCollapsed, setIsCollapsed }: FloatingSidebar
                       Rating
                     </p>
                     <div className="flex items-center justify-center gap-1">
-                      <Star size={12} className="text-yellow-500 fill-current" />
+                      <Star
+                        size={12}
+                        className="text-yellow-500 fill-current"
+                      />
                       <p className="text-lg font-bold text-yellow-600 dashboard-title">
                         4.8
                       </p>
@@ -199,11 +245,18 @@ export const FloatingSidebar = ({ isCollapsed, setIsCollapsed }: FloatingSidebar
 
                 {/* Quick Actions */}
                 <div className="flex gap-2">
-                  <Button size="sm" className="flex-1 h-8 text-xs bg-purple-500 hover:bg-purple-600 text-white dashboard-text">
+                  <Button
+                    size="sm"
+                    className="flex-1 h-8 text-xs bg-purple-500 hover:bg-purple-600 text-white dashboard-text"
+                  >
                     <Settings size={12} className="mr-1" />
                     Settings
                   </Button>
-                  <Button size="sm" variant="outline" className="w-8 h-8 p-0 hover:bg-red-50 border-red-200">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-8 h-8 p-0 hover:bg-red-50 border-red-200"
+                  >
                     <LogOut size={12} className="text-red-500" />
                   </Button>
                 </div>

@@ -376,30 +376,37 @@ export default function Chatbot() {
     // Audio volume boosting - Persistent approach with both methods
     vapiInstance.on("audio", (audioEl: HTMLAudioElement) => {
       if (!audioEl) return;
-      
+
       // Method 1: Direct element volume control (persistent)
       audioEl.volume = Math.min(audioVolume, 1.0); // Keep element volume at max 100%
       audioEl.muted = false;
-      
-      addDebugLog(`🔊 Direct audio volume: ${Math.round(audioEl.volume * 100)}%`);
-      
+
+      addDebugLog(
+        `🔊 Direct audio volume: ${Math.round(audioEl.volume * 100)}%`,
+      );
+
       // Method 2: Web Audio API for additional boost (only once per stream)
       if (audioEl.srcObject && !audioProcessed) {
         try {
-          const context = new (window.AudioContext || (window as any).webkitAudioContext)();
+          const context = new (window.AudioContext ||
+            (window as any).webkitAudioContext)();
           const gain = context.createGain();
           gain.gain.value = audioVolume; // Apply full boost through gain
-          
-          const source = context.createMediaStreamSource(audioEl.srcObject as MediaStream);
+
+          const source = context.createMediaStreamSource(
+            audioEl.srcObject as MediaStream,
+          );
           source.connect(gain);
           gain.connect(context.destination);
-          
+
           setAudioContext(context);
           setGainNode(gain);
           setAudioProcessed(true);
-          
-          addDebugLog(`🎚️ Web Audio boost: ${Math.round(audioVolume * 100)}% applied`);
-          
+
+          addDebugLog(
+            `🎚️ Web Audio boost: ${Math.round(audioVolume * 100)}% applied`,
+          );
+
           // Ensure audio context starts
           const startAudio = () => {
             if (context.state === "suspended") {
@@ -407,31 +414,33 @@ export default function Chatbot() {
               addDebugLog("🔊 Audio context resumed");
             }
           };
-          
+
           // Try to start immediately
           startAudio();
-          
+
           // Also set up for user interaction
           document.addEventListener("click", startAudio, { once: true });
           document.addEventListener("touchstart", startAudio, { once: true });
-          
         } catch (audioError) {
-          addDebugLog(`❌ Web Audio failed, using direct volume only: ${audioError}`);
+          addDebugLog(
+            `❌ Web Audio failed, using direct volume only: ${audioError}`,
+          );
         }
       }
-      
+
       // Continuous volume monitoring and correction
       const volumeMonitor = setInterval(() => {
         if (audioEl && !audioEl.paused) {
           if (audioEl.volume !== Math.min(audioVolume, 1.0)) {
             audioEl.volume = Math.min(audioVolume, 1.0);
-            addDebugLog(`🔧 Volume corrected back to ${Math.round(audioEl.volume * 100)}%`);
+            addDebugLog(
+              `🔧 Volume corrected back to ${Math.round(audioEl.volume * 100)}%`,
+            );
           }
         } else {
           clearInterval(volumeMonitor);
         }
       }, 500); // Check every 500ms
-      
     });
 
     vapiInstance.on("speech-start", () => {
@@ -499,9 +508,9 @@ export default function Chatbot() {
       addDebugLog("📞 Call ended");
       setVapiStatus("call-ended");
       setIsRecording(false);
-      
+
       // Cleanup Web Audio API resources
-      if (audioContext && audioContext.state !== 'closed') {
+      if (audioContext && audioContext.state !== "closed") {
         audioContext.close();
         setAudioContext(null);
         setGainNode(null);
@@ -868,7 +877,10 @@ export default function Chatbot() {
 
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <FloatingSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <FloatingSidebar
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
+      />
 
       {/* Main Content */}
       <motion.div
@@ -916,16 +928,16 @@ export default function Chatbot() {
                       vapiStatus === "connected" || vapiStatus === "call-active"
                         ? "bg-green-500 animate-pulse"
                         : vapiStatus === "error"
-                        ? "bg-red-500"
-                        : "bg-yellow-500"
+                          ? "bg-red-500"
+                          : "bg-yellow-500"
                     }`}
                   ></div>
                   <span className="text-gray-600 dashboard-text">
                     {vapiStatus === "connected" || vapiStatus === "call-active"
                       ? "Connected"
                       : vapiStatus === "error"
-                      ? "Error"
-                      : "Connecting..."}
+                        ? "Error"
+                        : "Connecting..."}
                   </span>
                 </div>
               </div>
@@ -1020,20 +1032,26 @@ export default function Chatbot() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.5 }}
                         >
-                          {message.suggestions.map((suggestion, suggestionIndex) => (
-                            <motion.button
-                              key={suggestionIndex}
-                              onClick={() => handleSuggestionClick(suggestion)}
-                              className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full hover:from-purple-200 hover:to-pink-200 transition-all duration-200 border border-purple-200/50 dashboard-text"
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: 0.6 + suggestionIndex * 0.1 }}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              {suggestion}
-                            </motion.button>
-                          ))}
+                          {message.suggestions.map(
+                            (suggestion, suggestionIndex) => (
+                              <motion.button
+                                key={suggestionIndex}
+                                onClick={() =>
+                                  handleSuggestionClick(suggestion)
+                                }
+                                className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full hover:from-purple-200 hover:to-pink-200 transition-all duration-200 border border-purple-200/50 dashboard-text"
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{
+                                  delay: 0.6 + suggestionIndex * 0.1,
+                                }}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                              >
+                                {suggestion}
+                              </motion.button>
+                            ),
+                          )}
                         </motion.div>
                       )}
                     </div>
@@ -1061,7 +1079,10 @@ export default function Chatbot() {
                           <motion.div
                             key={i}
                             className="w-2 h-2 bg-purple-400 rounded-full"
-                            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                            animate={{
+                              scale: [1, 1.2, 1],
+                              opacity: [0.5, 1, 0.5],
+                            }}
                             transition={{
                               duration: 1,
                               repeat: Infinity,
@@ -1144,11 +1165,32 @@ export default function Chatbot() {
                 </motion.button>
 
                 {/* Volume Control */}
-                <div className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg" title="Audio Volume">
+                <div
+                  className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg"
+                  title="Audio Volume"
+                >
                   <div className="text-gray-500">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M11 5L6 9H2V15H6L11 19V5Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </div>
                   <input
@@ -1163,11 +1205,13 @@ export default function Chatbot() {
                       if (gainNode) {
                         gainNode.gain.value = newVolume;
                       }
-                      addDebugLog(`🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`);
+                      addDebugLog(
+                        `🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`,
+                      );
                     }}
                     className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                     style={{
-                      background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`
+                      background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`,
                     }}
                   />
                   <span className="text-xs text-gray-500 min-w-[30px] dashboard-text">
@@ -1194,7 +1238,9 @@ export default function Chatbot() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg"
                 >
-                  <p className="text-sm text-red-700 dashboard-text">{vapiError}</p>
+                  <p className="text-sm text-red-700 dashboard-text">
+                    {vapiError}
+                  </p>
                 </motion.div>
               )}
 
@@ -1219,13 +1265,7 @@ export default function Chatbot() {
         </div>
 
         {/* Hidden video element for Vapi */}
-        <video
-          ref={videoRef}
-          className="hidden"
-          autoPlay
-          muted
-          playsInline
-        />
+        <video ref={videoRef} className="hidden" autoPlay muted playsInline />
       </motion.div>
     </div>
   );

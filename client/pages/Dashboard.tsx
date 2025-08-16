@@ -12,7 +12,6 @@ import {
   DollarSign,
 } from "lucide-react";
 
-
 export default function Dashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -26,7 +25,7 @@ export default function Dashboard() {
       bgColor: "from-green-50 to-green-100",
     },
     {
-      title: "New Orders", 
+      title: "New Orders",
       value: "1,429",
       change: "+8.2%",
       icon: ShoppingCart,
@@ -53,7 +52,10 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <FloatingSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <FloatingSidebar
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
+      />
 
       {/* Main Content */}
       <motion.div
@@ -83,7 +85,10 @@ export default function Dashboard() {
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
                 </Button>
               </motion.div>
-              <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white">
+              <Button
+                size="sm"
+                className="bg-purple-500 hover:bg-purple-600 text-white"
+              >
                 <Search size={16} className="mr-2" />
                 Search
               </Button>
@@ -111,26 +116,44 @@ export default function Dashboard() {
               <div className="relative bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30 overflow-hidden">
                 {/* Soft lift effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-2xl"></div>
-                <div className="absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300"
-                     style={{ background: `linear-gradient(135deg, ${stat.color.split(' ')[1]}, ${stat.color.split(' ')[3]})` }}></div>
-                
+                <div
+                  className="absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300"
+                  style={{
+                    background: `linear-gradient(135deg, ${stat.color.split(" ")[1]}, ${stat.color.split(" ")[3]})`,
+                  }}
+                ></div>
+
                 <div className="relative z-10">
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}>
-                      <stat.icon size={24} className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`} />
+                    <div
+                      className={`p-3 rounded-xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
+                    >
+                      <stat.icon
+                        size={24}
+                        className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}
+                      />
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <p
+                        className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full"
+                        style={{ fontFamily: "Poppins, sans-serif" }}
+                      >
                         {stat.change}
                       </p>
                     </div>
                   </div>
-                  
+
                   <div>
-                    <h3 className="text-sm font-medium text-gray-600 mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h3
+                      className="text-sm font-medium text-gray-600 mb-1"
+                      style={{ fontFamily: "Poppins, sans-serif" }}
+                    >
                       {stat.title}
                     </h3>
-                    <p className="text-2xl font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                    <p
+                      className="text-2xl font-bold text-gray-900"
+                      style={{ fontFamily: "Montserrat, sans-serif" }}
+                    >
                       {stat.value}
                     </p>
                   </div>
@@ -150,25 +173,55 @@ export default function Dashboard() {
           {/* Recent Activity */}
           <div className="lg:col-span-2">
             <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: "Montserrat, sans-serif" }}>
+              <h3
+                className="text-lg font-semibold text-gray-900 mb-4"
+                style={{ fontFamily: "Montserrat, sans-serif" }}
+              >
                 Recent Activity
               </h3>
               <div className="space-y-4">
                 {[
-                  { action: "New order received", time: "2 minutes ago", user: "Sarah Johnson" },
-                  { action: "Payment processed", time: "5 minutes ago", user: "Mike Chen" },
-                  { action: "User registered", time: "12 minutes ago", user: "Emma Wilson" },
-                  { action: "Product updated", time: "1 hour ago", user: "Admin" },
+                  {
+                    action: "New order received",
+                    time: "2 minutes ago",
+                    user: "Sarah Johnson",
+                  },
+                  {
+                    action: "Payment processed",
+                    time: "5 minutes ago",
+                    user: "Mike Chen",
+                  },
+                  {
+                    action: "User registered",
+                    time: "12 minutes ago",
+                    user: "Emma Wilson",
+                  },
+                  {
+                    action: "Product updated",
+                    time: "1 hour ago",
+                    user: "Admin",
+                  },
                 ].map((activity, index) => (
-                  <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/40 transition-colors">
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/40 transition-colors"
+                  >
                     <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-800" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <p
+                        className="text-sm font-medium text-gray-800"
+                        style={{ fontFamily: "Poppins, sans-serif" }}
+                      >
                         {activity.action}
                       </p>
-                      <p className="text-xs text-gray-500">by {activity.user}</p>
+                      <p className="text-xs text-gray-500">
+                        by {activity.user}
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-500" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <p
+                      className="text-xs text-gray-500"
+                      style={{ fontFamily: "Poppins, sans-serif" }}
+                    >
                       {activity.time}
                     </p>
                   </div>
@@ -180,31 +233,49 @@ export default function Dashboard() {
           {/* Quick Stats */}
           <div className="space-y-6">
             <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: "Montserrat, sans-serif" }}>
+              <h3
+                className="text-lg font-semibold text-gray-900 mb-4"
+                style={{ fontFamily: "Montserrat, sans-serif" }}
+              >
                 Quick Stats
               </h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <span
+                    className="text-sm text-gray-600"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
                     Conversion Rate
                   </span>
-                  <span className="text-sm font-semibold text-gray-900">3.2%</span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    3.2%
+                  </span>
                 </div>
                 <Progress value={32} className="h-2" />
-                
+
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <span
+                    className="text-sm text-gray-600"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
                     Customer Satisfaction
                   </span>
-                  <span className="text-sm font-semibold text-gray-900">4.8/5</span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    4.8/5
+                  </span>
                 </div>
                 <Progress value={96} className="h-2" />
-                
+
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <span
+                    className="text-sm text-gray-600"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
                     Server Uptime
                   </span>
-                  <span className="text-sm font-semibold text-gray-900">99.9%</span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    99.9%
+                  </span>
                 </div>
                 <Progress value={99.9} className="h-2" />
               </div>
