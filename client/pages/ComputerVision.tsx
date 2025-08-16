@@ -435,7 +435,7 @@ export default function ComputerVision() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
         </div>
 
         {/* Real-time Performance Monitor */}
