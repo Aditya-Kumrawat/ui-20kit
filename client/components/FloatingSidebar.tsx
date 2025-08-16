@@ -209,7 +209,9 @@ export const FloatingSidebar = ({
               <AnimatePresence>
                 {!isCollapsed && (
                   <motion.span
-                    className="text-sm font-medium flex-1 text-left dashboard-text"
+                    className={`text-sm font-medium flex-1 text-left dashboard-text transition-colors duration-200 ${
+                      isCollapsed ? "text-gray-200" : "text-gray-800"
+                    }`}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
