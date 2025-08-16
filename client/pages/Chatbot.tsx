@@ -529,6 +529,7 @@ export default function Chatbot() {
     vapiInstance.on("call-start", () => {
       addDebugLog("📞 Call started");
       setVapiStatus("call-active");
+      setCallStartTime(new Date());
       addDebugLog("🎧 Audio processing will be handled on audio stream");
     });
 
@@ -536,6 +537,13 @@ export default function Chatbot() {
       addDebugLog("📞 Call ended");
       setVapiStatus("call-ended");
       setIsRecording(false);
+      setCallDuration(0);
+      setHasAudioOutput(false);
+      setCallStartTime(null);
+      // Pause video when call ends
+      if (assistantVideoRef.current) {
+        assistantVideoRef.current.pause();
+      }
 
       // Cleanup Web Audio API resources
       if (audioContext && audioContext.state !== "closed") {
