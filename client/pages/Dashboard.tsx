@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
+import { FloatingTopBar } from "@/components/FloatingTopBar";
 import {
   Search,
   Bell,
@@ -127,6 +128,7 @@ export default function Dashboard() {
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />
+      <FloatingTopBar />
 
       {/* Main Content */}
       <motion.div
