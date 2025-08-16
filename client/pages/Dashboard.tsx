@@ -340,6 +340,19 @@ export default function Dashboard() {
                       allowDataOverflow={false}
                       allowDecimals={true}
                       allowDuplicatedCategory={true}
+                      domain={['dataMin', 'dataMax']}
+                      scale="auto"
+                      interval="preserveStartEnd"
+                      tickCount={5}
+                      minTickGap={5}
+                      angle={0}
+                      textAnchor="middle"
+                      height={60}
+                      orientation="bottom"
+                      mirror={false}
+                      reversed={false}
+                      includeHidden={false}
+                      hide={false}
                     />
                     <YAxis
                       axisLine={false}
@@ -349,6 +362,18 @@ export default function Dashboard() {
                       allowDataOverflow={false}
                       allowDecimals={true}
                       allowDuplicatedCategory={true}
+                      domain={['dataMin', 'dataMax']}
+                      scale="auto"
+                      tickCount={5}
+                      minTickGap={5}
+                      angle={0}
+                      textAnchor="end"
+                      width={60}
+                      orientation="left"
+                      mirror={false}
+                      reversed={false}
+                      includeHidden={false}
+                      hide={false}
                     />
                     <Tooltip
                       contentStyle={{
