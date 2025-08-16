@@ -187,9 +187,13 @@ export const FloatingSidebar = ({
           {menuItems.map((item, index) => (
             <motion.button
               key={item.id}
-              className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group relative z-10 ${
+              className={`w-full flex items-center gap-3 transition-all duration-200 group relative z-10 ${
+                isCollapsed ? "p-2 justify-center" : "p-3"
+              } rounded-xl ${
                 isActive(item.href)
-                  ? isCollapsed ? "text-purple-400" : "text-purple-600"
+                  ? isCollapsed
+                    ? "text-white bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg"
+                    : "text-purple-600"
                   : isCollapsed
                     ? "hover:bg-gray-800/50 text-gray-300 hover:text-white"
                     : "hover:bg-gray-100/30 text-gray-600 hover:text-gray-800"
@@ -202,10 +206,10 @@ export const FloatingSidebar = ({
               whileTap={{ scale: 0.98 }}
             >
               <item.icon
-                size={18}
-                className={`${
+                size={isCollapsed ? 20 : 18}
+                className={`transition-all duration-200 ${
                   isActive(item.href)
-                    ? isCollapsed ? "text-purple-400" : "text-purple-500"
+                    ? isCollapsed ? "text-white" : "text-purple-500"
                     : isCollapsed
                       ? "text-gray-400 group-hover:text-gray-200"
                       : "text-gray-500 group-hover:text-gray-700"
