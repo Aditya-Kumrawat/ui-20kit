@@ -1008,7 +1008,8 @@ export default function Chatbot() {
         audioContext.close();
         setAudioContext(null);
         setGainNode(null);
-        addDebugLog("🧹 Audio context cleaned up");
+        setAudioProcessed(false); // Reset for next call
+        addDebugLog("🧹 Audio context cleaned up and reset");
       }
     });
 
