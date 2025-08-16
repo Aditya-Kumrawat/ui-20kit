@@ -1441,6 +1441,13 @@ export default function Chatbot() {
             voice: {
               provider: "11labs",
               voiceId: voiceId,
+              stability: 0.5,
+              similarityBoost: 0.75,
+              style: 0.0,
+              useSpeakerBoost: true,
+              optimizeStreamingLatency: 0,
+              enableSsmlParsing: true,
+              model: "eleven_turbo_v2_5",
             },
             firstMessage: null,
           };
