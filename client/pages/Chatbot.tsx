@@ -150,7 +150,16 @@ export default function Chatbot() {
   const [vapiInitialized, setVapiInitialized] = useState(false);
 
   const { isCollapsed, setIsCollapsed } = useSidebar();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "system-welcome",
+      content: "👋 Hello! I'm your AI assistant. I can help you with various tasks, answer questions, and have conversations. You can type your message below or use the voice assistant panel on the right to talk with me. How can I assist you today?",
+      sender: "ai",
+      timestamp: new Date(),
+      status: "delivered",
+      type: "text"
+    }
+  ]);
 
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
