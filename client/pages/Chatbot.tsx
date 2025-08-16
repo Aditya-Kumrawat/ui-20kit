@@ -157,6 +157,9 @@ export default function Chatbot() {
   const [vapiStatus, setVapiStatus] = useState("disconnected"); // Force real API mode
   const [vapiError, setVapiError] = useState<string | null>(null);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
+  const [hasAudioOutput, setHasAudioOutput] = useState(false);
+  const [callDuration, setCallDuration] = useState(0);
+  const [callStartTime, setCallStartTime] = useState<Date | null>(null);
   const [testMode, setTestMode] = useState(false); // Force real API usage always
   const [networkStatus, setNetworkStatus] = useState<
     "unknown" | "online" | "offline" | "restricted"
@@ -169,12 +172,37 @@ export default function Chatbot() {
     "AI: We'll examine key genetic markers and potential health risks.",
   ]);
   const [audioVolume, setAudioVolume] = useState(2.5); // Volume control state - start at 250%
+
+  // Timer effect for call duration
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (isRecording && callStartTime) {
+      interval = setInterval(() => {
+        const now = new Date();
+        const duration = Math.floor((now.getTime() - callStartTime.getTime()) / 1000);
+        setCallDuration(duration);
+      }, 1000);
+    } else {
+      setCallDuration(0);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isRecording, callStartTime]);
+
+  // Format duration helper
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [gainNode, setGainNode] = useState<GainNode | null>(null);
   const [audioProcessed, setAudioProcessed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const assistantVideoRef = useRef<HTMLVideoElement>(null);
 
   // Initialize Vapi Web SDK for browser-based voice calls - moved before useEffect to fix hoisting
   const initializeVapi = useCallback(() => {
