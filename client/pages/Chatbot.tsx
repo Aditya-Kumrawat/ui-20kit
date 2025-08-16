@@ -1957,7 +1957,7 @@ export default function Chatbot() {
                         const newVolume = parseFloat(e.target.value);
                         setAudioVolume(newVolume);
                         if (gainNode) {
-                          gainNode.gain.value = newVolume * 5.0;
+                          gainNode.gain.value = newVolume;
                         }
                         addDebugLog(`🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`);
                       }}
