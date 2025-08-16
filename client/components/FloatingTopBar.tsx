@@ -21,7 +21,7 @@ export const FloatingTopBar = ({
   return (
     <motion.div
       className={`fixed top-4 right-4 z-40 transition-all duration-300 ${
-        isCollapsed ? "left-20" : "left-80"
+        isCollapsed ? "left-20" : "left-72"
       }`}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ export const FloatingTopBar = ({
               <input
                 type="text"
                 placeholder="Search..."
-                className="pl-10 pr-4 py-2 bg-gray-100/50 rounded-2xl border-0 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-sm w-64"
+                className="pl-10 pr-4 py-2 bg-gray-100/50 rounded-2xl border-0 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-sm w-48 sm:w-64"
               />
             </div>
           </div>
