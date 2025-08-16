@@ -235,8 +235,15 @@ export const FloatingSidebar = ({
                   {item.badge}
                 </Badge>
               )}
-              {item.badge && isCollapsed && (
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+              {/* Active indicator dot for collapsed state */}
+              {isActive(item.href) && isCollapsed && (
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full shadow-sm animate-pulse"></div>
+              )}
+              {/* Badge dot for collapsed state */}
+              {item.badge && isCollapsed && !isActive(item.href) && (
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-[8px] text-white font-bold">{item.badge > 9 ? '9+' : item.badge}</span>
+                </div>
               )}
             </motion.button>
           ))}
