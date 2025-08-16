@@ -350,12 +350,18 @@ export default function Dashboard() {
                       tickLine={false}
                       tick={{ fontSize: 12, fill: "#6b7280" }}
                       type="category"
+                      allowDataOverflow={false}
+                      allowDecimals={true}
+                      allowDuplicatedCategory={true}
                     />
                     <YAxis
                       axisLine={false}
                       tickLine={false}
                       tick={{ fontSize: 12, fill: "#6b7280" }}
                       type="number"
+                      allowDataOverflow={false}
+                      allowDecimals={true}
+                      allowDuplicatedCategory={true}
                     />
                     <Tooltip
                       contentStyle={{
