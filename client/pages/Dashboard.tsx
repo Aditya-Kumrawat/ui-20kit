@@ -1,38 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+import { FloatingSidebar } from "@/components/FloatingSidebar";
 import {
-  Home,
-  BarChart3,
-  Brain,
-  MessageSquare,
-  Users,
-  Calendar,
-  Mail,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
   Search,
   Bell,
-  User,
   TrendingUp,
-  Activity,
-  Zap,
-  Target,
-  PieChart,
-  LineChart,
-  MoreHorizontal,
-  LogOut,
-  Edit,
+  Users,
   ShoppingCart,
   DollarSign,
-  Package,
-  Star,
 } from "lucide-react";
 
 interface SidebarProps {
