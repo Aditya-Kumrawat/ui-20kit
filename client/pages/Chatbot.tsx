@@ -1009,16 +1009,17 @@ export default function Chatbot() {
         <div className="flex-1 flex overflow-hidden p-6">
           {/* Floating Glass Chat Container */}
           <motion.div
-            className="flex-1 mr-80 bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden"
+            className="mr-80 bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden"
+            style={{ height: 'calc(100vh - 8rem)' }}
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             {/* Chat Messages Area */}
-            <div className="flex-1 flex flex-col h-full">
+            <div className="flex flex-col h-full">
               {/* Messages Container with Gradient Background */}
               <div
-                className="flex-1 overflow-y-auto p-8 space-y-6"
+                className="flex-1 overflow-y-auto p-8 space-y-6 min-h-0"
                 style={{
                   background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.6) 50%, rgba(248, 250, 252, 0.9) 100%)'
                 }}
