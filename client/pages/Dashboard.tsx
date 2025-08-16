@@ -11,6 +11,15 @@ import {
   ShoppingCart,
   DollarSign,
 } from "lucide-react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function Dashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
