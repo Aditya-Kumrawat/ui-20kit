@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
+import { useSidebar } from "@/contexts/SidebarContext";
 import Vapi from "@vapi-ai/web";
 import {
   Send,
@@ -148,7 +149,7 @@ export default function Chatbot() {
   const [vapiInstance, setVapiInstance] = useState<any>(null);
   const [vapiInitialized, setVapiInitialized] = useState(false);
 
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { isCollapsed, setIsCollapsed } = useSidebar();
   const [messages, setMessages] = useState<Message[]>([]);
 
   const [inputValue, setInputValue] = useState("");

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
+import { useSidebar } from "@/contexts/SidebarContext";
 import {
   Camera,
   Upload,
@@ -15,7 +16,7 @@ import {
 } from "lucide-react";
 
 export default function ComputerVision() {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { isCollapsed, setIsCollapsed } = useSidebar();
   const [selectedModel, setSelectedModel] = useState("image-classification");
   const [isProcessing, setIsProcessing] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);

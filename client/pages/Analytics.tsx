@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
 import {
   BarChart,
@@ -33,7 +34,7 @@ import {
 } from "lucide-react";
 
 export default function Analytics() {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { isCollapsed, setIsCollapsed } = useSidebar();
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
 
   // Bar chart data with gradients
