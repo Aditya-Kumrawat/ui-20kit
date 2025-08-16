@@ -100,7 +100,7 @@ export default function ComputerVision() {
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />
-      <FloatingTopBar />
+      <FloatingTopBar isCollapsed={isCollapsed} />
 
       {/* Main Content */}
       <motion.div
