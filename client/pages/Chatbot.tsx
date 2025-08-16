@@ -1163,7 +1163,7 @@ export default function Chatbot() {
 
     // Cleanup event listeners
     return () => {
-      if (vapi) {
+      if (vapiInstance) {
         try {
           vapiInstance.removeAllListeners();
           addDebugLog("🧝 Cleaned up Vapi event listeners");
