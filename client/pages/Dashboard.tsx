@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
+import { useSidebar } from "@/contexts/SidebarContext";
 import {
   Search,
   Bell,
@@ -23,7 +24,7 @@ import {
 } from "recharts";
 
 export default function Dashboard() {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { isCollapsed, setIsCollapsed } = useSidebar();
 
   const dashboardStats = [
     {
