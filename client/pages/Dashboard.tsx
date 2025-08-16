@@ -75,6 +75,52 @@ export default function Dashboard() {
     { month: "Dec", revenue: 89000, orders: 285 },
   ];
 
+  // Map data for global business presence
+  const mapData = [
+    {
+      region: "North America",
+      customers: 12500,
+      revenue: 245000,
+      growth: 15.2,
+      color: "#8b5cf6",
+      position: { x: 150, y: 120 }
+    },
+    {
+      region: "Europe",
+      customers: 8900,
+      revenue: 189000,
+      growth: 12.8,
+      color: "#06b6d4",
+      position: { x: 420, y: 100 }
+    },
+    {
+      region: "Asia Pacific",
+      customers: 15600,
+      revenue: 298000,
+      growth: 22.5,
+      color: "#10b981",
+      position: { x: 650, y: 150 }
+    },
+    {
+      region: "South America",
+      customers: 4200,
+      revenue: 78000,
+      growth: 8.3,
+      color: "#f59e0b",
+      position: { x: 220, y: 250 }
+    },
+    {
+      region: "Africa",
+      customers: 2800,
+      revenue: 52000,
+      growth: 18.7,
+      color: "#ef4444",
+      position: { x: 480, y: 220 }
+    }
+  ];
+
+  const [hoveredRegion, setHoveredRegion] = useState(null);
+
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <FloatingSidebar
