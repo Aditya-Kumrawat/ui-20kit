@@ -182,7 +182,7 @@ export const FloatingSidebar = ({
           ))}
         </div>
 
-        {/* Custom User Profile Section */}
+        {/* Video Section */}
         <AnimatePresence>
           {!isCollapsed && (
             <motion.div
@@ -192,73 +192,24 @@ export const FloatingSidebar = ({
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 space-y-3">
-                <div className="flex items-center gap-3">
-                  <Avatar className="w-10 h-10 border-2 border-white shadow-sm">
-                    <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" />
-                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-sm">
-                      JD
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-800 truncate dashboard-title">
-                      John Doe
-                    </p>
-                    <p className="text-xs text-gray-500 truncate dashboard-text">
-                      john@example.com
-                    </p>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="w-8 h-8 p-0 hover:bg-white/50"
-                  >
-                    <Edit size={14} />
-                  </Button>
-                </div>
-
-                {/* User Stats */}
-                <div className="grid grid-cols-2 gap-2 text-center">
-                  <div className="bg-white/60 rounded-lg p-2">
-                    <p className="text-xs font-medium text-gray-600 dashboard-text">
-                      Projects
-                    </p>
-                    <p className="text-lg font-bold text-purple-600 dashboard-title">
-                      12
-                    </p>
-                  </div>
-                  <div className="bg-white/60 rounded-lg p-2">
-                    <p className="text-xs font-medium text-gray-600 dashboard-text">
-                      Rating
-                    </p>
-                    <div className="flex items-center justify-center gap-1">
-                      <Star
-                        size={12}
-                        className="text-yellow-500 fill-current"
+              <div className="flex flex-col relative mt-5 h-auto pb-7">
+                <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
+                  <div className="relative">
+                    <video
+                      autoPlay
+                      muted
+                      controls={false}
+                      playsInline
+                      loop
+                      className="w-full h-full object-cover object-center rounded-sm relative flex flex-col mt-5 min-h-5 min-w-5"
+                    >
+                      <source
+                        type="video/mp4"
+                        src="https://cdn.builder.io/o/assets%2Fa35bd991f0e541aa931714571cb88c16%2F671424c800a94207be9aa0b5e0a92325?alt=media&token=7a7dbbe0-724a-46f1-8b5e-83a5a7b0456d&apiKey=a35bd991f0e541aa931714571cb88c16"
                       />
-                      <p className="text-lg font-bold text-yellow-600 dashboard-title">
-                        4.8
-                      </p>
-                    </div>
+                    </video>
+                    <div className="w-full pt-[70.04048582995948%] pointer-events-none text-[0px]" />
                   </div>
-                </div>
-
-                {/* Quick Actions */}
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    className="flex-1 h-8 text-xs bg-purple-500 hover:bg-purple-600 text-white dashboard-text"
-                  >
-                    <Settings size={12} className="mr-1" />
-                    Settings
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="w-8 h-8 p-0 hover:bg-red-50 border-red-200"
-                  >
-                    <LogOut size={12} className="text-red-500" />
-                  </Button>
                 </div>
               </div>
             </motion.div>
