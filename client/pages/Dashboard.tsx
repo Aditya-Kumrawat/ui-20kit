@@ -17,8 +17,6 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Play,
-  Pause,
   Search,
   Bell,
   User,
@@ -29,6 +27,12 @@ import {
   PieChart,
   LineChart,
   MoreHorizontal,
+  LogOut,
+  Edit,
+  ShoppingCart,
+  DollarSign,
+  Package,
+  Star,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -36,343 +40,261 @@ interface SidebarProps {
   setIsCollapsed: (collapsed: boolean) => void;
 }
 
-const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
+const FloatingSidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   const [activeItem, setActiveItem] = useState("home");
   const navigate = useNavigate();
 
   const menuItems = [
-    { id: "home", label: "Homepage", icon: Home, href: "/dashboard" },
-    {
-      id: "statistics",
-      label: "Statistics",
-      icon: BarChart3,
-      href: "/dashboard/stats",
-    },
-    {
-      id: "analytics",
-      label: "Analytics",
-      icon: PieChart,
-      href: "/dashboard/analytics",
-      active: true,
-    },
-    {
-      id: "appointments",
-      label: "Appointments",
-      icon: Calendar,
-      href: "/dashboard/appointments",
-    },
-    {
-      id: "messages",
-      label: "Messages",
-      icon: MessageSquare,
-      href: "/dashboard/messages",
-      badge: 2,
-    },
-    { id: "ai", label: "AI Assistant", icon: Brain, href: "/dashboard/ai" },
-    {
-      id: "chatbot",
-      label: "Chatbot",
-      icon: MessageSquare,
-      href: "/dashboard/chatbot",
-    },
-    {
-      id: "community",
-      label: "Community",
-      icon: Users,
-      href: "/dashboard/community",
-    },
-  ];
-
-  const toolItems = [
-    { id: "dna", label: "DNA Profile", icon: Activity },
-    { id: "scanner", label: "Genetic Scanner", icon: Search },
-    { id: "analysis", label: "General Analysis", icon: Target },
+    { id: "home", label: "Dashboard", icon: Home, href: "/dashboard", active: true },
+    { id: "analytics", label: "Analytics", icon: BarChart3, href: "/dashboard/analytics" },
+    { id: "products", label: "Products", icon: Package, href: "/dashboard/products" },
+    { id: "orders", label: "Orders", icon: ShoppingCart, href: "/dashboard/orders", badge: 5 },
+    { id: "customers", label: "Customers", icon: Users, href: "/dashboard/customers" },
+    { id: "messages", label: "Messages", icon: MessageSquare, href: "/dashboard/messages", badge: 3 },
+    { id: "calendar", label: "Calendar", icon: Calendar, href: "/dashboard/calendar" },
+    { id: "chatbot", label: "AI Chat", icon: Brain, href: "/dashboard/chatbot" },
   ];
 
   return (
     <motion.div
-      className={`fixed left-0 top-0 h-full bg-gradient-to-b from-slate-900 to-slate-800 text-white z-50 shadow-2xl ${
-        isCollapsed ? "w-20" : "w-72"
-      }`}
-      animate={{ width: isCollapsed ? 80 : 288 }}
+      className={`fixed left-4 top-4 bottom-4 ${
+        isCollapsed ? "w-16" : "w-64"
+      } z-50`}
+      animate={{ width: isCollapsed ? 64 : 256 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-      {/* Logo Section */}
-      <motion.div
-        className="p-6 border-b border-slate-700/50"
-        initial={false}
-        animate={{ paddingLeft: isCollapsed ? 24 : 24 }}
-      >
-        <div className="flex items-center gap-3">
-          <motion.div
-            className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center font-bold text-lg shadow-lg"
-            whileHover={{ scale: 1.05 }}
-          >
-            MY
-          </motion.div>
-          <AnimatePresence>
-            {!isCollapsed && (
-              <motion.span
-                className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-              >
-                DNA
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
-      {/* Toggle Button */}
-      <motion.button
-        className="absolute -right-3 top-8 w-6 h-6 bg-slate-700 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-slate-600 transition-colors"
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-      </motion.button>
-
-      {/* Navigation Menu */}
-      <div className="flex-1 p-4 space-y-2">
-        {menuItems.map((item, index) => (
-          <motion.button
-            key={item.id}
-            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group relative ${
-              item.active || activeItem === item.id
-                ? "bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-white border border-purple-500/30"
-                : "hover:bg-slate-700/50 text-gray-300 hover:text-white"
-            }`}
-            onClick={() => {
-              setActiveItem(item.id);
-              if (item.id === "chatbot") {
-                navigate("/dashboard/chatbot");
-              }
-            }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05 }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <item.icon
-              size={20}
-              className={`${item.active || activeItem === item.id ? "text-purple-400" : "text-gray-400 group-hover:text-white"}`}
-            />
+      {/* Glass effect floating sidebar */}
+      <div className="h-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+        {/* Logo Section */}
+        <motion.div
+          className="p-4 border-b border-gray-200/50"
+          initial={false}
+        >
+          <div className="flex items-center gap-3">
+            <motion.div
+              className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center font-bold text-sm shadow-lg text-white"
+              whileHover={{ scale: 1.05 }}
+            >
+              D
+            </motion.div>
             <AnimatePresence>
               {!isCollapsed && (
                 <motion.span
-                  className="text-sm font-medium flex-1 text-left"
-                  initial={{ opacity: 0, x: -10 }}
+                  className="text-lg font-bold text-gray-800"
+                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                  initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
+                  exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {item.label}
+                  Dashboard
                 </motion.span>
               )}
             </AnimatePresence>
-            {item.badge && !isCollapsed && (
-              <Badge className="bg-red-500 text-white text-xs min-w-[20px] h-5 flex items-center justify-center">
-                {item.badge}
-              </Badge>
-            )}
-            {item.badge && isCollapsed && (
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
-            )}
-          </motion.button>
-        ))}
+          </div>
+        </motion.div>
 
-        {/* Connected Profiles Section */}
+        {/* Toggle Button */}
+        <motion.button
+          className="absolute -right-3 top-6 w-6 h-6 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 shadow-lg hover:bg-white transition-colors border border-gray-200/50"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {isCollapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
+        </motion.button>
+
+        {/* Navigation Menu */}
+        <div className="flex-1 p-3 space-y-1">
+          {menuItems.map((item, index) => (
+            <motion.button
+              key={item.id}
+              className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group relative ${
+                item.active || activeItem === item.id
+                  ? "bg-gradient-to-r from-purple-500/10 to-blue-500/10 text-purple-600 border border-purple-200/50"
+                  : "hover:bg-gray-100/50 text-gray-600 hover:text-gray-800"
+              }`}
+              onClick={() => {
+                setActiveItem(item.id);
+                if (item.href) {
+                  navigate(item.href);
+                }
+              }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <item.icon
+                size={18}
+                className={`${
+                  item.active || activeItem === item.id
+                    ? "text-purple-500"
+                    : "text-gray-500 group-hover:text-gray-700"
+                }`}
+              />
+              <AnimatePresence>
+                {!isCollapsed && (
+                  <motion.span
+                    className="text-sm font-medium flex-1 text-left"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {item.label}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+              {item.badge && !isCollapsed && (
+                <Badge className="bg-red-500 text-white text-xs min-w-[18px] h-5 flex items-center justify-center">
+                  {item.badge}
+                </Badge>
+              )}
+              {item.badge && isCollapsed && (
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Custom User Profile Section */}
         <AnimatePresence>
           {!isCollapsed && (
             <motion.div
-              className="mt-8 pt-6 border-t border-slate-700/50"
+              className="p-3 border-t border-gray-200/50"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
-                Connected Profiles
-              </div>
-              <div className="flex -space-x-2 mb-3 px-2">
-                {[1, 2, 3].map((i) => (
-                  <Avatar key={i} className="w-8 h-8 border-2 border-slate-700">
-                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
-                      U{i}
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <Avatar className="w-10 h-10 border-2 border-white shadow-sm">
+                    <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" />
+                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-sm">
+                      JD
                     </AvatarFallback>
                   </Avatar>
-                ))}
-              </div>
-              <Button
-                size="sm"
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white border-0 text-xs"
-              >
-                Add Profile
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-gray-800 truncate" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                      John Doe
+                    </p>
+                    <p className="text-xs text-gray-500 truncate" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      john@example.com
+                    </p>
+                  </div>
+                  <Button size="sm" variant="ghost" className="w-8 h-8 p-0 hover:bg-white/50">
+                    <Edit size={14} />
+                  </Button>
+                </div>
+                
+                {/* User Stats */}
+                <div className="grid grid-cols-2 gap-2 text-center">
+                  <div className="bg-white/60 rounded-lg p-2">
+                    <p className="text-xs font-medium text-gray-600" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      Projects
+                    </p>
+                    <p className="text-lg font-bold text-purple-600" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                      12
+                    </p>
+                  </div>
+                  <div className="bg-white/60 rounded-lg p-2">
+                    <p className="text-xs font-medium text-gray-600" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      Rating
+                    </p>
+                    <div className="flex items-center justify-center gap-1">
+                      <Star size={12} className="text-yellow-500 fill-current" />
+                      <p className="text-lg font-bold text-yellow-600" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                        4.8
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-        {/* AI Assistant Section */}
-        <AnimatePresence>
-          {!isCollapsed && (
-            <motion.div
-              className="mt-6 pt-4 border-t border-slate-700/50"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-            >
-              <div className="text-xs font-semibold text-gray-400 mb-3 px-2">
-                AI Assistant
+                {/* Quick Actions */}
+                <div className="flex gap-2">
+                  <Button size="sm" className="flex-1 h-8 text-xs bg-purple-500 hover:bg-purple-600 text-white">
+                    <Settings size={12} className="mr-1" />
+                    Settings
+                  </Button>
+                  <Button size="sm" variant="outline" className="w-8 h-8 p-0 hover:bg-red-50 border-red-200">
+                    <LogOut size={12} className="text-red-500" />
+                  </Button>
+                </div>
               </div>
-              {toolItems.map((tool, index) => (
-                <motion.button
-                  key={tool.id}
-                  className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700/50 text-gray-300 hover:text-white transition-all duration-200 group text-sm"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <tool.icon
-                    size={16}
-                    className="text-gray-400 group-hover:text-purple-400"
-                  />
-                  <span className="text-left">{tool.label}</span>
-                  <ChevronRight
-                    size={12}
-                    className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity"
-                  />
-                </motion.button>
-              ))}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
-      {/* Video Container at Bottom */}
-      <AnimatePresence>
-        {!isCollapsed && (
-          <motion.div
-            className="p-4 border-t border-slate-700/50"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="bg-slate-800 rounded-lg p-3 space-y-2">
-              <div className="flex items-center gap-2 text-xs text-gray-400">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-              </div>
-              <div className="aspect-video bg-gradient-to-br from-slate-700 to-slate-900 rounded-lg flex items-center justify-center relative overflow-hidden">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage:
-                      "url(https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2Fd5ef5f2a2a2d4fdda37b8beb31b2b7b7?alt=media&token=83995d22-6f0a-4e4a-979b-17c838b7d2cb&apiKey=ad2efc99155b417783200fc7999ced3f)",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                  }}
-                ></div>
-                <motion.div
-                  className="relative z-10"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.7, 1, 0.7],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <Brain size={24} className="text-purple-400" />
-                </motion.div>
-              </div>
-              <div className="text-xs text-gray-400 mt-2">AI Active</div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 };
 
 export default function Dashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [currentText, setCurrentText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const aiTexts = [
-    "Hello! I'm your AI assistant ready to help you analyze your data.",
-    "I can process your genetic information and provide insights.",
-    "Let me know how I can assist you with your research today.",
-    "I'm here to make complex data analysis simple and intuitive.",
+  const dashboardStats = [
+    {
+      title: "Total Revenue",
+      value: "$54,239",
+      change: "+12.5%",
+      icon: DollarSign,
+      color: "from-green-400 to-green-600",
+      bgColor: "from-green-50 to-green-100",
+    },
+    {
+      title: "New Orders", 
+      value: "1,429",
+      change: "+8.2%",
+      icon: ShoppingCart,
+      color: "from-blue-400 to-blue-600",
+      bgColor: "from-blue-50 to-blue-100",
+    },
+    {
+      title: "Active Users",
+      value: "9,532",
+      change: "+18.7%",
+      icon: Users,
+      color: "from-purple-400 to-purple-600",
+      bgColor: "from-purple-50 to-purple-100",
+    },
+    {
+      title: "Performance",
+      value: "94.2%",
+      change: "+2.1%",
+      icon: TrendingUp,
+      color: "from-orange-400 to-orange-600",
+      bgColor: "from-orange-50 to-orange-100",
+    },
   ];
 
-  // Typewriter effect
-  useEffect(() => {
-    if (currentIndex < aiTexts.length) {
-      const text = aiTexts[currentIndex];
-      let charIndex = 0;
-
-      const typeInterval = setInterval(() => {
-        if (charIndex < text.length) {
-          setCurrentText(text.slice(0, charIndex + 1));
-          charIndex++;
-        } else {
-          clearInterval(typeInterval);
-          setTimeout(() => {
-            setCurrentIndex((prev) => (prev + 1) % aiTexts.length);
-            setCurrentText("");
-          }, 3000);
-        }
-      }, 50);
-
-      return () => clearInterval(typeInterval);
-    }
-  }, [currentIndex, aiTexts]);
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <FloatingSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
       {/* Main Content */}
       <motion.div
-        className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"}`}
+        className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"} p-6`}
         animate={{ marginLeft: isCollapsed ? 80 : 288 }}
       >
         {/* Header */}
         <motion.header
-          className="bg-white shadow-sm border-b border-gray-200 px-6 py-4"
+          className="mb-8"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">DNA Overview</h1>
-              <div className="flex items-center gap-4 mt-2">
-                <Badge
-                  variant="secondary"
-                  className="bg-blue-100 text-blue-700 hover:bg-blue-200"
-                >
-                  Day
-                </Badge>
-                <Badge variant="outline" className="text-gray-600">
-                  Week
-                </Badge>
-                <Badge variant="outline" className="text-gray-600">
-                  Month
-                </Badge>
-              </div>
+              <h1 className="text-3xl font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                Dashboard Overview
+              </h1>
+              <p className="text-gray-600 mt-1" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Welcome back! Here's what's happening with your business today.
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <motion.div className="relative" whileHover={{ scale: 1.05 }}>
@@ -381,476 +303,134 @@ export default function Dashboard() {
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
                 </Button>
               </motion.div>
-              <Avatar className="w-10 h-10">
-                <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" />
-                <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                  BK
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-right">
-                <div className="text-sm font-medium text-gray-900">
-                  Becca Kirby
-                </div>
-                <div className="text-xs text-gray-500">Chicago, USA</div>
-              </div>
-              <Button size="sm" variant="ghost">
-                <MoreHorizontal size={16} />
+              <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white">
+                <Search size={16} className="mr-2" />
+                Search
               </Button>
             </div>
           </div>
         </motion.header>
 
-        {/* Video Section Below Topbar */}
-        <div className="px-6 py-4">
-          <div className="max-w-4xl">
-            <div className="relative w-full aspect-video bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-              <video
-                autoPlay
-                muted
-                controls
-                playsInline
-                loop
-                className="w-full h-full object-cover"
-                poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSI1NzYiIHZpZXdCb3g9IjAgMCAxMDI0IDU3NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMjQiIGhlaWdodD0iNTc2IiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjUxMiIgY3k9IjI4OCIgcj0iNDAiIGZpbGw9IiM2MzY2RjEiLz4KPHN2ZyB4PSI0OTIiIHk9IjI2OCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgo8cG9seWdvbiBwb2ludHM9IjUgMyAxOSAxMiA1IDIxIDUgMyIvPgo8L3N2Zz4KPHN2ZyB4PSI0MzIiIHk9IjUyNiIgd2lkdGg9IjE2MCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDE2MCAyNCIgZmlsbD0ibm9uZSI+Cjx0ZXh0IHg9IjAiIHk9IjE2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5Q0EzQUYiPkNsaWNrIHRvIHBsYXkgdmlkZW88L3RleHQ+Cjwvc3ZnPgo8L3N2Zz4K"
-              >
-                <source
-                  type="video/mp4"
-                  src="https://cdn.builder.io/o/assets%2Fad2efc99155b417783200fc7999ced3f%2F84c92a2126f04b12917d149b99d6a13b?alt=media&token=2a038587-3580-43f1-90c1-58c21713e468&apiKey=ad2efc99155b417783200fc7999ced3f"
-                />
-                <p className="text-white text-center">
-                  Your browser does not support the video tag.
-                </p>
-              </video>
-            </div>
-            <div className="mt-4 text-center">
-              <p className="text-sm text-gray-600">AI Avatar Video Player</p>
-              <div className="flex items-center justify-center gap-2 mt-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-xs text-gray-500">
-                  Video ready for interaction
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Dashboard Content */}
-        <div className="p-6 space-y-6">
-          {/* Stats Cards Row */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-4 gap-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            {[
-              {
-                label: "Analysis in progress",
-                value: "27",
-                icon: TrendingUp,
-                color: "text-blue-600",
-              },
-              {
-                label: "Active treatments",
-                value: "31",
-                icon: Activity,
-                color: "text-green-600",
-              },
-              {
-                label: "Hereditary",
-                value: "92",
-                icon: Zap,
-                color: "text-purple-600",
-                subtitle: "Average rate",
-              },
-              {
-                label: "Researches",
-                value: "Sept. 15, 2022",
-                icon: Target,
-                color: "text-orange-600",
-                subtitle: "September 15, 2022 / Week",
-              },
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + index * 0.1 }}
-                whileHover={{ y: -5, scale: 1.02 }}
-              >
-                <Card className="p-6 border border-gray-200 hover:shadow-lg transition-all duration-300">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
-                      <p className="text-2xl font-bold text-gray-900">
-                        {stat.value}
+        {/* Glass Effect Stats Cards - 2x2 Grid */}
+        <motion.div
+          className="grid grid-cols-2 gap-6 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          {dashboardStats.map((stat, index) => (
+            <motion.div
+              key={stat.title}
+              className="group relative"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + index * 0.1 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+            >
+              {/* Glass effect card with soft off-white background */}
+              <div className="relative bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30 overflow-hidden">
+                {/* Soft lift effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-2xl"></div>
+                <div className="absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300"
+                     style={{ background: `linear-gradient(135deg, ${stat.color.split(' ')[1]}, ${stat.color.split(' ')[3]})` }}></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}>
+                      <stat.icon size={24} className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`} />
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        {stat.change}
                       </p>
-                      {stat.subtitle && (
-                        <p className="text-xs text-gray-500 mt-1">
-                          {stat.subtitle}
-                        </p>
-                      )}
-                    </div>
-                    <div className={`p-3 rounded-xl bg-gray-50 ${stat.color}`}>
-                      <stat.icon size={24} />
                     </div>
                   </div>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* DNA Visualization */}
-            <motion.div
-              className="lg:col-span-2"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <Card className="p-6 h-96 border border-gray-200">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    DNA Interaction Visualization
-                  </h3>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-8 px-3 text-xs"
-                    >
-                      Export
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-8 px-3 text-xs"
-                    >
-                      Share
-                    </Button>
-                  </div>
-                </div>
-                <div className="relative h-full bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg flex items-center justify-center overflow-hidden">
-                  {/* DNA Helix Animation */}
-                  <motion.svg
-                    className="absolute inset-0 w-full h-full"
-                    viewBox="0 0 400 300"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1 }}
-                  >
-                    {/* DNA Helix Structure */}
-                    {Array.from({ length: 20 }, (_, i) => (
-                      <g key={i}>
-                        <motion.ellipse
-                          cx={200}
-                          cy={50 + i * 12}
-                          rx={100 - i * 2}
-                          ry={10}
-                          fill="none"
-                          stroke="#8b5cf6"
-                          strokeWidth="2"
-                          opacity={0.6}
-                          animate={{
-                            rx: [100 - i * 2, 120 - i * 2, 100 - i * 2],
-                            opacity: [0.6, 0.9, 0.6],
-                          }}
-                          transition={{
-                            duration: 3,
-                            delay: i * 0.1,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                          }}
-                        />
-                        <motion.ellipse
-                          cx={200}
-                          cy={50 + i * 12}
-                          rx={80 - i * 1.5}
-                          ry={8}
-                          fill="none"
-                          stroke="#3b82f6"
-                          strokeWidth="2"
-                          opacity={0.6}
-                          animate={{
-                            rx: [80 - i * 1.5, 100 - i * 1.5, 80 - i * 1.5],
-                            opacity: [0.6, 0.9, 0.6],
-                          }}
-                          transition={{
-                            duration: 3,
-                            delay: i * 0.1 + 0.5,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                          }}
-                        />
-                      </g>
-                    ))}
-
-                    {/* DNA Base Pairs */}
-                    {Array.from({ length: 15 }, (_, i) => (
-                      <motion.line
-                        key={`base-${i}`}
-                        x1={150 + Math.sin(i * 0.3) * 30}
-                        y1={60 + i * 15}
-                        x2={250 - Math.sin(i * 0.3) * 30}
-                        y2={60 + i * 15}
-                        stroke="#ec4899"
-                        strokeWidth="3"
-                        opacity={0.7}
-                        animate={{
-                          opacity: [0.7, 1, 0.7],
-                          strokeWidth: [3, 4, 3],
-                        }}
-                        transition={{
-                          duration: 2,
-                          delay: i * 0.2,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    ))}
-                  </motion.svg>
-
-                  {/* Floating Particles */}
-                  {Array.from({ length: 8 }, (_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute w-2 h-2 bg-purple-400 rounded-full"
-                      style={{
-                        left: `${20 + Math.random() * 60}%`,
-                        top: `${20 + Math.random() * 60}%`,
-                      }}
-                      animate={{
-                        y: [-10, 10, -10],
-                        x: [-5, 5, -5],
-                        opacity: [0.5, 1, 0.5],
-                        scale: [1, 1.2, 1],
-                      }}
-                      transition={{
-                        duration: 3 + Math.random() * 2,
-                        repeat: Infinity,
-                        delay: Math.random() * 2,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  ))}
-
-                  <div className="absolute bottom-4 left-4 text-sm text-gray-700">
-                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3">
-                      <div className="font-semibold">Good interaction</div>
-                      <div className="text-xs text-gray-600">
-                        with other molecules
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-
-            {/* Avatar Video and AI Text */}
-            <motion.div
-              className="space-y-6"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              {/* Avatar Video Component */}
-              <Card className="p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  AI Assistant
-                </h3>
-                <div className="space-y-4">
-                  <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20"></div>
-
-                    {/* Avatar Animation */}
-                    <motion.div
-                      className="relative z-10 w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center"
-                      animate={{
-                        scale: [1, 1.1, 1],
-                        boxShadow: [
-                          "0 0 0 0 rgba(139, 92, 246, 0.7)",
-                          "0 0 0 20px rgba(139, 92, 246, 0)",
-                          "0 0 0 0 rgba(139, 92, 246, 0)",
-                        ],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      <Brain size={32} className="text-white" />
-                    </motion.div>
-
-                    {/* Audio Waves */}
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-                      {Array.from({ length: 5 }, (_, i) => (
-                        <motion.div
-                          key={i}
-                          className="w-1 bg-purple-400 rounded-full"
-                          animate={{
-                            height: [4, 16, 4],
-                            opacity: [0.5, 1, 0.5],
-                          }}
-                          transition={{
-                            duration: 1,
-                            delay: i * 0.1,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Typewriter Text */}
-                  <div className="bg-gray-50 rounded-lg p-4 min-h-[80px] flex items-center">
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      {currentText}
-                      <motion.span
-                        className="inline-block w-2 h-4 bg-purple-500 ml-1"
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{ duration: 1, repeat: Infinity }}
-                      />
+                  
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-600 mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      {stat.title}
+                    </h3>
+                    <p className="text-2xl font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                      {stat.value}
                     </p>
                   </div>
                 </div>
-              </Card>
-
-              {/* Statistics Summary */}
-              <Card className="p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Research Summary
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">
-                      Calculating the risk of diseases
-                    </span>
-                    <motion.div
-                      className="w-4 h-4 bg-green-500 rounded-full"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">
-                      Diagnosis of genetic diseases
-                    </span>
-                    <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">
-                      Patterns in heredity
-                    </span>
-                    <div className="w-4 h-4 bg-orange-500 rounded-full"></div>
-                  </div>
-                </div>
-              </Card>
+              </div>
             </motion.div>
-          </div>
+          ))}
+        </motion.div>
 
-          {/* Chart and Progress Section */}
-          <motion.div
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            {/* Average Rate Chart */}
-            <Card className="p-6 border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Average Rate
-                </h3>
-                <div className="text-sm text-gray-500">Average rate</div>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">92</div>
-              <div className="text-sm text-gray-600 mb-4">
-                The degree of recent complications in hereditary polycythemia
-              </div>
-
-              {/* Chart Visualization */}
-              <div className="h-32 bg-gray-50 rounded-lg flex items-end justify-center p-4 relative overflow-hidden">
-                <svg
-                  className="absolute inset-0 w-full h-full"
-                  viewBox="0 0 200 100"
-                >
-                  <motion.path
-                    d="M20,80 Q60,40 100,60 Q140,20 180,30"
-                    stroke="#8b5cf6"
-                    strokeWidth="3"
-                    fill="none"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 2, ease: "easeInOut" }}
-                  />
-                  <motion.circle
-                    cx="180"
-                    cy="30"
-                    r="4"
-                    fill="#8b5cf6"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 2, duration: 0.5 }}
-                  />
-                </svg>
-              </div>
-            </Card>
-
-            {/* Research Progress */}
-            <Card className="p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Research Progress
+        {/* Additional Content Section */}
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          {/* Recent Activity */}
+          <div className="lg:col-span-2">
+            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                Recent Activity
               </h3>
               <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-600">DNA Analysis</span>
-                    <span className="text-sm font-medium text-gray-900">
-                      75%
-                    </span>
+                {[
+                  { action: "New order received", time: "2 minutes ago", user: "Sarah Johnson" },
+                  { action: "Payment processed", time: "5 minutes ago", user: "Mike Chen" },
+                  { action: "User registered", time: "12 minutes ago", user: "Emma Wilson" },
+                  { action: "Product updated", time: "1 hour ago", user: "Admin" },
+                ].map((activity, index) => (
+                  <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/40 transition-colors">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-800" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        {activity.action}
+                      </p>
+                      <p className="text-xs text-gray-500">by {activity.user}</p>
+                    </div>
+                    <p className="text-xs text-gray-500" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      {activity.time}
+                    </p>
                   </div>
-                  <Progress value={75} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-600">
-                      Genetic Mapping
-                    </span>
-                    <span className="text-sm font-medium text-gray-900">
-                      60%
-                    </span>
-                  </div>
-                  <Progress value={60} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-600">
-                      Risk Assessment
-                    </span>
-                    <span className="text-sm font-medium text-gray-900">
-                      90%
-                    </span>
-                  </div>
-                  <Progress value={90} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-600">
-                      Report Generation
-                    </span>
-                    <span className="text-sm font-medium text-gray-900">
-                      45%
-                    </span>
-                  </div>
-                  <Progress value={45} className="h-2" />
-                </div>
+                ))}
               </div>
-            </Card>
-          </motion.div>
-        </div>
+            </div>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="space-y-6">
+            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                Quick Stats
+              </h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Conversion Rate
+                  </span>
+                  <span className="text-sm font-semibold text-gray-900">3.2%</span>
+                </div>
+                <Progress value={32} className="h-2" />
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Customer Satisfaction
+                  </span>
+                  <span className="text-sm font-semibold text-gray-900">4.8/5</span>
+                </div>
+                <Progress value={96} className="h-2" />
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Server Uptime
+                  </span>
+                  <span className="text-sm font-semibold text-gray-900">99.9%</span>
+                </div>
+                <Progress value={99.9} className="h-2" />
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
     </div>
   );
