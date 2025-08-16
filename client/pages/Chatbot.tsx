@@ -1389,7 +1389,7 @@ export default function Chatbot() {
           {/* Interactive Controls */}
           <div className="p-4 space-y-4">
             {/* Voice Visualizer - Fixed Size */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-gray-200 shadow-md h-32">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-gray-200 shadow-md h-36">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm font-bold text-gray-800">Voice Activity</span>
                 <div className="flex items-center gap-1 h-8">
