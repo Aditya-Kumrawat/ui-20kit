@@ -230,78 +230,76 @@ export default function ComputerVision() {
           ))}
         </motion.div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* ML Models Panel */}
-          <motion.div
-            className="lg:col-span-1 bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30"
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <Brain className="w-6 h-6 text-purple-600" />
-              <h3 className="text-xl font-bold text-gray-900">Available Models</h3>
-            </div>
-            
-            <div className="space-y-4">
-              {mlModels.map((model, index) => (
-                <motion.div
-                  key={model.id}
-                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
-                    selectedModel === model.id
-                      ? "border-purple-300 bg-purple-50"
-                      : "border-white/50 bg-white/30 hover:bg-white/50"
-                  }`}
-                  onClick={() => setSelectedModel(model.id)}
-                  whileHover={{ scale: 1.02 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div
-                      className="p-2 rounded-lg"
-                      style={{ backgroundColor: `${model.color}20` }}
-                    >
-                      <model.icon style={{ color: model.color }} className="w-5 h-5" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900">{model.name}</h4>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-600">{model.type}</span>
-                        <span
-                          className={`text-xs px-2 py-1 rounded-full ${
-                            model.status === "active"
-                              ? "bg-green-100 text-green-600"
-                              : model.status === "training"
-                              ? "bg-yellow-100 text-yellow-600"
-                              : "bg-blue-100 text-blue-600"
-                          }`}
-                        >
-                          {model.status}
-                        </span>
-                      </div>
-                    </div>
+        {/* Available Models Section */}
+        <motion.div
+          className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/30 mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <Brain className="w-6 h-6 text-purple-600" />
+            <h3 className="text-xl font-bold text-gray-900">Available Models</h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+            {mlModels.map((model, index) => (
+              <motion.div
+                key={model.id}
+                className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
+                  selectedModel === model.id
+                    ? "border-purple-300 bg-purple-50"
+                    : "border-white/50 bg-white/30 hover:bg-white/50"
+                }`}
+                onClick={() => setSelectedModel(model.id)}
+                whileHover={{ scale: 1.02 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + index * 0.1 }}
+              >
+                <div className="text-center">
+                  <div
+                    className="w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center"
+                    style={{ backgroundColor: `${model.color}20` }}
+                  >
+                    <model.icon style={{ color: model.color }} className="w-6 h-6" />
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">{model.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">Accuracy</span>
+                  <h4 className="font-semibold text-gray-900 text-sm mb-1">{model.name}</h4>
+                  <div className="flex flex-col items-center gap-1 mb-3">
+                    <span className="text-xs text-gray-600">{model.type}</span>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        model.status === "active"
+                          ? "bg-green-100 text-green-600"
+                          : model.status === "training"
+                          ? "bg-yellow-100 text-yellow-600"
+                          : "bg-blue-100 text-blue-600"
+                      }`}
+                    >
+                      {model.status}
+                    </span>
+                  </div>
+                  <div className="text-center mb-2">
                     <span className="text-sm font-bold" style={{ color: model.color }}>
                       {model.accuracy}%
                     </span>
+                    <div className="text-xs text-gray-500">accuracy</div>
                   </div>
-                  <Progress value={model.accuracy} className="mt-2 h-2" />
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                  <Progress value={model.accuracy} className="h-2" />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
 
           {/* Upload & Processing Area */}
           <motion.div
-            className="lg:col-span-2 space-y-6"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
+            className="space-y-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             {/* Upload Area */}
