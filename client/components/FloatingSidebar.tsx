@@ -157,11 +157,14 @@ export const FloatingSidebar = ({
 
         {/* Toggle Button */}
         <motion.button
-          className={`absolute -right-3 top-6 w-6 h-6 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
-            isCollapsed
-              ? "bg-gray-800/90 text-gray-300 hover:bg-gray-700 border border-gray-600/50"
-              : "bg-white/90 text-gray-600 hover:bg-white border border-gray-200/50"
-          }`}
+          className="absolute -right-3 top-6 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 text-gray-600 hover:text-gray-800"
+          style={{
+            background: "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            border: "1px solid rgba(255, 255, 255, 0.5)",
+            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)"
+          }}
           onClick={() => setIsCollapsed(!isCollapsed)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
