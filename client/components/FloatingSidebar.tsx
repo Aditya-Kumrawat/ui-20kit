@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMobile } from "@/hooks/use-mobile";
 import {
   Home,
   BarChart3,
@@ -35,6 +36,12 @@ export const FloatingSidebar = ({
   const navigate = useNavigate();
   const location = useLocation();
   const [activeIndex, setActiveIndex] = useState(0);
+  const { isMobile } = useMobile();
+
+  // Hide sidebar on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   const menuItems = [
     { id: "home", label: "Dashboard", icon: Home, href: "/dashboard" },
