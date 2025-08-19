@@ -38,11 +38,6 @@ export const FloatingSidebar = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const { isMobile } = useMobile();
 
-  // Hide sidebar on mobile devices
-  if (isMobile) {
-    return null;
-  }
-
   const menuItems = [
     { id: "home", label: "Dashboard", icon: Home, href: "/dashboard" },
     {
