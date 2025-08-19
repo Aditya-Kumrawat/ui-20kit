@@ -109,6 +109,11 @@ export const FloatingSidebar = ({
     setActiveIndex(currentIndex !== -1 ? currentIndex : -1);
   }, [location.pathname]);
 
+  // Hide sidebar on mobile devices
+  if (isMobile) {
+    return null;
+  }
+
   return (
     <motion.div
       className={`fixed left-4 top-4 bottom-4 ${
