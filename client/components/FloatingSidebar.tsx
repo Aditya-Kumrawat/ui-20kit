@@ -109,7 +109,7 @@ export const FloatingSidebar = ({
     setActiveIndex(currentIndex !== -1 ? currentIndex : -1);
   }, [location.pathname]);
 
-  // Hide sidebar on mobile devices
+  // Hide sidebar on mobile devices by returning null
   if (isMobile) {
     return null;
   }
