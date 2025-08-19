@@ -16,7 +16,7 @@ export const getIsMobileDevice = (): boolean => {
 export const getOptimizedAnimationProps = (
   baseProps: MotionProps,
   isMobile?: boolean,
-  prefersReducedMotion?: boolean
+  prefersReducedMotion?: boolean,
 ): MotionProps => {
   const mobile = isMobile ?? getIsMobileDevice();
   const reducedMotion = prefersReducedMotion ?? getPrefersReducedMotion();
@@ -46,7 +46,7 @@ export const getOptimizedAnimationProps = (
       whileHover: undefined, // Disable hover animations on mobile
       whileTap: {
         scale: 0.98,
-        transition: { duration: 0.1 }
+        transition: { duration: 0.1 },
       },
     };
   }
@@ -62,7 +62,7 @@ export const animationVariants = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
     exit: { opacity: 0 },
-    transition: { duration: 0.3, ease: "easeOut" }
+    transition: { duration: 0.3, ease: "easeOut" },
   },
 
   // Slide up
@@ -70,7 +70,7 @@ export const animationVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -20 },
-    transition: { duration: 0.4, ease: "easeOut" }
+    transition: { duration: 0.4, ease: "easeOut" },
   },
 
   // Scale in
@@ -78,7 +78,7 @@ export const animationVariants = {
     initial: { opacity: 0, scale: 0.95 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.95 },
-    transition: { duration: 0.3, ease: "easeOut" }
+    transition: { duration: 0.3, ease: "easeOut" },
   },
 
   // Slide from left
@@ -86,7 +86,7 @@ export const animationVariants = {
     initial: { opacity: 0, x: -30 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 30 },
-    transition: { duration: 0.4, ease: "easeOut" }
+    transition: { duration: 0.4, ease: "easeOut" },
   },
 
   // Slide from right
@@ -94,8 +94,8 @@ export const animationVariants = {
     initial: { opacity: 0, x: 30 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -30 },
-    transition: { duration: 0.4, ease: "easeOut" }
-  }
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
 };
 
 // Mobile-optimized variants (faster, simpler)
@@ -104,43 +104,43 @@ export const mobileAnimationVariants = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
     exit: { opacity: 0 },
-    transition: { duration: 0.2, ease: "easeOut" }
+    transition: { duration: 0.2, ease: "easeOut" },
   },
 
   slideUp: {
     initial: { opacity: 0, y: 10 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -10 },
-    transition: { duration: 0.25, ease: "easeOut" }
+    transition: { duration: 0.25, ease: "easeOut" },
   },
 
   scaleIn: {
     initial: { opacity: 0, scale: 0.98 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.98 },
-    transition: { duration: 0.2, ease: "easeOut" }
+    transition: { duration: 0.2, ease: "easeOut" },
   },
 
   slideLeft: {
     initial: { opacity: 0, x: -15 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 15 },
-    transition: { duration: 0.25, ease: "easeOut" }
+    transition: { duration: 0.25, ease: "easeOut" },
   },
 
   slideRight: {
     initial: { opacity: 0, x: 15 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -15 },
-    transition: { duration: 0.25, ease: "easeOut" }
-  }
+    transition: { duration: 0.25, ease: "easeOut" },
+  },
 };
 
 // Get animation variant based on device
 export const getAnimationVariant = (
   variantName: keyof typeof animationVariants,
   isMobile?: boolean,
-  prefersReducedMotion?: boolean
+  prefersReducedMotion?: boolean,
 ) => {
   const mobile = isMobile ?? getIsMobileDevice();
   const reducedMotion = prefersReducedMotion ?? getPrefersReducedMotion();
@@ -150,24 +150,29 @@ export const getAnimationVariant = (
       initial: false,
       animate: false,
       exit: false,
-      transition: { duration: 0 }
+      transition: { duration: 0 },
     };
   }
 
-  return mobile 
-    ? mobileAnimationVariants[variantName] 
+  return mobile
+    ? mobileAnimationVariants[variantName]
     : animationVariants[variantName];
 };
 
 // Performance monitoring for animations
-export const logAnimationPerformance = (animationName: string, startTime: number) => {
+export const logAnimationPerformance = (
+  animationName: string,
+  startTime: number,
+) => {
   if (typeof window !== "undefined" && window.performance) {
     const endTime = performance.now();
     const duration = endTime - startTime;
-    
+
     // Log slow animations (> 16ms per frame for 60fps)
     if (duration > 16) {
-      console.warn(`Slow animation detected: ${animationName} took ${duration.toFixed(2)}ms`);
+      console.warn(
+        `Slow animation detected: ${animationName} took ${duration.toFixed(2)}ms`,
+      );
     }
   }
 };
@@ -175,7 +180,7 @@ export const logAnimationPerformance = (animationName: string, startTime: number
 // Debounce utility for reducing animation frequency
 export const debounce = <T extends (...args: any[]) => void>(
   func: T,
-  wait: number
+  wait: number,
 ): ((...args: Parameters<T>) => void) => {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
@@ -187,14 +192,14 @@ export const debounce = <T extends (...args: any[]) => void>(
 // Throttle utility for limiting animation frequency
 export const throttle = <T extends (...args: any[]) => void>(
   func: T,
-  limit: number
+  limit: number,
 ): ((...args: Parameters<T>) => void) => {
   let inThrottle: boolean;
   return (...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 };

@@ -128,17 +128,23 @@ export default function Dashboard() {
       <div>
         {/* Header */}
         <motion.header
-          className={`mb-6 ${isMobile ? 'mb-4' : 'mb-8'}`}
+          className={`mb-6 ${isMobile ? "mb-4" : "mb-8"}`}
           initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
           animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
           transition={prefersReducedMotion ? {} : { duration: 0.5 }}
         >
-          <div className={`flex items-center justify-between ${isMobile ? 'flex-col gap-4' : ''}`}>
-            <div className={isMobile ? 'text-center' : ''}>
-              <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-gray-900 dashboard-title`}>
+          <div
+            className={`flex items-center justify-between ${isMobile ? "flex-col gap-4" : ""}`}
+          >
+            <div className={isMobile ? "text-center" : ""}>
+              <h1
+                className={`${isMobile ? "text-2xl" : "text-3xl"} font-bold text-gray-900 dashboard-title`}
+              >
                 Dashboard Overview
               </h1>
-              <p className={`text-gray-600 mt-1 dashboard-text ${isMobile ? 'text-sm' : ''}`}>
+              <p
+                className={`text-gray-600 mt-1 dashboard-text ${isMobile ? "text-sm" : ""}`}
+              >
                 Welcome back! Here's what's happening with your business today.
               </p>
             </div>
@@ -147,12 +153,16 @@ export default function Dashboard() {
         </motion.header>
 
         {/* Two Column Layout with Image and Stats */}
-        <div className={`${isMobile ? 'mb-4' : 'mb-8'}`}>
-          <div className={`${isMobile ? 'flex flex-col gap-4' : 'flex gap-5 max-lg:flex-col max-lg:gap-0'}`}>
+        <div className={`${isMobile ? "mb-4" : "mb-8"}`}>
+          <div
+            className={`${isMobile ? "flex flex-col gap-4" : "flex gap-5 max-lg:flex-col max-lg:gap-0"}`}
+          >
             {/* Left Column - Image */}
-            <div className={`flex flex-col ${isMobile ? 'w-full' : 'w-1/2 max-lg:w-full'}`}>
+            <div
+              className={`flex flex-col ${isMobile ? "w-full" : "w-1/2 max-lg:w-full"}`}
+            >
               <div
-                className={`flex flex-col relative ${isMobile ? 'mt-2 h-[200px]' : 'mt-5 h-[365px]'} bg-cover bg-center bg-no-repeat border-none rounded-2xl`}
+                className={`flex flex-col relative ${isMobile ? "mt-2 h-[200px]" : "mt-5 h-[365px]"} bg-cover bg-center bg-no-repeat border-none rounded-2xl`}
                 style={{
                   backgroundImage:
                     "url(https://cdn.builder.io/api/v1/file/assets%2F3ef4243ecdf248dabd75417d35606fac%2F54bd8a0dcac741cabf36c1fc34c597e2)",
@@ -161,10 +171,14 @@ export default function Dashboard() {
                 {/* Transparent glass overlay with text at bottom */}
                 <div className="absolute bottom-0 left-0 right-0 bg-white/20 backdrop-blur-sm rounded-b-lg p-6">
                   <div className="text-left">
-                    <h2 className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-gray-900 mb-2 dashboard-title`}>
+                    <h2
+                      className={`${isMobile ? "text-lg" : "text-2xl"} font-bold text-gray-900 mb-2 dashboard-title`}
+                    >
                       Business Analytics
                     </h2>
-                    <p className={`text-gray-600 ${isMobile ? 'text-xs' : 'text-sm'} dashboard-text`}>
+                    <p
+                      className={`text-gray-600 ${isMobile ? "text-xs" : "text-sm"} dashboard-text`}
+                    >
                       Monitor your business performance with real-time insights
                       and comprehensive data visualization.
                     </p>
@@ -174,24 +188,38 @@ export default function Dashboard() {
             </div>
 
             {/* Right Column - Dashboard Stats */}
-            <div className={`flex flex-col ${isMobile ? 'w-full mt-4' : 'w-1/2 ml-5 max-lg:w-full max-lg:ml-0'}`}>
+            <div
+              className={`flex flex-col ${isMobile ? "w-full mt-4" : "w-1/2 ml-5 max-lg:w-full max-lg:ml-0"}`}
+            >
               <motion.div
-                className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-2 gap-6'}`}
+                className={`grid ${isMobile ? "grid-cols-1 gap-3" : "grid-cols-2 gap-6"}`}
                 initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
                 animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
-                transition={prefersReducedMotion ? {} : { duration: 0.5, delay: 0.1 }}
+                transition={
+                  prefersReducedMotion ? {} : { duration: 0.5, delay: 0.1 }
+                }
               >
                 {dashboardStats.map((stat, index) => (
                   <motion.div
                     key={stat.title}
                     className="group relative"
-                    initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-                    animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
-                    transition={prefersReducedMotion ? {} : { delay: 0.1 + index * 0.1 }}
-                    whileHover={prefersReducedMotion ? {} : { y: -8, scale: 1.02 }}
+                    initial={
+                      prefersReducedMotion ? false : { opacity: 0, y: 20 }
+                    }
+                    animate={
+                      prefersReducedMotion ? false : { opacity: 1, y: 0 }
+                    }
+                    transition={
+                      prefersReducedMotion ? {} : { delay: 0.1 + index * 0.1 }
+                    }
+                    whileHover={
+                      prefersReducedMotion ? {} : { y: -8, scale: 1.02 }
+                    }
                   >
                     {/* Glass effect card with soft off-white background */}
-                    <div className={`relative bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30 overflow-hidden`}>
+                    <div
+                      className={`relative bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30 overflow-hidden`}
+                    >
                       {/* Soft lift effect */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-3xl"></div>
                       <div
@@ -202,9 +230,11 @@ export default function Dashboard() {
                       ></div>
 
                       <div className="relative z-10">
-                        <div className={`flex items-center justify-between ${isMobile ? 'mb-3' : 'mb-4'}`}>
+                        <div
+                          className={`flex items-center justify-between ${isMobile ? "mb-3" : "mb-4"}`}
+                        >
                           <div
-                            className={`${isMobile ? 'p-2' : 'p-3'} rounded-2xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
+                            className={`${isMobile ? "p-2" : "p-3"} rounded-2xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
                           >
                             <stat.icon
                               size={isMobile ? 20 : 24}
@@ -213,7 +243,7 @@ export default function Dashboard() {
                           </div>
                           <div className="text-right">
                             <p
-                              className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full`}
+                              className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full`}
                               style={{ fontFamily: "Poppins, sans-serif" }}
                             >
                               {stat.change}
@@ -223,13 +253,13 @@ export default function Dashboard() {
 
                         <div>
                           <h3
-                            className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-gray-600 mb-1`}
+                            className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-gray-600 mb-1`}
                             style={{ fontFamily: "Poppins, sans-serif" }}
                           >
                             {stat.title}
                           </h3>
                           <p
-                            className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-gray-900`}
+                            className={`${isMobile ? "text-lg" : "text-2xl"} font-bold text-gray-900`}
                             style={{ fontFamily: "Montserrat, sans-serif" }}
                           >
                             {stat.value}
@@ -246,25 +276,37 @@ export default function Dashboard() {
 
         {/* Interactive Animated Graph Section */}
         <motion.div
-          className={`${isMobile ? 'mb-4' : 'mb-8'}`}
+          className={`${isMobile ? "mb-4" : "mb-8"}`}
           initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
           animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
           transition={prefersReducedMotion ? {} : { duration: 0.6, delay: 0.4 }}
         >
-          <div className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}>
+          <div
+            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30`}
+          >
             <motion.div
               initial={prefersReducedMotion ? false : { opacity: 0 }}
               animate={prefersReducedMotion ? false : { opacity: 1 }}
-              transition={prefersReducedMotion ? {} : { delay: 0.6, duration: 0.4 }}
+              transition={
+                prefersReducedMotion ? {} : { delay: 0.6, duration: 0.4 }
+              }
             >
-              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-gray-900 ${isMobile ? 'mb-4' : 'mb-6'} dashboard-title`}>
+              <h3
+                className={`${isMobile ? "text-lg" : "text-xl"} font-bold text-gray-900 ${isMobile ? "mb-4" : "mb-6"} dashboard-title`}
+              >
                 Revenue & Orders Trend
               </h3>
               <motion.div
-                className={`${isMobile ? 'h-60' : 'h-80'}`}
-                initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.95 }}
-                animate={prefersReducedMotion ? false : { opacity: 1, scale: 1 }}
-                transition={prefersReducedMotion ? {} : { duration: 0.8, delay: 0.7 }}
+                className={`${isMobile ? "h-60" : "h-80"}`}
+                initial={
+                  prefersReducedMotion ? false : { opacity: 0, scale: 0.95 }
+                }
+                animate={
+                  prefersReducedMotion ? false : { opacity: 1, scale: 1 }
+                }
+                transition={
+                  prefersReducedMotion ? {} : { duration: 0.8, delay: 0.7 }
+                }
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
@@ -329,7 +371,11 @@ export default function Dashboard() {
                       stroke="#8b5cf6"
                       strokeWidth={3}
                       fill="url(#revenueGradient)"
-                      dot={{ fill: "#8b5cf6", strokeWidth: 0, r: isMobile ? 3 : 4 }}
+                      dot={{
+                        fill: "#8b5cf6",
+                        strokeWidth: 0,
+                        r: isMobile ? 3 : 4,
+                      }}
                       activeDot={{
                         r: isMobile ? 5 : 6,
                         stroke: "#8b5cf6",
@@ -346,21 +392,23 @@ export default function Dashboard() {
 
         {/* Additional Content Section */}
         <motion.div
-          className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 lg:grid-cols-3 gap-6'}`}
+          className={`grid ${isMobile ? "grid-cols-1 gap-4" : "grid-cols-1 lg:grid-cols-3 gap-6"}`}
           initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
           animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
           transition={prefersReducedMotion ? {} : { duration: 0.5, delay: 0.3 }}
         >
           {/* Recent Activity */}
-          <div className={`${isMobile ? '' : 'lg:col-span-2'}`}>
-            <div className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}>
+          <div className={`${isMobile ? "" : "lg:col-span-2"}`}>
+            <div
+              className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30`}
+            >
               <h3
-                className={`${isMobile ? 'text-lg' : 'text-lg'} font-semibold text-gray-900 ${isMobile ? 'mb-3' : 'mb-4'}`}
+                className={`${isMobile ? "text-lg" : "text-lg"} font-semibold text-gray-900 ${isMobile ? "mb-3" : "mb-4"}`}
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 Recent Activity
               </h3>
-              <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
+              <div className={`${isMobile ? "space-y-3" : "space-y-4"}`}>
                 {[
                   {
                     action: "New order received",
@@ -385,22 +433,24 @@ export default function Dashboard() {
                 ].map((activity, index) => (
                   <div
                     key={index}
-                    className={`flex items-center gap-3 ${isMobile ? 'p-2' : 'p-3'} rounded-2xl hover:bg-white/40 transition-colors`}
+                    className={`flex items-center gap-3 ${isMobile ? "p-2" : "p-3"} rounded-2xl hover:bg-white/40 transition-colors`}
                   >
                     <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                     <div className="flex-1">
                       <p
-                        className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-gray-800`}
+                        className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-gray-800`}
                         style={{ fontFamily: "Poppins, sans-serif" }}
                       >
                         {activity.action}
                       </p>
-                      <p className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-500`}>
+                      <p
+                        className={`${isMobile ? "text-xs" : "text-xs"} text-gray-500`}
+                      >
                         by {activity.user}
                       </p>
                     </div>
                     <p
-                      className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-500`}
+                      className={`${isMobile ? "text-xs" : "text-xs"} text-gray-500`}
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {activity.time}
@@ -412,23 +462,27 @@ export default function Dashboard() {
           </div>
 
           {/* Quick Stats */}
-          <div className={`${isMobile ? 'space-y-4' : 'space-y-6'}`}>
-            <div className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}>
+          <div className={`${isMobile ? "space-y-4" : "space-y-6"}`}>
+            <div
+              className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30`}
+            >
               <h3
-                className={`${isMobile ? 'text-lg' : 'text-lg'} font-semibold text-gray-900 ${isMobile ? 'mb-3' : 'mb-4'}`}
+                className={`${isMobile ? "text-lg" : "text-lg"} font-semibold text-gray-900 ${isMobile ? "mb-3" : "mb-4"}`}
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 Quick Stats
               </h3>
-              <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
+              <div className={`${isMobile ? "space-y-3" : "space-y-4"}`}>
                 <div className="flex justify-between items-center">
                   <span
-                    className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}
+                    className={`${isMobile ? "text-xs" : "text-sm"} text-gray-600`}
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     Conversion Rate
                   </span>
-                  <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-semibold text-gray-900`}>
+                  <span
+                    className={`${isMobile ? "text-xs" : "text-sm"} font-semibold text-gray-900`}
+                  >
                     3.2%
                   </span>
                 </div>
@@ -436,12 +490,14 @@ export default function Dashboard() {
 
                 <div className="flex justify-between items-center">
                   <span
-                    className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}
+                    className={`${isMobile ? "text-xs" : "text-sm"} text-gray-600`}
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     Customer Satisfaction
                   </span>
-                  <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-semibold text-gray-900`}>
+                  <span
+                    className={`${isMobile ? "text-xs" : "text-sm"} font-semibold text-gray-900`}
+                  >
                     4.8/5
                   </span>
                 </div>
@@ -449,12 +505,14 @@ export default function Dashboard() {
 
                 <div className="flex justify-between items-center">
                   <span
-                    className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}
+                    className={`${isMobile ? "text-xs" : "text-sm"} text-gray-600`}
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     Server Uptime
                   </span>
-                  <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-semibold text-gray-900`}>
+                  <span
+                    className={`${isMobile ? "text-xs" : "text-sm"} font-semibold text-gray-900`}
+                  >
                     99.9%
                   </span>
                 </div>

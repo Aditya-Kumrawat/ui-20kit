@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 export function useMobile() {
   const [isMobile, setIsMobile] = useState(false);
   const [screenWidth, setScreenWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1200
+    typeof window !== "undefined" ? window.innerWidth : 1200,
   );
 
   useEffect(() => {
     const checkMobile = () => {
       const width = window.innerWidth;
       setScreenWidth(width);
-      
+
       // Mobile breakpoint: 768px and below
       const mobile = width <= 768;
       setIsMobile(mobile);

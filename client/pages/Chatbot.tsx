@@ -649,22 +649,28 @@ export default function Chatbot() {
         <div className="flex-1 flex overflow-hidden">
           {/* Floating Glass Chat Container */}
           <motion.div
-            className={`${isMobile ? 'w-full' : isTablet ? 'mr-4' : 'mr-80'} bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transition-all duration-300`}
-            style={{ height: isMobile ? "calc(100vh - 120px)" : "calc(100vh - 2rem)" }}
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 20, scale: 0.98 }}
+            className={`${isMobile ? "w-full" : isTablet ? "mr-4" : "mr-80"} bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transition-all duration-300`}
+            style={{
+              height: isMobile ? "calc(100vh - 120px)" : "calc(100vh - 2rem)",
+            }}
+            initial={
+              prefersReducedMotion ? false : { opacity: 0, y: 20, scale: 0.98 }
+            }
             animate={{
               opacity: 1,
               y: 0,
               scale: 1,
               marginRight: isMobile ? 0 : isTablet ? 16 : 280,
             }}
-            transition={prefersReducedMotion ? {} : { duration: 0.6, ease: "easeOut" }}
+            transition={
+              prefersReducedMotion ? {} : { duration: 0.6, ease: "easeOut" }
+            }
           >
             {/* Chat Messages Area */}
             <div className="flex flex-col h-full">
               {/* Messages Container with Gradient Background */}
               <div
-                className={`flex-1 overflow-y-auto ${isMobile ? 'p-4 space-y-4' : 'p-8 space-y-6'} min-h-0`}
+                className={`flex-1 overflow-y-auto ${isMobile ? "p-4 space-y-4" : "p-8 space-y-6"} min-h-0`}
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.6) 50%, rgba(248, 250, 252, 0.9) 100%)",
@@ -674,15 +680,33 @@ export default function Chatbot() {
                   {messages.map((message, index) => (
                     <motion.div
                       key={message.id}
-                      initial={prefersReducedMotion ? false : { opacity: 0, y: 20, scale: 0.95 }}
-                      animate={prefersReducedMotion ? false : { opacity: 1, y: 0, scale: 1 }}
-                      exit={prefersReducedMotion ? false : { opacity: 0, y: -20, scale: 0.95 }}
-                      transition={prefersReducedMotion ? {} : { duration: 0.3, delay: index * 0.05 }}
+                      initial={
+                        prefersReducedMotion
+                          ? false
+                          : { opacity: 0, y: 20, scale: 0.95 }
+                      }
+                      animate={
+                        prefersReducedMotion
+                          ? false
+                          : { opacity: 1, y: 0, scale: 1 }
+                      }
+                      exit={
+                        prefersReducedMotion
+                          ? false
+                          : { opacity: 0, y: -20, scale: 0.95 }
+                      }
+                      transition={
+                        prefersReducedMotion
+                          ? {}
+                          : { duration: 0.3, delay: index * 0.05 }
+                      }
                       className={`flex items-start gap-3 ${
                         message.sender === "user" ? "flex-row-reverse" : ""
                       }`}
                     >
-                      <Avatar className={`${isMobile ? 'w-6 h-6' : 'w-8 h-8'} flex-shrink-0`}>
+                      <Avatar
+                        className={`${isMobile ? "w-6 h-6" : "w-8 h-8"} flex-shrink-0`}
+                      >
                         <AvatarFallback
                           className={`${
                             message.sender === "user"
@@ -699,23 +723,25 @@ export default function Chatbot() {
                       </Avatar>
 
                       <div
-                        className={`flex-1 ${isMobile ? 'max-w-xs' : 'max-w-3xl'} ${
+                        className={`flex-1 ${isMobile ? "max-w-xs" : "max-w-3xl"} ${
                           message.sender === "user" ? "text-right" : ""
                         }`}
                       >
                         <div
-                          className={`relative ${isMobile ? 'p-3' : 'p-5'} rounded-2xl shadow-lg ${
+                          className={`relative ${isMobile ? "p-3" : "p-5"} rounded-2xl shadow-lg ${
                             message.sender === "user"
-                              ? `bg-gradient-to-r from-blue-500 to-cyan-500 text-white ${isMobile ? 'ml-8' : 'ml-12'} shadow-blue-200/50`
-                              : `bg-white/90 backdrop-blur-md text-gray-800 ${isMobile ? 'mr-8' : 'mr-12'} border border-white/40 shadow-gray-200/30`
+                              ? `bg-gradient-to-r from-blue-500 to-cyan-500 text-white ${isMobile ? "ml-8" : "ml-12"} shadow-blue-200/50`
+                              : `bg-white/90 backdrop-blur-md text-gray-800 ${isMobile ? "mr-8" : "mr-12"} border border-white/40 shadow-gray-200/30`
                           }`}
                         >
-                          <p className={`${isMobile ? 'text-xs' : 'text-sm'} leading-relaxed dashboard-text`}>
+                          <p
+                            className={`${isMobile ? "text-xs" : "text-sm"} leading-relaxed dashboard-text`}
+                          >
                             {message.content}
                           </p>
 
                           <div
-                            className={`mt-2 flex items-center gap-2 ${isMobile ? 'text-xs' : 'text-xs'} ${
+                            className={`mt-2 flex items-center gap-2 ${isMobile ? "text-xs" : "text-xs"} ${
                               message.sender === "user"
                                 ? "text-blue-100 justify-end"
                                 : "text-gray-500"
@@ -735,35 +761,67 @@ export default function Chatbot() {
                         </div>
 
                         {/* AI Suggestions */}
-                        {message.sender === "ai" && message.suggestions && !isMobile && (
-                          <motion.div
-                            className="mt-3 flex flex-wrap gap-2"
-                            initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                            animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
-                            transition={prefersReducedMotion ? {} : { delay: 0.5 }}
-                          >
-                            {message.suggestions.map(
-                              (suggestion, suggestionIndex) => (
-                                <motion.button
-                                  key={suggestionIndex}
-                                  onClick={() =>
-                                    handleSuggestionClick(suggestion)
-                                  }
-                                  className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full hover:from-purple-200 hover:to-pink-200 transition-all duration-200 border border-purple-200/50 dashboard-text"
-                                  initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
-                                  animate={prefersReducedMotion ? false : { opacity: 1, scale: 1 }}
-                                  transition={prefersReducedMotion ? {} : {
-                                    delay: 0.6 + suggestionIndex * 0.1,
-                                  }}
-                                  whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                                  whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
-                                >
-                                  {suggestion}
-                                </motion.button>
-                              ),
-                            )}
-                          </motion.div>
-                        )}
+                        {message.sender === "ai" &&
+                          message.suggestions &&
+                          !isMobile && (
+                            <motion.div
+                              className="mt-3 flex flex-wrap gap-2"
+                              initial={
+                                prefersReducedMotion
+                                  ? false
+                                  : { opacity: 0, y: 10 }
+                              }
+                              animate={
+                                prefersReducedMotion
+                                  ? false
+                                  : { opacity: 1, y: 0 }
+                              }
+                              transition={
+                                prefersReducedMotion ? {} : { delay: 0.5 }
+                              }
+                            >
+                              {message.suggestions.map(
+                                (suggestion, suggestionIndex) => (
+                                  <motion.button
+                                    key={suggestionIndex}
+                                    onClick={() =>
+                                      handleSuggestionClick(suggestion)
+                                    }
+                                    className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full hover:from-purple-200 hover:to-pink-200 transition-all duration-200 border border-purple-200/50 dashboard-text"
+                                    initial={
+                                      prefersReducedMotion
+                                        ? false
+                                        : { opacity: 0, scale: 0.8 }
+                                    }
+                                    animate={
+                                      prefersReducedMotion
+                                        ? false
+                                        : { opacity: 1, scale: 1 }
+                                    }
+                                    transition={
+                                      prefersReducedMotion
+                                        ? {}
+                                        : {
+                                            delay: 0.6 + suggestionIndex * 0.1,
+                                          }
+                                    }
+                                    whileHover={
+                                      prefersReducedMotion
+                                        ? {}
+                                        : { scale: 1.05 }
+                                    }
+                                    whileTap={
+                                      prefersReducedMotion
+                                        ? {}
+                                        : { scale: 0.95 }
+                                    }
+                                  >
+                                    {suggestion}
+                                  </motion.button>
+                                ),
+                              )}
+                            </motion.div>
+                          )}
                       </div>
                     </motion.div>
                   ))}
@@ -773,12 +831,18 @@ export default function Chatbot() {
                 <AnimatePresence>
                   {isTyping && (
                     <motion.div
-                      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-                      animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
-                      exit={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
+                      initial={
+                        prefersReducedMotion ? false : { opacity: 0, y: 20 }
+                      }
+                      animate={
+                        prefersReducedMotion ? false : { opacity: 1, y: 0 }
+                      }
+                      exit={
+                        prefersReducedMotion ? false : { opacity: 0, y: -20 }
+                      }
                       className="flex items-start gap-3"
                     >
-                      <Avatar className={`${isMobile ? 'w-6 h-6' : 'w-8 h-8'}`}>
+                      <Avatar className={`${isMobile ? "w-6 h-6" : "w-8 h-8"}`}>
                         <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
                           <Brain size={isMobile ? 12 : 16} />
                         </AvatarFallback>
@@ -789,15 +853,23 @@ export default function Chatbot() {
                             <motion.div
                               key={i}
                               className="w-2 h-2 bg-purple-400 rounded-full"
-                              animate={prefersReducedMotion ? {} : {
-                                scale: [1, 1.2, 1],
-                                opacity: [0.5, 1, 0.5],
-                              }}
-                              transition={prefersReducedMotion ? {} : {
-                                duration: 1,
-                                repeat: Infinity,
-                                delay: i * 0.2,
-                              }}
+                              animate={
+                                prefersReducedMotion
+                                  ? {}
+                                  : {
+                                      scale: [1, 1.2, 1],
+                                      opacity: [0.5, 1, 0.5],
+                                    }
+                              }
+                              transition={
+                                prefersReducedMotion
+                                  ? {}
+                                  : {
+                                      duration: 1,
+                                      repeat: Infinity,
+                                      delay: i * 0.2,
+                                    }
+                              }
                             />
                           ))}
                         </div>
@@ -810,30 +882,50 @@ export default function Chatbot() {
               </div>
 
               {/* Input Area with Enhanced Glass Effect */}
-              <div className={`border-t border-white/30 bg-gradient-to-r from-white/70 via-gray-50/60 to-white/80 backdrop-blur-lg ${isMobile ? 'p-4' : 'p-6'} shadow-inner`}>
+              <div
+                className={`border-t border-white/30 bg-gradient-to-r from-white/70 via-gray-50/60 to-white/80 backdrop-blur-lg ${isMobile ? "p-4" : "p-6"} shadow-inner`}
+              >
                 {/* Quick Actions */}
-                <div className={`${isMobile ? 'mb-3' : 'mb-4'}`}>
-                  <div className={`flex flex-wrap ${isMobile ? 'gap-1' : 'gap-2'}`}>
-                    {quickActions.slice(0, isMobile ? 3 : quickActions.length).map((action, index) => (
-                      <motion.button
-                        key={action.id}
-                        onClick={() => handleQuickAction(action)}
-                        className={`flex items-center gap-2 ${isMobile ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-xs'} bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200/50 dashboard-text`}
-                        initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.9 }}
-                        animate={prefersReducedMotion ? false : { opacity: 1, scale: 1 }}
-                        transition={prefersReducedMotion ? {} : { delay: index * 0.05 }}
-                        whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
-                        whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-                      >
-                        {action.icon}
-                        {action.label}
-                      </motion.button>
-                    ))}
+                <div className={`${isMobile ? "mb-3" : "mb-4"}`}>
+                  <div
+                    className={`flex flex-wrap ${isMobile ? "gap-1" : "gap-2"}`}
+                  >
+                    {quickActions
+                      .slice(0, isMobile ? 3 : quickActions.length)
+                      .map((action, index) => (
+                        <motion.button
+                          key={action.id}
+                          onClick={() => handleQuickAction(action)}
+                          className={`flex items-center gap-2 ${isMobile ? "px-2 py-1 text-xs" : "px-3 py-2 text-xs"} bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200/50 dashboard-text`}
+                          initial={
+                            prefersReducedMotion
+                              ? false
+                              : { opacity: 0, scale: 0.9 }
+                          }
+                          animate={
+                            prefersReducedMotion
+                              ? false
+                              : { opacity: 1, scale: 1 }
+                          }
+                          transition={
+                            prefersReducedMotion ? {} : { delay: index * 0.05 }
+                          }
+                          whileHover={
+                            prefersReducedMotion ? {} : { scale: 1.02 }
+                          }
+                          whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+                        >
+                          {action.icon}
+                          {action.label}
+                        </motion.button>
+                      ))}
                   </div>
                 </div>
 
                 {/* Input Controls */}
-                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-3'}`}>
+                <div
+                  className={`flex items-center ${isMobile ? "gap-2" : "gap-3"}`}
+                >
                   <div className="flex-1 relative">
                     <Input
                       ref={inputRef}
@@ -846,11 +938,13 @@ export default function Chatbot() {
                         }
                       }}
                       placeholder="Type your message or use voice..."
-                      className={`${isMobile ? 'pr-8 text-sm' : 'pr-12'} bg-white/90 border-white/30 backdrop-blur-sm focus:bg-white focus:border-purple-300 transition-all dashboard-text`}
+                      className={`${isMobile ? "pr-8 text-sm" : "pr-12"} bg-white/90 border-white/30 backdrop-blur-sm focus:bg-white focus:border-purple-300 transition-all dashboard-text`}
                     />
 
                     {/* Character count or file indicator */}
-                    <div className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${isMobile ? 'text-xs' : 'text-xs'} text-gray-400`}>
+                    <div
+                      className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${isMobile ? "text-xs" : "text-xs"} text-gray-400`}
+                    >
                       {inputValue.length > 0 && (
                         <span>{inputValue.length}</span>
                       )}
@@ -860,20 +954,30 @@ export default function Chatbot() {
                   {/* Voice Recording */}
                   <motion.button
                     onClick={toggleRecording}
-                    className={`${isMobile ? 'p-2' : 'p-2'} rounded-full transition-all ${
+                    className={`${isMobile ? "p-2" : "p-2"} rounded-full transition-all ${
                       isRecording
                         ? "bg-red-500 text-white"
                         : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                     }`}
                     whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
                     whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
-                    animate={isRecording && !prefersReducedMotion ? { scale: [1, 1.1, 1] } : {}}
+                    animate={
+                      isRecording && !prefersReducedMotion
+                        ? { scale: [1, 1.1, 1] }
+                        : {}
+                    }
                     transition={
-                      isRecording && !prefersReducedMotion ? { duration: 1, repeat: Infinity } : {}
+                      isRecording && !prefersReducedMotion
+                        ? { duration: 1, repeat: Infinity }
+                        : {}
                     }
                     title="Voice Recording"
                   >
-                    {isRecording ? <MicOff size={isMobile ? 18 : 20} /> : <Mic size={isMobile ? 18 : 20} />}
+                    {isRecording ? (
+                      <MicOff size={isMobile ? 18 : 20} />
+                    ) : (
+                      <Mic size={isMobile ? 18 : 20} />
+                    )}
                   </motion.button>
 
                   {/* Volume Control - Hidden on mobile */}
@@ -937,7 +1041,7 @@ export default function Chatbot() {
                   <motion.button
                     onClick={() => handleSendMessage(inputValue)}
                     disabled={!inputValue.trim() || isTyping}
-                    className={`${isMobile ? 'p-2' : 'p-2'} bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors`}
+                    className={`${isMobile ? "p-2" : "p-2"} bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors`}
                     whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
                     whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                   >
@@ -948,11 +1052,17 @@ export default function Chatbot() {
                 {/* Error Display */}
                 {vapiError && (
                   <motion.div
-                    initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                    animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+                    initial={
+                      prefersReducedMotion ? false : { opacity: 0, y: 10 }
+                    }
+                    animate={
+                      prefersReducedMotion ? false : { opacity: 1, y: 0 }
+                    }
                     className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg"
                   >
-                    <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-red-700 dashboard-text`}>
+                    <p
+                      className={`${isMobile ? "text-xs" : "text-sm"} text-red-700 dashboard-text`}
+                    >
                       {vapiError}
                     </p>
                   </motion.div>
@@ -986,7 +1096,7 @@ export default function Chatbot() {
       {/* Right Panel - Voice Assistant - Hidden on mobile */}
       {!isMobile && (
         <motion.div
-          className={`fixed right-4 top-4 bottom-4 ${isTablet ? 'w-64' : 'w-72'} z-40`}
+          className={`fixed right-4 top-4 bottom-4 ${isTablet ? "w-64" : "w-72"} z-40`}
           initial={prefersReducedMotion ? false : { opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={prefersReducedMotion ? {} : { duration: 0.5, delay: 0.2 }}
@@ -997,19 +1107,26 @@ export default function Chatbot() {
               <div className="flex items-center gap-3">
                 <motion.div
                   className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
-                  animate={!prefersReducedMotion && vapiStatus === "call-active" ? {
-                    scale: [1, 1.1, 1],
-                    boxShadow: [
-                      "0 0 0 0 rgba(59, 130, 246, 0.7)",
-                      "0 0 0 10px rgba(59, 130, 246, 0)",
-                      "0 0 0 0 rgba(59, 130, 246, 0)",
-                    ]
-                  } : {
-                    boxShadow: "0 4px 14px 0 rgba(0, 0, 0, 0.1)"
-                  }}
+                  animate={
+                    !prefersReducedMotion && vapiStatus === "call-active"
+                      ? {
+                          scale: [1, 1.1, 1],
+                          boxShadow: [
+                            "0 0 0 0 rgba(59, 130, 246, 0.7)",
+                            "0 0 0 10px rgba(59, 130, 246, 0)",
+                            "0 0 0 0 rgba(59, 130, 246, 0)",
+                          ],
+                        }
+                      : {
+                          boxShadow: "0 4px 14px 0 rgba(0, 0, 0, 0.1)",
+                        }
+                  }
                   transition={{
                     duration: 1.5,
-                    repeat: vapiStatus === "call-active" && !prefersReducedMotion ? Infinity : 0,
+                    repeat:
+                      vapiStatus === "call-active" && !prefersReducedMotion
+                        ? Infinity
+                        : 0,
                   }}
                 >
                   <Bot size={18} className="text-white" />
@@ -1053,14 +1170,21 @@ export default function Chatbot() {
                 {/* Voice status indicator */}
                 <motion.div
                   className="absolute top-3 right-3 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-md border border-gray-200"
-                  animate={!prefersReducedMotion && vapiStatus === "call-active" ? {
-                    opacity: [0.9, 1, 0.9],
-                  } : {
-                    opacity: 0.9
-                  }}
+                  animate={
+                    !prefersReducedMotion && vapiStatus === "call-active"
+                      ? {
+                          opacity: [0.9, 1, 0.9],
+                        }
+                      : {
+                          opacity: 0.9,
+                        }
+                  }
                   transition={{
                     duration: 1.5,
-                    repeat: vapiStatus === "call-active" && !prefersReducedMotion ? Infinity : 0,
+                    repeat:
+                      vapiStatus === "call-active" && !prefersReducedMotion
+                        ? Infinity
+                        : 0,
                   }}
                 >
                   <div
@@ -1096,14 +1220,21 @@ export default function Chatbot() {
                       <motion.div
                         key={i}
                         className="w-1.5 bg-gradient-to-t from-blue-500 to-purple-500 rounded-full"
-                        animate={!prefersReducedMotion && hasAudioOutput ? {
-                          height: [6, Math.random() * 20 + 12, 6],
-                        } : {
-                          height: 6
-                        }}
+                        animate={
+                          !prefersReducedMotion && hasAudioOutput
+                            ? {
+                                height: [6, Math.random() * 20 + 12, 6],
+                              }
+                            : {
+                                height: 6,
+                              }
+                        }
                         transition={{
                           duration: 0.5 + Math.random() * 0.5,
-                          repeat: hasAudioOutput && !prefersReducedMotion ? Infinity : 0,
+                          repeat:
+                            hasAudioOutput && !prefersReducedMotion
+                              ? Infinity
+                              : 0,
                           delay: i * 0.1,
                         }}
                       />

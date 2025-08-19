@@ -28,26 +28,73 @@ export const MobileBottomNav = ({ className = "" }: MobileBottomNavProps) => {
   // Primary navigation items (always visible)
   const primaryItems = [
     { id: "home", label: "Dashboard", icon: Home, href: "/dashboard" },
-    { id: "chatbot", label: "AI Chat", icon: Brain, href: "/dashboard/chatbot" },
-    { id: "analytics", label: "Analytics", icon: BarChart3, href: "/dashboard/analytics" },
+    {
+      id: "chatbot",
+      label: "AI Chat",
+      icon: Brain,
+      href: "/dashboard/chatbot",
+    },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: BarChart3,
+      href: "/dashboard/analytics",
+    },
   ];
 
   // Secondary navigation items (shown when "More" is tapped)
   const secondaryItems = [
-    { id: "products", label: "Products", icon: Package, href: "/dashboard/products" },
-    { id: "orders", label: "Orders", icon: ShoppingCart, href: "/dashboard/orders" },
-    { id: "customers", label: "Customers", icon: Users, href: "/dashboard/customers" },
-    { id: "messages", label: "Messages", icon: MessageSquare, href: "/dashboard/messages" },
-    { id: "calendar", label: "Calendar", icon: Calendar, href: "/dashboard/calendar" },
-    { id: "computer-vision", label: "Computer Vision", icon: Camera, href: "/dashboard/computer-vision" },
-    { id: "settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
+    {
+      id: "products",
+      label: "Products",
+      icon: Package,
+      href: "/dashboard/products",
+    },
+    {
+      id: "orders",
+      label: "Orders",
+      icon: ShoppingCart,
+      href: "/dashboard/orders",
+    },
+    {
+      id: "customers",
+      label: "Customers",
+      icon: Users,
+      href: "/dashboard/customers",
+    },
+    {
+      id: "messages",
+      label: "Messages",
+      icon: MessageSquare,
+      href: "/dashboard/messages",
+    },
+    {
+      id: "calendar",
+      label: "Calendar",
+      icon: Calendar,
+      href: "/dashboard/calendar",
+    },
+    {
+      id: "computer-vision",
+      label: "Computer Vision",
+      icon: Camera,
+      href: "/dashboard/computer-vision",
+    },
+    {
+      id: "settings",
+      label: "Settings",
+      icon: Settings,
+      href: "/dashboard/settings",
+    },
   ];
 
   const isActive = (href: string) => {
     if (href === "/dashboard") {
       return location.pathname === "/dashboard";
     }
-    return location.pathname === href || location.pathname.startsWith(href + "/");
+    return (
+      location.pathname === href || location.pathname.startsWith(href + "/")
+    );
   };
 
   const handleNavigation = (href: string) => {
@@ -78,11 +125,11 @@ export const MobileBottomNav = ({ className = "" }: MobileBottomNavProps) => {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
-            transition={{ 
-              type: "spring", 
-              damping: 25, 
+            transition={{
+              type: "spring",
+              damping: 25,
               stiffness: 300,
-              mass: 0.8
+              mass: 0.8,
             }}
           >
             <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 p-4">
@@ -119,21 +166,22 @@ export const MobileBottomNav = ({ className = "" }: MobileBottomNavProps) => {
         className={`fixed bottom-0 left-0 right-0 z-50 ${className}`}
         initial={{ y: 100 }}
         animate={{ y: 0 }}
-        transition={{ 
-          type: "spring", 
-          damping: 25, 
+        transition={{
+          type: "spring",
+          damping: 25,
           stiffness: 300,
-          mass: 0.8
+          mass: 0.8,
         }}
       >
         <div className="mx-4 mb-4">
-          <div 
+          <div
             className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 px-4 py-3"
             style={{
               background: "rgba(255, 255, 255, 0.95)",
               backdropFilter: "blur(20px) saturate(150%)",
               WebkitBackdropFilter: "blur(20px) saturate(150%)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)",
+              boxShadow:
+                "0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)",
             }}
           >
             <div className="flex items-center justify-between">
@@ -152,17 +200,19 @@ export const MobileBottomNav = ({ className = "" }: MobileBottomNavProps) => {
                   style={{ minWidth: "72px" }}
                 >
                   <motion.div
-                    animate={isActive(item.href) ? { 
-                      scale: [1, 1.2, 1],
-                      rotate: [0, 5, -5, 0]
-                    } : {}}
+                    animate={
+                      isActive(item.href)
+                        ? {
+                            scale: [1, 1.2, 1],
+                            rotate: [0, 5, -5, 0],
+                          }
+                        : {}
+                    }
                     transition={{ duration: 0.3 }}
                   >
                     <item.icon size={20} className="mb-1" />
                   </motion.div>
-                  <span className="text-xs font-medium">
-                    {item.label}
-                  </span>
+                  <span className="text-xs font-medium">{item.label}</span>
                   {/* Active indicator */}
                   {isActive(item.href) && (
                     <motion.div
@@ -191,11 +241,13 @@ export const MobileBottomNav = ({ className = "" }: MobileBottomNavProps) => {
                   animate={{ rotate: showMore ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {showMore ? <X size={20} className="mb-1" /> : <Menu size={20} className="mb-1" />}
+                  {showMore ? (
+                    <X size={20} className="mb-1" />
+                  ) : (
+                    <Menu size={20} className="mb-1" />
+                  )}
                 </motion.div>
-                <span className="text-xs font-medium">
-                  More
-                </span>
+                <span className="text-xs font-medium">More</span>
                 {/* Active indicator for more menu */}
                 {showMore && (
                   <motion.div

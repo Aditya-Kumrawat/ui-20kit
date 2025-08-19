@@ -112,27 +112,37 @@ export default function Analytics() {
       <div>
         {/* Header */}
         <motion.header
-          className={`${isMobile ? 'mb-4' : 'mb-8'}`}
+          className={`${isMobile ? "mb-4" : "mb-8"}`}
           initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
           animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
           transition={prefersReducedMotion ? {} : { duration: 0.5 }}
         >
-          <div className={`flex items-center justify-between ${isMobile ? 'flex-col gap-4' : ''}`}>
-            <div className={isMobile ? 'text-center' : ''}>
-              <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-gray-900 dashboard-title`}>
+          <div
+            className={`flex items-center justify-between ${isMobile ? "flex-col gap-4" : ""}`}
+          >
+            <div className={isMobile ? "text-center" : ""}>
+              <h1
+                className={`${isMobile ? "text-2xl" : "text-3xl"} font-bold text-gray-900 dashboard-title`}
+              >
                 Analytics Dashboard
               </h1>
-              <p className={`text-gray-600 mt-1 dashboard-text ${isMobile ? 'text-sm' : ''}`}>
+              <p
+                className={`text-gray-600 mt-1 dashboard-text ${isMobile ? "text-sm" : ""}`}
+              >
                 Comprehensive insights and performance metrics for your business
               </p>
             </div>
-            <div className={`flex items-center ${isMobile ? 'flex-col' : 'flex-row'} gap-4`}>
-              <div className={`flex bg-white/60 backdrop-blur-sm rounded-2xl p-1 border border-white/30 ${isMobile ? 'text-sm' : ''}`}>
+            <div
+              className={`flex items-center ${isMobile ? "flex-col" : "flex-row"} gap-4`}
+            >
+              <div
+                className={`flex bg-white/60 backdrop-blur-sm rounded-2xl p-1 border border-white/30 ${isMobile ? "text-sm" : ""}`}
+              >
                 {["7d", "30d", "90d", "1y"].map((period) => (
                   <button
                     key={period}
                     onClick={() => setSelectedPeriod(period)}
-                    className={`${isMobile ? 'px-2 py-1' : 'px-3 py-2'} rounded-xl text-sm font-medium transition-all ${
+                    className={`${isMobile ? "px-2 py-1" : "px-3 py-2"} rounded-xl text-sm font-medium transition-all ${
                       selectedPeriod === period
                         ? "bg-purple-500 text-white shadow-sm"
                         : "text-gray-600 hover:text-gray-900"
@@ -155,7 +165,7 @@ export default function Analytics() {
 
         {/* Key Metrics Cards */}
         <motion.div
-          className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-1 md:grid-cols-4 gap-6'} ${isMobile ? 'mb-4' : 'mb-8'}`}
+          className={`grid ${isMobile ? "grid-cols-1 gap-3" : "grid-cols-1 md:grid-cols-4 gap-6"} ${isMobile ? "mb-4" : "mb-8"}`}
           initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
           animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
           transition={prefersReducedMotion ? {} : { duration: 0.5, delay: 0.1 }}
@@ -192,26 +202,28 @@ export default function Analytics() {
           ].map((metric, index) => (
             <motion.div
               key={metric.title}
-              className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} border border-white/30`}
+              className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} border border-white/30`}
               whileHover={prefersReducedMotion ? {} : { y: -4, scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <div className={`flex items-center justify-between ${isMobile ? 'mb-3' : 'mb-4'}`}>
+              <div
+                className={`flex items-center justify-between ${isMobile ? "mb-3" : "mb-4"}`}
+              >
                 <div
-                  className={`${isMobile ? 'p-2' : 'p-3'} rounded-2xl bg-gradient-to-br from-${metric.color}-50 to-${metric.color}-100`}
+                  className={`${isMobile ? "p-2" : "p-3"} rounded-2xl bg-gradient-to-br from-${metric.color}-50 to-${metric.color}-100`}
                 >
                   {metric.trending === "up" ? (
                     <TrendingUp
-                      className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-${metric.color}-600`}
+                      className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} text-${metric.color}-600`}
                     />
                   ) : (
                     <TrendingDown
-                      className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-${metric.color}-600`}
+                      className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} text-${metric.color}-600`}
                     />
                   )}
                 </div>
                 <span
-                  className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium px-2 py-1 rounded-full ${
+                  className={`${isMobile ? "text-xs" : "text-sm"} font-medium px-2 py-1 rounded-full ${
                     metric.trending === "up"
                       ? "text-green-600 bg-green-50"
                       : "text-red-600 bg-red-50"
@@ -220,32 +232,56 @@ export default function Analytics() {
                   {metric.change}
                 </span>
               </div>
-              <h3 className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-gray-600 mb-1`}>
+              <h3
+                className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-gray-600 mb-1`}
+              >
                 {metric.title}
               </h3>
-              <p className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-gray-900`}>{metric.value}</p>
+              <p
+                className={`${isMobile ? "text-lg" : "text-2xl"} font-bold text-gray-900`}
+              >
+                {metric.value}
+              </p>
             </motion.div>
           ))}
         </motion.div>
 
         {/* Charts Section */}
-        <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 lg:grid-cols-2 gap-6'} ${isMobile ? 'mb-4' : 'mb-8'}`}>
+        <div
+          className={`grid ${isMobile ? "grid-cols-1 gap-4" : "grid-cols-1 lg:grid-cols-2 gap-6"} ${isMobile ? "mb-4" : "mb-8"}`}
+        >
           {/* Monthly Revenue Bar Chart */}
           <motion.div
-            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}
+            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30`}
             initial={prefersReducedMotion ? false : { opacity: 0, x: -40 }}
             animate={prefersReducedMotion ? false : { opacity: 1, x: 0 }}
-            transition={prefersReducedMotion ? {} : { duration: 0.6, delay: 0.2 }}
+            transition={
+              prefersReducedMotion ? {} : { duration: 0.6, delay: 0.2 }
+            }
           >
-            <div className={`flex items-center justify-between ${isMobile ? 'mb-4' : 'mb-6'}`}>
-              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-gray-900`}>
+            <div
+              className={`flex items-center justify-between ${isMobile ? "mb-4" : "mb-6"}`}
+            >
+              <h3
+                className={`${isMobile ? "text-lg" : "text-xl"} font-bold text-gray-900`}
+              >
                 Monthly Revenue
               </h3>
-              <BarChart3 className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-purple-600`} />
+              <BarChart3
+                className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} text-purple-600`}
+              />
             </div>
-            <div className={`${isMobile ? 'h-60' : 'h-80'}`}>
+            <div className={`${isMobile ? "h-60" : "h-80"}`}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyRevenueData} margin={{ top: 20, right: isMobile ? 10 : 30, left: isMobile ? 10 : 20, bottom: 5 }}>
+                <BarChart
+                  data={monthlyRevenueData}
+                  margin={{
+                    top: 20,
+                    right: isMobile ? 10 : 30,
+                    left: isMobile ? 10 : 20,
+                    bottom: 5,
+                  }}
+                >
                   <defs>
                     <linearGradient id="revenueBar" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.9} />
@@ -295,36 +331,54 @@ export default function Analytics() {
 
           {/* Category Performance */}
           <motion.div
-            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}
+            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30`}
             initial={prefersReducedMotion ? false : { opacity: 0, x: 40 }}
             animate={prefersReducedMotion ? false : { opacity: 1, x: 0 }}
-            transition={prefersReducedMotion ? {} : { duration: 0.6, delay: 0.3 }}
+            transition={
+              prefersReducedMotion ? {} : { duration: 0.6, delay: 0.3 }
+            }
           >
-            <div className={`flex items-center justify-between ${isMobile ? 'mb-4' : 'mb-6'}`}>
-              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-gray-900`}>
+            <div
+              className={`flex items-center justify-between ${isMobile ? "mb-4" : "mb-6"}`}
+            >
+              <h3
+                className={`${isMobile ? "text-lg" : "text-xl"} font-bold text-gray-900`}
+              >
                 Category Performance
               </h3>
-              <Activity className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-blue-600`} />
+              <Activity
+                className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} text-blue-600`}
+              />
             </div>
-            <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
+            <div className={`${isMobile ? "space-y-3" : "space-y-4"}`}>
               {categoryData.map((category, index) => (
                 <motion.div
                   key={category.category}
                   className="relative"
-                  initial={prefersReducedMotion ? false : { opacity: 0, x: -20 }}
+                  initial={
+                    prefersReducedMotion ? false : { opacity: 0, x: -20 }
+                  }
                   animate={prefersReducedMotion ? false : { opacity: 1, x: 0 }}
-                  transition={prefersReducedMotion ? {} : { delay: 0.4 + index * 0.1 }}
+                  transition={
+                    prefersReducedMotion ? {} : { delay: 0.4 + index * 0.1 }
+                  }
                 >
-                  <div className={`flex items-center justify-between ${isMobile ? 'mb-1' : 'mb-2'}`}>
-                    <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-gray-700`}>
+                  <div
+                    className={`flex items-center justify-between ${isMobile ? "mb-1" : "mb-2"}`}
+                  >
+                    <span
+                      className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-gray-700`}
+                    >
                       {category.category}
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-bold text-gray-900`}>
+                      <span
+                        className={`${isMobile ? "text-xs" : "text-sm"} font-bold text-gray-900`}
+                      >
                         ${(category.sales / 1000).toFixed(0)}K
                       </span>
                       <span
-                        className={`${isMobile ? 'text-xs' : 'text-xs'} px-2 py-1 rounded-full ${
+                        className={`${isMobile ? "text-xs" : "text-xs"} px-2 py-1 rounded-full ${
                           category.growth > 0
                             ? "text-green-600 bg-green-50"
                             : "text-red-600 bg-red-50"
@@ -335,7 +389,9 @@ export default function Analytics() {
                       </span>
                     </div>
                   </div>
-                  <div className={`w-full bg-gray-200 rounded-full ${isMobile ? 'h-2' : 'h-3'} overflow-hidden`}>
+                  <div
+                    className={`w-full bg-gray-200 rounded-full ${isMobile ? "h-2" : "h-3"} overflow-hidden`}
+                  >
                     <motion.div
                       className="h-full rounded-full"
                       style={{
@@ -343,7 +399,11 @@ export default function Analytics() {
                       }}
                       initial={{ width: 0 }}
                       animate={{ width: `${(category.sales / 67000) * 100}%` }}
-                      transition={prefersReducedMotion ? {} : { duration: 1, delay: 0.5 + index * 0.1 }}
+                      transition={
+                        prefersReducedMotion
+                          ? {}
+                          : { duration: 1, delay: 0.5 + index * 0.1 }
+                      }
                     />
                   </div>
                 </motion.div>
@@ -353,21 +413,31 @@ export default function Analytics() {
         </div>
 
         {/* Traffic Sources & Performance Metrics */}
-        <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 lg:grid-cols-2 gap-6'} ${isMobile ? 'mb-4' : 'mb-8'}`}>
+        <div
+          className={`grid ${isMobile ? "grid-cols-1 gap-4" : "grid-cols-1 lg:grid-cols-2 gap-6"} ${isMobile ? "mb-4" : "mb-8"}`}
+        >
           {/* Traffic Sources Pie Chart */}
           <motion.div
-            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}
+            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30`}
             initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
             animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
-            transition={prefersReducedMotion ? {} : { duration: 0.6, delay: 0.4 }}
+            transition={
+              prefersReducedMotion ? {} : { duration: 0.6, delay: 0.4 }
+            }
           >
-            <div className={`flex items-center justify-between ${isMobile ? 'mb-4' : 'mb-6'}`}>
-              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-gray-900`}>
+            <div
+              className={`flex items-center justify-between ${isMobile ? "mb-4" : "mb-6"}`}
+            >
+              <h3
+                className={`${isMobile ? "text-lg" : "text-xl"} font-bold text-gray-900`}
+              >
                 Traffic Sources
               </h3>
-              <PieChartIcon className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-green-600`} />
+              <PieChartIcon
+                className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} text-green-600`}
+              />
             </div>
-            <div className={`${isMobile ? 'h-60' : 'h-80'}`}>
+            <div className={`${isMobile ? "h-60" : "h-80"}`}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -394,15 +464,23 @@ export default function Analytics() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className={`grid ${isMobile ? 'grid-cols-1 gap-1' : 'grid-cols-2 gap-2'} mt-4`}>
+            <div
+              className={`grid ${isMobile ? "grid-cols-1 gap-1" : "grid-cols-2 gap-2"} mt-4`}
+            >
               {trafficData.map((source, index) => (
                 <div key={source.name} className="flex items-center gap-2">
                   <div
-                    className={`${isMobile ? 'w-2 h-2' : 'w-3 h-3'} rounded-full`}
+                    className={`${isMobile ? "w-2 h-2" : "w-3 h-3"} rounded-full`}
                     style={{ backgroundColor: source.color }}
                   />
-                  <span className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-600`}>{source.name}</span>
-                  <span className={`${isMobile ? 'text-xs' : 'text-xs'} font-medium text-gray-900`}>
+                  <span
+                    className={`${isMobile ? "text-xs" : "text-xs"} text-gray-600`}
+                  >
+                    {source.name}
+                  </span>
+                  <span
+                    className={`${isMobile ? "text-xs" : "text-xs"} font-medium text-gray-900`}
+                  >
                     {source.value}%
                   </span>
                 </div>
@@ -412,18 +490,26 @@ export default function Analytics() {
 
           {/* Performance Metrics Radial Chart */}
           <motion.div
-            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}
+            className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30`}
             initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
             animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
-            transition={prefersReducedMotion ? {} : { duration: 0.6, delay: 0.5 }}
+            transition={
+              prefersReducedMotion ? {} : { duration: 0.6, delay: 0.5 }
+            }
           >
-            <div className={`flex items-center justify-between ${isMobile ? 'mb-4' : 'mb-6'}`}>
-              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-gray-900`}>
+            <div
+              className={`flex items-center justify-between ${isMobile ? "mb-4" : "mb-6"}`}
+            >
+              <h3
+                className={`${isMobile ? "text-lg" : "text-xl"} font-bold text-gray-900`}
+              >
                 Performance Metrics
               </h3>
-              <TrendingUp className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-orange-600`} />
+              <TrendingUp
+                className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} text-orange-600`}
+              />
             </div>
-            <div className={`${isMobile ? 'h-60' : 'h-80'}`}>
+            <div className={`${isMobile ? "h-60" : "h-80"}`}>
               <ResponsiveContainer width="100%" height="100%">
                 <RadialBarChart
                   data={performanceData}
@@ -443,18 +529,26 @@ export default function Analytics() {
                 </RadialBarChart>
               </ResponsiveContainer>
             </div>
-            <div className={`${isMobile ? 'space-y-2' : 'space-y-3'}`}>
+            <div className={`${isMobile ? "space-y-2" : "space-y-3"}`}>
               {performanceData.map((metric, index) => (
                 <div
                   key={metric.metric}
                   className="flex items-center justify-between"
                 >
-                  <span className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}>{metric.metric}</span>
+                  <span
+                    className={`${isMobile ? "text-xs" : "text-sm"} text-gray-600`}
+                  >
+                    {metric.metric}
+                  </span>
                   <div className="flex items-center gap-2">
-                    <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-bold text-gray-900`}>
+                    <span
+                      className={`${isMobile ? "text-xs" : "text-sm"} font-bold text-gray-900`}
+                    >
                       {metric.value}%
                     </span>
-                    <span className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-500`}>
+                    <span
+                      className={`${isMobile ? "text-xs" : "text-xs"} text-gray-500`}
+                    >
                       / {metric.target}%
                     </span>
                   </div>
@@ -466,20 +560,34 @@ export default function Analytics() {
 
         {/* Hourly Activity Line Chart */}
         <motion.div
-          className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}
+          className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? "p-4" : "p-6"} shadow-lg border border-white/30`}
           initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
           animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
           transition={prefersReducedMotion ? {} : { duration: 0.6, delay: 0.6 }}
         >
-          <div className={`flex items-center justify-between ${isMobile ? 'mb-4' : 'mb-6'}`}>
-            <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-gray-900`}>
+          <div
+            className={`flex items-center justify-between ${isMobile ? "mb-4" : "mb-6"}`}
+          >
+            <h3
+              className={`${isMobile ? "text-lg" : "text-xl"} font-bold text-gray-900`}
+            >
               24-Hour Activity
             </h3>
-            <Activity className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-purple-600`} />
+            <Activity
+              className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} text-purple-600`}
+            />
           </div>
-          <div className={`${isMobile ? 'h-60' : 'h-80'}`}>
+          <div className={`${isMobile ? "h-60" : "h-80"}`}>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={hourlyData} margin={{ top: 20, right: isMobile ? 10 : 30, left: isMobile ? 10 : 20, bottom: 5 }}>
+              <AreaChart
+                data={hourlyData}
+                margin={{
+                  top: 20,
+                  right: isMobile ? 10 : 30,
+                  left: isMobile ? 10 : 20,
+                  bottom: 5,
+                }}
+              >
                 <defs>
                   <linearGradient
                     id="usersGradient"
