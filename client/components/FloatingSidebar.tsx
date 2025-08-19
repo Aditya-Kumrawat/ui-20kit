@@ -109,12 +109,8 @@ export const FloatingSidebar = ({
     setActiveIndex(currentIndex !== -1 ? currentIndex : -1);
   }, [location.pathname]);
 
-  // Hide sidebar on mobile devices by returning null
-  if (isMobile) {
-    return null;
-  }
-
-  return (
+  // Hide sidebar on mobile devices by conditional rendering
+  return !isMobile ? (
     <motion.div
       className={`fixed left-4 top-4 bottom-4 ${
         isCollapsed ? "w-16" : "w-64"
@@ -275,5 +271,5 @@ export const FloatingSidebar = ({
         </AnimatePresence>
       </div>
     </motion.div>
-  );
+  ) : null;
 };
