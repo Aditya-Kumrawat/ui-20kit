@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { FloatingSidebar } from "@/components/FloatingSidebar";
-import { FloatingTopBar } from "@/components/FloatingTopBar";
-import { useSidebar } from "@/contexts/SidebarContext";
+import { ResponsiveLayout } from "@/components/ResponsiveLayout";
+import { useMobile, useReducedMotion } from "@/hooks/use-mobile";
 import {
   Search,
   Bell,
@@ -24,7 +23,8 @@ import {
 } from "recharts";
 
 export default function Dashboard() {
-  const { isCollapsed, setIsCollapsed } = useSidebar();
+  const { isMobile, isTablet } = useMobile();
+  const prefersReducedMotion = useReducedMotion();
 
   const dashboardStats = [
     {
@@ -124,31 +124,21 @@ export default function Dashboard() {
   const [hoveredRegion, setHoveredRegion] = useState(null);
 
   return (
-    <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <FloatingSidebar
-        isCollapsed={isCollapsed}
-        setIsCollapsed={setIsCollapsed}
-      />
-      <FloatingTopBar isCollapsed={isCollapsed} />
-
-      {/* Main Content */}
-      <motion.div
-        className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"} pt-28 p-6`}
-        animate={{ marginLeft: isCollapsed ? 80 : 272 }}
-      >
+    <ResponsiveLayout className="dashboard-page">
+      <div>
         {/* Header */}
         <motion.header
-          className="mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          className={`mb-6 ${isMobile ? 'mb-4' : 'mb-8'}`}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
+          animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+          transition={prefersReducedMotion ? {} : { duration: 0.5 }}
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dashboard-title">
+          <div className={`flex items-center justify-between ${isMobile ? 'flex-col gap-4' : ''}`}>
+            <div className={isMobile ? 'text-center' : ''}>
+              <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-gray-900 dashboard-title`}>
                 Dashboard Overview
               </h1>
-              <p className="text-gray-600 mt-1 dashboard-text">
+              <p className={`text-gray-600 mt-1 dashboard-text ${isMobile ? 'text-sm' : ''}`}>
                 Welcome back! Here's what's happening with your business today.
               </p>
             </div>
@@ -157,12 +147,12 @@ export default function Dashboard() {
         </motion.header>
 
         {/* Two Column Layout with Image and Stats */}
-        <div className="mb-8">
-          <div className="flex gap-5 max-lg:flex-col max-lg:gap-0">
+        <div className={`${isMobile ? 'mb-4' : 'mb-8'}`}>
+          <div className={`${isMobile ? 'flex flex-col gap-4' : 'flex gap-5 max-lg:flex-col max-lg:gap-0'}`}>
             {/* Left Column - Image */}
-            <div className="flex flex-col w-1/2 max-lg:w-full">
+            <div className={`flex flex-col ${isMobile ? 'w-full' : 'w-1/2 max-lg:w-full'}`}>
               <div
-                className="flex flex-col relative mt-5 h-[365px] bg-cover bg-center bg-no-repeat border-none rounded-2xl"
+                className={`flex flex-col relative ${isMobile ? 'mt-2 h-[200px]' : 'mt-5 h-[365px]'} bg-cover bg-center bg-no-repeat border-none rounded-2xl`}
                 style={{
                   backgroundImage:
                     "url(https://cdn.builder.io/api/v1/file/assets%2F3ef4243ecdf248dabd75417d35606fac%2F54bd8a0dcac741cabf36c1fc34c597e2)",
@@ -171,10 +161,10 @@ export default function Dashboard() {
                 {/* Transparent glass overlay with text at bottom */}
                 <div className="absolute bottom-0 left-0 right-0 bg-white/20 backdrop-blur-sm rounded-b-lg p-6">
                   <div className="text-left">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2 dashboard-title">
+                    <h2 className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-gray-900 mb-2 dashboard-title`}>
                       Business Analytics
                     </h2>
-                    <p className="text-gray-600 text-sm dashboard-text">
+                    <p className={`text-gray-600 ${isMobile ? 'text-xs' : 'text-sm'} dashboard-text`}>
                       Monitor your business performance with real-time insights
                       and comprehensive data visualization.
                     </p>
@@ -184,24 +174,24 @@ export default function Dashboard() {
             </div>
 
             {/* Right Column - Dashboard Stats */}
-            <div className="flex flex-col w-1/2 ml-5 max-lg:w-full max-lg:ml-0">
+            <div className={`flex flex-col ${isMobile ? 'w-full mt-4' : 'w-1/2 ml-5 max-lg:w-full max-lg:ml-0'}`}>
               <motion.div
-                className="grid grid-cols-2 gap-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-2 gap-6'}`}
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+                transition={prefersReducedMotion ? {} : { duration: 0.5, delay: 0.1 }}
               >
                 {dashboardStats.map((stat, index) => (
                   <motion.div
                     key={stat.title}
                     className="group relative"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + index * 0.1 }}
-                    whileHover={{ y: -8, scale: 1.02 }}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                    animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+                    transition={prefersReducedMotion ? {} : { delay: 0.1 + index * 0.1 }}
+                    whileHover={prefersReducedMotion ? {} : { y: -8, scale: 1.02 }}
                   >
                     {/* Glass effect card with soft off-white background */}
-                    <div className="relative bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30 overflow-hidden">
+                    <div className={`relative bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30 overflow-hidden`}>
                       {/* Soft lift effect */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-3xl"></div>
                       <div
@@ -212,18 +202,18 @@ export default function Dashboard() {
                       ></div>
 
                       <div className="relative z-10">
-                        <div className="flex items-center justify-between mb-4">
+                        <div className={`flex items-center justify-between ${isMobile ? 'mb-3' : 'mb-4'}`}>
                           <div
-                            className={`p-3 rounded-2xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
+                            className={`${isMobile ? 'p-2' : 'p-3'} rounded-2xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
                           >
                             <stat.icon
-                              size={24}
+                              size={isMobile ? 20 : 24}
                               className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}
                             />
                           </div>
                           <div className="text-right">
                             <p
-                              className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full"
+                              className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full`}
                               style={{ fontFamily: "Poppins, sans-serif" }}
                             >
                               {stat.change}
@@ -233,13 +223,13 @@ export default function Dashboard() {
 
                         <div>
                           <h3
-                            className="text-sm font-medium text-gray-600 mb-1"
+                            className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-gray-600 mb-1`}
                             style={{ fontFamily: "Poppins, sans-serif" }}
                           >
                             {stat.title}
                           </h3>
                           <p
-                            className="text-2xl font-bold text-gray-900"
+                            className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-gray-900`}
                             style={{ fontFamily: "Montserrat, sans-serif" }}
                           >
                             {stat.value}
@@ -256,33 +246,33 @@ export default function Dashboard() {
 
         {/* Interactive Animated Graph Section */}
         <motion.div
-          className="mb-8"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          className={`${isMobile ? 'mb-4' : 'mb-8'}`}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
+          animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+          transition={prefersReducedMotion ? {} : { duration: 0.6, delay: 0.4 }}
         >
-          <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
+          <div className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}>
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.4 }}
+              initial={prefersReducedMotion ? false : { opacity: 0 }}
+              animate={prefersReducedMotion ? false : { opacity: 1 }}
+              transition={prefersReducedMotion ? {} : { delay: 0.6, duration: 0.4 }}
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6 dashboard-title">
+              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-gray-900 ${isMobile ? 'mb-4' : 'mb-6'} dashboard-title`}>
                 Revenue & Orders Trend
               </h3>
               <motion.div
-                className="h-80"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
+                className={`${isMobile ? 'h-60' : 'h-80'}`}
+                initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.95 }}
+                animate={prefersReducedMotion ? false : { opacity: 1, scale: 1 }}
+                transition={prefersReducedMotion ? {} : { duration: 0.8, delay: 0.7 }}
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
                     data={chartData}
                     margin={{
                       top: 20,
-                      right: 30,
-                      left: 20,
+                      right: isMobile ? 10 : 30,
+                      left: isMobile ? 10 : 20,
                       bottom: 5,
                     }}
                   >
@@ -305,24 +295,6 @@ export default function Dashboard() {
                           stopOpacity={0.1}
                         />
                       </linearGradient>
-                      <linearGradient
-                        id="ordersGradient"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#06b6d4"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#06b6d4"
-                          stopOpacity={0.1}
-                        />
-                      </linearGradient>
                     </defs>
                     <CartesianGrid
                       strokeDasharray="3 3"
@@ -333,39 +305,12 @@ export default function Dashboard() {
                       dataKey="month"
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fontSize: 12, fill: "#6b7280" }}
-                      type="category"
-                      allowDataOverflow={false}
-                      allowDecimals={true}
-                      allowDuplicatedCategory={true}
-                      domain={["dataMin", "dataMax"]}
-                      scale="auto"
-                      interval="preserveStartEnd"
-                      tickCount={5}
-                      minTickGap={5}
-                      height={60}
-                      orientation="bottom"
-                      mirror={false}
-                      reversed={false}
-                      hide={false}
+                      tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
                     />
                     <YAxis
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fontSize: 12, fill: "#6b7280" }}
-                      type="number"
-                      allowDataOverflow={false}
-                      allowDecimals={true}
-                      allowDuplicatedCategory={true}
-                      domain={["dataMin", "dataMax"]}
-                      scale="auto"
-                      tickCount={5}
-                      minTickGap={5}
-                      width={60}
-                      orientation="left"
-                      mirror={false}
-                      reversed={false}
-                      hide={false}
+                      tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
                     />
                     <Tooltip
                       contentStyle={{
@@ -374,6 +319,7 @@ export default function Dashboard() {
                         borderRadius: "12px",
                         boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
                         backdropFilter: "blur(10px)",
+                        fontSize: isMobile ? "12px" : "14px",
                       }}
                       labelStyle={{ color: "#374151", fontWeight: "600" }}
                     />
@@ -383,9 +329,9 @@ export default function Dashboard() {
                       stroke="#8b5cf6"
                       strokeWidth={3}
                       fill="url(#revenueGradient)"
-                      dot={{ fill: "#8b5cf6", strokeWidth: 0, r: 4 }}
+                      dot={{ fill: "#8b5cf6", strokeWidth: 0, r: isMobile ? 3 : 4 }}
                       activeDot={{
-                        r: 6,
+                        r: isMobile ? 5 : 6,
                         stroke: "#8b5cf6",
                         strokeWidth: 2,
                         fill: "#ffffff",
@@ -398,251 +344,23 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Real Geographical World Map Section */}
-        <motion.div
-          className="mb-8"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-gray-900 dashboard-title">
-                Global Business Presence
-              </h3>
-              <div className="text-sm text-gray-600 dashboard-text">
-                Live data from 5 continents
-              </div>
-            </div>
-
-            <div className="relative">
-              {/* Real Geological World Map */}
-              <motion.div
-                className="relative h-96 rounded-2xl overflow-hidden shadow-lg"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-              >
-                {/* Real World Map using multiple tile sources for reliability */}
-                <div className="relative w-full h-full bg-slate-200">
-                  {/* Primary map using Natural Earth */}
-                  <img
-                    src="https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/img/data/world.png"
-                    alt="World Map"
-                    className="w-full h-full object-cover rounded-2xl"
-                    style={{
-                      filter:
-                        "hue-rotate(200deg) saturate(1.2) contrast(1.1) brightness(1.05)",
-                    }}
-                    onError={(e) => {
-                      // Fallback to OpenStreetMap static image
-                      const target = e.target as HTMLImageElement;
-                      target.src = "https://tile.openstreetmap.org/0/0/0.png";
-                      target.style.transform = "scale(4)";
-                      target.style.transformOrigin = "center";
-                    }}
-                  />
-
-                  {/* Fallback: Static world map from MapBox */}
-                  <img
-                    src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/-180,-85,180,85/800x400?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
-                    alt="World Map Fallback"
-                    className="absolute inset-0 w-full h-full object-cover rounded-2xl opacity-0"
-                    style={{
-                      filter:
-                        "hue-rotate(200deg) saturate(1.2) contrast(1.1) brightness(1.05)",
-                    }}
-                    onLoad={(e) => {
-                      // Show this as backup if primary fails
-                      const target = e.target as HTMLImageElement;
-                      const primaryImg =
-                        target.previousElementSibling as HTMLImageElement | null;
-                      if (
-                        primaryImg &&
-                        primaryImg.complete &&
-                        primaryImg.naturalWidth === 0
-                      ) {
-                        target.style.opacity = "1";
-                      }
-                    }}
-                    onError={(e) => {
-                      // Final fallback: Use a data URL with world map
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = "none";
-                      const container = target.parentElement;
-                      if (container) {
-                        container.innerHTML = `
-                          <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center">
-                            <div class="text-center text-white">
-                              <h3 class="text-xl font-bold mb-2">World Map</h3>
-                              <p class="text-sm opacity-90">Global Business Analytics</p>
-                            </div>
-                          </div>
-                        `;
-                      }
-                    }}
-                  />
-
-                  {/* Enhanced overlay with subtle styling */}
-                  <div
-                    className="absolute inset-0 rounded-2xl pointer-events-none"
-                    style={{
-                      background: `
-                        linear-gradient(45deg, rgba(139, 92, 246, 0.15) 0%, transparent 30%, transparent 70%, rgba(6, 182, 212, 0.15) 100%),
-                        radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.1) 0%, transparent 50%)
-                      `,
-                      mixBlendMode: "overlay",
-                    }}
-                  />
-
-                  {/* Map title overlay */}
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-2xl px-3 py-2 shadow-md">
-                    <h4 className="text-sm font-semibold text-gray-800">
-                      Global Coverage
-                    </h4>
-                    <p className="text-xs text-gray-600">
-                      Real-time worldwide data
-                    </p>
-                  </div>
-
-                  {/* Coordinates grid overlay for authenticity */}
-                  <div
-                    className="absolute inset-0 rounded-2xl pointer-events-none opacity-20"
-                    style={{
-                      backgroundImage: `
-                        linear-gradient(to right, rgba(255,255,255,0.3) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255,255,255,0.3) 1px, transparent 1px)
-                      `,
-                      backgroundSize: "80px 40px",
-                    }}
-                  />
-                </div>
-              </motion.div>
-
-              {/* Enhanced Business Metrics */}
-              <motion.div
-                className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.5, duration: 0.5 }}
-              >
-                {/* Total Global Reach */}
-                <motion.div
-                  className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 border border-purple-200/50"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <h4 className="text-lg font-bold text-purple-800 mb-2">
-                    Global Reach
-                  </h4>
-                  <p className="text-2xl font-bold text-purple-900">
-                    {mapData
-                      .reduce((sum, region) => sum + region.customers, 0)
-                      .toLocaleString()}
-                  </p>
-                  <p className="text-sm text-purple-600">
-                    Total Customers Worldwide
-                  </p>
-                </motion.div>
-
-                {/* Total Revenue */}
-                <motion.div
-                  className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200/50"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <h4 className="text-lg font-bold text-blue-800 mb-2">
-                    Global Revenue
-                  </h4>
-                  <p className="text-2xl font-bold text-blue-900">
-                    $
-                    {(
-                      mapData.reduce((sum, region) => sum + region.revenue, 0) /
-                      1000
-                    ).toFixed(0)}
-                    K
-                  </p>
-                  <p className="text-sm text-blue-600">
-                    Combined Revenue Stream
-                  </p>
-                </motion.div>
-
-                {/* Average Growth */}
-                <motion.div
-                  className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200/50"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <h4 className="text-lg font-bold text-green-800 mb-2">
-                    Growth Rate
-                  </h4>
-                  <p className="text-2xl font-bold text-green-900">
-                    +
-                    {(
-                      mapData.reduce((sum, region) => sum + region.growth, 0) /
-                      mapData.length
-                    ).toFixed(1)}
-                    %
-                  </p>
-                  <p className="text-sm text-green-600">
-                    Average Global Growth
-                  </p>
-                </motion.div>
-              </motion.div>
-
-              {/* Regional Breakdown */}
-              <motion.div
-                className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.7, duration: 0.5 }}
-              >
-                {mapData.map((region, index) => (
-                  <motion.div
-                    key={region.region}
-                    className="bg-white/50 backdrop-blur-sm rounded-2xl p-3 border border-white/30 hover:bg-white/70 transition-all duration-300"
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.8 + index * 0.1 }}
-                  >
-                    <div className="flex items-center space-x-2 mb-2">
-                      <div
-                        className="w-3 h-3 rounded-full shadow-sm"
-                        style={{ backgroundColor: region.color }}
-                      />
-                      <div className="text-xs font-medium text-gray-800">
-                        {region.region}
-                      </div>
-                    </div>
-                    <div className="text-xs text-gray-600">
-                      <div>{region.customers.toLocaleString()} customers</div>
-                      <div className="text-green-600 font-medium">
-                        +{region.growth}% growth
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Additional Content Section */}
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 lg:grid-cols-3 gap-6'}`}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+          animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+          transition={prefersReducedMotion ? {} : { duration: 0.5, delay: 0.3 }}
         >
           {/* Recent Activity */}
-          <div className="lg:col-span-2">
-            <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
+          <div className={`${isMobile ? '' : 'lg:col-span-2'}`}>
+            <div className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}>
               <h3
-                className="text-lg font-semibold text-gray-900 mb-4"
+                className={`${isMobile ? 'text-lg' : 'text-lg'} font-semibold text-gray-900 ${isMobile ? 'mb-3' : 'mb-4'}`}
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 Recent Activity
               </h3>
-              <div className="space-y-4">
+              <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
                 {[
                   {
                     action: "New order received",
@@ -667,22 +385,22 @@ export default function Dashboard() {
                 ].map((activity, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/40 transition-colors"
+                    className={`flex items-center gap-3 ${isMobile ? 'p-2' : 'p-3'} rounded-2xl hover:bg-white/40 transition-colors`}
                   >
                     <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                     <div className="flex-1">
                       <p
-                        className="text-sm font-medium text-gray-800"
+                        className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-gray-800`}
                         style={{ fontFamily: "Poppins, sans-serif" }}
                       >
                         {activity.action}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-500`}>
                         by {activity.user}
                       </p>
                     </div>
                     <p
-                      className="text-xs text-gray-500"
+                      className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-500`}
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {activity.time}
@@ -694,23 +412,23 @@ export default function Dashboard() {
           </div>
 
           {/* Quick Stats */}
-          <div className="space-y-6">
-            <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
+          <div className={`${isMobile ? 'space-y-4' : 'space-y-6'}`}>
+            <div className={`bg-white/60 backdrop-blur-lg rounded-3xl ${isMobile ? 'p-4' : 'p-6'} shadow-lg border border-white/30`}>
               <h3
-                className="text-lg font-semibold text-gray-900 mb-4"
+                className={`${isMobile ? 'text-lg' : 'text-lg'} font-semibold text-gray-900 ${isMobile ? 'mb-3' : 'mb-4'}`}
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 Quick Stats
               </h3>
-              <div className="space-y-4">
+              <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
                 <div className="flex justify-between items-center">
                   <span
-                    className="text-sm text-gray-600"
+                    className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     Conversion Rate
                   </span>
-                  <span className="text-sm font-semibold text-gray-900">
+                  <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-semibold text-gray-900`}>
                     3.2%
                   </span>
                 </div>
@@ -718,12 +436,12 @@ export default function Dashboard() {
 
                 <div className="flex justify-between items-center">
                   <span
-                    className="text-sm text-gray-600"
+                    className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     Customer Satisfaction
                   </span>
-                  <span className="text-sm font-semibold text-gray-900">
+                  <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-semibold text-gray-900`}>
                     4.8/5
                   </span>
                 </div>
@@ -731,12 +449,12 @@ export default function Dashboard() {
 
                 <div className="flex justify-between items-center">
                   <span
-                    className="text-sm text-gray-600"
+                    className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     Server Uptime
                   </span>
-                  <span className="text-sm font-semibold text-gray-900">
+                  <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-semibold text-gray-900`}>
                     99.9%
                   </span>
                 </div>
@@ -745,7 +463,7 @@ export default function Dashboard() {
             </div>
           </div>
         </motion.div>
-      </motion.div>
-    </div>
+      </div>
+    </ResponsiveLayout>
   );
 }
