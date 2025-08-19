@@ -124,7 +124,7 @@ export const FloatingSidebar = ({
           WebkitBackdropFilter: "blur(10px) saturate(150%)",
           borderRadius: "1.25rem",
           border: "1px solid rgba(255, 255, 255, 0.3)",
-          boxShadow: "0 6px 24px rgba(0, 0, 0, 0.12)"
+          boxShadow: "0 6px 24px rgba(0, 0, 0, 0.12)",
         }}
       >
         {/* Logo Section */}
@@ -163,7 +163,7 @@ export const FloatingSidebar = ({
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
             border: "1px solid rgba(255, 255, 255, 0.5)",
-            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)"
+            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
           }}
           onClick={() => setIsCollapsed(!isCollapsed)}
           whileHover={{ scale: 1.1 }}
