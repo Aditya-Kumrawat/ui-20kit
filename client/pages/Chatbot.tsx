@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { FloatingSidebar } from "@/components/FloatingSidebar";
-import { useSidebar } from "@/contexts/SidebarContext";
+import { ResponsiveLayout } from "@/components/ResponsiveLayout";
+import { useMobile, useReducedMotion } from "@/hooks/use-mobile";
 import Vapi from "@vapi-ai/web";
 import {
   Send,
@@ -149,7 +149,8 @@ export default function Chatbot() {
   const [vapiInstance, setVapiInstance] = useState<any>(null);
   const [vapiInitialized, setVapiInitialized] = useState(false);
 
-  const { isCollapsed, setIsCollapsed } = useSidebar();
+  const { isMobile, isTablet } = useMobile();
+  const prefersReducedMotion = useReducedMotion();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "system-welcome",
@@ -262,7 +263,7 @@ export default function Chatbot() {
         `Length: ${keyToUse.length}`,
       );
       console.error(
-        "📝 Required: Web SDK needs a PUBLIC key that starts with 'pk_'",
+        "�� Required: Web SDK needs a PUBLIC key that starts with 'pk_'",
       );
       return null;
     }
@@ -356,319 +357,6 @@ export default function Chatbot() {
     console.log(`🔊 VAPI DEBUG: ${finalLogMessage}`);
     setDebugLogs((prev) => [...prev.slice(-9), finalLogMessage]); // Keep last 10 logs
   }, []);
-
-  // Initial environment check log
-  useEffect(() => {
-    if (isRestrictedEnvironment()) {
-      addDebugLog("🛡️ RESTRICTED ENVIRONMENT DETECTED");
-      addDebugLog("🧪 Test Mode auto-enabled to prevent network errors");
-      addDebugLog(`📍 Hostname: ${window.location.hostname}`);
-    } else {
-      addDebugLog("🌍 Unrestricted environment - Vapi API available");
-    }
-  }, []);
-
-  // Test mode - simulate Vapi functionality for testing
-  const toggleTestMode = () => {
-    setTestMode(false); // Force real speech mode only
-    if (!testMode) {
-      addDebugLog("🧪 Test mode enabled - simulating Vapi responses");
-      setVapiStatus("test-mode");
-    } else {
-      addDebugLog("🔧 Test mode disabled - using real Vapi");
-      setVapiStatus("disconnected");
-    }
-  };
-
-  // Vapi initialization and event listeners (only if not in test mode)
-  useEffect(() => {
-    if (testMode) {
-      addDebugLog("🧪 Skipping Vapi setup - Test Mode active");
-      return;
-    }
-
-    // Initialize Vapi only once
-    if (!vapiInitialized && !vapiInstance) {
-      addDebugLog("Initializing Vapi instance...");
-      const newVapi = initializeVapi();
-      setVapiInstance(newVapi);
-      setVapiInitialized(true);
-
-      if (!newVapi) {
-        addDebugLog("❌ Vapi initialization failed - no instance created");
-        setVapiStatus("error");
-        setVapiError(
-          "Failed to initialize Vapi SDK. Check API key configuration.",
-        );
-        return;
-      }
-    }
-
-    if (!vapiInstance) {
-      addDebugLog("❌ No Vapi instance available");
-      return;
-    }
-
-    addDebugLog("Setting up Vapi event listeners...");
-
-    // Clear any existing listeners to prevent conflicts
-    vapiInstance.removeAllListeners();
-
-    // Audio volume boosting - Persistent approach with both methods
-    vapiInstance.on("audio", (audioEl: HTMLAudioElement) => {
-      if (!audioEl) return;
-
-      // Method 1: Direct element volume control (persistent)
-      audioEl.volume = Math.min(audioVolume, 1.0); // Keep element volume at max 100%
-      audioEl.muted = false;
-      setHasAudioOutput(true); // Set audio output flag
-
-      // Start video when audio is received
-      if (assistantVideoRef.current) {
-        assistantVideoRef.current.play();
-      }
-
-      addDebugLog(
-        `🔊 Direct audio volume: ${Math.round(audioEl.volume * 100)}%`,
-      );
-
-      // Method 2: Web Audio API for additional boost (only once per stream)
-      if (audioEl.srcObject && !audioProcessed) {
-        try {
-          const context = new (window.AudioContext ||
-            (window as any).webkitAudioContext)();
-          const gain = context.createGain();
-          gain.gain.value = audioVolume; // Apply full boost through gain
-
-          const source = context.createMediaStreamSource(
-            audioEl.srcObject as MediaStream,
-          );
-          source.connect(gain);
-          gain.connect(context.destination);
-
-          setAudioContext(context);
-          setGainNode(gain);
-          setAudioProcessed(true);
-
-          addDebugLog(
-            `🎚️ Web Audio boost: ${Math.round(audioVolume * 100)}% applied`,
-          );
-
-          // Ensure audio context starts
-          const startAudio = () => {
-            if (context.state === "suspended") {
-              context.resume();
-              addDebugLog("🔊 Audio context resumed");
-            }
-          };
-
-          // Try to start immediately
-          startAudio();
-
-          // Also set up for user interaction
-          document.addEventListener("click", startAudio, { once: true });
-          document.addEventListener("touchstart", startAudio, { once: true });
-        } catch (audioError) {
-          addDebugLog(
-            `❌ Web Audio failed, using direct volume only: ${audioError}`,
-          );
-        }
-      }
-
-      // Continuous volume monitoring and correction
-      const volumeMonitor = setInterval(() => {
-        if (audioEl && !audioEl.paused) {
-          if (audioEl.volume !== Math.min(audioVolume, 1.0)) {
-            audioEl.volume = Math.min(audioVolume, 1.0);
-            addDebugLog(
-              `🔧 Volume corrected back to ${Math.round(audioEl.volume * 100)}%`,
-            );
-          }
-        } else {
-          clearInterval(volumeMonitor);
-        }
-      }, 500); // Check every 500ms
-    });
-
-    vapiInstance.on("speech-start", () => {
-      addDebugLog("🎤 Speech started");
-    });
-
-    vapiInstance.on("speech-end", () => {
-      addDebugLog("🔇 Speech ended");
-    });
-
-    vapiInstance.on("message", (message: any) => {
-      try {
-        if (
-          message &&
-          typeof message === "object" &&
-          message.type === "transcript"
-        ) {
-          const transcript = message.transcript || "";
-          const transcriptType = message.transcriptType || "unknown";
-          const role = message.role || "unknown";
-
-          if (role === "user") {
-            addDebugLog(
-              `📝 User transcript: ${transcriptType} - ${transcript}`,
-            );
-            if (transcriptType === "partial") {
-              setInputValue(transcript);
-            } else if (transcriptType === "final") {
-              addDebugLog(`✅ Final user transcript: ${transcript}`);
-              setInputValue(""); // Clear input after final transcript
-              handleSendMessage(transcript);
-              setTranscript((prev) => [...prev, `User: ${transcript}`]);
-            }
-          } else if (role === "assistant") {
-            addDebugLog(`🤖 AI response: ${transcript}`);
-
-            // Trigger voice activity when assistant speaks
-            setHasAudioOutput(true);
-            // Keep the audio output flag active for a short time to show visual feedback
-            setTimeout(() => {
-              setHasAudioOutput(false);
-            }, 3000);
-
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: Date.now().toString(),
-                content: transcript,
-                sender: "ai" as const,
-                timestamp: new Date(),
-                status: "read" as const,
-              },
-            ]);
-            setTranscript((prev) => [...prev, `AI: ${transcript}`]);
-          }
-        } else {
-          // Handle non-transcript messages
-          addDebugLog(`📨 Vapi message: ${JSON.stringify(message, null, 2)}`);
-        }
-      } catch (error) {
-        addDebugLog(`❌ Error handling Vapi message: ${error}`);
-        console.error("Error processing Vapi message:", error, message);
-      }
-    });
-
-    vapiInstance.on("call-start", () => {
-      addDebugLog("📞 Call started");
-      setVapiStatus("call-active");
-      setCallStartTime(new Date());
-      addDebugLog("🎧 Audio processing will be handled on audio stream");
-    });
-
-    vapiInstance.on("call-end", () => {
-      addDebugLog("📞 Call ended");
-      setVapiStatus("call-ended");
-      setIsRecording(false);
-      setCallDuration(0);
-      setHasAudioOutput(false);
-      setCallStartTime(null);
-      // Pause video when call ends
-      if (assistantVideoRef.current) {
-        assistantVideoRef.current.pause();
-      }
-
-      // Cleanup Web Audio API resources
-      if (audioContext && audioContext.state !== "closed") {
-        audioContext.close();
-        setAudioContext(null);
-        setGainNode(null);
-        setAudioProcessed(false); // Reset for next call
-        addDebugLog("🧹 Audio context cleaned up and reset");
-      }
-    });
-
-    vapiInstance.on("error", (error: any) => {
-      // Comprehensive error serialization to fix [object Object] issue
-      let errorMessage = "Unknown error";
-      let debugInfo = "";
-
-      try {
-        // Log the raw error for debugging
-        console.error("RAW VAPI ERROR:", error);
-        console.error("ERROR TYPE:", typeof error);
-        console.error("ERROR CONSTRUCTOR:", error?.constructor?.name);
-
-        if (typeof error === "string") {
-          errorMessage = error;
-        } else if (error instanceof Error) {
-          errorMessage = error.message || error.toString();
-          debugInfo = `Name: ${error.name}, Stack: ${error.stack?.substring(0, 100)}`;
-        } else if (error?.message) {
-          errorMessage = String(error.message);
-        } else if (error?.error) {
-          errorMessage = String(error.error);
-        } else if (error?.data) {
-          errorMessage = JSON.stringify(error.data);
-        } else if (error?.response) {
-          // Handle fetch response errors
-          errorMessage = `HTTP ${error.response.status}: ${error.response.statusText}`;
-        } else if (typeof error === "object" && error !== null) {
-          // Extract all enumerable properties
-          const errorObj: any = {};
-          for (const key in error) {
-            try {
-              errorObj[key] = error[key];
-            } catch (e) {
-              errorObj[key] = "[Unable to serialize]";
-            }
-          }
-          errorMessage = JSON.stringify(errorObj, null, 2);
-        } else {
-          errorMessage = String(error);
-        }
-
-        // If we still have [object Object], force a different approach
-        if (
-          errorMessage.includes("[object Object]") ||
-          errorMessage === "[object Object]"
-        ) {
-          errorMessage = `Vapi Error - Type: ${typeof error}, Constructor: ${error?.constructor?.name || "unknown"}`;
-          if (error?.status) errorMessage += `, Status: ${error.status}`;
-          if (error?.code) errorMessage += `, Code: ${error.code}`;
-        }
-      } catch (e) {
-        errorMessage = `Error serialization failed: ${e}`;
-      }
-
-      addDebugLog(`❌ Vapi error: ${errorMessage}`);
-      if (debugInfo) {
-        addDebugLog(`🔍 Debug info: ${debugInfo}`);
-      }
-
-      // Check for specific error types and provide helpful messages
-      let userFriendlyMessage = errorMessage;
-      if (
-        errorMessage.includes("Invalid Key") ||
-        errorMessage.includes("Invalid API key")
-      ) {
-        userFriendlyMessage =
-          "Authentication failed: Invalid API key. Please check your Vapi configuration.";
-        addDebugLog(
-          "🔑 Tip: Make sure you're using the correct key type (public key for Web SDK)",
-        );
-      }
-
-      setVapiError(userFriendlyMessage);
-      setVapiStatus("error");
-    });
-
-    // Cleanup event listeners
-    return () => {
-      if (vapiInstance) {
-        try {
-          vapiInstance.removeAllListeners();
-          addDebugLog("🧝 Cleaned up Vapi event listeners");
-        } catch (error) {
-          console.error("Error cleaning up Vapi listeners:", error);
-        }
-      }
-    };
-  }, [testMode, vapiInstance, vapiInitialized]);
 
   const handleSendMessage = (content: string) => {
     if (!content.trim()) return;
@@ -784,16 +472,31 @@ export default function Chatbot() {
   };
 
   const toggleRecording = async () => {
-    // REAL SPEECH MODE - User wants real speech, not test mode
-    addDebugLog("🎤 Starting REAL Vapi voice recording - NO test mode!");
+    // For demo purposes on mobile, just toggle the recording state
+    if (isMobile) {
+      setIsRecording(!isRecording);
+      if (!isRecording) {
+        setCallStartTime(new Date());
+        // Simulate receiving a voice message after a few seconds
+        setTimeout(() => {
+          handleSendMessage("This is a voice message converted to text");
+          setIsRecording(false);
+          setCallStartTime(null);
+        }, 3000);
+      } else {
+        setCallStartTime(null);
+      }
+      return;
+    }
 
-    // Force real speech mode
+    // Original Vapi logic for desktop
+    console.log("🎤 Starting REAL Vapi voice recording - NO test mode!");
     setTestMode(false);
     setVapiStatus("starting");
 
     try {
       if (isRecording) {
-        addDebugLog("Stopping Vapi recording...");
+        console.log("Stopping Vapi recording...");
         if (vapiInstance) {
           await vapiInstance.stop();
         }
@@ -802,9 +505,9 @@ export default function Chatbot() {
         if (videoRef.current) {
           videoRef.current.pause();
         }
-        addDebugLog("✅ Vapi stopped successfully");
+        console.log("✅ Vapi stopped successfully");
       } else {
-        addDebugLog("Starting Vapi recording...");
+        console.log("Starting Vapi recording...");
         setVapiError(null);
         setVapiStatus("starting");
 
@@ -824,20 +527,20 @@ export default function Chatbot() {
           );
         }
 
-        addDebugLog(`🔑 Using public key: ${publicKey.substring(0, 8)}...`);
-        addDebugLog(`🤖 Using assistant: ${assistantId}`);
+        console.log(`🔑 Using public key: ${publicKey.substring(0, 8)}...`);
+        console.log(`🤖 Using assistant: ${assistantId}`);
 
         // Check microphone permissions
         try {
-          addDebugLog("Checking microphone permissions...");
+          console.log("Checking microphone permissions...");
           const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
           });
           stream.getTracks().forEach((track) => track.stop()); // Clean up
-          addDebugLog("✅ Microphone permissions granted");
+          console.log("✅ Microphone permissions granted");
         } catch (permError: any) {
           const errorMsg = permError.message || "Permission denied";
-          addDebugLog(`❌ Microphone access failed: ${errorMsg}`);
+          console.log(`❌ Microphone access failed: ${errorMsg}`);
           throw new Error(`Microphone error: ${errorMsg}`);
         }
 
@@ -845,7 +548,7 @@ export default function Chatbot() {
         if (!vapiInstance) {
           // Try to initialize if not already done
           if (!vapiInitialized) {
-            addDebugLog(
+            console.log(
               "Attempting to initialize Vapi during recording start...",
             );
             const newVapi = initializeVapi();
@@ -871,11 +574,11 @@ export default function Chatbot() {
 
         if (assistantId) {
           // Use pre-created assistant
-          addDebugLog(`Using pre-created assistant: ${assistantId}`);
+          console.log(`Using pre-created assistant: ${assistantId}`);
           callConfig = assistantId; // For Web SDK, just pass the assistant ID
         } else {
           // Create assistant configuration dynamically
-          addDebugLog("Creating dynamic assistant configuration");
+          console.log("Creating dynamic assistant configuration");
           callConfig = {
             model: {
               provider: "openai",
@@ -905,14 +608,14 @@ export default function Chatbot() {
 
         // Start Vapi call
         await vapiInstance.start(callConfig);
-        addDebugLog("✅ Vapi call started successfully");
+        console.log("✅ Vapi call started successfully");
 
         setIsRecording(true);
         setVapiStatus("recording");
         setCallStartTime(new Date());
         videoRef.current?.play();
-        addDebugLog("🎉 Vapi Web SDK call started successfully!");
-        addDebugLog("🎤 Listening for real speech via Vapi...");
+        console.log("🎉 Vapi Web SDK call started successfully!");
+        console.log("🎤 Listening for real speech via Vapi...");
       }
     } catch (error: any) {
       // Handle errors
@@ -932,7 +635,7 @@ export default function Chatbot() {
         errorMessage = "Error parsing error object";
       }
 
-      addDebugLog(`❌ Recording failed: ${errorMessage}`);
+      console.log(`❌ Recording failed: ${errorMessage}`);
       setVapiError(errorMessage);
       setVapiStatus("error");
       setIsRecording(false);
@@ -940,39 +643,28 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <FloatingSidebar
-        isCollapsed={isCollapsed}
-        setIsCollapsed={setIsCollapsed}
-      />
-
-      {/* Main Content */}
-      <motion.div
-        className={`transition-all duration-300 min-h-screen flex flex-col ${
-          isCollapsed ? "ml-20" : "ml-72"
-        } pr-4`}
-        animate={{ marginLeft: isCollapsed ? 80 : 272 }}
-      >
+    <ResponsiveLayout className="dashboard-page" showTopBar={false}>
+      <div className="min-h-screen flex flex-col">
         {/* Main Chat Container */}
-        <div className="flex-1 flex overflow-hidden p-4">
+        <div className="flex-1 flex overflow-hidden">
           {/* Floating Glass Chat Container */}
           <motion.div
-            className={`${isCollapsed ? "mr-80" : "mr-84"} bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transition-all duration-300`}
-            style={{ height: "calc(100vh - 2rem)" }}
-            initial={{ opacity: 0, y: 20, scale: 0.98 }}
+            className={`${isMobile ? 'w-full' : isTablet ? 'mr-4' : 'mr-80'} bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transition-all duration-300`}
+            style={{ height: isMobile ? "calc(100vh - 120px)" : "calc(100vh - 2rem)" }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 20, scale: 0.98 }}
             animate={{
               opacity: 1,
               y: 0,
               scale: 1,
-              marginRight: isCollapsed ? 280 : 288,
+              marginRight: isMobile ? 0 : isTablet ? 16 : 280,
             }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={prefersReducedMotion ? {} : { duration: 0.6, ease: "easeOut" }}
           >
             {/* Chat Messages Area */}
             <div className="flex flex-col h-full">
               {/* Messages Container with Gradient Background */}
               <div
-                className="flex-1 overflow-y-auto p-8 space-y-6 min-h-0"
+                className={`flex-1 overflow-y-auto ${isMobile ? 'p-4 space-y-4' : 'p-8 space-y-6'} min-h-0`}
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.6) 50%, rgba(248, 250, 252, 0.9) 100%)",
@@ -982,15 +674,15 @@ export default function Chatbot() {
                   {messages.map((message, index) => (
                     <motion.div
                       key={message.id}
-                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      initial={prefersReducedMotion ? false : { opacity: 0, y: 20, scale: 0.95 }}
+                      animate={prefersReducedMotion ? false : { opacity: 1, y: 0, scale: 1 }}
+                      exit={prefersReducedMotion ? false : { opacity: 0, y: -20, scale: 0.95 }}
+                      transition={prefersReducedMotion ? {} : { duration: 0.3, delay: index * 0.05 }}
                       className={`flex items-start gap-3 ${
                         message.sender === "user" ? "flex-row-reverse" : ""
                       }`}
                     >
-                      <Avatar className="w-8 h-8 flex-shrink-0">
+                      <Avatar className={`${isMobile ? 'w-6 h-6' : 'w-8 h-8'} flex-shrink-0`}>
                         <AvatarFallback
                           className={`${
                             message.sender === "user"
@@ -999,37 +691,37 @@ export default function Chatbot() {
                           } text-white text-sm`}
                         >
                           {message.sender === "user" ? (
-                            <User size={16} />
+                            <User size={isMobile ? 12 : 16} />
                           ) : (
-                            <Brain size={16} />
+                            <Brain size={isMobile ? 12 : 16} />
                           )}
                         </AvatarFallback>
                       </Avatar>
 
                       <div
-                        className={`flex-1 max-w-3xl ${
+                        className={`flex-1 ${isMobile ? 'max-w-xs' : 'max-w-3xl'} ${
                           message.sender === "user" ? "text-right" : ""
                         }`}
                       >
                         <div
-                          className={`relative p-5 rounded-2xl shadow-lg ${
+                          className={`relative ${isMobile ? 'p-3' : 'p-5'} rounded-2xl shadow-lg ${
                             message.sender === "user"
-                              ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white ml-12 shadow-blue-200/50"
-                              : "bg-white/90 backdrop-blur-md text-gray-800 mr-12 border border-white/40 shadow-gray-200/30"
+                              ? `bg-gradient-to-r from-blue-500 to-cyan-500 text-white ${isMobile ? 'ml-8' : 'ml-12'} shadow-blue-200/50`
+                              : `bg-white/90 backdrop-blur-md text-gray-800 ${isMobile ? 'mr-8' : 'mr-12'} border border-white/40 shadow-gray-200/30`
                           }`}
                         >
-                          <p className="text-sm leading-relaxed dashboard-text">
+                          <p className={`${isMobile ? 'text-xs' : 'text-sm'} leading-relaxed dashboard-text`}>
                             {message.content}
                           </p>
 
                           <div
-                            className={`mt-2 flex items-center gap-2 text-xs ${
+                            className={`mt-2 flex items-center gap-2 ${isMobile ? 'text-xs' : 'text-xs'} ${
                               message.sender === "user"
                                 ? "text-blue-100 justify-end"
                                 : "text-gray-500"
                             }`}
                           >
-                            <Clock size={12} />
+                            <Clock size={isMobile ? 10 : 12} />
                             <span>
                               {message.timestamp.toLocaleTimeString([], {
                                 hour: "2-digit",
@@ -1037,18 +729,18 @@ export default function Chatbot() {
                               })}
                             </span>
                             {message.status === "read" && (
-                              <CheckCheck size={12} />
+                              <CheckCheck size={isMobile ? 10 : 12} />
                             )}
                           </div>
                         </div>
 
                         {/* AI Suggestions */}
-                        {message.sender === "ai" && message.suggestions && (
+                        {message.sender === "ai" && message.suggestions && !isMobile && (
                           <motion.div
                             className="mt-3 flex flex-wrap gap-2"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.5 }}
+                            initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                            animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+                            transition={prefersReducedMotion ? {} : { delay: 0.5 }}
                           >
                             {message.suggestions.map(
                               (suggestion, suggestionIndex) => (
@@ -1058,13 +750,13 @@ export default function Chatbot() {
                                     handleSuggestionClick(suggestion)
                                   }
                                   className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full hover:from-purple-200 hover:to-pink-200 transition-all duration-200 border border-purple-200/50 dashboard-text"
-                                  initial={{ opacity: 0, scale: 0.8 }}
-                                  animate={{ opacity: 1, scale: 1 }}
-                                  transition={{
+                                  initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
+                                  animate={prefersReducedMotion ? false : { opacity: 1, scale: 1 }}
+                                  transition={prefersReducedMotion ? {} : {
                                     delay: 0.6 + suggestionIndex * 0.1,
                                   }}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
+                                  whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                                  whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                                 >
                                   {suggestion}
                                 </motion.button>
@@ -1081,14 +773,14 @@ export default function Chatbot() {
                 <AnimatePresence>
                   {isTyping && (
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
+                      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                      animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+                      exit={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
                       className="flex items-start gap-3"
                     >
-                      <Avatar className="w-8 h-8">
+                      <Avatar className={`${isMobile ? 'w-6 h-6' : 'w-8 h-8'}`}>
                         <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                          <Brain size={16} />
+                          <Brain size={isMobile ? 12 : 16} />
                         </AvatarFallback>
                       </Avatar>
                       <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/40 shadow-gray-200/30">
@@ -1097,11 +789,11 @@ export default function Chatbot() {
                             <motion.div
                               key={i}
                               className="w-2 h-2 bg-purple-400 rounded-full"
-                              animate={{
+                              animate={prefersReducedMotion ? {} : {
                                 scale: [1, 1.2, 1],
                                 opacity: [0.5, 1, 0.5],
                               }}
-                              transition={{
+                              transition={prefersReducedMotion ? {} : {
                                 duration: 1,
                                 repeat: Infinity,
                                 delay: i * 0.2,
@@ -1118,20 +810,20 @@ export default function Chatbot() {
               </div>
 
               {/* Input Area with Enhanced Glass Effect */}
-              <div className="border-t border-white/30 bg-gradient-to-r from-white/70 via-gray-50/60 to-white/80 backdrop-blur-lg p-6 shadow-inner">
+              <div className={`border-t border-white/30 bg-gradient-to-r from-white/70 via-gray-50/60 to-white/80 backdrop-blur-lg ${isMobile ? 'p-4' : 'p-6'} shadow-inner`}>
                 {/* Quick Actions */}
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-2">
-                    {quickActions.map((action, index) => (
+                <div className={`${isMobile ? 'mb-3' : 'mb-4'}`}>
+                  <div className={`flex flex-wrap ${isMobile ? 'gap-1' : 'gap-2'}`}>
+                    {quickActions.slice(0, isMobile ? 3 : quickActions.length).map((action, index) => (
                       <motion.button
                         key={action.id}
                         onClick={() => handleQuickAction(action)}
-                        className="flex items-center gap-2 px-3 py-2 text-xs bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200/50 dashboard-text"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.05 }}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        className={`flex items-center gap-2 ${isMobile ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-xs'} bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200/50 dashboard-text`}
+                        initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.9 }}
+                        animate={prefersReducedMotion ? false : { opacity: 1, scale: 1 }}
+                        transition={prefersReducedMotion ? {} : { delay: index * 0.05 }}
+                        whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+                        whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
                       >
                         {action.icon}
                         {action.label}
@@ -1141,7 +833,7 @@ export default function Chatbot() {
                 </div>
 
                 {/* Input Controls */}
-                <div className="flex items-center gap-3">
+                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-3'}`}>
                   <div className="flex-1 relative">
                     <Input
                       ref={inputRef}
@@ -1154,11 +846,11 @@ export default function Chatbot() {
                         }
                       }}
                       placeholder="Type your message or use voice..."
-                      className="pr-12 bg-white/90 border-white/30 backdrop-blur-sm focus:bg-white focus:border-purple-300 transition-all dashboard-text"
+                      className={`${isMobile ? 'pr-8 text-sm' : 'pr-12'} bg-white/90 border-white/30 backdrop-blur-sm focus:bg-white focus:border-purple-300 transition-all dashboard-text`}
                     />
 
                     {/* Character count or file indicator */}
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
+                    <div className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${isMobile ? 'text-xs' : 'text-xs'} text-gray-400`}>
                       {inputValue.length > 0 && (
                         <span>{inputValue.length}</span>
                       )}
@@ -1168,107 +860,109 @@ export default function Chatbot() {
                   {/* Voice Recording */}
                   <motion.button
                     onClick={toggleRecording}
-                    className={`p-2 rounded-full transition-all ${
+                    className={`${isMobile ? 'p-2' : 'p-2'} rounded-full transition-all ${
                       isRecording
                         ? "bg-red-500 text-white"
                         : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                     }`}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+                    animate={isRecording && !prefersReducedMotion ? { scale: [1, 1.1, 1] } : {}}
                     transition={
-                      isRecording ? { duration: 1, repeat: Infinity } : {}
+                      isRecording && !prefersReducedMotion ? { duration: 1, repeat: Infinity } : {}
                     }
                     title="Voice Recording"
                   >
-                    {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+                    {isRecording ? <MicOff size={isMobile ? 18 : 20} /> : <Mic size={isMobile ? 18 : 20} />}
                   </motion.button>
 
-                  {/* Volume Control */}
-                  <div
-                    className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg"
-                    title="Audio Volume"
-                  >
-                    <div className="text-gray-500">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11 5L6 9H2V15H6L11 19V5Z"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                  {/* Volume Control - Hidden on mobile */}
+                  {!isMobile && (
+                    <div
+                      className="flex items-center gap-2 px-2 py-1 bg-gray-50 rounded-lg"
+                      title="Audio Volume"
+                    >
+                      <div className="text-gray-500">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11 5L6 9H2V15H6L11 19V5Z"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M19.07 4.93A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 15.54 15.54"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        type="range"
+                        min="0.1"
+                        max="4.0"
+                        step="0.1"
+                        value={audioVolume}
+                        onChange={(e) => {
+                          const newVolume = parseFloat(e.target.value);
+                          setAudioVolume(newVolume);
+                          if (gainNode) {
+                            gainNode.gain.value = newVolume;
+                          }
+                          addDebugLog(
+                            `🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`,
+                          );
+                        }}
+                        className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                        style={{
+                          background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`,
+                        }}
+                      />
+                      <span className="text-xs text-gray-500 min-w-[30px] dashboard-text">
+                        {Math.round(audioVolume * 100)}%
+                      </span>
                     </div>
-                    <input
-                      type="range"
-                      min="0.1"
-                      max="4.0"
-                      step="0.1"
-                      value={audioVolume}
-                      onChange={(e) => {
-                        const newVolume = parseFloat(e.target.value);
-                        setAudioVolume(newVolume);
-                        if (gainNode) {
-                          gainNode.gain.value = newVolume;
-                        }
-                        addDebugLog(
-                          `🔊 Volume adjusted to ${Math.round(newVolume * 100)}%`,
-                        );
-                      }}
-                      className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                      style={{
-                        background: `linear-gradient(to right, #9333ea 0%, #9333ea ${(audioVolume / 4) * 100}%, #e5e7eb ${(audioVolume / 4) * 100}%, #e5e7eb 100%)`,
-                      }}
-                    />
-                    <span className="text-xs text-gray-500 min-w-[30px] dashboard-text">
-                      {Math.round(audioVolume * 100)}%
-                    </span>
-                  </div>
+                  )}
 
                   {/* Send Button */}
                   <motion.button
                     onClick={() => handleSendMessage(inputValue)}
                     disabled={!inputValue.trim() || isTyping}
-                    className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
+                    className={`${isMobile ? 'p-2' : 'p-2'} bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors`}
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                   >
-                    <Send size={20} />
+                    <Send size={isMobile ? 18 : 20} />
                   </motion.button>
                 </div>
 
                 {/* Error Display */}
                 {vapiError && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                    animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
                     className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg"
                   >
-                    <p className="text-sm text-red-700 dashboard-text">
+                    <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-red-700 dashboard-text`}>
                       {vapiError}
                     </p>
                   </motion.div>
                 )}
 
-                {/* Debug Logs */}
-                {debugLogs.length > 0 && (
+                {/* Debug Logs - Hidden on mobile */}
+                {debugLogs.length > 0 && !isMobile && (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    initial={prefersReducedMotion ? false : { opacity: 0 }}
+                    animate={prefersReducedMotion ? false : { opacity: 1 }}
                     className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-lg max-h-32 overflow-y-auto"
                   >
                     <div className="text-xs text-gray-600 space-y-1 dashboard-text">
@@ -1287,204 +981,207 @@ export default function Chatbot() {
 
         {/* Hidden video element for Vapi */}
         <video ref={videoRef} className="hidden" autoPlay muted playsInline />
-      </motion.div>
+      </div>
 
-      {/* Right Panel - Voice Assistant */}
-      <motion.div
-        className="fixed right-4 top-4 bottom-4 w-72 z-40"
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <div className="h-full bg-white/95 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
-          {/* Header */}
-          <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50 rounded-t-2xl">
-            <div className="flex items-center gap-3">
-              <motion.div
-                className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
-                animate={{
-                  scale: vapiStatus === "call-active" ? [1, 1.1, 1] : 1,
-                  boxShadow:
-                    vapiStatus === "call-active"
-                      ? [
-                          "0 0 0 0 rgba(59, 130, 246, 0.7)",
-                          "0 0 0 10px rgba(59, 130, 246, 0)",
-                          "0 0 0 0 rgba(59, 130, 246, 0)",
-                        ]
-                      : "0 4px 14px 0 rgba(0, 0, 0, 0.1)",
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: vapiStatus === "call-active" ? Infinity : 0,
-                }}
-              >
-                <Bot size={18} className="text-white" />
-              </motion.div>
-              <div>
-                <h3 className="text-sm font-bold text-gray-800">
-                  Voice Assistant
-                </h3>
-                <p className="text-xs text-gray-600">
-                  {vapiStatus === "call-active"
-                    ? "Listening..."
-                    : "Ready to talk"}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Video Section */}
-          <div className="p-4">
-            <motion.div
-              className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 border-2 border-gray-200 shadow-lg"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-48 object-cover rounded-xl"
-              >
-                <source
-                  src="https://cdn.builder.io/o/assets%2Fa35bd991f0e541aa931714571cb88c16%2Ff399aac4c02c41bdac297eb7996352fe?alt=media&token=c1bbf4ed-04bb-45b1-957e-f7ca03620265&apiKey=a35bd991f0e541aa931714571cb88c16"
-                  type="video/mp4"
-                />
-              </video>
-
-              {/* Overlay for interaction */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl" />
-
-              {/* Voice status indicator */}
-              <motion.div
-                className="absolute top-3 right-3 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-md border border-gray-200"
-                animate={{
-                  opacity: vapiStatus === "call-active" ? [0.9, 1, 0.9] : 0.9,
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: vapiStatus === "call-active" ? Infinity : 0,
-                }}
-              >
-                <div
-                  className={`w-2.5 h-2.5 rounded-full ${
-                    vapiStatus === "call-active"
-                      ? "bg-green-500"
-                      : vapiStatus === "error"
-                        ? "bg-red-500"
-                        : "bg-blue-500"
-                  }`}
-                />
-                <span className="text-xs text-gray-800 font-semibold">
-                  {vapiStatus === "call-active"
-                    ? "Live"
-                    : vapiStatus === "error"
-                      ? "Error"
-                      : "Ready"}
-                </span>
-              </motion.div>
-            </motion.div>
-          </div>
-
-          {/* Interactive Controls */}
-          <div className="p-4 space-y-4">
-            {/* Voice Visualizer - Fixed Size */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-gray-200 shadow-md h-36">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-bold text-gray-800">
-                  Voice Activity
-                </span>
-                <div className="flex items-center gap-1 h-8">
-                  {[...Array(5)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="w-1.5 bg-gradient-to-t from-blue-500 to-purple-500 rounded-full"
-                      animate={{
-                        height: hasAudioOutput
-                          ? [6, Math.random() * 20 + 12, 6]
-                          : 6,
-                      }}
-                      transition={{
-                        duration: 0.5 + Math.random() * 0.5,
-                        repeat: hasAudioOutput ? Infinity : 0,
-                        delay: i * 0.1,
-                      }}
-                    />
-                  ))}
+      {/* Right Panel - Voice Assistant - Hidden on mobile */}
+      {!isMobile && (
+        <motion.div
+          className={`fixed right-4 top-4 bottom-4 ${isTablet ? 'w-64' : 'w-72'} z-40`}
+          initial={prefersReducedMotion ? false : { opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={prefersReducedMotion ? {} : { duration: 0.5, delay: 0.2 }}
+        >
+          <div className="h-full bg-white/95 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+            {/* Header */}
+            <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50 rounded-t-2xl">
+              <div className="flex items-center gap-3">
+                <motion.div
+                  className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
+                  animate={!prefersReducedMotion && vapiStatus === "call-active" ? {
+                    scale: [1, 1.1, 1],
+                    boxShadow: [
+                      "0 0 0 0 rgba(59, 130, 246, 0.7)",
+                      "0 0 0 10px rgba(59, 130, 246, 0)",
+                      "0 0 0 0 rgba(59, 130, 246, 0)",
+                    ]
+                  } : {
+                    boxShadow: "0 4px 14px 0 rgba(0, 0, 0, 0.1)"
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: vapiStatus === "call-active" && !prefersReducedMotion ? Infinity : 0,
+                  }}
+                >
+                  <Bot size={18} className="text-white" />
+                </motion.div>
+                <div>
+                  <h3 className="text-sm font-bold text-gray-800">
+                    Voice Assistant
+                  </h3>
+                  <p className="text-xs text-gray-600">
+                    {vapiStatus === "call-active"
+                      ? "Listening..."
+                      : "Ready to talk"}
+                  </p>
                 </div>
               </div>
+            </div>
 
-              {/* Quick Stats - Fixed Layout */}
-              <div className="grid grid-cols-2 gap-4 text-xs h-16">
-                <div className="text-center bg-white rounded-lg p-2 border border-gray-200 flex flex-col justify-center">
-                  <div className="text-gray-600 font-medium">Duration</div>
-                  <div className="text-gray-900 font-bold text-sm">
-                    {formatDuration(callDuration)}
+            {/* Video Section */}
+            <div className="p-4">
+              <motion.div
+                className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 border-2 border-gray-200 shadow-lg"
+                whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-48 object-cover rounded-xl"
+                >
+                  <source
+                    src="https://cdn.builder.io/o/assets%2Fa35bd991f0e541aa931714571cb88c16%2Ff399aac4c02c41bdac297eb7996352fe?alt=media&token=c1bbf4ed-04bb-45b1-957e-f7ca03620265&apiKey=a35bd991f0e541aa931714571cb88c16"
+                    type="video/mp4"
+                  />
+                </video>
+
+                {/* Overlay for interaction */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl" />
+
+                {/* Voice status indicator */}
+                <motion.div
+                  className="absolute top-3 right-3 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-md border border-gray-200"
+                  animate={!prefersReducedMotion && vapiStatus === "call-active" ? {
+                    opacity: [0.9, 1, 0.9],
+                  } : {
+                    opacity: 0.9
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: vapiStatus === "call-active" && !prefersReducedMotion ? Infinity : 0,
+                  }}
+                >
+                  <div
+                    className={`w-2.5 h-2.5 rounded-full ${
+                      vapiStatus === "call-active"
+                        ? "bg-green-500"
+                        : vapiStatus === "error"
+                          ? "bg-red-500"
+                          : "bg-blue-500"
+                    }`}
+                  />
+                  <span className="text-xs text-gray-800 font-semibold">
+                    {vapiStatus === "call-active"
+                      ? "Live"
+                      : vapiStatus === "error"
+                        ? "Error"
+                        : "Ready"}
+                  </span>
+                </motion.div>
+              </motion.div>
+            </div>
+
+            {/* Interactive Controls */}
+            <div className="p-4 space-y-4">
+              {/* Voice Visualizer - Fixed Size */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-gray-200 shadow-md h-36">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm font-bold text-gray-800">
+                    Voice Activity
+                  </span>
+                  <div className="flex items-center gap-1 h-8">
+                    {[...Array(5)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="w-1.5 bg-gradient-to-t from-blue-500 to-purple-500 rounded-full"
+                        animate={!prefersReducedMotion && hasAudioOutput ? {
+                          height: [6, Math.random() * 20 + 12, 6],
+                        } : {
+                          height: 6
+                        }}
+                        transition={{
+                          duration: 0.5 + Math.random() * 0.5,
+                          repeat: hasAudioOutput && !prefersReducedMotion ? Infinity : 0,
+                          delay: i * 0.1,
+                        }}
+                      />
+                    ))}
                   </div>
                 </div>
-                <div className="text-center bg-white rounded-lg p-2 border border-gray-200 flex flex-col justify-center">
-                  <div className="text-gray-600 font-medium">Quality</div>
-                  <div className="text-green-600 font-bold text-sm">HD</div>
+
+                {/* Quick Stats - Fixed Layout */}
+                <div className="grid grid-cols-2 gap-4 text-xs h-16">
+                  <div className="text-center bg-white rounded-lg p-2 border border-gray-200 flex flex-col justify-center">
+                    <div className="text-gray-600 font-medium">Duration</div>
+                    <div className="text-gray-900 font-bold text-sm">
+                      {formatDuration(callDuration)}
+                    </div>
+                  </div>
+                  <div className="text-center bg-white rounded-lg p-2 border border-gray-200 flex flex-col justify-center">
+                    <div className="text-gray-600 font-medium">Quality</div>
+                    <div className="text-green-600 font-bold text-sm">HD</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="space-y-3">
+                <motion.button
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl py-3 px-4 font-bold flex items-center justify-center gap-2 hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg border-2 border-transparent hover:border-blue-300"
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+                  whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+                  onClick={toggleRecording}
+                >
+                  {isRecording ? (
+                    <>
+                      <MicOff size={18} />
+                      Stop Voice Chat
+                    </>
+                  ) : (
+                    <>
+                      <Mic size={18} />
+                      Start Voice Chat
+                    </>
+                  )}
+                </motion.button>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <motion.button
+                    className="bg-white text-gray-700 rounded-xl py-3 px-3 text-sm hover:bg-gray-50 transition-all border-2 border-gray-200 hover:border-blue-300 shadow-md flex items-center justify-center"
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+                  >
+                    <Settings size={16} />
+                  </motion.button>
+                  <motion.button
+                    className="bg-white text-gray-700 rounded-xl py-3 px-3 text-sm hover:bg-gray-50 transition-all border-2 border-gray-200 hover:border-purple-300 shadow-md flex items-center justify-center"
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+                  >
+                    <Activity size={16} />
+                  </motion.button>
                 </div>
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="space-y-3">
-              <motion.button
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl py-3 px-4 font-bold flex items-center justify-center gap-2 hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg border-2 border-transparent hover:border-blue-300"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={toggleRecording}
-              >
-                {isRecording ? (
-                  <>
-                    <MicOff size={18} />
-                    Stop Voice Chat
-                  </>
-                ) : (
-                  <>
-                    <Mic size={18} />
-                    Start Voice Chat
-                  </>
-                )}
-              </motion.button>
-
-              <div className="grid grid-cols-2 gap-3">
-                <motion.button
-                  className="bg-white text-gray-700 rounded-xl py-3 px-3 text-sm hover:bg-gray-50 transition-all border-2 border-gray-200 hover:border-blue-300 shadow-md flex items-center justify-center"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Settings size={16} />
-                </motion.button>
-                <motion.button
-                  className="bg-white text-gray-700 rounded-xl py-3 px-3 text-sm hover:bg-gray-50 transition-all border-2 border-gray-200 hover:border-purple-300 shadow-md flex items-center justify-center"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Activity size={16} />
-                </motion.button>
+            {/* Debug Info (if in test mode) */}
+            {testMode && (
+              <div className="p-4 border-t border-gray-200">
+                <div className="bg-gray-100 rounded-xl p-3 border-2 border-gray-200">
+                  <div className="text-xs text-gray-600 font-semibold mb-2">
+                    Debug Mode
+                  </div>
+                  <div className="text-xs text-gray-800 font-mono bg-white rounded-lg p-2 border border-gray-200">
+                    Status: {vapiStatus}
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-
-          {/* Debug Info (if in test mode) */}
-          {testMode && (
-            <div className="p-4 border-t border-gray-200">
-              <div className="bg-gray-100 rounded-xl p-3 border-2 border-gray-200">
-                <div className="text-xs text-gray-600 font-semibold mb-2">
-                  Debug Mode
-                </div>
-                <div className="text-xs text-gray-800 font-mono bg-white rounded-lg p-2 border border-gray-200">
-                  Status: {vapiStatus}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </motion.div>
-    </div>
+        </motion.div>
+      )}
+    </ResponsiveLayout>
   );
 }
