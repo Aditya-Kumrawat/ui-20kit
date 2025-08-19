@@ -129,9 +129,7 @@ export const FloatingSidebar = ({
       >
         {/* Logo Section */}
         <motion.div
-          className={`p-4 border-b transition-colors duration-300 ${
-            isCollapsed ? "border-gray-700/50" : "border-gray-200/50"
-          }`}
+          className="p-4 border-b border-white/30 transition-colors duration-300"
           initial={false}
         >
           <div className="flex items-center gap-3">
