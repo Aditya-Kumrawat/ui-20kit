@@ -115,13 +115,17 @@ export const FloatingSidebar = ({
       animate={{ width: isCollapsed ? 64 : 256 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-      {/* Glass effect floating sidebar */}
+      {/* Frosted glass floating sidebar */}
       <div
-        className={`h-full backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden transition-all duration-300 ${
-          isCollapsed
-            ? "bg-gray-900/95 border border-gray-700/50"
-            : "bg-white/80 border border-white/20"
-        }`}
+        className="h-full overflow-hidden transition-all duration-300"
+        style={{
+          background: "rgba(255, 255, 255, 0.6)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderRadius: "1rem",
+          border: "1px solid rgba(255, 255, 255, 0.4)",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)"
+        }}
       >
         {/* Logo Section */}
         <motion.div
