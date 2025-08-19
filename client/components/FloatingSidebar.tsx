@@ -181,12 +181,8 @@ export const FloatingSidebar = ({
                 isCollapsed ? "p-2 justify-center" : "p-3"
               } rounded-xl ${
                 isActive(item.href)
-                  ? isCollapsed
-                    ? "text-white bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg"
-                    : "text-purple-600"
-                  : isCollapsed
-                    ? "hover:bg-gray-800/50 text-gray-300 hover:text-white"
-                    : "hover:bg-gray-100/30 text-gray-600 hover:text-gray-800"
+                  ? "text-white bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg"
+                  : "hover:bg-white/40 text-gray-700 hover:text-gray-900"
               }`}
               onClick={() => navigate(item.href)}
               initial={{ opacity: 0, x: -20 }}
