@@ -240,7 +240,7 @@ export default function Index() {
                   <motion.span
                     key={index + 8}
                     variants={wordVariants}
-                    className="inline-block mr-4 font-extralight"
+                    className="inline-block mr-4 font-normal"
                     custom={index + 8}
                   >
                     {word}
