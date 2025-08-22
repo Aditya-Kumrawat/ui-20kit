@@ -14,6 +14,23 @@ import {
   Users,
   MousePointer,
 } from "lucide-react";
+import {
+  SiReact,
+  SiNodedotjs,
+  SiExpress,
+  SiMongodb,
+  SiFirebase,
+  SiTypescript,
+  SiGraphql,
+  SiDocker,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiVercel,
+  SiPostgresql,
+  SiPython,
+  SiTensorflow,
+  SiKubernetes,
+} from "react-icons/si";
 
 export default function Index() {
   const { scrollY } = useScroll();
