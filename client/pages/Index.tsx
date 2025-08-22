@@ -708,6 +708,324 @@ export default function Index() {
         </div>
       </div>
 
+      {/* Tech Stack Section with Mobile/PC Mockups */}
+      <div className="bg-white py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            data-aos="fade-up"
+          >
+            <h2
+              className="text-4xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+            >
+              Powered by Modern Technology
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Built with cutting-edge technologies for seamless web and mobile experiences
+            </p>
+          </motion.div>
+
+          {/* Platform Mockups */}
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            data-aos="fade-up"
+          >
+            {/* Desktop Mockup */}
+            <motion.div
+              className="bg-gray-50 rounded-3xl p-8 border border-gray-100"
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="bg-white rounded-2xl p-4 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                </div>
+                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6 h-48">
+                  <motion.div
+                    className="space-y-3"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <div className="h-4 bg-gradient-to-r from-blue-400 to-purple-400 rounded w-3/4"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-3 bg-gray-100 rounded w-2/3"></div>
+                    <div className="grid grid-cols-3 gap-2 mt-4">
+                      {[...Array(6)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="h-8 bg-blue-100 rounded"
+                          initial={{ scale: 0 }}
+                          whileInView={{ scale: 1 }}
+                          transition={{ delay: 0.7 + i * 0.1 }}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+              <div className="text-center mt-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  💻 Web Platform
+                </h3>
+                <p className="text-gray-600">
+                  Full-featured desktop experience
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Mobile Mockup */}
+            <motion.div
+              className="bg-gray-50 rounded-3xl p-8 border border-gray-100"
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="bg-white rounded-3xl p-3 shadow-lg max-w-xs mx-auto">
+                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-4 h-64">
+                  <motion.div
+                    className="space-y-4"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                      <div className="h-3 bg-gray-200 rounded flex-1"></div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-3 bg-gray-200 rounded w-full"></div>
+                      <div className="h-3 bg-gray-100 rounded w-3/4"></div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[...Array(4)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="h-12 bg-blue-100 rounded-lg"
+                          initial={{ scale: 0 }}
+                          whileInView={{ scale: 1 }}
+                          transition={{ delay: 0.7 + i * 0.1 }}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+              <div className="text-center mt-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  📱 Mobile App
+                </h3>
+                <p className="text-gray-600">AI-powered mobile experience</p>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Tech Stack Icons */}
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-8">
+              Built with industry-leading technologies
+            </h3>
+            <div className="flex flex-wrap justify-center gap-8 items-center opacity-60">
+              {["React", "Node.js", "TypeScript", "AI/ML", "Cloud", "Security"].map((tech, index) => (
+                <motion.div
+                  key={tech}
+                  className="flex flex-col items-center group"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 0.6, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ opacity: 1, scale: 1.1 }}
+                >
+                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-blue-50 transition-colors">
+                    <span className="text-gray-600 font-semibold text-sm">
+                      {tech.slice(0, 2).toUpperCase()}
+                    </span>
+                  </div>
+                  <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
+                    {tech}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* AI Features Section */}
+      <div className="bg-gray-50 py-20 relative overflow-hidden">
+        {/* Enhanced Background with Multiple Layers */}
+
+        {/* Base Gradient Background */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)",
+            opacity: 0.03,
+          }}
+        />
+
+        {/* Animated Gradient Overlay */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
+          }}
+          animate={{
+            background: [
+              "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
+              "radial-gradient(circle at 40% 30%, rgba(120, 119, 198, 0.15) 0%, transparent 50%), radial-gradient(circle at 60% 70%, rgba(255, 119, 198, 0.15) 0%, transparent 50%)",
+              "radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 40%)",
+            ],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+
+        {/* Floating Particles */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-blue-400/20 rounded-full"
+            style={{
+              left: `${10 + Math.random() * 80}%`,
+              top: `${10 + Math.random() * 80}%`,
+            }}
+            animate={{
+              y: [-20, 20, -20],
+              x: [-10, 10, -10],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            data-aos="fade-up"
+          >
+            <h2
+              className="text-4xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "'Synera', 'Space Grotesk', sans-serif" }}
+            >
+              🤖 AI-Powered Features
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Harness the power of artificial intelligence with our advanced machine learning models
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                title: "Neural Networks",
+                description: "Advanced deep learning models for intelligent automation and pattern recognition",
+                icon: "🧠",
+                gradient: "from-purple-100 to-blue-100",
+              },
+              {
+                title: "Computer Vision",
+                description: "Real-time image and video analysis with state-of-the-art accuracy",
+                icon: "👁️",
+                gradient: "from-blue-100 to-cyan-100",
+              },
+              {
+                title: "Natural Language",
+                description: "Sophisticated text processing, understanding, and generation capabilities",
+                icon: "💬",
+                gradient: "from-cyan-100 to-teal-100",
+              },
+              {
+                title: "Predictive Analytics",
+                description: "Data-driven insights and future predictions with machine learning",
+                icon: "📊",
+                gradient: "from-teal-100 to-green-100",
+              },
+            ].map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{
+                  y: -5,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                }}
+                viewport={{ once: true }}
+                data-aos="fade-up"
+                data-aos-delay={index * 100}
+              >
+                <motion.div
+                  className={`w-16 h-16 rounded-xl bg-gradient-to-r ${feature.gradient} flex items-center justify-center text-2xl mb-4 shadow-sm`}
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {feature.icon}
+                </motion.div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+
+                {/* Simple progress indicator */}
+                <motion.div
+                  className="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
+                >
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "100%" }}
+                    transition={{ duration: 1.5, delay: 1 + index * 0.2 }}
+                  />
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* CTA Section */}
       <div className="bg-gray-50 py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
