@@ -408,7 +408,8 @@ export default function Index() {
                   <div className="absolute inset-0 flex items-center justify-center pt-8 z-10">
                     <div className="transform -rotate-90 origin-center whitespace-nowrap">
                       <motion.h3
-                        className="text-xs font-bold mb-1 font-serif text-center"
+                        className="text-xs font-bold mb-1 text-center"
+                        style={{ fontFamily: 'Montserrat, sans-serif', padding: '0 0 4px 3px' }}
                         whileHover={{ y: -2 }}
                         transition={{ duration: 0.2 }}
                       >
@@ -418,7 +419,7 @@ export default function Index() {
                   </div>
 
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <span className="text-xs opacity-80 font-serif">04</span>
+                    <span className="text-xs opacity-80" style={{ fontFamily: 'Montserrat, sans-serif' }}>04</span>
                   </div>
                 </Card>
               </motion.div>
