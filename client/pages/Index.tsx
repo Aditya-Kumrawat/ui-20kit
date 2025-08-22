@@ -264,8 +264,8 @@ export default function Index() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              <p className="text-black font-semibold mb-2 font-serif">Marketing analytics:</p>
-              <p className="text-gray-600 text-sm font-serif font-normal">
+              <p className="text-black font-semibold mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>Marketing analytics:</p>
+              <p className="text-gray-600 text-sm font-normal" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                 illuminating your path to digital triumph by decoding data intricacies.
               </p>
             </motion.div>
