@@ -871,61 +871,96 @@ export default function Index() {
               style={{ width: `${15 * 200}px` }}
             >
               {[
-                { name: "React", color: "#61DAFB" },
-                { name: "Node.js", color: "#339933" },
-                { name: "Express", color: "#000000" },
-                { name: "MongoDB", color: "#47A248" },
-                { name: "Firebase", color: "#FFCA28" },
-                { name: "TypeScript", color: "#3178C6" },
-                { name: "Python", color: "#3776AB" },
-                { name: "TensorFlow", color: "#FF6F00" },
-                { name: "GraphQL", color: "#E10098" },
-                { name: "Docker", color: "#2496ED" },
-                { name: "Kubernetes", color: "#326CE5" },
-                { name: "Next.js", color: "#000000" },
-                { name: "Tailwind", color: "#06B6D4" },
-                { name: "Vercel", color: "#000000" },
-                { name: "PostgreSQL", color: "#336791" },
-              ].map((tech, index) => (
-                <motion.div
-                  key={`${tech.name}-${index}`}
-                  className="flex flex-col items-center group min-w-[150px]"
-                  whileHover={{
-                    scale: 1.1,
-                    y: -10,
-                    transition: {
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 20,
-                    },
-                  }}
-                >
+                { name: "React", icon: SiReact, color: "#61DAFB" },
+                { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+                { name: "Express", icon: SiExpress, color: "#000000" },
+                { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+                { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
+                { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+                { name: "Python", icon: SiPython, color: "#3776AB" },
+                { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
+                { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
+                { name: "Docker", icon: SiDocker, color: "#2496ED" },
+                { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
+                { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
+                { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
+                { name: "Vercel", icon: SiVercel, color: "#000000" },
+                { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
+              ].concat([
+                { name: "React", icon: SiReact, color: "#61DAFB" },
+                { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+                { name: "Express", icon: SiExpress, color: "#000000" },
+                { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+                { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
+                { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+                { name: "Python", icon: SiPython, color: "#3776AB" },
+                { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
+                { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
+                { name: "Docker", icon: SiDocker, color: "#2496ED" },
+                { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
+                { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
+                { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
+                { name: "Vercel", icon: SiVercel, color: "#000000" },
+                { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
+              ]).concat([
+                { name: "React", icon: SiReact, color: "#61DAFB" },
+                { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+                { name: "Express", icon: SiExpress, color: "#000000" },
+                { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+                { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
+                { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+                { name: "Python", icon: SiPython, color: "#3776AB" },
+                { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
+                { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
+                { name: "Docker", icon: SiDocker, color: "#2496ED" },
+                { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
+                { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
+                { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
+                { name: "Vercel", icon: SiVercel, color: "#000000" },
+                { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
+              ]).map((tech, index) => {
+                const IconComponent = tech.icon;
+                return (
                   <motion.div
-                    className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 border-2 bg-white shadow-md group-hover:shadow-xl transition-all duration-300"
-                    style={{
-                      borderColor: `${tech.color}20`,
-                      backgroundColor: `${tech.color}05`,
-                    }}
+                    key={`${tech.name}-${index}`}
+                    className="flex flex-col items-center group min-w-[150px]"
                     whileHover={{
-                      borderColor: tech.color,
-                      boxShadow: `0 12px 30px ${tech.color}30`,
+                      scale: 1.1,
+                      y: -10,
+                      transition: {
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                      },
                     }}
                   >
                     <motion.div
-                      whileHover={{ rotate: 360, scale: 1.2 }}
-                      transition={{ duration: 0.6 }}
+                      className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 border-2 bg-white shadow-md group-hover:shadow-xl transition-all duration-300"
+                      style={{
+                        borderColor: `${tech.color}20`,
+                        backgroundColor: `${tech.color}05`,
+                      }}
+                      whileHover={{
+                        borderColor: tech.color,
+                        boxShadow: `0 12px 30px ${tech.color}30`,
+                      }}
                     >
-                      <div
-                        className="w-8 h-8 rounded"
-                        style={{ backgroundColor: tech.color }}
-                      />
+                      <motion.div
+                        whileHover={{ rotate: 360, scale: 1.2 }}
+                        transition={{ duration: 0.6 }}
+                      >
+                        <IconComponent
+                          size={32}
+                          style={{ color: tech.color }}
+                        />
+                      </motion.div>
                     </motion.div>
+                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
+                      {tech.name}
+                    </span>
                   </motion.div>
-                  <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
-                    {tech.name}
-                  </span>
-                </motion.div>
-              ))}
+                );
+              })}
             </motion.div>
           </div>
         </div>
