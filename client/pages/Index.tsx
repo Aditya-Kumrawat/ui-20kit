@@ -513,7 +513,8 @@ export default function Index() {
                     <div className="absolute inset-0 flex items-center justify-center z-10">
                       <div className="transform -rotate-90 origin-center whitespace-nowrap">
                         <motion.h3
-                          className="text-sm font-medium font-serif text-center"
+                          className="text-sm font-medium text-center"
+                          style={{ fontFamily: "Montserrat, sans-serif" }}
                           whileHover={{ y: -2 }}
                           transition={{ duration: 0.2 }}
                         >
@@ -522,7 +523,10 @@ export default function Index() {
                       </div>
                     </div>
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
-                      <span className="text-xs opacity-80 font-serif">
+                      <span
+                        className="text-xs opacity-80"
+                        style={{ fontFamily: "Montserrat, sans-serif" }}
+                      >
                         {card.number}
                       </span>
                     </div>
@@ -658,10 +662,16 @@ export default function Index() {
                     >
                       <stat.icon className="w-6 h-6 text-blue-600 mx-auto mb-2" />
                     </motion.div>
-                    <p className="text-sm text-gray-600 mb-1 font-serif font-normal relative z-10">
+                    <p
+                      className="text-sm text-gray-600 mb-1 font-normal relative z-10"
+                      style={{ fontFamily: "Montserrat, sans-serif" }}
+                    >
                       {stat.label}
                     </p>
-                    <p className="text-2xl font-semibold text-black font-serif relative z-10">
+                    <p
+                      className="text-2xl font-semibold text-black relative z-10"
+                      style={{ fontFamily: "Montserrat, sans-serif" }}
+                    >
                       {stat.prefix}
                       {stat.originalValue === 2.3
                         ? (stat.count / 10).toFixed(1)
