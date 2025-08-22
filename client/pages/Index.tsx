@@ -153,7 +153,9 @@ export default function Index() {
               <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm">
                 <span className="text-white font-bold text-lg">DN</span>
               </div>
-              <span className="font-bold text-xl text-gray-900">Dream Navigator</span>
+              <span className="font-bold text-xl text-gray-900">
+                Dream Navigator
+              </span>
             </motion.div>
 
             {/* Navigation Links */}
@@ -213,17 +215,21 @@ export default function Index() {
               className="max-w-4xl"
             >
               <div className="text-6xl font-bold text-black uppercase leading-tight tracking-wider font-sans">
-                {["THE", "DREAM", "NAVIGATOR", "IS", "YOUR"].map((word, index) => (
-                  <motion.span
-                    key={index}
-                    variants={wordVariants}
-                    className="inline-block mr-4 font-semibold"
-                    custom={index}
-                  >
-                    {word}
-                    {index === 1 && <Star className="inline w-8 h-8 text-black ml-2" />}
-                  </motion.span>
-                ))}
+                {["THE", "DREAM", "NAVIGATOR", "IS", "YOUR"].map(
+                  (word, index) => (
+                    <motion.span
+                      key={index}
+                      variants={wordVariants}
+                      className="inline-block mr-4 font-semibold"
+                      custom={index}
+                    >
+                      {word}
+                      {index === 1 && (
+                        <Star className="inline w-8 h-8 text-black ml-2" />
+                      )}
+                    </motion.span>
+                  ),
+                )}
                 <br />
                 {["PATH", "TO", "INSPIRATION"].map((word, index) => (
                   <motion.span
@@ -248,7 +254,11 @@ export default function Index() {
                       <motion.div
                         className="inline-block ml-2"
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                        transition={{
+                          duration: 8,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "linear",
+                        }}
                       >
                         <Sparkles className="inline w-8 h-8 text-black" />
                       </motion.div>
@@ -264,9 +274,18 @@ export default function Index() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              <p className="text-black font-semibold mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>Marketing analytics:</p>
-              <p className="text-gray-600 text-sm font-normal" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                illuminating your path to digital triumph by decoding data intricacies.
+              <p
+                className="text-black font-semibold mb-2"
+                style={{ fontFamily: "Montserrat, sans-serif" }}
+              >
+                Marketing analytics:
+              </p>
+              <p
+                className="text-gray-600 text-sm font-normal"
+                style={{ fontFamily: "Montserrat, sans-serif" }}
+              >
+                illuminating your path to digital triumph by decoding data
+                intricacies.
               </p>
             </motion.div>
           </div>
@@ -304,28 +323,47 @@ export default function Index() {
                 <motion.div
                   className="absolute top-4 left-6 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-800 shadow-lg"
                   animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                  transition={{
+                    duration: 3,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
                 >
                   Digital Marketing
                 </motion.div>
                 <motion.div
                   className="absolute top-16 right-8 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-800 shadow-lg"
                   animate={{ y: [0, 8, 0] }}
-                  transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 0.5 }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                    delay: 0.5,
+                  }}
                 >
                   Content Strategy
                 </motion.div>
                 <motion.div
                   className="absolute bottom-8 left-12 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-800 shadow-lg"
                   animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 2.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1 }}
+                  transition={{
+                    duration: 2.8,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                    delay: 1,
+                  }}
                 >
                   Email Marketing
                 </motion.div>
                 <motion.div
                   className="absolute bottom-16 right-6 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-800 shadow-lg"
                   animate={{ y: [0, 12, 0] }}
-                  transition={{ duration: 3.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1.5 }}
+                  transition={{
+                    duration: 3.2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                    delay: 1.5,
+                  }}
                 >
                   Social Media
                 </motion.div>
@@ -341,7 +379,11 @@ export default function Index() {
                   key={card.number}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 + index * 0.1, ease: "easeOut" }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.8 + index * 0.1,
+                    ease: "easeOut",
+                  }}
                   whileHover={{
                     scale: 1.02,
                     y: -8,
@@ -359,7 +401,7 @@ export default function Index() {
                       <div className="transform -rotate-90 origin-center whitespace-nowrap">
                         <motion.h3
                           className="text-sm font-medium text-center"
-                          style={{ fontFamily: 'Montserrat, sans-serif' }}
+                          style={{ fontFamily: "Montserrat, sans-serif" }}
                           whileHover={{ y: -2 }}
                           transition={{ duration: 0.2 }}
                         >
@@ -368,7 +410,12 @@ export default function Index() {
                       </div>
                     </div>
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
-                      <span className="text-xs opacity-80" style={{ fontFamily: 'Montserrat, sans-serif' }}>{card.number}</span>
+                      <span
+                        className="text-xs opacity-80"
+                        style={{ fontFamily: "Montserrat, sans-serif" }}
+                      >
+                        {card.number}
+                      </span>
                     </div>
                   </Card>
                 </motion.div>
@@ -400,7 +447,11 @@ export default function Index() {
                   <motion.div
                     className="absolute top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center z-10"
                     animate={{ rotate: [0, 5, -5, 0] }}
-                    transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                    transition={{
+                      duration: 4,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "easeInOut",
+                    }}
                   >
                     <div className="w-4 h-4 bg-black rounded-full"></div>
                   </motion.div>
@@ -409,7 +460,10 @@ export default function Index() {
                     <div className="transform -rotate-90 origin-center whitespace-nowrap">
                       <motion.h3
                         className="text-xs font-bold mb-1 text-center"
-                        style={{ fontFamily: 'Montserrat, sans-serif', padding: '0 0 4px 3px' }}
+                        style={{
+                          fontFamily: "Montserrat, sans-serif",
+                          padding: "0 0 4px 3px",
+                        }}
                         whileHover={{ y: -2 }}
                         transition={{ duration: 0.2 }}
                       >
@@ -419,7 +473,12 @@ export default function Index() {
                   </div>
 
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <span className="text-xs opacity-80" style={{ fontFamily: 'Montserrat, sans-serif' }}>04</span>
+                    <span
+                      className="text-xs opacity-80"
+                      style={{ fontFamily: "Montserrat, sans-serif" }}
+                    >
+                      04
+                    </span>
                   </div>
                 </Card>
               </motion.div>
@@ -433,7 +492,11 @@ export default function Index() {
                   key={card.number}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.1 + index * 0.1, ease: "easeOut" }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 1.1 + index * 0.1,
+                    ease: "easeOut",
+                  }}
                   whileHover={{
                     scale: 1.02,
                     y: -8,
@@ -459,7 +522,9 @@ export default function Index() {
                       </div>
                     </div>
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
-                      <span className="text-xs opacity-80 font-serif">{card.number}</span>
+                      <span className="text-xs opacity-80 font-serif">
+                        {card.number}
+                      </span>
                     </div>
                   </Card>
                 </motion.div>
@@ -496,7 +561,9 @@ export default function Index() {
             <motion.div
               className="max-w-md"
               initial={{ opacity: 0, x: -30 }}
-              animate={isStatsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+              animate={
+                isStatsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }
+              }
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             >
               <h2 className="text-4xl font-bold text-black mb-6 font-sans">
@@ -504,7 +571,10 @@ export default function Index() {
                 <br />
                 with data insights
               </h2>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 font-serif font-medium shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden">
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 -translate-x-full"
@@ -520,9 +590,27 @@ export default function Index() {
             {/* Right Side Stat Blocks */}
             <div className="flex gap-4">
               {[
-                { icon: Eye, label: "Impressions", value: impressions.count, suffix: "M", originalValue: 2.3 },
-                { icon: TrendingUp, label: "Conversion", value: conversion.count, suffix: "%", originalValue: 35 },
-                { icon: Users, label: "Customers", value: customers.count, suffix: "", originalValue: 2341 },
+                {
+                  icon: Eye,
+                  label: "Impressions",
+                  value: impressions.count,
+                  suffix: "M",
+                  originalValue: 2.3,
+                },
+                {
+                  icon: TrendingUp,
+                  label: "Conversion",
+                  value: conversion.count,
+                  suffix: "%",
+                  originalValue: 35,
+                },
+                {
+                  icon: Users,
+                  label: "Customers",
+                  value: customers.count,
+                  suffix: "",
+                  originalValue: 2341,
+                },
                 {
                   icon: MousePointer,
                   label: "Clicks",
@@ -535,8 +623,16 @@ export default function Index() {
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                  animate={isStatsInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1, ease: "easeOut" }}
+                  animate={
+                    isStatsInView
+                      ? { opacity: 1, y: 0, scale: 1 }
+                      : { opacity: 0, y: 20, scale: 0.9 }
+                  }
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.4 + index * 0.1,
+                    ease: "easeOut",
+                  }}
                   whileHover={{
                     scale: 1.05,
                     y: -5,
@@ -553,12 +649,18 @@ export default function Index() {
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={isStatsInView ? { scale: 1 } : { scale: 0 }}
-                      transition={{ duration: 0.5, delay: 0.6 + index * 0.1, type: "spring" }}
+                      transition={{
+                        duration: 0.5,
+                        delay: 0.6 + index * 0.1,
+                        type: "spring",
+                      }}
                       className="relative z-10"
                     >
                       <stat.icon className="w-6 h-6 text-blue-600 mx-auto mb-2" />
                     </motion.div>
-                    <p className="text-sm text-gray-600 mb-1 font-serif font-normal relative z-10">{stat.label}</p>
+                    <p className="text-sm text-gray-600 mb-1 font-serif font-normal relative z-10">
+                      {stat.label}
+                    </p>
                     <p className="text-2xl font-semibold text-black font-serif relative z-10">
                       {stat.prefix}
                       {stat.originalValue === 2.3
@@ -888,81 +990,84 @@ export default function Index() {
                 { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
                 { name: "Vercel", icon: SiVercel, color: "#000000" },
                 { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
-              ].concat([
-                { name: "React", icon: SiReact, color: "#61DAFB" },
-                { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
-                { name: "Express", icon: SiExpress, color: "#000000" },
-                { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-                { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
-                { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
-                { name: "Python", icon: SiPython, color: "#3776AB" },
-                { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
-                { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
-                { name: "Docker", icon: SiDocker, color: "#2496ED" },
-                { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
-                { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
-                { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
-                { name: "Vercel", icon: SiVercel, color: "#000000" },
-                { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
-              ]).concat([
-                { name: "React", icon: SiReact, color: "#61DAFB" },
-                { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
-                { name: "Express", icon: SiExpress, color: "#000000" },
-                { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-                { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
-                { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
-                { name: "Python", icon: SiPython, color: "#3776AB" },
-                { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
-                { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
-                { name: "Docker", icon: SiDocker, color: "#2496ED" },
-                { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
-                { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
-                { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
-                { name: "Vercel", icon: SiVercel, color: "#000000" },
-                { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
-              ]).map((tech, index) => {
-                const IconComponent = tech.icon;
-                return (
-                  <motion.div
-                    key={`${tech.name}-${index}`}
-                    className="flex flex-col items-center group min-w-[150px]"
-                    whileHover={{
-                      scale: 1.1,
-                      y: -10,
-                      transition: {
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 20,
-                      },
-                    }}
-                  >
+              ]
+                .concat([
+                  { name: "React", icon: SiReact, color: "#61DAFB" },
+                  { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+                  { name: "Express", icon: SiExpress, color: "#000000" },
+                  { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+                  { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
+                  { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+                  { name: "Python", icon: SiPython, color: "#3776AB" },
+                  { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
+                  { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
+                  { name: "Docker", icon: SiDocker, color: "#2496ED" },
+                  { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
+                  { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
+                  { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
+                  { name: "Vercel", icon: SiVercel, color: "#000000" },
+                  { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
+                ])
+                .concat([
+                  { name: "React", icon: SiReact, color: "#61DAFB" },
+                  { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+                  { name: "Express", icon: SiExpress, color: "#000000" },
+                  { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+                  { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
+                  { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+                  { name: "Python", icon: SiPython, color: "#3776AB" },
+                  { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
+                  { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
+                  { name: "Docker", icon: SiDocker, color: "#2496ED" },
+                  { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
+                  { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
+                  { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" },
+                  { name: "Vercel", icon: SiVercel, color: "#000000" },
+                  { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
+                ])
+                .map((tech, index) => {
+                  const IconComponent = tech.icon;
+                  return (
                     <motion.div
-                      className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 border-2 bg-white shadow-md group-hover:shadow-xl transition-all duration-300"
-                      style={{
-                        borderColor: `${tech.color}20`,
-                        backgroundColor: `${tech.color}05`,
-                      }}
+                      key={`${tech.name}-${index}`}
+                      className="flex flex-col items-center group min-w-[150px]"
                       whileHover={{
-                        borderColor: tech.color,
-                        boxShadow: `0 12px 30px ${tech.color}30`,
+                        scale: 1.1,
+                        y: -10,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        },
                       }}
                     >
                       <motion.div
-                        whileHover={{ rotate: 360, scale: 1.2 }}
-                        transition={{ duration: 0.6 }}
+                        className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 border-2 bg-white shadow-md group-hover:shadow-xl transition-all duration-300"
+                        style={{
+                          borderColor: `${tech.color}20`,
+                          backgroundColor: `${tech.color}05`,
+                        }}
+                        whileHover={{
+                          borderColor: tech.color,
+                          boxShadow: `0 12px 30px ${tech.color}30`,
+                        }}
                       >
-                        <IconComponent
-                          size={32}
-                          style={{ color: tech.color }}
-                        />
+                        <motion.div
+                          whileHover={{ rotate: 360, scale: 1.2 }}
+                          transition={{ duration: 0.6 }}
+                        >
+                          <IconComponent
+                            size={32}
+                            style={{ color: tech.color }}
+                          />
+                        </motion.div>
                       </motion.div>
+                      <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
+                        {tech.name}
+                      </span>
                     </motion.div>
-                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
-                      {tech.name}
-                    </span>
-                  </motion.div>
-                );
-              })}
+                  );
+                })}
             </motion.div>
           </div>
         </div>
