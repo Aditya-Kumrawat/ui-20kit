@@ -730,65 +730,6 @@ export default function ClassView() {
     </div>
   );
 
-  const GradesTab = () => (
-    <div className="space-y-6">
-      <Card className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-green-600">92.5%</div>
-            <div className="text-sm text-gray-600">Overall Grade</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600">185/200</div>
-            <div className="text-sm text-gray-600">Total Points</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-purple-600">2/3</div>
-            <div className="text-sm text-gray-600">Completed</div>
-          </div>
-        </div>
-      </Card>
-
-      <div className="space-y-4">
-        {assignments.map((assignment, index) => (
-          <Card key={assignment.id} className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h4 className="font-semibold">{assignment.title}</h4>
-                <p className="text-sm text-gray-600">
-                  Due: {assignment.dueDate.toLocaleDateString()}
-                </p>
-              </div>
-              <div className="text-right">
-                {assignment.submitted && assignment.grade ? (
-                  <div>
-                    <div className="text-lg font-semibold">
-                      {assignment.grade}/{assignment.points}
-                    </div>
-                    <div className="text-sm text-green-600">
-                      {((assignment.grade / assignment.points) * 100).toFixed(1)}%
-                    </div>
-                  </div>
-                ) : assignment.submitted ? (
-                  <Badge>Submitted</Badge>
-                ) : (
-                  <Badge variant="outline">Not Submitted</Badge>
-                )}
-              </div>
-            </div>
-            {assignment.feedback && (
-              <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  <strong>Feedback:</strong> {assignment.feedback}
-                </p>
-              </div>
-            )}
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
     <div className="min-h-screen bg-gray-50">
       <FloatingSidebar
