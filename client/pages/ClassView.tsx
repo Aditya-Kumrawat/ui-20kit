@@ -855,8 +855,7 @@ export default function ClassView() {
             {[
               { id: "stream", label: "Stream", icon: MessageSquare },
               { id: "classwork", label: "Classwork", icon: FileText },
-              { id: "people", label: "People", icon: Users },
-              { id: "grades", label: "Grades", icon: GraduationCap }
+              { id: "people", label: "People", icon: Users }
             ].map((tab) => (
               <button
                 key={tab.id}
