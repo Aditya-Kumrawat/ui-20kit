@@ -124,7 +124,10 @@ export default function TestTaking() {
     }
     setTimeRemaining(testData.duration * 60); // Convert minutes to seconds
     setTestStarted(true);
+  }, []); // Empty dependency array - only run once on mount
 
+  // Separate useEffect for cleanup on unmount
+  useEffect(() => {
     // Add beforeunload event to cleanup camera when user closes tab/window
     const handleBeforeUnload = () => {
       if (stream) {
@@ -144,7 +147,7 @@ export default function TestTaking() {
         });
       }
     };
-  }, []); // Empty dependency array - only run once on mount
+  }, [stream]); // This useEffect depends on stream for proper cleanup
 
   // Timer countdown
   useEffect(() => {
