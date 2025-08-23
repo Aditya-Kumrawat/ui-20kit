@@ -32,6 +32,7 @@ interface FloatingSidebarProps {
 export const FloatingSidebar = ({
   isCollapsed,
   setIsCollapsed,
+  userType = "teacher",
 }: FloatingSidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
