@@ -148,8 +148,8 @@ export default function ClassView() {
     {
       id: "assign-1",
       title: "Calculus Problem Set #3",
-      description: "Complete problems 1-15 from Chapter 7",
-      dueDate: new Date(2024, 0, 20, 23, 59),
+      description: "Complete problems 1-15 from Chapter 7. Show all work and explain your reasoning for each solution.",
+      dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // Due in 2 days
       type: "assignment",
       points: 100,
       submitted: false
@@ -168,10 +168,19 @@ export default function ClassView() {
     {
       id: "assign-3",
       title: "Group Project: Real-world Applications",
-      description: "Work in teams to find and present real-world applications of advanced mathematics",
-      dueDate: new Date(2024, 1, 5, 23, 59),
+      description: "Work in teams to find and present real-world applications of advanced mathematics in engineering or data science",
+      dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // Due in 5 days
       type: "assignment",
       points: 150,
+      submitted: false
+    },
+    {
+      id: "assign-4",
+      title: "Weekly Quiz: Derivatives",
+      description: "Short quiz on derivative rules and applications",
+      dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // Due tomorrow
+      type: "quiz",
+      points: 50,
       submitted: false
     }
   ];
