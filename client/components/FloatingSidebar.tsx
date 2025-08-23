@@ -120,7 +120,8 @@ export const FloatingSidebar = ({
     },
   ];
 
-  const menuItems = userType === "student" ? studentMenuItems : teacherMenuItems;
+  const menuItems =
+    userType === "student" ? studentMenuItems : teacherMenuItems;
 
   const isActive = (href: string) => {
     // Exact match for root dashboard path

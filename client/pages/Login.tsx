@@ -11,7 +11,9 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<"teacher" | "student" | null>(null);
+  const [selectedRole, setSelectedRole] = useState<
+    "teacher" | "student" | null
+  >(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -171,7 +173,9 @@ export default function Login() {
                     <div className="text-center">
                       <div className="text-2xl mb-2">👨‍🏫</div>
                       <div className="font-semibold">Teacher</div>
-                      <div className="text-sm opacity-75">Manage classes & students</div>
+                      <div className="text-sm opacity-75">
+                        Manage classes & students
+                      </div>
                     </div>
                   </motion.button>
                   <motion.button
@@ -188,7 +192,9 @@ export default function Login() {
                     <div className="text-center">
                       <div className="text-2xl mb-2">👨‍🎓</div>
                       <div className="font-semibold">Student</div>
-                      <div className="text-sm opacity-75">Access courses & learning</div>
+                      <div className="text-sm opacity-75">
+                        Access courses & learning
+                      </div>
                     </div>
                   </motion.button>
                 </div>
@@ -417,9 +423,9 @@ export default function Login() {
                 </h3>
                 <p className="text-gray-600 leading-relaxed -mt-px">
                   Join thousands of educators and students who are transforming
-                  learning experiences with our intelligent education platform. From
-                  personalized learning paths to smart assessments, discover how AI
-                  can enhance every aspect of education.
+                  learning experiences with our intelligent education platform.
+                  From personalized learning paths to smart assessments,
+                  discover how AI can enhance every aspect of education.
                 </p>
 
                 {/* Feature Pills */}

@@ -51,10 +51,12 @@ interface CalendarDay {
 export default function Calendar() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
   const location = useLocation();
-  
+
   // Detect user type based on current route
-  const userType = location.pathname.startsWith('/dashboard2') ? 'student' : 'teacher';
-  
+  const userType = location.pathname.startsWith("/dashboard2")
+    ? "student"
+    : "teacher";
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<"month" | "week" | "day">("month");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -70,7 +72,7 @@ export default function Calendar() {
       location: "Room 201",
       teacher: "Dr. Sarah Johnson",
       color: "bg-blue-500",
-      description: "Calculus integration techniques"
+      description: "Calculus integration techniques",
     },
     {
       id: "2",
@@ -79,7 +81,7 @@ export default function Calendar() {
       time: "23:59",
       color: "bg-orange-500",
       isImportant: true,
-      description: "Submit quantum mechanics experiment report"
+      description: "Submit quantum mechanics experiment report",
     },
     {
       id: "3",
@@ -88,7 +90,7 @@ export default function Calendar() {
       time: "18:00",
       color: "bg-red-500",
       isImportant: true,
-      description: "Final submission for AI chatbot project"
+      description: "Final submission for AI chatbot project",
     },
     {
       id: "4",
@@ -98,7 +100,7 @@ export default function Calendar() {
       endTime: "16:00",
       location: "Library Room 3",
       color: "bg-green-500",
-      description: "Group study session for upcoming exam"
+      description: "Group study session for upcoming exam",
     },
     {
       id: "5",
@@ -109,52 +111,68 @@ export default function Calendar() {
       location: "Hall A",
       color: "bg-purple-500",
       isImportant: true,
-      description: "Comprehensive exam covering chapters 1-8"
-    }
+      description: "Comprehensive exam covering chapters 1-8",
+    },
   ];
 
   // Generate calendar days
   const generateCalendarDays = (): CalendarDay[] => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    
+
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
-    
+
     const days: CalendarDay[] = [];
     const today = new Date();
-    
+
     for (let i = 0; i < 42; i++) {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + i);
-      
+
       // Filter events for this date (simplified - in real app you'd check actual dates)
-      const dayEvents = i === 15 ? [events[0], events[1]] : 
-                      i === 18 ? [events[2]] :
-                      i === 20 ? [events[3]] :
-                      i === 25 ? [events[4]] : [];
-      
+      const dayEvents =
+        i === 15
+          ? [events[0], events[1]]
+          : i === 18
+            ? [events[2]]
+            : i === 20
+              ? [events[3]]
+              : i === 25
+                ? [events[4]]
+                : [];
+
       days.push({
         date: date.getDate(),
         isCurrentMonth: date.getMonth() === month,
         isToday: date.toDateString() === today.toDateString(),
-        events: dayEvents
+        events: dayEvents,
       });
     }
-    
+
     return days;
   };
 
   const calendarDays = generateCalendarDays();
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const navigateMonth = (direction: "prev" | "next") => {
-    setCurrentDate(prev => {
+    setCurrentDate((prev) => {
       const newDate = new Date(prev);
       newDate.setMonth(prev.getMonth() + (direction === "next" ? 1 : -1));
       return newDate;
@@ -185,14 +203,12 @@ export default function Calendar() {
           transition={{ duration: 0.5 }}
         >
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Calendar
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Calendar</h1>
             <p className="text-gray-600">
               Manage your schedule, assignments, and important dates
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <Button variant="outline" size="sm">
               <Filter className="w-4 h-4 mr-2" />
@@ -219,18 +235,27 @@ export default function Calendar() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                   <h2 className="text-2xl font-bold text-gray-900">
-                    {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+                    {monthNames[currentDate.getMonth()]}{" "}
+                    {currentDate.getFullYear()}
                   </h2>
                   <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="sm" onClick={() => navigateMonth("prev")}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => navigateMonth("prev")}
+                    >
                       <ChevronLeft className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => navigateMonth("next")}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => navigateMonth("next")}
+                    >
                       <ChevronRight className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <Button
                     variant={viewMode === "month" ? "default" : "ghost"}
@@ -258,11 +283,16 @@ export default function Calendar() {
 
               {/* Calendar Grid */}
               <div className="grid grid-cols-7 gap-1 mb-2">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                  <div key={day} className="p-3 text-center text-sm font-medium text-gray-500">
-                    {day}
-                  </div>
-                ))}
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                  (day) => (
+                    <div
+                      key={day}
+                      className="p-3 text-center text-sm font-medium text-gray-500"
+                    >
+                      {day}
+                    </div>
+                  ),
+                )}
               </div>
 
               <div className="grid grid-cols-7 gap-1">
@@ -270,20 +300,22 @@ export default function Calendar() {
                   <motion.div
                     key={index}
                     className={`p-2 min-h-24 border border-gray-100 rounded-lg cursor-pointer transition-all duration-200 ${
-                      day.isCurrentMonth 
-                        ? "bg-white hover:bg-blue-50" 
+                      day.isCurrentMonth
+                        ? "bg-white hover:bg-blue-50"
                         : "bg-gray-50 text-gray-400"
                     } ${
-                      day.isToday 
-                        ? "bg-blue-100 border-blue-300 ring-2 ring-blue-200" 
+                      day.isToday
+                        ? "bg-blue-100 border-blue-300 ring-2 ring-blue-200"
                         : ""
                     }`}
                     whileHover={{ scale: 1.02 }}
                     onClick={() => setSelectedDate(new Date())}
                   >
-                    <div className={`text-sm font-medium mb-1 ${
-                      day.isToday ? "text-blue-700" : "text-gray-900"
-                    }`}>
+                    <div
+                      className={`text-sm font-medium mb-1 ${
+                        day.isToday ? "text-blue-700" : "text-gray-900"
+                      }`}
+                    >
                       {day.date}
                     </div>
                     <div className="space-y-1">
@@ -315,7 +347,7 @@ export default function Calendar() {
                 <Clock className="w-5 h-5 text-blue-500" />
                 <h3 className="text-lg font-semibold">Today's Schedule</h3>
               </div>
-              
+
               <div className="space-y-3">
                 {upcomingEvents.slice(0, 3).map((event, index) => (
                   <motion.div
@@ -325,7 +357,9 @@ export default function Calendar() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 + index * 0.1 }}
                   >
-                    <div className={`w-3 h-3 rounded-full ${event.color} mt-1 flex-shrink-0`} />
+                    <div
+                      className={`w-3 h-3 rounded-full ${event.color} mt-1 flex-shrink-0`}
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm text-gray-900 truncate">
                         {event.title}
@@ -336,7 +370,9 @@ export default function Calendar() {
                       {event.location && (
                         <div className="flex items-center gap-1 mt-1">
                           <MapPin className="w-3 h-3 text-gray-400" />
-                          <span className="text-xs text-gray-500">{event.location}</span>
+                          <span className="text-xs text-gray-500">
+                            {event.location}
+                          </span>
                         </div>
                       )}
                     </div>
@@ -346,7 +382,7 @@ export default function Calendar() {
                   </motion.div>
                 ))}
               </div>
-              
+
               <Button variant="ghost" className="w-full mt-4 text-sm">
                 View All Events
               </Button>
@@ -355,7 +391,7 @@ export default function Calendar() {
             {/* Quick Stats */}
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4">This Week</h3>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -364,7 +400,7 @@ export default function Calendar() {
                   </div>
                   <span className="text-lg font-bold text-gray-900">12</span>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4 text-orange-500" />
@@ -372,7 +408,7 @@ export default function Calendar() {
                   </div>
                   <span className="text-lg font-bold text-gray-900">5</span>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 text-red-500" />
@@ -380,7 +416,7 @@ export default function Calendar() {
                   </div>
                   <span className="text-lg font-bold text-gray-900">2</span>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Users className="w-4 h-4 text-green-500" />
@@ -397,39 +433,42 @@ export default function Calendar() {
                 <AlertCircle className="w-5 h-5 text-red-500" />
                 <h3 className="text-lg font-semibold">Urgent Deadlines</h3>
               </div>
-              
+
               <div className="space-y-3">
-                {events.filter(e => e.isImportant).slice(0, 2).map((event, index) => (
-                  <motion.div
-                    key={event.id}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-red-50 border border-red-100"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                  >
-                    <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm text-red-900 truncate">
-                        {event.title}
-                      </p>
-                      <p className="text-xs text-red-600 mt-1">
-                        Due {event.time}
-                      </p>
-                      {event.description && (
-                        <p className="text-xs text-red-700 mt-1 truncate">
-                          {event.description}
+                {events
+                  .filter((e) => e.isImportant)
+                  .slice(0, 2)
+                  .map((event, index) => (
+                    <motion.div
+                      key={event.id}
+                      className="flex items-start gap-3 p-3 rounded-lg bg-red-50 border border-red-100"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 + index * 0.1 }}
+                    >
+                      <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm text-red-900 truncate">
+                          {event.title}
                         </p>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
+                        <p className="text-xs text-red-600 mt-1">
+                          Due {event.time}
+                        </p>
+                        {event.description && (
+                          <p className="text-xs text-red-700 mt-1 truncate">
+                            {event.description}
+                          </p>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
               </div>
             </Card>
 
             {/* Quick Actions */}
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-              
+
               <div className="space-y-2">
                 <Button variant="outline" className="w-full justify-start">
                   <Plus className="w-4 h-4 mr-2" />

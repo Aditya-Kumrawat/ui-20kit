@@ -5,7 +5,13 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
 import { useSidebar } from "@/contexts/SidebarContext";
@@ -68,9 +74,12 @@ export default function ClassView() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
   const navigate = useNavigate();
   const { classId } = useParams();
-  const [activeTab, setActiveTab] = useState<"stream" | "classwork" | "people">("stream");
+  const [activeTab, setActiveTab] = useState<"stream" | "classwork" | "people">(
+    "stream",
+  );
   const [newPost, setNewPost] = useState("");
-  const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
+  const [selectedAssignment, setSelectedAssignment] =
+    useState<Assignment | null>(null);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [submissionText, setSubmissionText] = useState("");
@@ -85,10 +94,12 @@ export default function ClassView() {
     section: "Section A",
     room: "Room 201",
     color: "from-blue-500 to-blue-600",
-    coverImage: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=300&fit=crop",
+    coverImage:
+      "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=300&fit=crop",
     studentsCount: 28,
     classCode: "abc123d",
-    description: "Advanced mathematical concepts including calculus, linear algebra, and statistical analysis."
+    description:
+      "Advanced mathematical concepts including calculus, linear algebra, and statistical analysis.",
   };
 
   // Sample stream posts
@@ -97,24 +108,26 @@ export default function ClassView() {
       id: "1",
       type: "announcement",
       title: "Welcome to Advanced Mathematics!",
-      content: "Welcome everyone to our Advanced Mathematics class! Please make sure to check the syllabus and upcoming assignments. Don't hesitate to reach out if you have any questions.",
+      content:
+        "Welcome everyone to our Advanced Mathematics class! Please make sure to check the syllabus and upcoming assignments. Don't hesitate to reach out if you have any questions.",
       author: {
         name: "Dr. Sarah Johnson",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
-        role: "teacher"
+        role: "teacher",
       },
       timestamp: new Date(2024, 0, 15, 10, 30),
-      comments: 5
+      comments: 5,
     },
     {
       id: "2",
       type: "assignment",
       title: "Calculus Problem Set #3",
-      content: "Complete problems 1-15 from Chapter 7. Show all work and submit before the due date.",
+      content:
+        "Complete problems 1-15 from Chapter 7. Show all work and submit before the due date.",
       author: {
         name: "Dr. Sarah Johnson",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
-        role: "teacher"
+        role: "teacher",
       },
       timestamp: new Date(2024, 0, 14, 14, 15),
       attachments: ["calculus-problems.pdf"],
@@ -125,22 +138,23 @@ export default function ClassView() {
         dueDate: new Date(2024, 0, 20, 23, 59),
         type: "assignment",
         points: 100,
-        submitted: false
-      }
+        submitted: false,
+      },
     },
     {
       id: "3",
       type: "material",
       title: "Linear Algebra Study Guide",
-      content: "Here's the study guide for our upcoming linear algebra unit. Review this before next week's lecture.",
+      content:
+        "Here's the study guide for our upcoming linear algebra unit. Review this before next week's lecture.",
       author: {
         name: "Dr. Sarah Johnson",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
-        role: "teacher"
+        role: "teacher",
       },
       timestamp: new Date(2024, 0, 12, 9, 45),
-      attachments: ["linear-algebra-guide.pdf", "practice-problems.pdf"]
-    }
+      attachments: ["linear-algebra-guide.pdf", "practice-problems.pdf"],
+    },
   ];
 
   // Sample assignments for classwork tab
@@ -148,11 +162,12 @@ export default function ClassView() {
     {
       id: "assign-1",
       title: "Calculus Problem Set #3",
-      description: "Complete problems 1-15 from Chapter 7. Show all work and explain your reasoning for each solution.",
+      description:
+        "Complete problems 1-15 from Chapter 7. Show all work and explain your reasoning for each solution.",
       dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // Due in 2 days
       type: "assignment",
       points: 100,
-      submitted: false
+      submitted: false,
     },
     {
       id: "assign-2",
@@ -163,16 +178,18 @@ export default function ClassView() {
       points: 200,
       submitted: true,
       grade: 185,
-      feedback: "Excellent work! Your understanding of integration techniques is particularly strong."
+      feedback:
+        "Excellent work! Your understanding of integration techniques is particularly strong.",
     },
     {
       id: "assign-3",
       title: "Group Project: Real-world Applications",
-      description: "Work in teams to find and present real-world applications of advanced mathematics in engineering or data science",
+      description:
+        "Work in teams to find and present real-world applications of advanced mathematics in engineering or data science",
       dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // Due in 5 days
       type: "assignment",
       points: 150,
-      submitted: false
+      submitted: false,
     },
     {
       id: "assign-4",
@@ -181,8 +198,8 @@ export default function ClassView() {
       dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // Due tomorrow
       type: "quiz",
       points: 50,
-      submitted: false
-    }
+      submitted: false,
+    },
   ];
 
   // Sample class members
@@ -192,29 +209,29 @@ export default function ClassView() {
         name: "Dr. Sarah Johnson",
         email: "s.johnson@university.edu",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
-        role: "teacher"
-      }
+        role: "teacher",
+      },
     ],
     students: [
       {
         name: "Alex Chen",
         email: "a.chen@student.edu",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=alex",
-        role: "student"
+        role: "student",
       },
       {
         name: "Maria Rodriguez",
         email: "m.rodriguez@student.edu",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=maria",
-        role: "student"
+        role: "student",
       },
       {
         name: "James Wilson",
         email: "j.wilson@student.edu",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=james",
-        role: "student"
-      }
-    ]
+        role: "student",
+      },
+    ],
   };
 
   // Handle file selection
@@ -230,8 +247,8 @@ export default function ClassView() {
     if (!selectedAssignment) return;
 
     const formData = new FormData();
-    formData.append('assignmentId', selectedAssignment.id);
-    formData.append('submissionText', submissionText);
+    formData.append("assignmentId", selectedAssignment.id);
+    formData.append("submissionText", submissionText);
 
     selectedFiles.forEach((file, index) => {
       formData.append(`file_${index}`, file);
@@ -239,10 +256,10 @@ export default function ClassView() {
 
     try {
       // Simulate API call
-      console.log('Submitting assignment:', {
+      console.log("Submitting assignment:", {
         assignmentId: selectedAssignment.id,
         submissionText,
-        files: selectedFiles.map(f => f.name)
+        files: selectedFiles.map((f) => f.name),
       });
 
       // Here you would make the actual API call
@@ -251,14 +268,14 @@ export default function ClassView() {
       //   body: formData
       // });
 
-      alert('Assignment submitted successfully!');
+      alert("Assignment submitted successfully!");
       setIsSubmissionModalOpen(false);
       setSelectedFiles([]);
-      setSubmissionText('');
+      setSubmissionText("");
       setSelectedAssignment(null);
     } catch (error) {
-      console.error('Error submitting assignment:', error);
-      alert('Error submitting assignment. Please try again.');
+      console.error("Error submitting assignment:", error);
+      alert("Error submitting assignment. Please try again.");
     }
   };
 
@@ -333,20 +350,27 @@ export default function ClassView() {
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={post.author.avatar} />
                   <AvatarFallback>
-                    {post.author.name.split(' ').map(n => n[0]).join('')}
+                    {post.author.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-semibold">{post.author.name}</span>
-                    <Badge variant={post.author.role === "teacher" ? "default" : "secondary"}>
+                    <Badge
+                      variant={
+                        post.author.role === "teacher" ? "default" : "secondary"
+                      }
+                    >
                       {post.author.role}
                     </Badge>
                     <span className="text-sm text-gray-500">
                       {post.timestamp.toLocaleDateString()}
                     </span>
                   </div>
-                  
+
                   {post.type === "assignment" && (
                     <div className="mb-3">
                       <Badge className="bg-blue-100 text-blue-800">
@@ -355,10 +379,10 @@ export default function ClassView() {
                       </Badge>
                     </div>
                   )}
-                  
+
                   <h3 className="font-semibold text-lg mb-2">{post.title}</h3>
                   <p className="text-gray-700 mb-4">{post.content}</p>
-                  
+
                   {post.attachments && (
                     <div className="flex flex-wrap gap-2 mb-4">
                       {post.attachments.map((attachment, idx) => (
@@ -370,23 +394,28 @@ export default function ClassView() {
                       ))}
                     </div>
                   )}
-                  
+
                   {post.assignment && (
                     <Card className="p-4 bg-blue-50 border-blue-200">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-semibold">{post.assignment.title}</h4>
+                          <h4 className="font-semibold">
+                            {post.assignment.title}
+                          </h4>
                           <p className="text-sm text-gray-600">
-                            Due: {post.assignment.dueDate.toLocaleDateString()} • {post.assignment.points} points
+                            Due: {post.assignment.dueDate.toLocaleDateString()}{" "}
+                            • {post.assignment.points} points
                           </p>
                         </div>
                         <Button size="sm">
-                          {post.assignment.submitted ? "View Submission" : "Submit"}
+                          {post.assignment.submitted
+                            ? "View Submission"
+                            : "Submit"}
                         </Button>
                       </div>
                     </Card>
                   )}
-                  
+
                   <div className="flex items-center gap-4 mt-4 pt-4 border-t">
                     <Button variant="ghost" size="sm">
                       <MessageSquare className="w-4 h-4 mr-2" />
@@ -407,7 +436,9 @@ export default function ClassView() {
 
   const ClassworkTab = () => {
     const dueAssignments = assignments.filter(isAssignmentDue);
-    const otherAssignments = assignments.filter(assignment => !isAssignmentDue(assignment));
+    const otherAssignments = assignments.filter(
+      (assignment) => !isAssignmentDue(assignment),
+    );
 
     return (
       <div className="space-y-6">
@@ -440,7 +471,9 @@ export default function ClassView() {
                       </Badge>
                     </div>
 
-                    <h3 className="font-semibold text-lg mb-2">{assignment.title}</h3>
+                    <h3 className="font-semibold text-lg mb-2">
+                      {assignment.title}
+                    </h3>
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                       {assignment.description}
                     </p>
@@ -479,25 +512,42 @@ export default function ClassView() {
               >
                 <Card
                   className={`p-6 hover:shadow-lg transition-shadow cursor-pointer ${
-                    isAssignmentDue(assignment) ? 'border-red-200 bg-red-50/30' : ''
+                    isAssignmentDue(assignment)
+                      ? "border-red-200 bg-red-50/30"
+                      : ""
                   }`}
                   onClick={() => handleAssignmentClick(assignment)}
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                      assignment.type === "assignment" ? "bg-blue-100" :
-                      assignment.type === "quiz" ? "bg-purple-100" : "bg-green-100"
-                    }`}>
+                    <div
+                      className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                        assignment.type === "assignment"
+                          ? "bg-blue-100"
+                          : assignment.type === "quiz"
+                            ? "bg-purple-100"
+                            : "bg-green-100"
+                      }`}
+                    >
                       {assignment.type === "assignment" ? (
-                        <FileText className={`w-6 h-6 ${
-                          assignment.type === "assignment" ? "text-blue-600" :
-                          assignment.type === "quiz" ? "text-purple-600" : "text-green-600"
-                        }`} />
+                        <FileText
+                          className={`w-6 h-6 ${
+                            assignment.type === "assignment"
+                              ? "text-blue-600"
+                              : assignment.type === "quiz"
+                                ? "text-purple-600"
+                                : "text-green-600"
+                          }`}
+                        />
                       ) : (
-                        <GraduationCap className={`w-6 h-6 ${
-                          assignment.type === "assignment" ? "text-blue-600" :
-                          assignment.type === "quiz" ? "text-purple-600" : "text-green-600"
-                        }`} />
+                        <GraduationCap
+                          className={`w-6 h-6 ${
+                            assignment.type === "assignment"
+                              ? "text-blue-600"
+                              : assignment.type === "quiz"
+                                ? "text-purple-600"
+                                : "text-green-600"
+                          }`}
+                        />
                       )}
                     </div>
 
@@ -510,15 +560,21 @@ export default function ClassView() {
                     )}
                   </div>
 
-                  <h3 className="font-semibold text-lg mb-2">{assignment.title}</h3>
+                  <h3 className="font-semibold text-lg mb-2">
+                    {assignment.title}
+                  </h3>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                     {assignment.description}
                   </p>
 
                   <div className="space-y-2 mb-4">
-                    <div className={`flex items-center gap-2 text-sm ${
-                      isAssignmentDue(assignment) ? 'text-red-600 font-medium' : 'text-gray-600'
-                    }`}>
+                    <div
+                      className={`flex items-center gap-2 text-sm ${
+                        isAssignmentDue(assignment)
+                          ? "text-red-600 font-medium"
+                          : "text-gray-600"
+                      }`}
+                    >
                       <Clock className="w-4 h-4" />
                       Due: {assignment.dueDate.toLocaleDateString()}
                     </div>
@@ -539,13 +595,16 @@ export default function ClassView() {
                   <Button
                     className={`w-full ${
                       isAssignmentDue(assignment) && !assignment.submitted
-                        ? 'bg-red-600 hover:bg-red-700'
-                        : ''
+                        ? "bg-red-600 hover:bg-red-700"
+                        : ""
                     }`}
                     variant={assignment.submitted ? "outline" : "default"}
                   >
-                    {assignment.submitted ? "View Submission" :
-                     isAssignmentDue(assignment) ? "Submit Assignment" : "Start Assignment"}
+                    {assignment.submitted
+                      ? "View Submission"
+                      : isAssignmentDue(assignment)
+                        ? "Submit Assignment"
+                        : "Start Assignment"}
                   </Button>
                 </Card>
               </motion.div>
@@ -554,7 +613,10 @@ export default function ClassView() {
         </div>
 
         {/* Assignment Submission Modal */}
-        <Dialog open={isSubmissionModalOpen} onOpenChange={setIsSubmissionModalOpen}>
+        <Dialog
+          open={isSubmissionModalOpen}
+          onOpenChange={setIsSubmissionModalOpen}
+        >
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -568,7 +630,9 @@ export default function ClassView() {
                 {/* Assignment Details */}
                 <div className="bg-gray-50 rounded-lg p-4">
                   <h4 className="font-medium mb-2">Assignment Description</h4>
-                  <p className="text-gray-700 text-sm">{selectedAssignment.description}</p>
+                  <p className="text-gray-700 text-sm">
+                    {selectedAssignment.description}
+                  </p>
                   <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
                     <span className="flex items-center gap-1">
                       <Clock className="w-4 h-4" />
@@ -627,7 +691,10 @@ export default function ClassView() {
                     <div className="mt-3 space-y-2">
                       <h5 className="text-sm font-medium">Selected Files:</h5>
                       {selectedFiles.map((file, index) => (
-                        <div key={index} className="flex items-center gap-2 text-sm bg-blue-50 p-2 rounded">
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 text-sm bg-blue-50 p-2 rounded"
+                        >
                           <FileText className="w-4 h-4 text-blue-600" />
                           <span className="flex-1">{file.name}</span>
                           <span className="text-gray-500">
@@ -637,7 +704,9 @@ export default function ClassView() {
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              setSelectedFiles(files => files.filter((_, i) => i !== index));
+                              setSelectedFiles((files) =>
+                                files.filter((_, i) => i !== index),
+                              );
                             }}
                           >
                             ✕
@@ -686,7 +755,10 @@ export default function ClassView() {
                 <Avatar className="w-12 h-12">
                   <AvatarImage src={teacher.avatar} />
                   <AvatarFallback>
-                    {teacher.name.split(' ').map(n => n[0]).join('')}
+                    {teacher.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
@@ -715,12 +787,17 @@ export default function ClassView() {
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={student.avatar} />
                   <AvatarFallback>
-                    {student.name.split(' ').map(n => n[0]).join('')}
+                    {student.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium truncate">{student.name}</h4>
-                  <p className="text-sm text-gray-600 truncate">{student.email}</p>
+                  <p className="text-sm text-gray-600 truncate">
+                    {student.email}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -767,22 +844,25 @@ export default function ClassView() {
             <div
               className="h-48 bg-cover bg-center relative"
               style={{
-                backgroundImage: `url(${classData.coverImage})`
+                backgroundImage: `url(${classData.coverImage})`,
               }}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${classData.color} opacity-80`} />
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${classData.color} opacity-80`}
+              />
               <div className="absolute inset-0 bg-black/20" />
-              
+
               <div className="absolute bottom-6 left-6 text-white">
                 <h1 className="text-3xl font-bold mb-2">{classData.name}</h1>
                 <p className="text-white/90">
-                  {classData.section} • {classData.teacher} • Room {classData.room}
+                  {classData.section} • {classData.teacher} • Room{" "}
+                  {classData.room}
                 </p>
                 <p className="text-white/80 text-sm mt-1">
                   Class code: {classData.classCode}
                 </p>
               </div>
-              
+
               <div className="absolute top-6 right-6">
                 <Button variant="secondary" size="sm">
                   <Settings className="w-4 h-4" />
@@ -796,7 +876,7 @@ export default function ClassView() {
             {[
               { id: "stream", label: "Stream", icon: MessageSquare },
               { id: "classwork", label: "Classwork", icon: FileText },
-              { id: "people", label: "People", icon: Users }
+              { id: "people", label: "People", icon: Users },
             ].map((tab) => (
               <button
                 key={tab.id}

@@ -51,7 +51,9 @@ export default function TestTaking() {
   // Test state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set());
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(
+    new Set(),
+  );
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [cameraEnabled, setCameraEnabled] = useState(true);
@@ -78,14 +80,21 @@ export default function TestTaking() {
       {
         id: "q2",
         type: "multiple-choice",
-        question: "Which integration technique is most suitable for ∫x·sin(x) dx?",
-        options: ["Substitution", "Integration by parts", "Partial fractions", "Direct integration"],
+        question:
+          "Which integration technique is most suitable for ∫x·sin(x) dx?",
+        options: [
+          "Substitution",
+          "Integration by parts",
+          "Partial fractions",
+          "Direct integration",
+        ],
         marks: 10,
       },
       {
         id: "q3",
         type: "true-false",
-        question: "The integral of a constant function is always a linear function.",
+        question:
+          "The integral of a constant function is always a linear function.",
         marks: 5,
       },
       {
@@ -97,10 +106,11 @@ export default function TestTaking() {
       {
         id: "q5",
         type: "essay",
-        question: "Explain the fundamental theorem of calculus and provide an example of its application.",
+        question:
+          "Explain the fundamental theorem of calculus and provide an example of its application.",
         marks: 20,
       },
-    ]
+    ],
   };
 
   const currentQuestion = testData.questions[currentQuestionIndex];
@@ -115,7 +125,7 @@ export default function TestTaking() {
 
     return () => {
       if (stream) {
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       }
     };
   }, []);
@@ -124,7 +134,7 @@ export default function TestTaking() {
   useEffect(() => {
     if (testStarted && timeRemaining > 0) {
       const timer = setInterval(() => {
-        setTimeRemaining(prev => {
+        setTimeRemaining((prev) => {
           if (prev <= 1) {
             handleSubmitTest();
             return 0;
@@ -141,7 +151,7 @@ export default function TestTaking() {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { width: 240, height: 180 },
-        audio: micEnabled
+        audio: micEnabled,
       });
       setStream(mediaStream);
       if (videoRef.current) {
@@ -155,7 +165,7 @@ export default function TestTaking() {
 
   const toggleCamera = async () => {
     if (cameraEnabled && stream) {
-      stream.getVideoTracks().forEach(track => track.stop());
+      stream.getVideoTracks().forEach((track) => track.stop());
       setCameraEnabled(false);
     } else {
       await initializeCamera();
@@ -165,7 +175,7 @@ export default function TestTaking() {
 
   const toggleMic = () => {
     if (stream) {
-      stream.getAudioTracks().forEach(track => {
+      stream.getAudioTracks().forEach((track) => {
         track.enabled = !micEnabled;
       });
       setMicEnabled(!micEnabled);
@@ -176,19 +186,19 @@ export default function TestTaking() {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
+
     if (hours > 0) {
-      return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      return `${hours}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
     }
-    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+    return `${minutes}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleAnswerChange = (questionId: string, answer: string) => {
-    setAnswers(prev => ({ ...prev, [questionId]: answer }));
+    setAnswers((prev) => ({ ...prev, [questionId]: answer }));
   };
 
   const toggleFlag = (questionId: string) => {
-    setFlaggedQuestions(prev => {
+    setFlaggedQuestions((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(questionId)) {
         newSet.delete(questionId);
@@ -238,7 +248,9 @@ export default function TestTaking() {
                   name={currentQuestion.id}
                   value={option}
                   checked={answers[currentQuestion.id] === option}
-                  onChange={(e) => handleAnswerChange(currentQuestion.id, e.target.value)}
+                  onChange={(e) =>
+                    handleAnswerChange(currentQuestion.id, e.target.value)
+                  }
                   className="mr-3"
                 />
                 <span>{option}</span>
@@ -260,7 +272,9 @@ export default function TestTaking() {
                   name={currentQuestion.id}
                   value={option}
                   checked={answers[currentQuestion.id] === option}
-                  onChange={(e) => handleAnswerChange(currentQuestion.id, e.target.value)}
+                  onChange={(e) =>
+                    handleAnswerChange(currentQuestion.id, e.target.value)
+                  }
                   className="mr-3"
                 />
                 <span>{option}</span>
@@ -273,7 +287,9 @@ export default function TestTaking() {
         return (
           <textarea
             value={answers[currentQuestion.id] || ""}
-            onChange={(e) => handleAnswerChange(currentQuestion.id, e.target.value)}
+            onChange={(e) =>
+              handleAnswerChange(currentQuestion.id, e.target.value)
+            }
             placeholder="Enter your answer here..."
             className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             rows={4}
@@ -284,7 +300,9 @@ export default function TestTaking() {
         return (
           <textarea
             value={answers[currentQuestion.id] || ""}
-            onChange={(e) => handleAnswerChange(currentQuestion.id, e.target.value)}
+            onChange={(e) =>
+              handleAnswerChange(currentQuestion.id, e.target.value)
+            }
             placeholder="Write your detailed answer here..."
             className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             rows={8}
@@ -318,13 +336,18 @@ export default function TestTaking() {
 
           <div className="flex items-center gap-4">
             {/* Timer */}
-            <div className={`flex items-center gap-2 font-mono text-lg font-bold ${getTimeColor()}`}>
+            <div
+              className={`flex items-center gap-2 font-mono text-lg font-bold ${getTimeColor()}`}
+            >
               <Clock className="w-5 h-5" />
               {formatTime(timeRemaining)}
             </div>
 
             {/* Submit Button */}
-            <Button onClick={handleSubmitTest} className="bg-green-600 hover:bg-green-700">
+            <Button
+              onClick={handleSubmitTest}
+              className="bg-green-600 hover:bg-green-700"
+            >
               <Send className="w-4 h-4 mr-2" />
               Submit Test
             </Button>
@@ -342,7 +365,8 @@ export default function TestTaking() {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-4">
                     <Badge variant="outline">
-                      Question {currentQuestionIndex + 1} of {testData.questions.length}
+                      Question {currentQuestionIndex + 1} of{" "}
+                      {testData.questions.length}
                     </Badge>
                     <Badge className="bg-blue-100 text-blue-700">
                       {currentQuestion.marks} marks
@@ -354,7 +378,7 @@ export default function TestTaking() {
                       </Badge>
                     )}
                   </div>
-                  
+
                   <h2 className="text-xl font-semibold text-gray-900 mb-6">
                     {currentQuestion.question}
                   </h2>
@@ -364,7 +388,11 @@ export default function TestTaking() {
                   variant="outline"
                   size="sm"
                   onClick={() => toggleFlag(currentQuestion.id)}
-                  className={flaggedQuestions.has(currentQuestion.id) ? "bg-yellow-50" : ""}
+                  className={
+                    flaggedQuestions.has(currentQuestion.id)
+                      ? "bg-yellow-50"
+                      : ""
+                  }
                 >
                   <Flag className="w-4 h-4" />
                 </Button>
@@ -386,13 +414,16 @@ export default function TestTaking() {
 
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-600">
-                  Question {currentQuestionIndex + 1} of {testData.questions.length}
+                  Question {currentQuestionIndex + 1} of{" "}
+                  {testData.questions.length}
                 </span>
               </div>
 
               <Button
                 onClick={() => goToQuestion(currentQuestionIndex + 1)}
-                disabled={currentQuestionIndex === testData.questions.length - 1}
+                disabled={
+                  currentQuestionIndex === testData.questions.length - 1
+                }
               >
                 Next
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -404,7 +435,7 @@ export default function TestTaking() {
         {/* Sidebar */}
         <div className="w-80 bg-white border-l border-gray-200 p-6">
           <h3 className="text-lg font-semibold mb-4">Question Navigator</h3>
-          
+
           <div className="grid grid-cols-5 gap-2 mb-6">
             {testData.questions.map((question, index) => {
               const status = getQuestionStatus(question.id);
@@ -416,10 +447,10 @@ export default function TestTaking() {
                     index === currentQuestionIndex
                       ? "bg-blue-500 text-white border-blue-500"
                       : status === "answered"
-                      ? "bg-green-100 text-green-700 border-green-300"
-                      : status === "flagged"
-                      ? "bg-yellow-100 text-yellow-700 border-yellow-300"
-                      : "bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100"
+                        ? "bg-green-100 text-green-700 border-green-300"
+                        : status === "flagged"
+                          ? "bg-yellow-100 text-yellow-700 border-yellow-300"
+                          : "bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100"
                   }`}
                 >
                   {index + 1}
@@ -448,13 +479,15 @@ export default function TestTaking() {
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
               <span>Progress</span>
-              <span>{Object.keys(answers).length}/{testData.questions.length}</span>
+              <span>
+                {Object.keys(answers).length}/{testData.questions.length}
+              </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                 style={{
-                  width: `${(Object.keys(answers).length / testData.questions.length) * 100}%`
+                  width: `${(Object.keys(answers).length / testData.questions.length) * 100}%`,
                 }}
               ></div>
             </div>
@@ -474,7 +507,9 @@ export default function TestTaking() {
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-xs font-medium text-gray-700">Proctoring</span>
+                <span className="text-xs font-medium text-gray-700">
+                  Proctoring
+                </span>
               </div>
               <div className="flex gap-1">
                 <Button
@@ -503,7 +538,7 @@ export default function TestTaking() {
                 </Button>
               </div>
             </div>
-            
+
             <div className="w-48 h-36 bg-gray-900 rounded-lg overflow-hidden">
               {cameraEnabled ? (
                 <video
@@ -518,7 +553,7 @@ export default function TestTaking() {
                 </div>
               )}
             </div>
-            
+
             <div className="mt-2 text-xs text-gray-600 text-center">
               Your activity is being monitored
             </div>
@@ -546,7 +581,8 @@ export default function TestTaking() {
                 <h3 className="text-lg font-semibold">Test Security Warning</h3>
               </div>
               <p className="text-gray-600 mb-4">
-                You have left the test window. This action has been recorded. Please return to the test immediately.
+                You have left the test window. This action has been recorded.
+                Please return to the test immediately.
               </p>
               <Button className="w-full" onClick={() => window.focus()}>
                 Return to Test

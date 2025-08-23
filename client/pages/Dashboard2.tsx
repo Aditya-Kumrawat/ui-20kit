@@ -61,7 +61,8 @@ export default function Dashboard2() {
       section: "Section A",
       room: "Room 201",
       color: "from-blue-500 to-blue-600",
-      coverImage: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=200&fit=crop",
+      coverImage:
+        "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=200&fit=crop",
       studentsCount: 28,
       pendingWork: 3,
       lastActivity: "2 hours ago",
@@ -77,7 +78,8 @@ export default function Dashboard2() {
       section: "Section B",
       room: "Lab 305",
       color: "from-purple-500 to-purple-600",
-      coverImage: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=400&h=200&fit=crop",
+      coverImage:
+        "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=400&h=200&fit=crop",
       studentsCount: 24,
       pendingWork: 1,
       lastActivity: "5 hours ago",
@@ -92,7 +94,8 @@ export default function Dashboard2() {
       section: "Section A",
       room: "Lab 104",
       color: "from-green-500 to-green-600",
-      coverImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=200&fit=crop",
+      coverImage:
+        "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=200&fit=crop",
       studentsCount: 32,
       pendingWork: 5,
       lastActivity: "1 day ago",
@@ -107,7 +110,8 @@ export default function Dashboard2() {
       section: "Section C",
       room: "Room 156",
       color: "from-red-500 to-red-600",
-      coverImage: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=200&fit=crop",
+      coverImage:
+        "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=200&fit=crop",
       studentsCount: 22,
       pendingWork: 2,
       lastActivity: "3 days ago",
@@ -122,7 +126,8 @@ export default function Dashboard2() {
       section: "Section A",
       room: "Lab 220",
       color: "from-orange-500 to-orange-600",
-      coverImage: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=200&fit=crop",
+      coverImage:
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=200&fit=crop",
       studentsCount: 20,
       pendingWork: 0,
       lastActivity: "1 week ago",
@@ -137,7 +142,8 @@ export default function Dashboard2() {
       section: "Section B",
       room: "Lab 315",
       color: "from-teal-500 to-teal-600",
-      coverImage: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop",
+      coverImage:
+        "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop",
       studentsCount: 26,
       pendingWork: 1,
       lastActivity: "4 days ago",
@@ -149,7 +155,7 @@ export default function Dashboard2() {
     (cls) =>
       cls.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cls.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cls.teacher.toLowerCase().includes(searchQuery.toLowerCase())
+      cls.teacher.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const ClassCard = ({ classData }: { classData: ClassData }) => (
@@ -171,7 +177,7 @@ export default function Dashboard2() {
             className="w-full h-full object-cover opacity-60"
           />
         )}
-        
+
         {/* Pinned indicator */}
         {classData.isPinned && (
           <div className="absolute top-3 left-3">
@@ -212,7 +218,8 @@ export default function Dashboard2() {
           <div className="flex items-center gap-2 mb-3">
             <AlertCircle className="w-4 h-4 text-orange-500" />
             <span className="text-sm text-orange-600 font-medium">
-              {classData.pendingWork} assignment{classData.pendingWork > 1 ? 's' : ''} due
+              {classData.pendingWork} assignment
+              {classData.pendingWork > 1 ? "s" : ""} due
             </span>
           </div>
         )}
@@ -234,7 +241,10 @@ export default function Dashboard2() {
           <Avatar className="w-6 h-6">
             <AvatarImage src={classData.teacherAvatar} />
             <AvatarFallback className="text-xs">
-              {classData.teacher.split(' ').map(n => n[0]).join('')}
+              {classData.teacher
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
             </AvatarFallback>
           </Avatar>
           <span className="text-sm text-gray-700 truncate">
@@ -254,8 +264,10 @@ export default function Dashboard2() {
     >
       <div className="flex items-center gap-4">
         {/* Class color indicator */}
-        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${classData.color} flex-shrink-0`} />
-        
+        <div
+          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${classData.color} flex-shrink-0`}
+        />
+
         {/* Class info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
@@ -284,7 +296,10 @@ export default function Dashboard2() {
         {/* Pending work */}
         <div className="flex items-center gap-2">
           {classData.pendingWork > 0 ? (
-            <Badge variant="secondary" className="bg-orange-100 text-orange-700">
+            <Badge
+              variant="secondary"
+              className="bg-orange-100 text-orange-700"
+            >
               {classData.pendingWork} due
             </Badge>
           ) : (
@@ -330,14 +345,12 @@ export default function Dashboard2() {
           transition={{ duration: 0.5 }}
         >
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              My Classes
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
             <p className="text-gray-600 mt-1">
               Welcome back! Here are your enrolled classes.
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             {/* Search */}
             <div className="relative">
@@ -372,7 +385,7 @@ export default function Dashboard2() {
             </div>
 
             {/* Join class button */}
-            <Button 
+            <Button
               variant="outline"
               onClick={() => {
                 // Handle join class
@@ -402,7 +415,9 @@ export default function Dashboard2() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Classes</p>
-                <p className="text-2xl font-bold text-gray-900">{classes.length}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {classes.length}
+                </p>
               </div>
             </div>
           </Card>
@@ -496,10 +511,9 @@ export default function Dashboard2() {
               No classes found
             </h3>
             <p className="text-gray-600">
-              {searchQuery 
+              {searchQuery
                 ? "Try adjusting your search terms"
-                : "Join your first class to get started"
-              }
+                : "Join your first class to get started"}
             </p>
           </motion.div>
         )}

@@ -153,7 +153,9 @@ export default function Chatbot() {
   const location = useLocation();
 
   // Detect user type based on current route
-  const userType = location.pathname.startsWith('/dashboard2') ? 'student' : 'teacher';
+  const userType = location.pathname.startsWith("/dashboard2")
+    ? "student"
+    : "teacher";
 
   const [messages, setMessages] = useState<Message[]>([
     {

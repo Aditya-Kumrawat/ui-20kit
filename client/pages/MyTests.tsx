@@ -62,7 +62,8 @@ export default function MyTests() {
       status: "pending",
       difficulty: "hard",
       type: "midterm",
-      description: "Comprehensive test covering integration by parts, substitution methods, and trigonometric integrals.",
+      description:
+        "Comprehensive test covering integration by parts, substitution methods, and trigonometric integrals.",
       isProctored: true,
       attempts: 0,
       maxAttempts: 1,
@@ -79,7 +80,8 @@ export default function MyTests() {
       status: "pending",
       difficulty: "medium",
       type: "quiz",
-      description: "Quick assessment on wave functions, uncertainty principle, and quantum states.",
+      description:
+        "Quick assessment on wave functions, uncertainty principle, and quantum states.",
       isProctored: false,
       attempts: 0,
       maxAttempts: 2,
@@ -96,7 +98,8 @@ export default function MyTests() {
       status: "pending",
       difficulty: "hard",
       type: "final",
-      description: "Final exam covering supervised learning, neural networks, and deep learning concepts.",
+      description:
+        "Final exam covering supervised learning, neural networks, and deep learning concepts.",
       isProctored: true,
       attempts: 0,
       maxAttempts: 1,
@@ -113,7 +116,8 @@ export default function MyTests() {
       status: "completed",
       difficulty: "medium",
       type: "assignment",
-      description: "Analysis of themes, characters, and literary devices in Hamlet and Macbeth.",
+      description:
+        "Analysis of themes, characters, and literary devices in Hamlet and Macbeth.",
       isProctored: false,
       attempts: 1,
       maxAttempts: 1,
@@ -121,32 +125,43 @@ export default function MyTests() {
     },
   ];
 
-  const filteredTests = tests.filter(test => {
-    const matchesSearch = test.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         test.subject.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = filterStatus === "all" || test.status === filterStatus;
+  const filteredTests = tests.filter((test) => {
+    const matchesSearch =
+      test.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      test.subject.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter =
+      filterStatus === "all" || test.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
 
-  const pendingTests = tests.filter(t => t.status === "pending");
-  const completedTests = tests.filter(t => t.status === "completed");
+  const pendingTests = tests.filter((t) => t.status === "pending");
+  const completedTests = tests.filter((t) => t.status === "completed");
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending": return "bg-orange-100 text-orange-700";
-      case "completed": return "bg-green-100 text-green-700";
-      case "in-progress": return "bg-blue-100 text-blue-700";
-      case "missed": return "bg-red-100 text-red-700";
-      default: return "bg-gray-100 text-gray-700";
+      case "pending":
+        return "bg-orange-100 text-orange-700";
+      case "completed":
+        return "bg-green-100 text-green-700";
+      case "in-progress":
+        return "bg-blue-100 text-blue-700";
+      case "missed":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-gray-100 text-gray-700";
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "easy": return "bg-green-100 text-green-700";
-      case "medium": return "bg-yellow-100 text-yellow-700";
-      case "hard": return "bg-red-100 text-red-700";
-      default: return "bg-gray-100 text-gray-700";
+      case "easy":
+        return "bg-green-100 text-green-700";
+      case "medium":
+        return "bg-yellow-100 text-yellow-700";
+      case "hard":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-gray-100 text-gray-700";
     }
   };
 
@@ -154,7 +169,7 @@ export default function MyTests() {
     const now = new Date();
     const timeDiff = dueDate.getTime() - now.getTime();
     const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    
+
     if (daysDiff < 0) return "Overdue";
     if (daysDiff === 0) return "Due today";
     if (daysDiff === 1) return "Due tomorrow";
@@ -187,14 +202,12 @@ export default function MyTests() {
           transition={{ duration: 0.5 }}
         >
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              My Tests
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Tests</h1>
             <p className="text-gray-600">
               View and attempt your pending tests and assessments
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             {/* Search */}
             <div className="relative">
@@ -236,7 +249,9 @@ export default function MyTests() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Pending Tests</p>
-                <p className="text-2xl font-bold text-gray-900">{pendingTests.length}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {pendingTests.length}
+                </p>
               </div>
             </div>
           </Card>
@@ -248,7 +263,9 @@ export default function MyTests() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">{completedTests.length}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {completedTests.length}
+                </p>
               </div>
             </div>
           </Card>
@@ -261,9 +278,15 @@ export default function MyTests() {
               <div>
                 <p className="text-sm text-gray-600">Average Score</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {completedTests.length > 0 
-                    ? Math.round(completedTests.reduce((acc, test) => acc + (test.score || 0), 0) / completedTests.length)
-                    : 0}%
+                  {completedTests.length > 0
+                    ? Math.round(
+                        completedTests.reduce(
+                          (acc, test) => acc + (test.score || 0),
+                          0,
+                        ) / completedTests.length,
+                      )
+                    : 0}
+                  %
                 </p>
               </div>
             </div>
@@ -276,7 +299,9 @@ export default function MyTests() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Tests</p>
-                <p className="text-2xl font-bold text-gray-900">{tests.length}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {tests.length}
+                </p>
               </div>
             </div>
           </Card>
@@ -318,14 +343,16 @@ export default function MyTests() {
                       )}
                     </div>
                   </div>
-                  
+
                   {test.status === "pending" && (
                     <div className="text-right">
-                      <div className={`text-sm font-medium ${
-                        getTimeRemaining(test.dueDate).includes("Overdue") 
-                          ? "text-red-600" 
-                          : "text-orange-600"
-                      }`}>
+                      <div
+                        className={`text-sm font-medium ${
+                          getTimeRemaining(test.dueDate).includes("Overdue")
+                            ? "text-red-600"
+                            : "text-orange-600"
+                        }`}
+                      >
                         {getTimeRemaining(test.dueDate)}
                       </div>
                     </div>
@@ -338,27 +365,31 @@ export default function MyTests() {
                     <User className="w-4 h-4" />
                     <span>{test.teacher}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Timer className="w-4 h-4" />
-                    <span>{test.duration} minutes • {test.totalQuestions} questions • {test.totalMarks} marks</span>
+                    <span>
+                      {test.duration} minutes • {test.totalQuestions} questions
+                      • {test.totalMarks} marks
+                    </span>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Calendar className="w-4 h-4" />
                     <span>Due: {test.dueDate.toLocaleDateString()}</span>
                   </div>
-                  
+
                   <p className="text-sm text-gray-700 line-clamp-2">
                     {test.description}
                   </p>
-                  
+
                   {test.attempts > 0 && (
                     <div className="text-sm text-gray-600">
                       Attempts: {test.attempts}/{test.maxAttempts}
                       {test.score && (
                         <span className="ml-2 font-medium text-green-600">
-                          Score: {test.score}/{test.totalMarks} ({Math.round((test.score / test.totalMarks) * 100)}%)
+                          Score: {test.score}/{test.totalMarks} (
+                          {Math.round((test.score / test.totalMarks) * 100)}%)
                         </span>
                       )}
                     </div>
@@ -368,7 +399,7 @@ export default function MyTests() {
                 {/* Action Button */}
                 <div className="pt-4 border-t border-gray-100">
                   {test.status === "pending" ? (
-                    <Button 
+                    <Button
                       className="w-full"
                       onClick={() => handleStartTest(test.id)}
                       disabled={test.attempts >= test.maxAttempts}
@@ -405,10 +436,9 @@ export default function MyTests() {
               No tests found
             </h3>
             <p className="text-gray-600">
-              {searchQuery || filterStatus !== "all" 
+              {searchQuery || filterStatus !== "all"
                 ? "Try adjusting your search or filter criteria"
-                : "You don't have any tests at the moment"
-              }
+                : "You don't have any tests at the moment"}
             </p>
           </motion.div>
         )}
