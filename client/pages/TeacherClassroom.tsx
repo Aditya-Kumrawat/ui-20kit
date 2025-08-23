@@ -122,6 +122,7 @@ export default function TeacherClassroom() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [classPosts, setClassPosts] = useState<ClassPost[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [selectedView, setSelectedView] = useState<"overview" | "assignments" | "students" | "posts">("overview");
   
   // Dialog states
