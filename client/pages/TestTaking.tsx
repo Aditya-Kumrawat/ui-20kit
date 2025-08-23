@@ -149,6 +149,11 @@ export default function TestTaking() {
 
   const initializeCamera = async () => {
     try {
+      // Check if mediaDevices is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Camera API not supported in this browser");
+      }
+
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { width: 240, height: 180 },
         audio: micEnabled,
@@ -157,9 +162,36 @@ export default function TestTaking() {
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
       }
+      setCameraEnabled(true);
     } catch (error) {
       console.error("Error accessing camera:", error);
       setCameraEnabled(false);
+
+      // Handle different types of camera errors
+      let errorMessage = "Camera access failed";
+      let actionMessage = "Please check your camera settings and try again.";
+
+      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+        errorMessage = "Camera permission denied";
+        actionMessage = "Please allow camera access in your browser settings and refresh the page. For proctored tests, camera access is required.";
+      } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
+        errorMessage = "No camera found";
+        actionMessage = "Please connect a camera device and try again.";
+      } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
+        errorMessage = "Camera is being used by another application";
+        actionMessage = "Please close other applications using the camera and try again.";
+      } else if (error.name === "OverconstrainedError" || error.name === "ConstraintNotSatisfiedError") {
+        errorMessage = "Camera doesn't support required settings";
+        actionMessage = "Your camera doesn't support the required resolution. Please try with a different camera.";
+      } else if (error.message.includes("not supported")) {
+        errorMessage = "Camera not supported";
+        actionMessage = "Your browser doesn't support camera access. Please use a modern browser like Chrome, Firefox, or Safari.";
+      }
+
+      // Show user-friendly error notification
+      if (typeof window !== 'undefined' && window.alert) {
+        window.alert(`${errorMessage}\n\n${actionMessage}`);
+      }
     }
   };
 
