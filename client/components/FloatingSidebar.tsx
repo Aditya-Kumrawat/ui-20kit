@@ -38,7 +38,7 @@ export const FloatingSidebar = ({
   const location = useLocation();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const menuItems = [
+  const teacherMenuItems = [
     { id: "home", label: "Dashboard", icon: Home, href: "/dashboard" },
     {
       id: "analytics",
@@ -91,6 +91,30 @@ export const FloatingSidebar = ({
       href: "/dashboard/computer-vision",
     },
   ];
+
+  const studentMenuItems = [
+    { id: "home", label: "Dashboard", icon: Home, href: "/dashboard2" },
+    {
+      id: "customers",
+      label: "Students",
+      icon: Users,
+      href: "/dashboard2/students",
+    },
+    {
+      id: "calendar",
+      label: "Calendar",
+      icon: Calendar,
+      href: "/dashboard2/calendar",
+    },
+    {
+      id: "chatbot",
+      label: "AI Chat",
+      icon: Brain,
+      href: "/dashboard2/chatbot",
+    },
+  ];
+
+  const menuItems = userType === "student" ? studentMenuItems : teacherMenuItems;
 
   const isActive = (href: string) => {
     // Exact match for root dashboard path
