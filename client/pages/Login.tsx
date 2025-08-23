@@ -25,8 +25,12 @@ export default function Login() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
     console.log("Login attempt:", { email, password, role: selectedRole });
-    // Navigate to dashboard after successful login
-    navigate("/dashboard");
+    // Navigate to appropriate dashboard based on role
+    if (selectedRole === "student") {
+      navigate("/dashboard2");
+    } else {
+      navigate("/dashboard");
+    }
   };
 
   const handleGoogleLogin = () => {
