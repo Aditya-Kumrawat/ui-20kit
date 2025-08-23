@@ -16,11 +16,15 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedRole) {
+      alert("Please select your role (Teacher or Student) before signing in.");
+      return;
+    }
     setIsLoading(true);
     // Simulate login process
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
-    console.log("Login attempt:", { email, password });
+    console.log("Login attempt:", { email, password, role: selectedRole });
     // Navigate to dashboard after successful login
     navigate("/dashboard");
   };
