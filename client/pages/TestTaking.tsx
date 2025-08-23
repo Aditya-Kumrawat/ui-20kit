@@ -144,7 +144,7 @@ export default function TestTaking() {
         });
       }
     };
-  }, [stream]);
+  }, []); // Empty dependency array - only run once on mount
 
   // Timer countdown
   useEffect(() => {
