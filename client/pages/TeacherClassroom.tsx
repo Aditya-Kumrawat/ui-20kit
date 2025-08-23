@@ -58,6 +58,9 @@ import {
   GraduationCap,
   Shield,
   ScanLine,
+  School,
+  Folder,
+  ChevronRight,
 } from "lucide-react";
 
 interface Assignment {
