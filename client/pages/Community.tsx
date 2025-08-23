@@ -710,6 +710,170 @@ export default function Community() {
           </motion.div>
         </div>
       </motion.div>
+
+      {/* Comments Dialog */}
+      <Dialog open={isCommentsDialogOpen} onOpenChange={setIsCommentsDialogOpen}>
+        <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-hidden">
+          <DialogHeader>
+            <DialogTitle>Comments</DialogTitle>
+          </DialogHeader>
+          {selectedPost && (
+            <div className="space-y-4">
+              {/* Post Preview */}
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-3 mb-2">
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src={selectedPost.author.avatar} />
+                    <AvatarFallback>
+                      {selectedPost.author.name.split(" ").map(n => n[0]).join("")}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h4 className="font-semibold text-sm">{selectedPost.author.name}</h4>
+                    <p className="text-xs text-gray-500">{selectedPost.timestamp}</p>
+                  </div>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-1">{selectedPost.title}</h3>
+                <p className="text-sm text-gray-600 line-clamp-2">{selectedPost.content}</p>
+              </div>
+
+              {/* Add Comment */}
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=currentuser" />
+                    <AvatarFallback>CU</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 space-y-2">
+                    <Textarea
+                      placeholder="Write a comment..."
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      rows={2}
+                    />
+                    <div className="flex justify-end">
+                      <Button
+                        size="sm"
+                        onClick={handleAddComment}
+                        disabled={!newComment.trim()}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        <Send className="w-4 h-4 mr-2" />
+                        Comment
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Comments List */}
+              <div className="max-h-96 overflow-y-auto space-y-4">
+                {selectedPost.commentsList && selectedPost.commentsList.length > 0 ? (
+                  selectedPost.commentsList.map((comment) => (
+                    <div key={comment.id} className="flex gap-3">
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage src={comment.author.avatar} />
+                        <AvatarFallback>
+                          {comment.author.name.split(" ").map(n => n[0]).join("")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h5 className="font-semibold text-sm">{comment.author.name}</h5>
+                            <Badge variant="outline" className="text-xs">
+                              {comment.author.role}
+                            </Badge>
+                            <span className="text-xs text-gray-500">{comment.timestamp}</span>
+                          </div>
+                          <p className="text-sm text-gray-700">{comment.content}</p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className={`text-xs ${comment.isLiked ? 'text-red-500' : 'text-gray-500'}`}
+                            onClick={() => handleLikeComment(comment.id)}
+                          >
+                            <Heart className={`w-3 h-3 mr-1 ${comment.isLiked ? 'fill-current' : ''}`} />
+                            {comment.likes}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-500">No comments yet. Be the first to comment!</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Share Dialog */}
+      <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Share Post</DialogTitle>
+          </DialogHeader>
+          {selectedPost && (
+            <div className="space-y-4">
+              {/* Post Preview */}
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold text-sm text-gray-900 mb-1">
+                  {selectedPost.title}
+                </h4>
+                <p className="text-xs text-gray-600 line-clamp-2">
+                  {selectedPost.content}
+                </p>
+              </div>
+
+              {/* Share Options */}
+              <div className="space-y-3">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => handleShare('copy')}
+                >
+                  <Copy className="w-4 h-4 mr-3" />
+                  Copy Link
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => handleShare('twitter')}
+                >
+                  <Twitter className="w-4 h-4 mr-3" />
+                  Share on Twitter
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => handleShare('facebook')}
+                >
+                  <Facebook className="w-4 h-4 mr-3" />
+                  Share on Facebook
+                </Button>
+              </div>
+
+              <div className="flex justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsShareDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
