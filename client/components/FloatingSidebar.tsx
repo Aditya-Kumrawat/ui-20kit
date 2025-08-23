@@ -307,10 +307,12 @@ export const FloatingSidebar = ({
               isCollapsed ? "p-2 justify-center" : "p-3"
             } rounded-xl hover:bg-red-50 text-red-600 hover:text-red-700`}
             onClick={() => {
-              // Add logout logic here
-              console.log("Logout clicked");
-              // Example: clear auth tokens, redirect to login, etc.
-              // navigate("/login");
+              // Clear any auth tokens or user session data here if needed
+              // localStorage.removeItem("authToken");
+              // sessionStorage.clear();
+
+              // Navigate to login page
+              navigate("/login");
             }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
