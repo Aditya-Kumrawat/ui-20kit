@@ -203,7 +203,7 @@ export default function Login() {
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 }}
+                    transition={{ delay: 0.55 }}
                   >
                     <Label
                       htmlFor="email"
@@ -228,7 +228,7 @@ export default function Login() {
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 }}
+                    transition={{ delay: 0.65 }}
                   >
                     <Label
                       htmlFor="password"
@@ -261,7 +261,7 @@ export default function Login() {
                     className="flex items-center justify-between"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7 }}
+                    transition={{ delay: 0.75 }}
                   >
                     <label className="flex items-center space-x-2 cursor-pointer">
                       <input
@@ -282,7 +282,7 @@ export default function Login() {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 }}
+                    transition={{ delay: 0.85 }}
                   >
                     <Button
                       type="submit"
@@ -317,7 +317,7 @@ export default function Login() {
                     className="relative"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.9 }}
+                    transition={{ delay: 0.95 }}
                   >
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-white/20"></div>
@@ -333,7 +333,7 @@ export default function Login() {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.0 }}
+                    transition={{ delay: 1.05 }}
                   >
                     <Button
                       type="button"
@@ -352,7 +352,7 @@ export default function Login() {
                   className="mt-6 text-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 1.1 }}
+                  transition={{ delay: 1.15 }}
                 >
                   <p className="text-gray-600 text-sm">
                     Don't have an account?{" "}
