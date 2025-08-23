@@ -73,6 +73,12 @@ export const FloatingSidebar = ({
       badge: 3,
     },
     {
+      id: "tests",
+      label: "Tests",
+      icon: Cpu,
+      href: "/dashboard/tests",
+    },
+    {
       id: "calendar",
       label: "Calendar",
       icon: Calendar,
