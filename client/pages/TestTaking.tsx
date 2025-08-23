@@ -593,8 +593,19 @@ export default function TestTaking() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <CameraOff className="w-8 h-8 text-gray-400" />
+                <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center">
+                  <CameraOff className="w-8 h-8 text-red-400 mb-2" />
+                  <p className="text-xs text-gray-300 mb-2">
+                    Camera access denied or unavailable
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={retryCamera}
+                    className="h-6 px-2 text-xs bg-white/10 border-white/20 text-white hover:bg-white/20"
+                  >
+                    Retry
+                  </Button>
                 </div>
               )}
             </div>
