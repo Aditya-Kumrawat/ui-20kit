@@ -150,6 +150,11 @@ export default function Chatbot() {
   const [vapiInitialized, setVapiInitialized] = useState(false);
 
   const { isCollapsed, setIsCollapsed } = useSidebar();
+  const location = useLocation();
+
+  // Detect user type based on current route
+  const userType = location.pathname.startsWith('/dashboard2') ? 'student' : 'teacher';
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "system-welcome",
