@@ -45,13 +45,6 @@ export const FloatingSidebar = ({
       href: "/dashboard/analytics",
     },
     {
-      id: "orders",
-      label: "Orders",
-      icon: ShoppingCart,
-      href: "/dashboard/orders",
-      badge: 5,
-    },
-    {
       id: "tests",
       label: "Tests",
       icon: Cpu,
