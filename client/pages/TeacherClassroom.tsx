@@ -25,6 +25,8 @@ import { useToast } from "@/hooks/use-toast";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { PlagiarismDetection } from "@/components/PlagiarismDetection";
+import { AnomalyDetection } from "@/components/AnomalyDetection";
 import {
   BookOpen,
   Users,
@@ -54,6 +56,8 @@ import {
   CalendarDays,
   BookMarked,
   GraduationCap,
+  Shield,
+  ScanLine,
 } from "lucide-react";
 
 interface Assignment {
