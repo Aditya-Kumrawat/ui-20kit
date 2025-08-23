@@ -539,6 +539,22 @@ export default function TeacherClassroom() {
           
           {/* Quick Actions */}
           <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsPlagiarismOpen(true)}
+            >
+              <ScanLine className="w-4 h-4 mr-2" />
+              Plagiarism Check
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsAnomalyOpen(true)}
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              AI Monitoring
+            </Button>
             <Button variant="outline" size="sm">
               <CalendarDays className="w-4 h-4 mr-2" />
               Schedule
