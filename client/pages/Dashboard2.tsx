@@ -59,9 +59,9 @@ export default function Dashboard2() {
   const [isJoining, setIsJoining] = useState(false);
   const [enrolledClasses, setEnrolledClasses] = useState<ClassData[]>([]);
 
-  // Sample classroom data
-  const classes: ClassData[] = [
-    {
+  // Available classes that can be joined
+  const availableClasses: { [key: string]: ClassData } = {
+    "abc123d": {
       id: "math-101",
       name: "Advanced Mathematics",
       subject: "Mathematics",
@@ -78,7 +78,7 @@ export default function Dashboard2() {
       classCode: "abc123d",
       isPinned: true,
     },
-    {
+    "xyz789e": {
       id: "physics-201",
       name: "Quantum Physics",
       subject: "Physics",
@@ -94,73 +94,86 @@ export default function Dashboard2() {
       lastActivity: "5 hours ago",
       classCode: "xyz789e",
     },
-    {
-      id: "cs-301",
-      name: "Artificial Intelligence",
-      subject: "Computer Science",
-      teacher: "Dr. Emily Rodriguez",
-      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=emily",
+    "hist101a": {
+      id: "history-101",
+      name: "World History",
+      subject: "History",
+      teacher: "Prof. James Wilson",
+      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=james",
       section: "Section A",
-      room: "Lab 104",
-      color: "from-green-500 to-green-600",
-      coverImage:
-        "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=200&fit=crop",
-      studentsCount: 32,
-      pendingWork: 5,
-      lastActivity: "1 day ago",
-      classCode: "ai2024f",
-    },
-    {
-      id: "eng-102",
-      name: "Advanced Literature",
-      subject: "English",
-      teacher: "Ms. Jessica Taylor",
-      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=jessica",
-      section: "Section C",
-      room: "Room 156",
-      color: "from-red-500 to-red-600",
-      coverImage:
-        "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=200&fit=crop",
-      studentsCount: 22,
-      pendingWork: 2,
-      lastActivity: "3 days ago",
-      classCode: "lit456g",
-    },
-    {
-      id: "chem-201",
-      name: "Organic Chemistry",
-      subject: "Chemistry",
-      teacher: "Dr. Robert Kim",
-      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=robert",
-      section: "Section A",
-      room: "Lab 220",
-      color: "from-orange-500 to-orange-600",
-      coverImage:
-        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=200&fit=crop",
-      studentsCount: 20,
+      room: "Room 301",
+      color: "from-indigo-500 to-indigo-600",
+      studentsCount: 25,
       pendingWork: 0,
-      lastActivity: "1 week ago",
-      classCode: "chem789h",
+      lastActivity: "Just started",
+      classCode: "hist101a",
     },
-    {
-      id: "bio-301",
-      name: "Molecular Biology",
-      subject: "Biology",
-      teacher: "Dr. Maria Santos",
-      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=maria",
-      section: "Section B",
-      room: "Lab 315",
-      color: "from-teal-500 to-teal-600",
-      coverImage:
-        "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop",
-      studentsCount: 26,
-      pendingWork: 1,
-      lastActivity: "4 days ago",
-      classCode: "bio123i",
-    },
-  ];
+  };
 
-  const filteredClasses = classes.filter(
+  // Initialize with some enrolled classes
+  React.useEffect(() => {
+    if (enrolledClasses.length === 0) {
+      setEnrolledClasses([
+        availableClasses["abc123d"],
+        availableClasses["xyz789e"],
+      ]);
+    }
+  }, []);
+
+  // Handle join class functionality
+  const handleJoinClass = async () => {
+    if (!classCode.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a class code",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsJoining(true);
+
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    const foundClass = availableClasses[classCode.toLowerCase()];
+
+    if (!foundClass) {
+      toast({
+        title: "Class not found",
+        description: "Invalid class code. Please check and try again.",
+        variant: "destructive",
+      });
+      setIsJoining(false);
+      return;
+    }
+
+    // Check if already enrolled
+    if (enrolledClasses.some(cls => cls.id === foundClass.id)) {
+      toast({
+        title: "Already enrolled",
+        description: "You are already enrolled in this class.",
+        variant: "destructive",
+      });
+      setIsJoining(false);
+      return;
+    }
+
+    // Add class to enrolled classes
+    setEnrolledClasses(prev => [...prev, foundClass]);
+
+    toast({
+      title: "Success!",
+      description: `Successfully joined ${foundClass.name}`,
+    });
+
+    // Reset form
+    setClassCode("");
+    setJoinClassOpen(false);
+    setIsJoining(false);
+  };
+
+  const filteredClasses = enrolledClasses.filter(
     (cls) =>
       cls.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cls.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -394,19 +407,53 @@ export default function Dashboard2() {
             </div>
 
             {/* Join class button */}
-            <Button
-              variant="outline"
-              onClick={() => {
-                // Handle join class
-                const classCode = prompt("Enter class code:");
-                if (classCode) {
-                  console.log("Joining class with code:", classCode);
-                }
-              }}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Join Class
-            </Button>
+            <Dialog open={joinClassOpen} onOpenChange={setJoinClassOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Join Class
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Join a Class</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="classCode">Class Code</Label>
+                    <Input
+                      id="classCode"
+                      placeholder="Enter class code"
+                      value={classCode}
+                      onChange={(e) => setClassCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !isJoining) {
+                          handleJoinClass();
+                        }
+                      }}
+                    />
+                    <p className="text-sm text-gray-500">
+                      Try these codes: abc123d, xyz789e, hist101a
+                    </p>
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setJoinClassOpen(false)}
+                      disabled={isJoining}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleJoinClass}
+                      disabled={isJoining || !classCode.trim()}
+                    >
+                      {isJoining ? "Joining..." : "Join Class"}
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </motion.div>
 
@@ -425,7 +472,7 @@ export default function Dashboard2() {
               <div>
                 <p className="text-sm text-gray-600">Total Classes</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {classes.length}
+                  {enrolledClasses.length}
                 </p>
               </div>
             </div>
@@ -439,7 +486,7 @@ export default function Dashboard2() {
               <div>
                 <p className="text-sm text-gray-600">Pending Work</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {classes.reduce((total, cls) => total + cls.pendingWork, 0)}
+                  {enrolledClasses.reduce((total, cls) => total + cls.pendingWork, 0)}
                 </p>
               </div>
             </div>
@@ -465,7 +512,7 @@ export default function Dashboard2() {
               <div>
                 <p className="text-sm text-gray-600">Classmates</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {classes.reduce((total, cls) => total + cls.studentsCount, 0)}
+                  {enrolledClasses.reduce((total, cls) => total + cls.studentsCount, 0)}
                 </p>
               </div>
             </div>
