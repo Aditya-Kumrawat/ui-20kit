@@ -12,7 +12,6 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  ShoppingCart,
   LogOut,
   Edit,
   Star,
