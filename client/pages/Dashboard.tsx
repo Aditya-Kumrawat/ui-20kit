@@ -366,38 +366,337 @@ export default function Dashboard() {
     averageGrade: "B+",
   };
 
+  // Main dashboard blocks (2x2 grid)
+  const DashboardBlocks = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      {/* Assignments Block */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <Card className="h-full bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-blue-600" />
+              <CardTitle className="text-lg text-blue-800">Assignments</CardTitle>
+            </div>
+            <Dialog open={isNewAssignmentOpen} onOpenChange={setIsNewAssignmentOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                  <Plus className="w-4 h-4 mr-1" />
+                  New
+                </Button>
+              </DialogTrigger>
+            </Dialog>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="text-3xl font-bold text-blue-800">{assignments.length}</div>
+              <div className="text-sm text-blue-600">
+                {assignments.filter(a => a.status === "published").length} Published • {assignments.filter(a => a.status === "draft").length} Drafts
+              </div>
+              <div className="space-y-2">
+                {assignments.slice(0, 2).map(assignment => (
+                  <div key={assignment.id} className="flex items-center justify-between bg-white/60 rounded-lg p-2">
+                    <div>
+                      <div className="font-medium text-sm">{assignment.title}</div>
+                      <div className="text-xs text-gray-600">Due: {assignment.dueDate}</div>
+                    </div>
+                    <Badge variant={assignment.status === "published" ? "default" : "secondary"}>
+                      {assignment.submissions}/{assignment.totalStudents}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedView("assignments")}
+                className="w-full text-blue-600 hover:text-blue-700"
+              >
+                View All Assignments
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Students Block */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <Card className="h-full bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-green-600" />
+              <CardTitle className="text-lg text-green-800">Students</CardTitle>
+            </div>
+            <Button size="sm" variant="outline" className="border-green-300 text-green-700 hover:bg-green-50">
+              <UserCheck className="w-4 h-4 mr-1" />
+              Manage
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="text-3xl font-bold text-green-800">{students.length}</div>
+              <div className="text-sm text-green-600">
+                {students.filter(s => s.status === "active").length} Active • {students.filter(s => s.status === "inactive").length} Inactive
+              </div>
+              <div className="space-y-2">
+                {students.slice(0, 2).map(student => (
+                  <div key={student.id} className="flex items-center gap-2 bg-white/60 rounded-lg p-2">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={student.avatar} />
+                      <AvatarFallback>{student.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">{student.name}</div>
+                      <div className="text-xs text-gray-600">Grade: {student.grade}</div>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full ${student.status === "active" ? "bg-green-500" : "bg-gray-400"}`} />
+                  </div>
+                ))}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedView("students")}
+                className="w-full text-green-600 hover:text-green-700"
+              >
+                View All Students
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Recent Posts Block */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <Card className="h-full bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-purple-600" />
+              <CardTitle className="text-lg text-purple-800">Class Posts</CardTitle>
+            </div>
+            <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                  <Plus className="w-4 h-4 mr-1" />
+                  Post
+                </Button>
+              </DialogTrigger>
+            </Dialog>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="text-3xl font-bold text-purple-800">{classPosts.length}</div>
+              <div className="text-sm text-purple-600">
+                {classPosts.filter(p => p.type === "announcement").length} Announcements • {classPosts.filter(p => p.type === "material").length} Materials
+              </div>
+              <div className="space-y-2">
+                {classPosts.slice(0, 2).map(post => (
+                  <div key={post.id} className="bg-white/60 rounded-lg p-2">
+                    <div className="font-medium text-sm line-clamp-1">{post.title}</div>
+                    <div className="text-xs text-gray-600 flex items-center gap-2">
+                      <span>{post.createdAt}</span>
+                      <Badge variant="outline" className="text-xs">
+                        {post.type}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedView("posts")}
+                className="w-full text-purple-600 hover:text-purple-700"
+              >
+                View All Posts
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Your Classrooms Block */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
+        <Card className="h-full bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-lg transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <div className="flex items-center gap-2">
+              <School className="w-5 h-5 text-orange-600" />
+              <CardTitle className="text-lg text-orange-800">Your Classrooms</CardTitle>
+            </div>
+            <Button size="sm" variant="outline" className="border-orange-300 text-orange-700 hover:bg-orange-50">
+              <Folder className="w-4 h-4 mr-1" />
+              Manage
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="text-3xl font-bold text-orange-800">{classrooms.filter(c => c.status === "active").length}</div>
+              <div className="text-sm text-orange-600">
+                {classrooms.filter(c => c.status === "active").length} Active • {classrooms.filter(c => c.status === "archived").length} Archived
+              </div>
+              <div className="space-y-2">
+                {classrooms.slice(0, 2).map(classroom => (
+                  <div key={classroom.id} className="flex items-center justify-between bg-white/60 rounded-lg p-2 hover:bg-white/80 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${classroom.color}`} />
+                      <div>
+                        <div className="font-medium text-sm">{classroom.name}</div>
+                        <div className="text-xs text-gray-600">{classroom.students} students • {classroom.code}</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </div>
+                ))}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full text-orange-600 hover:text-orange-700"
+              >
+                View All Classrooms
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
+  );
+
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <FloatingSidebar
-        isCollapsed={isCollapsed}
-        setIsCollapsed={setIsCollapsed}
-      />
+      <FloatingSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
       <FloatingTopBar isCollapsed={isCollapsed} />
 
-      {/* Main Content */}
       <motion.div
         className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"} pt-28 p-6`}
         animate={{ marginLeft: isCollapsed ? 80 : 272 }}
       >
         {/* Header */}
-        <motion.header
-          className="mb-8"
+        <motion.div
+          className="flex items-center justify-between mb-8"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dashboard-title">
-                Dashboard Overview
-              </h1>
-              <p className="text-gray-600 mt-1 dashboard-text">
-                Welcome back! Here's what's happening with your business today.
-              </p>
-            </div>
-            <div className="flex items-center gap-4" />
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dashboard-title">
+              Teacher Dashboard
+            </h1>
+            <p className="text-gray-600 mt-1 dashboard-text">
+              Manage your classes, assignments, and student progress
+            </p>
           </div>
-        </motion.header>
+
+          {/* Quick Actions */}
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsPlagiarismOpen(true)}
+            >
+              <ScanLine className="w-4 h-4 mr-2" />
+              Plagiarism Check
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsAnomalyOpen(true)}
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              AI Monitoring
+            </Button>
+            <Button variant="outline" size="sm">
+              <CalendarDays className="w-4 h-4 mr-2" />
+              Schedule
+            </Button>
+            <Button variant="outline" size="sm">
+              <Bell className="w-4 h-4 mr-2" />
+              Notifications
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Quick Stats Bar */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <Card className="bg-white/80 backdrop-blur-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Users className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{dashboardStats.totalStudents}</p>
+                  <p className="text-sm text-gray-600">Total Students</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/80 backdrop-blur-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <ClipboardList className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{dashboardStats.activeAssignments}</p>
+                  <p className="text-sm text-gray-600">Active Assignments</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/80 backdrop-blur-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-orange-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{dashboardStats.pendingSubmissions}</p>
+                  <p className="text-sm text-gray-600">Pending Submissions</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/80 backdrop-blur-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <Award className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{dashboardStats.averageGrade}</p>
+                  <p className="text-sm text-gray-600">Average Grade</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Main 4-Block Dashboard */}
+        <DashboardBlocks />
 
         {/* Two Column Layout with Image and Stats */}
         <div className="mb-8">
