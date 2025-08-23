@@ -24,7 +24,6 @@ import {
   Star,
   MessageSquare,
   BookOpen,
-  Assignment,
   GraduationCap,
   Settings,
   Pin,
