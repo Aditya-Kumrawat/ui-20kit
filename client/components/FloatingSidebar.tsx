@@ -18,6 +18,7 @@ import {
   Star,
   Cpu,
   Users,
+  GraduationCap,
 } from "lucide-react";
 
 interface FloatingSidebarProps {
