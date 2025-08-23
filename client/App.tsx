@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Dashboard2 from "./pages/Dashboard2";
+import ClassView from "./pages/ClassView";
 import Analytics from "./pages/Analytics";
 import Chatbot from "./pages/Chatbot";
 import ComputerVision from "./pages/ComputerVision";
