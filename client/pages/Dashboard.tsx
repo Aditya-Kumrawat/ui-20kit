@@ -751,6 +751,156 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </motion.div>
+
+        {/* New Assignment Dialog */}
+        <Dialog open={isNewAssignmentOpen} onOpenChange={setIsNewAssignmentOpen}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Create New Assignment</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="title">Assignment Title *</Label>
+                <Input
+                  id="title"
+                  placeholder="Enter assignment title"
+                  value={newAssignment.title}
+                  onChange={(e) => setNewAssignment(prev => ({ ...prev, title: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="subject">Subject</Label>
+                <Select
+                  value={newAssignment.subject}
+                  onValueChange={(value) => setNewAssignment(prev => ({ ...prev, subject: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select subject" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Mathematics">Mathematics</SelectItem>
+                    <SelectItem value="Science">Science</SelectItem>
+                    <SelectItem value="History">History</SelectItem>
+                    <SelectItem value="English">English</SelectItem>
+                    <SelectItem value="General">General</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description">Description *</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Describe the assignment"
+                  value={newAssignment.description}
+                  onChange={(e) => setNewAssignment(prev => ({ ...prev, description: e.target.value }))}
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="dueDate">Due Date *</Label>
+                  <Input
+                    id="dueDate"
+                    type="date"
+                    value={newAssignment.dueDate}
+                    onChange={(e) => setNewAssignment(prev => ({ ...prev, dueDate: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="points">Points</Label>
+                  <Input
+                    id="points"
+                    type="number"
+                    value={newAssignment.points}
+                    onChange={(e) => setNewAssignment(prev => ({ ...prev, points: parseInt(e.target.value) || 100 }))}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setIsNewAssignmentOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleCreateAssignment} className="bg-blue-600 hover:bg-blue-700">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Assignment
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* New Post Dialog */}
+        <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Create Class Post</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="postType">Post Type</Label>
+                <Select
+                  value={newPost.type}
+                  onValueChange={(value: "announcement" | "material") => setNewPost(prev => ({ ...prev, type: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select post type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="announcement">Announcement</SelectItem>
+                    <SelectItem value="material">Material</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="postTitle">Title *</Label>
+                <Input
+                  id="postTitle"
+                  placeholder="Enter post title"
+                  value={newPost.title}
+                  onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="postContent">Content *</Label>
+                <Textarea
+                  id="postContent"
+                  placeholder="Write your message to the class"
+                  value={newPost.content}
+                  onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
+                  rows={4}
+                />
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setIsNewPostOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleCreatePost} className="bg-purple-600 hover:bg-purple-700">
+                  <Send className="w-4 h-4 mr-2" />
+                  Post to Class
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Plagiarism Detection Component */}
+        <PlagiarismDetection
+          isOpen={isPlagiarismOpen}
+          onClose={() => setIsPlagiarismOpen(false)}
+        />
+
+        {/* Anomaly Detection Component */}
+        <AnomalyDetection
+          isOpen={isAnomalyOpen}
+          onClose={() => setIsAnomalyOpen(false)}
+        />
       </motion.div>
     </div>
   );
