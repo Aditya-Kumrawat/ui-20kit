@@ -39,6 +39,12 @@ export const FloatingSidebar = ({
   const teacherMenuItems = [
     { id: "home", label: "Dashboard", icon: Home, href: "/dashboard" },
     {
+      id: "classroom",
+      label: "Classroom",
+      icon: GraduationCap,
+      href: "/dashboard/classroom",
+    },
+    {
       id: "analytics",
       label: "Analytics",
       icon: BarChart3,
