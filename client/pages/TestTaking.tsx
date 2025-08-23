@@ -262,11 +262,12 @@ export default function TestTaking() {
 
   // Clean up camera and microphone streams
   const cleanupMediaStreams = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => {
         track.stop();
         console.log(`Stopped ${track.kind} track`);
       });
+      streamRef.current = null;
       setStream(null);
       if (videoRef.current) {
         videoRef.current.srcObject = null;
