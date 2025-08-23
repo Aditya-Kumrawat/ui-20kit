@@ -51,8 +51,13 @@ interface ClassData {
 export default function Dashboard2() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
+  const [joinClassOpen, setJoinClassOpen] = useState(false);
+  const [classCode, setClassCode] = useState("");
+  const [isJoining, setIsJoining] = useState(false);
+  const [enrolledClasses, setEnrolledClasses] = useState<ClassData[]>([]);
 
   // Sample classroom data
   const classes: ClassData[] = [
@@ -210,7 +215,7 @@ export default function Dashboard2() {
             {classData.name}
           </h3>
           <p className="text-white/80 text-sm">
-            {classData.section} • {classData.teacher}
+            {classData.section} ��� {classData.teacher}
           </p>
         </div>
       </div>
