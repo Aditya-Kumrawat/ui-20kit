@@ -113,6 +113,8 @@ export default function TeacherClassroom() {
   // Dialog states
   const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
   const [isNewPostOpen, setIsNewPostOpen] = useState(false);
+  const [isPlagiarismOpen, setIsPlagiarismOpen] = useState(false);
+  const [isAnomalyOpen, setIsAnomalyOpen] = useState(false);
   
   // Form states
   const [newAssignment, setNewAssignment] = useState({
