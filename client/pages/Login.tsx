@@ -195,7 +195,7 @@ export default function Login() {
                 className="bg-white/60 backdrop-blur-lg rounded-3xl p-8 border border-purple-200/50 shadow-2xl"
                 initial={{ opacity: 0, y: 30, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
+                transition={{ delay: 0.45, duration: 0.6 }}
                 whileHover={{ boxShadow: "0 25px 50px rgba(139,69,193,0.15)" }}
               >
                 <form onSubmit={handleSubmit} className="space-y-6">
