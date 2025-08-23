@@ -246,6 +246,50 @@ export default function TeacherClassroom() {
         type: "material",
       },
     ]);
+
+    // Sample classrooms
+    setClassrooms([
+      {
+        id: "1",
+        name: "Advanced Mathematics",
+        subject: "Mathematics",
+        students: 25,
+        color: "bg-blue-500",
+        lastActivity: "2 hours ago",
+        code: "MATH301",
+        status: "active",
+      },
+      {
+        id: "2",
+        name: "General Science",
+        subject: "Science",
+        students: 28,
+        color: "bg-green-500",
+        lastActivity: "4 hours ago",
+        code: "SCI101",
+        status: "active",
+      },
+      {
+        id: "3",
+        name: "World History",
+        subject: "History",
+        students: 22,
+        color: "bg-purple-500",
+        lastActivity: "1 day ago",
+        code: "HIST205",
+        status: "active",
+      },
+      {
+        id: "4",
+        name: "English Literature",
+        subject: "English",
+        students: 20,
+        color: "bg-orange-500",
+        lastActivity: "3 days ago",
+        code: "ENG102",
+        status: "archived",
+      },
+    ]);
   }, []);
 
   // Handle new assignment creation
