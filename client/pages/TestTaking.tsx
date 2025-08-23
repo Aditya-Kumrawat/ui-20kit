@@ -312,7 +312,11 @@ export default function TestTaking() {
 
     // Process answers and submit
     console.log("Submitting test with answers:", answers);
-    navigate("/dashboard2/tests");
+
+    // Small delay to ensure camera cleanup is visible before navigation
+    setTimeout(() => {
+      navigate("/dashboard2/tests");
+    }, 500);
   };
 
   const getQuestionStatus = (questionId: string) => {
