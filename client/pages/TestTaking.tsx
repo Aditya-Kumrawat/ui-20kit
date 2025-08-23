@@ -191,9 +191,11 @@ export default function TestTaking() {
       }
 
       // Show user-friendly error notification
-      if (typeof window !== 'undefined' && window.alert) {
-        window.alert(`${errorMessage}\n\n${actionMessage}`);
-      }
+      toast({
+        title: errorMessage,
+        description: actionMessage,
+        variant: "destructive",
+      });
     }
   };
 
