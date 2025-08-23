@@ -251,12 +251,16 @@ export default function Community() {
   };
 
   const handleCommentClick = (post: CommunityPost) => {
-    setSelectedPost(post);
+    // Get the most current version of the post from state
+    const currentPost = posts.find(p => p.id === post.id) || post;
+    setSelectedPost(currentPost);
     setIsCommentsDialogOpen(true);
   };
 
   const handleShareClick = (post: CommunityPost) => {
-    setSelectedPost(post);
+    // Get the most current version of the post from state
+    const currentPost = posts.find(p => p.id === post.id) || post;
+    setSelectedPost(currentPost);
     setIsShareDialogOpen(true);
   };
 
