@@ -165,6 +165,12 @@ export default function TestTaking() {
         videoRef.current.srcObject = mediaStream;
       }
       setCameraEnabled(true);
+
+      // Show success notification
+      toast({
+        title: "Camera enabled",
+        description: "Camera access granted successfully.",
+      });
     } catch (error) {
       console.error("Error accessing camera:", error);
       setCameraEnabled(false);
