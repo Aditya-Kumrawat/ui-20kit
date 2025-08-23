@@ -301,6 +301,15 @@ export default function TestTaking() {
   };
 
   const handleSubmitTest = () => {
+    // Confirm test submission
+    const confirmed = window.confirm(
+      "Are you sure you want to submit your test? This will end the test session and turn off your camera and microphone."
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
     // Clean up camera and microphone before submitting
     cleanupMediaStreams();
 
