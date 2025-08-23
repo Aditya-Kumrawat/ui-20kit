@@ -1,27 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { PlagiarismDetection } from "@/components/PlagiarismDetection";
+import { AnomalyDetection } from "@/components/AnomalyDetection";
 import {
+  BookOpen,
+  Users,
+  FileText,
+  Calendar,
+  Plus,
+  MoreVertical,
+  Send,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Star,
+  Download,
+  Upload,
   Search,
+  Filter,
+  Eye,
+  Edit,
+  Trash2,
+  MessageSquare,
   Bell,
   TrendingUp,
-  Users,
-  ShoppingCart,
-  DollarSign,
+  Award,
+  UserCheck,
+  ClipboardList,
+  PlusCircle,
+  CalendarDays,
+  BookMarked,
+  GraduationCap,
+  Shield,
+  ScanLine,
+  School,
+  Folder,
+  ChevronRight,
 } from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 
 export default function Dashboard() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
