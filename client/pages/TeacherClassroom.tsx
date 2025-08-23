@@ -825,6 +825,18 @@ export default function TeacherClassroom() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Plagiarism Detection Component */}
+      <PlagiarismDetection
+        isOpen={isPlagiarismOpen}
+        onClose={() => setIsPlagiarismOpen(false)}
+      />
+
+      {/* Anomaly Detection Component */}
+      <AnomalyDetection
+        isOpen={isAnomalyOpen}
+        onClose={() => setIsAnomalyOpen(false)}
+      />
     </div>
   );
 }
