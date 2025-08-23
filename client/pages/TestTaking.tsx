@@ -125,14 +125,11 @@ export default function TestTaking() {
     }
     setTimeRemaining(testData.duration * 60); // Convert minutes to seconds
     setTestStarted(true);
-  }, []); // Empty dependency array - only run once on mount
 
-  // Separate useEffect for cleanup on unmount
-  useEffect(() => {
     // Add beforeunload event to cleanup camera when user closes tab/window
     const handleBeforeUnload = () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
 
@@ -141,14 +138,14 @@ export default function TestTaking() {
     // Cleanup function to stop camera when component unmounts
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      if (stream) {
-        stream.getTracks().forEach((track) => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => {
           track.stop();
           console.log(`Cleanup: Stopped ${track.kind} track`);
         });
       }
     };
-  }, [stream]); // This useEffect depends on stream for proper cleanup
+  }, []); // Empty dependency array - only run once on mount
 
   // Timer countdown
   useEffect(() => {
