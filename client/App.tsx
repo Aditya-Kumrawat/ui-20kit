@@ -37,6 +37,7 @@ const App = () => (
             <Route path="/dashboard2/calendar" element={<Calendar />} />
             <Route path="/dashboard2/chatbot" element={<Chatbot />} />
             <Route path="/dashboard/analytics" element={<Analytics />} />
+            <Route path="/dashboard/calendar" element={<Calendar />} />
             <Route path="/dashboard/chatbot" element={<Chatbot />} />
             <Route
               path="/dashboard/computer-vision"
