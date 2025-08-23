@@ -254,8 +254,9 @@ export default function TestTaking() {
   };
 
   const retryCamera = async () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
       setStream(null);
     }
     await initializeCamera();
