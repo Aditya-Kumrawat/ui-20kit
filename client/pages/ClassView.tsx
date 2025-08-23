@@ -396,75 +396,274 @@ export default function ClassView() {
     </div>
   );
 
-  const ClassworkTab = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {assignments.map((assignment, index) => (
-          <motion.div
-            key={assignment.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-start justify-between mb-4">
-                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                  assignment.type === "assignment" ? "bg-blue-100" :
-                  assignment.type === "quiz" ? "bg-purple-100" : "bg-green-100"
-                }`}>
-                  {assignment.type === "assignment" ? (
-                    <FileText className={`w-6 h-6 ${
-                      assignment.type === "assignment" ? "text-blue-600" :
-                      assignment.type === "quiz" ? "text-purple-600" : "text-green-600"
-                    }`} />
-                  ) : (
-                    <GraduationCap className={`w-6 h-6 ${
-                      assignment.type === "assignment" ? "text-blue-600" :
-                      assignment.type === "quiz" ? "text-purple-600" : "text-green-600"
-                    }`} />
+  const ClassworkTab = () => {
+    const dueAssignments = assignments.filter(isAssignmentDue);
+    const otherAssignments = assignments.filter(assignment => !isAssignmentDue(assignment));
+
+    return (
+      <div className="space-y-6">
+        {/* Due Assignments Section */}
+        {dueAssignments.length > 0 && (
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <AlertCircle className="w-5 h-5 text-red-500" />
+              <h3 className="text-lg font-semibold text-red-700">Due Soon</h3>
+              <Badge variant="destructive">{dueAssignments.length}</Badge>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {dueAssignments.map((assignment, index) => (
+                <motion.div
+                  key={assignment.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card
+                    className="p-6 hover:shadow-lg transition-shadow cursor-pointer border-red-200 bg-red-50/50"
+                    onClick={() => handleAssignmentClick(assignment)}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
+                        <AlertCircle className="w-6 h-6 text-red-600" />
+                      </div>
+                      <Badge variant="destructive" className="animate-pulse">
+                        DUE SOON
+                      </Badge>
+                    </div>
+
+                    <h3 className="font-semibold text-lg mb-2">{assignment.title}</h3>
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      {assignment.description}
+                    </p>
+
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-sm text-red-600 font-medium">
+                        <Clock className="w-4 h-4" />
+                        Due: {assignment.dueDate.toLocaleDateString()}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Star className="w-4 h-4" />
+                        {assignment.points} points
+                      </div>
+                    </div>
+
+                    <Button className="w-full bg-red-600 hover:bg-red-700">
+                      Submit Assignment
+                    </Button>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All Assignments Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">All Assignments</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {assignments.map((assignment, index) => (
+              <motion.div
+                key={assignment.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card
+                  className={`p-6 hover:shadow-lg transition-shadow cursor-pointer ${
+                    isAssignmentDue(assignment) ? 'border-red-200 bg-red-50/30' : ''
+                  }`}
+                  onClick={() => handleAssignmentClick(assignment)}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                      assignment.type === "assignment" ? "bg-blue-100" :
+                      assignment.type === "quiz" ? "bg-purple-100" : "bg-green-100"
+                    }`}>
+                      {assignment.type === "assignment" ? (
+                        <FileText className={`w-6 h-6 ${
+                          assignment.type === "assignment" ? "text-blue-600" :
+                          assignment.type === "quiz" ? "text-purple-600" : "text-green-600"
+                        }`} />
+                      ) : (
+                        <GraduationCap className={`w-6 h-6 ${
+                          assignment.type === "assignment" ? "text-blue-600" :
+                          assignment.type === "quiz" ? "text-purple-600" : "text-green-600"
+                        }`} />
+                      )}
+                    </div>
+
+                    {assignment.submitted ? (
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                    ) : isAssignmentDue(assignment) ? (
+                      <AlertCircle className="w-5 h-5 text-red-500 animate-pulse" />
+                    ) : (
+                      <AlertCircle className="w-5 h-5 text-orange-500" />
+                    )}
+                  </div>
+
+                  <h3 className="font-semibold text-lg mb-2">{assignment.title}</h3>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    {assignment.description}
+                  </p>
+
+                  <div className="space-y-2 mb-4">
+                    <div className={`flex items-center gap-2 text-sm ${
+                      isAssignmentDue(assignment) ? 'text-red-600 font-medium' : 'text-gray-600'
+                    }`}>
+                      <Clock className="w-4 h-4" />
+                      Due: {assignment.dueDate.toLocaleDateString()}
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Star className="w-4 h-4" />
+                      {assignment.points} points
+                    </div>
+                  </div>
+
+                  {assignment.submitted && assignment.grade && (
+                    <div className="mb-4">
+                      <Badge className="bg-green-100 text-green-800">
+                        {assignment.grade}/{assignment.points} points
+                      </Badge>
+                    </div>
+                  )}
+
+                  <Button
+                    className={`w-full ${
+                      isAssignmentDue(assignment) && !assignment.submitted
+                        ? 'bg-red-600 hover:bg-red-700'
+                        : ''
+                    }`}
+                    variant={assignment.submitted ? "outline" : "default"}
+                  >
+                    {assignment.submitted ? "View Submission" :
+                     isAssignmentDue(assignment) ? "Submit Assignment" : "Start Assignment"}
+                  </Button>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Assignment Submission Modal */}
+        <Dialog open={isSubmissionModalOpen} onOpenChange={setIsSubmissionModalOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Submit Assignment: {selectedAssignment?.title}
+              </DialogTitle>
+            </DialogHeader>
+
+            {selectedAssignment && (
+              <div className="space-y-6">
+                {/* Assignment Details */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-medium mb-2">Assignment Description</h4>
+                  <p className="text-gray-700 text-sm">{selectedAssignment.description}</p>
+                  <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      Due: {selectedAssignment.dueDate.toLocaleDateString()}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Star className="w-4 h-4" />
+                      {selectedAssignment.points} points
+                    </span>
+                  </div>
+                </div>
+
+                {/* Submission Text */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Submission Notes (Optional)
+                  </label>
+                  <Textarea
+                    placeholder="Add any notes or comments about your submission..."
+                    value={submissionText}
+                    onChange={(e) => setSubmissionText(e.target.value)}
+                    className="min-h-20"
+                  />
+                </div>
+
+                {/* File Upload */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Attach Files
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                    <input
+                      type="file"
+                      multiple
+                      onChange={handleFileSelect}
+                      className="hidden"
+                      id="file-upload"
+                      accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="cursor-pointer flex flex-col items-center gap-2"
+                    >
+                      <Paperclip className="w-8 h-8 text-gray-400" />
+                      <span className="text-sm text-gray-600">
+                        Click to upload files or drag and drop
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        PDF, DOC, TXT, JPG, PNG up to 10MB each
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* Selected Files */}
+                  {selectedFiles.length > 0 && (
+                    <div className="mt-3 space-y-2">
+                      <h5 className="text-sm font-medium">Selected Files:</h5>
+                      {selectedFiles.map((file, index) => (
+                        <div key={index} className="flex items-center gap-2 text-sm bg-blue-50 p-2 rounded">
+                          <FileText className="w-4 h-4 text-blue-600" />
+                          <span className="flex-1">{file.name}</span>
+                          <span className="text-gray-500">
+                            {(file.size / 1024 / 1024).toFixed(2)} MB
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedFiles(files => files.filter((_, i) => i !== index));
+                            }}
+                          >
+                            ✕
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
-                
-                {assignment.submitted ? (
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 text-orange-500" />
-                )}
-              </div>
-              
-              <h3 className="font-semibold text-lg mb-2">{assignment.title}</h3>
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                {assignment.description}
-              </p>
-              
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Clock className="w-4 h-4" />
-                  Due: {assignment.dueDate.toLocaleDateString()}
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Star className="w-4 h-4" />
-                  {assignment.points} points
+
+                {/* Submit Button */}
+                <div className="flex gap-3 pt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsSubmissionModalOpen(false)}
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSubmitAssignment}
+                    disabled={selectedFiles.length === 0}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Turn In Assignment
+                  </Button>
                 </div>
               </div>
-              
-              {assignment.submitted && assignment.grade && (
-                <div className="mb-4">
-                  <Badge className="bg-green-100 text-green-800">
-                    {assignment.grade}/{assignment.points} points
-                  </Badge>
-                </div>
-              )}
-              
-              <Button className="w-full" variant={assignment.submitted ? "outline" : "default"}>
-                {assignment.submitted ? "View Submission" : "Start Assignment"}
-              </Button>
-            </Card>
-          </motion.div>
-        ))}
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
-    </div>
-  );
+    );
+  };
 
   const PeopleTab = () => (
     <div className="space-y-6">
