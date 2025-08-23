@@ -39,6 +39,8 @@ const App = () => (
             <Route path="/dashboard2/chatbot" element={<Chatbot />} />
             <Route path="/dashboard/analytics" element={<Analytics />} />
             <Route path="/dashboard/calendar" element={<Calendar />} />
+            <Route path="/dashboard/tests" element={<MyTests />} />
+            <Route path="/dashboard/test/:testId" element={<TestTaking />} />
             <Route path="/dashboard/chatbot" element={<Chatbot />} />
             <Route
               path="/dashboard/computer-vision"
