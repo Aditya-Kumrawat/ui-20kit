@@ -8,19 +8,16 @@ import {
   Home,
   BarChart3,
   Brain,
-  MessageSquare,
-  Users,
   Calendar,
   Settings,
   ChevronLeft,
   ChevronRight,
-  Package,
   ShoppingCart,
   LogOut,
   Edit,
   Star,
-  Camera,
   Cpu,
+  UserGroup,
 } from "lucide-react";
 
 interface FloatingSidebarProps {
@@ -47,30 +44,11 @@ export const FloatingSidebar = ({
       href: "/dashboard/analytics",
     },
     {
-      id: "products",
-      label: "Products",
-      icon: Package,
-      href: "/dashboard/products",
-    },
-    {
       id: "orders",
       label: "Orders",
       icon: ShoppingCart,
       href: "/dashboard/orders",
       badge: 5,
-    },
-    {
-      id: "customers",
-      label: "Customers",
-      icon: Users,
-      href: "/dashboard/customers",
-    },
-    {
-      id: "messages",
-      label: "Messages",
-      icon: MessageSquare,
-      href: "/dashboard/messages",
-      badge: 3,
     },
     {
       id: "tests",
@@ -91,10 +69,10 @@ export const FloatingSidebar = ({
       href: "/dashboard/chatbot",
     },
     {
-      id: "computer-vision",
-      label: "Computer Vision",
-      icon: Camera,
-      href: "/dashboard/computer-vision",
+      id: "community",
+      label: "Community",
+      icon: UserGroup,
+      href: "/dashboard/community",
     },
   ];
 
