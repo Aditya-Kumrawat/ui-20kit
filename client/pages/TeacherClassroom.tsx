@@ -526,7 +526,7 @@ export default function TeacherClassroom() {
         </Card>
       </motion.div>
 
-      {/* Analytics Block */}
+      {/* Your Classrooms Block */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -535,34 +535,40 @@ export default function TeacherClassroom() {
         <Card className="h-full bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-orange-600" />
-              <CardTitle className="text-lg text-orange-800">Class Analytics</CardTitle>
+              <School className="w-5 h-5 text-orange-600" />
+              <CardTitle className="text-lg text-orange-800">Your Classrooms</CardTitle>
             </div>
             <Button size="sm" variant="outline" className="border-orange-300 text-orange-700 hover:bg-orange-50">
-              <Eye className="w-4 h-4 mr-1" />
-              Details
+              <Folder className="w-4 h-4 mr-1" />
+              Manage
             </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="text-3xl font-bold text-orange-800">{dashboardStats.averageGrade}</div>
-              <div className="text-sm text-orange-600">Average Class Grade</div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center bg-white/60 rounded-lg p-2">
-                  <span className="text-sm font-medium">Submission Rate</span>
-                  <span className="text-sm font-bold">76%</span>
-                </div>
-                <div className="flex justify-between items-center bg-white/60 rounded-lg p-2">
-                  <span className="text-sm font-medium">Engagement</span>
-                  <span className="text-sm font-bold">89%</span>
-                </div>
+              <div className="text-3xl font-bold text-orange-800">{classrooms.filter(c => c.status === "active").length}</div>
+              <div className="text-sm text-orange-600">
+                {classrooms.filter(c => c.status === "active").length} Active • {classrooms.filter(c => c.status === "archived").length} Archived
               </div>
-              <Button 
-                variant="ghost" 
+              <div className="space-y-2">
+                {classrooms.slice(0, 2).map(classroom => (
+                  <div key={classroom.id} className="flex items-center justify-between bg-white/60 rounded-lg p-2 hover:bg-white/80 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${classroom.color}`} />
+                      <div>
+                        <div className="font-medium text-sm">{classroom.name}</div>
+                        <div className="text-xs text-gray-600">{classroom.students} students • {classroom.code}</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </div>
+                ))}
+              </div>
+              <Button
+                variant="ghost"
                 size="sm"
                 className="w-full text-orange-600 hover:text-orange-700"
               >
-                View Analytics
+                View All Classrooms
               </Button>
             </div>
           </CardContent>
