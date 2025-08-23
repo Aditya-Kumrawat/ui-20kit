@@ -1,84 +1,315 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Card } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
 import { useSidebar } from "@/contexts/SidebarContext";
 import {
-  Search,
-  Bell,
-  TrendingUp,
-  Users,
+  Plus,
+  MoreVertical,
   BookOpen,
-  GraduationCap,
+  Users,
+  Calendar,
+  FileText,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Search,
+  Filter,
+  Grid3X3,
+  List,
+  Star,
+  Pin,
 } from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { useNavigate } from "react-router-dom";
+
+interface ClassData {
+  id: string;
+  name: string;
+  subject: string;
+  teacher: string;
+  teacherAvatar?: string;
+  section: string;
+  room?: string;
+  color: string;
+  coverImage?: string;
+  studentsCount: number;
+  pendingWork: number;
+  lastActivity: string;
+  classCode: string;
+  isArchived?: boolean;
+  isPinned?: boolean;
+}
 
 export default function Dashboard2() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
+  const navigate = useNavigate();
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const dashboardStats = [
+  // Sample classroom data
+  const classes: ClassData[] = [
     {
-      title: "Courses Enrolled",
-      value: "12",
-      change: "+2 this month",
-      icon: BookOpen,
-      color: "from-green-400 to-green-600",
-      bgColor: "from-green-50 to-green-100",
+      id: "math-101",
+      name: "Advanced Mathematics",
+      subject: "Mathematics",
+      teacher: "Dr. Sarah Johnson",
+      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
+      section: "Section A",
+      room: "Room 201",
+      color: "from-blue-500 to-blue-600",
+      coverImage: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=200&fit=crop",
+      studentsCount: 28,
+      pendingWork: 3,
+      lastActivity: "2 hours ago",
+      classCode: "abc123d",
+      isPinned: true,
     },
     {
-      title: "Assignments Due",
-      value: "5",
-      change: "3 this week",
-      icon: TrendingUp,
-      color: "from-blue-400 to-blue-600",
-      bgColor: "from-blue-50 to-blue-100",
+      id: "physics-201",
+      name: "Quantum Physics",
+      subject: "Physics",
+      teacher: "Prof. Michael Chen",
+      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=michael",
+      section: "Section B",
+      room: "Lab 305",
+      color: "from-purple-500 to-purple-600",
+      coverImage: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=400&h=200&fit=crop",
+      studentsCount: 24,
+      pendingWork: 1,
+      lastActivity: "5 hours ago",
+      classCode: "xyz789e",
     },
     {
-      title: "Study Groups",
-      value: "8",
-      change: "+1 joined",
-      icon: Users,
-      color: "from-purple-400 to-purple-600",
-      bgColor: "from-purple-50 to-purple-100",
+      id: "cs-301",
+      name: "Artificial Intelligence",
+      subject: "Computer Science",
+      teacher: "Dr. Emily Rodriguez",
+      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=emily",
+      section: "Section A",
+      room: "Lab 104",
+      color: "from-green-500 to-green-600",
+      coverImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=200&fit=crop",
+      studentsCount: 32,
+      pendingWork: 5,
+      lastActivity: "1 day ago",
+      classCode: "ai2024f",
     },
     {
-      title: "Average Grade",
-      value: "92%",
-      change: "+3.2%",
-      icon: GraduationCap,
-      color: "from-orange-400 to-orange-600",
-      bgColor: "from-orange-50 to-orange-100",
+      id: "eng-102",
+      name: "Advanced Literature",
+      subject: "English",
+      teacher: "Ms. Jessica Taylor",
+      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=jessica",
+      section: "Section C",
+      room: "Room 156",
+      color: "from-red-500 to-red-600",
+      coverImage: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=200&fit=crop",
+      studentsCount: 22,
+      pendingWork: 2,
+      lastActivity: "3 days ago",
+      classCode: "lit456g",
+    },
+    {
+      id: "chem-201",
+      name: "Organic Chemistry",
+      subject: "Chemistry",
+      teacher: "Dr. Robert Kim",
+      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=robert",
+      section: "Section A",
+      room: "Lab 220",
+      color: "from-orange-500 to-orange-600",
+      coverImage: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=200&fit=crop",
+      studentsCount: 20,
+      pendingWork: 0,
+      lastActivity: "1 week ago",
+      classCode: "chem789h",
+    },
+    {
+      id: "bio-301",
+      name: "Molecular Biology",
+      subject: "Biology",
+      teacher: "Dr. Maria Santos",
+      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=maria",
+      section: "Section B",
+      room: "Lab 315",
+      color: "from-teal-500 to-teal-600",
+      coverImage: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop",
+      studentsCount: 26,
+      pendingWork: 1,
+      lastActivity: "4 days ago",
+      classCode: "bio123i",
     },
   ];
 
-  // Chart data for learning progress
-  const chartData = [
-    { month: "Jan", progress: 65, assignments: 8 },
-    { month: "Feb", progress: 72, assignments: 12 },
-    { month: "Mar", progress: 78, assignments: 15 },
-    { month: "Apr", progress: 85, assignments: 18 },
-    { month: "May", progress: 88, assignments: 20 },
-    { month: "Jun", progress: 92, assignments: 22 },
-    { month: "Jul", progress: 89, assignments: 19 },
-    { month: "Aug", progress: 94, assignments: 25 },
-    { month: "Sep", progress: 96, assignments: 28 },
-    { month: "Oct", progress: 93, assignments: 26 },
-    { month: "Nov", progress: 97, assignments: 30 },
-    { month: "Dec", progress: 95, assignments: 32 },
-  ];
+  const filteredClasses = classes.filter(
+    (cls) =>
+      cls.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cls.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cls.teacher.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const ClassCard = ({ classData }: { classData: ClassData }) => (
+    <motion.div
+      className="group relative overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+      whileHover={{ y: -4, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={() => navigate(`/dashboard2/class/${classData.id}`)}
+    >
+      {/* Cover Image */}
+      <div className="relative h-32 overflow-hidden">
+        <div
+          className={`absolute inset-0 bg-gradient-to-br ${classData.color} opacity-90`}
+        />
+        {classData.coverImage && (
+          <img
+            src={classData.coverImage}
+            alt=""
+            className="w-full h-full object-cover opacity-60"
+          />
+        )}
+        
+        {/* Pinned indicator */}
+        {classData.isPinned && (
+          <div className="absolute top-3 left-3">
+            <Pin className="w-4 h-4 text-white fill-white" />
+          </div>
+        )}
+
+        {/* More options */}
+        <div className="absolute top-3 right-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Handle more options
+            }}
+          >
+            <MoreVertical className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Class name overlay */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+          <h3 className="text-white font-semibold text-lg truncate">
+            {classData.name}
+          </h3>
+          <p className="text-white/80 text-sm">
+            {classData.section} • {classData.teacher}
+          </p>
+        </div>
+      </div>
+
+      {/* Card content */}
+      <div className="p-4">
+        {/* Pending work indicator */}
+        {classData.pendingWork > 0 && (
+          <div className="flex items-center gap-2 mb-3">
+            <AlertCircle className="w-4 h-4 text-orange-500" />
+            <span className="text-sm text-orange-600 font-medium">
+              {classData.pendingWork} assignment{classData.pendingWork > 1 ? 's' : ''} due
+            </span>
+          </div>
+        )}
+
+        {/* Quick stats */}
+        <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="flex items-center gap-1">
+            <Users className="w-4 h-4" />
+            <span>{classData.studentsCount} students</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Clock className="w-4 h-4" />
+            <span>{classData.lastActivity}</span>
+          </div>
+        </div>
+
+        {/* Teacher info */}
+        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+          <Avatar className="w-6 h-6">
+            <AvatarImage src={classData.teacherAvatar} />
+            <AvatarFallback className="text-xs">
+              {classData.teacher.split(' ').map(n => n[0]).join('')}
+            </AvatarFallback>
+          </Avatar>
+          <span className="text-sm text-gray-700 truncate">
+            {classData.teacher}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  const ClassListItem = ({ classData }: { classData: ClassData }) => (
+    <motion.div
+      className="group bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border border-gray-100"
+      whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
+      onClick={() => navigate(`/dashboard2/class/${classData.id}`)}
+    >
+      <div className="flex items-center gap-4">
+        {/* Class color indicator */}
+        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${classData.color} flex-shrink-0`} />
+        
+        {/* Class info */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="font-semibold text-gray-900 truncate">
+              {classData.name}
+            </h3>
+            {classData.isPinned && (
+              <Pin className="w-4 h-4 text-gray-400 fill-gray-400" />
+            )}
+          </div>
+          <p className="text-sm text-gray-600 truncate">
+            {classData.section} • {classData.teacher}
+          </p>
+          <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+            <span className="flex items-center gap-1">
+              <Users className="w-3 h-3" />
+              {classData.studentsCount}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              {classData.lastActivity}
+            </span>
+          </div>
+        </div>
+
+        {/* Pending work */}
+        <div className="flex items-center gap-2">
+          {classData.pendingWork > 0 ? (
+            <Badge variant="secondary" className="bg-orange-100 text-orange-700">
+              {classData.pendingWork} due
+            </Badge>
+          ) : (
+            <CheckCircle className="w-5 h-5 text-green-500" />
+          )}
+        </div>
+
+        {/* More options */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={(e) => {
+            e.stopPropagation();
+            // Handle more options
+          }}
+        >
+          <MoreVertical className="w-4 h-4" />
+        </Button>
+      </div>
+    </motion.div>
+  );
 
   return (
-    <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <FloatingSidebar
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
@@ -92,341 +323,186 @@ export default function Dashboard2() {
         animate={{ marginLeft: isCollapsed ? 80 : 272 }}
       >
         {/* Header */}
-        <motion.header
-          className="mb-8"
+        <motion.div
+          className="flex items-center justify-between mb-8"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dashboard-title">
-                Student Dashboard
-              </h1>
-              <p className="text-gray-600 mt-1 dashboard-text">
-                Welcome back! Here's your learning progress and upcoming tasks.
-              </p>
-            </div>
-            <div className="flex items-center gap-4" />
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              My Classes
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Welcome back! Here are your enrolled classes.
+            </p>
           </div>
-        </motion.header>
-
-        {/* Two Column Layout with Image and Stats */}
-        <div className="mb-8">
-          <div className="flex gap-5 max-lg:flex-col max-lg:gap-0">
-            {/* Left Column - Image */}
-            <div className="flex flex-col w-1/2 max-lg:w-full">
-              <div
-                className="flex flex-col relative mt-5 h-[365px] bg-cover bg-center bg-no-repeat border-none rounded-2xl"
-                style={{
-                  backgroundImage:
-                    "url(https://cdn.builder.io/api/v1/file/assets%2F3ef4243ecdf248dabd75417d35606fac%2F54bd8a0dcac741cabf36c1fc34c597e2)",
-                }}
-              >
-                {/* Transparent glass overlay with text at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 bg-white/20 backdrop-blur-sm rounded-b-lg p-6">
-                  <div className="text-left">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2 dashboard-title">
-                      Learning Analytics
-                    </h2>
-                    <p className="text-gray-600 text-sm dashboard-text">
-                      Track your academic progress with personalized insights
-                      and AI-powered learning recommendations.
-                    </p>
-                  </div>
-                </div>
-              </div>
+          
+          <div className="flex items-center gap-3">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search classes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
 
-            {/* Right Column - Dashboard Stats */}
-            <div className="flex flex-col w-1/2 ml-5 max-lg:w-full max-lg:ml-0">
-              <motion.div
-                className="grid grid-cols-2 gap-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+            {/* View toggle */}
+            <div className="flex bg-gray-100 rounded-lg p-1">
+              <Button
+                variant={viewMode === "grid" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("grid")}
+                className="h-8 w-8 p-0"
               >
-                {dashboardStats.map((stat, index) => (
-                  <motion.div
-                    key={stat.title}
-                    className="group relative"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + index * 0.1 }}
-                    whileHover={{ y: -8, scale: 1.02 }}
-                  >
-                    {/* Glass effect card with soft off-white background */}
-                    <div className="relative bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30 overflow-hidden">
-                      {/* Soft lift effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-3xl"></div>
-                      <div
-                        className="absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300"
-                        style={{
-                          background: `linear-gradient(135deg, ${stat.color.split(" ")[1]}, ${stat.color.split(" ")[3]})`,
-                        }}
-                      ></div>
-
-                      <div className="relative z-10">
-                        <div className="flex items-center justify-between mb-4">
-                          <div
-                            className={`p-3 rounded-2xl bg-gradient-to-br ${stat.bgColor} shadow-sm`}
-                          >
-                            <stat.icon
-                              size={24}
-                              className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}
-                            />
-                          </div>
-                          <div className="text-right">
-                            <p
-                              className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full"
-                              style={{ fontFamily: "Poppins, sans-serif" }}
-                            >
-                              {stat.change}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h3
-                            className="text-sm font-medium text-gray-600 mb-1"
-                            style={{ fontFamily: "Poppins, sans-serif" }}
-                          >
-                            {stat.title}
-                          </h3>
-                          <p
-                            className="text-2xl font-bold text-gray-900"
-                            style={{ fontFamily: "Montserrat, sans-serif" }}
-                          >
-                            {stat.value}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
+                <Grid3X3 className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={viewMode === "list" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("list")}
+                className="h-8 w-8 p-0"
+              >
+                <List className="w-4 h-4" />
+              </Button>
             </div>
-          </div>
-        </div>
 
-        {/* Interactive Learning Progress Chart */}
-        <motion.div
-          className="mb-8"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.4 }}
+            {/* Join class button */}
+            <Button 
+              variant="outline"
+              onClick={() => {
+                // Handle join class
+                const classCode = prompt("Enter class code:");
+                if (classCode) {
+                  console.log("Joining class with code:", classCode);
+                }
+              }}
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-6 dashboard-title">
-                Learning Progress & Assignment Completion
-              </h3>
-              <motion.div
-                className="h-80"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart
-                    data={chartData}
-                    margin={{
-                      top: 20,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
-                    }}
-                  >
-                    <defs>
-                      <linearGradient
-                        id="progressGradient"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#8b5cf6"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#8b5cf6"
-                          stopOpacity={0.1}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#e5e7eb"
-                      opacity={0.5}
-                    />
-                    <XAxis
-                      dataKey="month"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fontSize: 12, fill: "#6b7280" }}
-                    />
-                    <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fontSize: 12, fill: "#6b7280" }}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "rgba(255, 255, 255, 0.95)",
-                        border: "none",
-                        borderRadius: "12px",
-                        boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
-                        backdropFilter: "blur(10px)",
-                      }}
-                      labelStyle={{ color: "#374151", fontWeight: "600" }}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="progress"
-                      stroke="#8b5cf6"
-                      strokeWidth={3}
-                      fill="url(#progressGradient)"
-                      dot={{ fill: "#8b5cf6", strokeWidth: 0, r: 4 }}
-                      activeDot={{
-                        r: 6,
-                        stroke: "#8b5cf6",
-                        strokeWidth: 2,
-                        fill: "#ffffff",
-                      }}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </motion.div>
-            </motion.div>
+              <Plus className="w-4 h-4 mr-2" />
+              Join Class
+            </Button>
           </div>
         </motion.div>
 
-        {/* Additional Content Section */}
+        {/* Quick stats */}
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          {/* Recent Activity */}
-          <div className="lg:col-span-2">
-            <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
-              <h3
-                className="text-lg font-semibold text-gray-900 mb-4"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
-              >
-                Recent Learning Activity
-              </h3>
-              <div className="space-y-4">
-                {[
-                  {
-                    action: "Completed Math Assignment",
-                    time: "2 hours ago",
-                    course: "Advanced Calculus",
-                  },
-                  {
-                    action: "Submitted Science Project",
-                    time: "1 day ago",
-                    course: "Physics Lab",
-                  },
-                  {
-                    action: "Joined Study Group",
-                    time: "2 days ago",
-                    course: "Literature Discussion",
-                  },
-                  {
-                    action: "Started New Module",
-                    time: "3 days ago",
-                    course: "AI Fundamentals",
-                  },
-                ].map((activity, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/40 transition-colors"
-                  >
-                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <p
-                        className="text-sm font-medium text-gray-800"
-                        style={{ fontFamily: "Poppins, sans-serif" }}
-                      >
-                        {activity.action}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        in {activity.course}
-                      </p>
-                    </div>
-                    <p
-                      className="text-xs text-gray-500"
-                      style={{ fontFamily: "Poppins, sans-serif" }}
-                    >
-                      {activity.time}
-                    </p>
-                  </div>
-                ))}
+          <Card className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <BookOpen className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Total Classes</p>
+                <p className="text-2xl font-bold text-gray-900">{classes.length}</p>
               </div>
             </div>
-          </div>
+          </Card>
 
-          {/* Quick Stats */}
-          <div className="space-y-6">
-            <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/30">
-              <h3
-                className="text-lg font-semibold text-gray-900 mb-4"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
-              >
-                Performance Metrics
-              </h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span
-                    className="text-sm text-gray-600"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
-                  >
-                    Assignment Completion
-                  </span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    85%
-                  </span>
-                </div>
-                <Progress value={85} className="h-2" />
-
-                <div className="flex justify-between items-center">
-                  <span
-                    className="text-sm text-gray-600"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
-                  >
-                    Course Engagement
-                  </span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    92%
-                  </span>
-                </div>
-                <Progress value={92} className="h-2" />
-
-                <div className="flex justify-between items-center">
-                  <span
-                    className="text-sm text-gray-600"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
-                  >
-                    Study Streak
-                  </span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    12 days
-                  </span>
-                </div>
-                <Progress value={80} className="h-2" />
+          <Card className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                <AlertCircle className="w-5 h-5 text-orange-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Pending Work</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {classes.reduce((total, cls) => total + cls.pendingWork, 0)}
+                </p>
               </div>
             </div>
-          </div>
+          </Card>
+
+          <Card className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Completed</p>
+                <p className="text-2xl font-bold text-gray-900">24</p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Classmates</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {classes.reduce((total, cls) => total + cls.studentsCount, 0)}
+                </p>
+              </div>
+            </div>
+          </Card>
         </motion.div>
+
+        {/* Classes list */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          {viewMode === "grid" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredClasses.map((classData, index) => (
+                <motion.div
+                  key={classData.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <ClassCard classData={classData} />
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filteredClasses.map((classData, index) => (
+                <motion.div
+                  key={classData.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                >
+                  <ClassListItem classData={classData} />
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </motion.div>
+
+        {/* Empty state */}
+        {filteredClasses.length === 0 && (
+          <motion.div
+            className="text-center py-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No classes found
+            </h3>
+            <p className="text-gray-600">
+              {searchQuery 
+                ? "Try adjusting your search terms"
+                : "Join your first class to get started"
+              }
+            </p>
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );
