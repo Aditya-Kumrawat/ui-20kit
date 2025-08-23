@@ -68,7 +68,7 @@ export default function ClassView() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
   const navigate = useNavigate();
   const { classId } = useParams();
-  const [activeTab, setActiveTab] = useState<"stream" | "classwork" | "people" | "grades">("stream");
+  const [activeTab, setActiveTab] = useState<"stream" | "classwork" | "people">("stream");
   const [newPost, setNewPost] = useState("");
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
