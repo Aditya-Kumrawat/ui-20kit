@@ -24,7 +24,25 @@ import {
   Filter,
   Clock,
   Send,
+  Link,
+  Twitter,
+  Facebook,
+  Copy,
+  X,
 } from "lucide-react";
+
+interface Comment {
+  id: string;
+  author: {
+    name: string;
+    avatar: string;
+    role: string;
+  };
+  content: string;
+  timestamp: string;
+  likes: number;
+  isLiked: boolean;
+}
 
 interface CommunityPost {
   id: string;
@@ -42,6 +60,7 @@ interface CommunityPost {
   shares: number;
   isLiked: boolean;
   tags: string[];
+  commentsList?: Comment[];
 }
 
 export default function Community() {
@@ -51,7 +70,11 @@ export default function Community() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isPostDialogOpen, setIsPostDialogOpen] = useState(false);
   const [posts, setPosts] = useState<CommunityPost[]>([]);
-  
+  const [selectedPost, setSelectedPost] = useState<CommunityPost | null>(null);
+  const [isCommentsDialogOpen, setIsCommentsDialogOpen] = useState(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+  const [newComment, setNewComment] = useState("");
+
   // New post form state
   const [newPost, setNewPost] = useState({
     title: "",
@@ -80,6 +103,20 @@ export default function Community() {
           shares: 7,
           isLiked: false,
           tags: ["teaching", "online-learning", "tips"],
+          commentsList: [
+            {
+              id: "c1",
+              author: {
+                name: "Student Mike",
+                avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=mike",
+                role: "Student"
+              },
+              content: "This is really helpful! Thank you for sharing these tips.",
+              timestamp: "1 hour ago",
+              likes: 5,
+              isLiked: false
+            }
+          ],
         },
         {
           id: "2",
@@ -97,6 +134,7 @@ export default function Community() {
           shares: 3,
           isLiked: true,
           tags: ["mathematics", "study-group", "calculus"],
+          commentsList: [],
         },
         {
           id: "3",
@@ -114,6 +152,32 @@ export default function Community() {
           shares: 25,
           isLiked: false,
           tags: ["ai", "research", "opportunities"],
+          commentsList: [
+            {
+              id: "c2",
+              author: {
+                name: "Dr. Lisa Wang",
+                avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=lisa",
+                role: "Professor"
+              },
+              content: "Exciting opportunity! I'm definitely interested in collaborating.",
+              timestamp: "12 hours ago",
+              likes: 8,
+              isLiked: true
+            },
+            {
+              id: "c3",
+              author: {
+                name: "John Smith",
+                avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=john",
+                role: "Student"
+              },
+              content: "When will applications be available? Looking forward to applying!",
+              timestamp: "8 hours ago",
+              likes: 3,
+              isLiked: false
+            }
+          ],
         },
       ]);
     }
@@ -159,6 +223,7 @@ export default function Community() {
       shares: 0,
       isLiked: false,
       tags: newPost.tags.split(",").map(tag => tag.trim()).filter(tag => tag),
+      commentsList: [],
     };
 
     setPosts(prev => [post, ...prev]);
@@ -174,15 +239,111 @@ export default function Community() {
   };
 
   const handleLikePost = (postId: string) => {
-    setPosts(prev => prev.map(post => 
-      post.id === postId 
-        ? { 
-            ...post, 
+    setPosts(prev => prev.map(post =>
+      post.id === postId
+        ? {
+            ...post,
             isLiked: !post.isLiked,
             likes: post.isLiked ? post.likes - 1 : post.likes + 1
           }
         : post
     ));
+  };
+
+  const handleCommentClick = (post: CommunityPost) => {
+    setSelectedPost(post);
+    setIsCommentsDialogOpen(true);
+  };
+
+  const handleShareClick = (post: CommunityPost) => {
+    setSelectedPost(post);
+    setIsShareDialogOpen(true);
+  };
+
+  const handleAddComment = () => {
+    if (!newComment.trim() || !selectedPost) return;
+
+    const comment: Comment = {
+      id: Date.now().toString(),
+      author: {
+        name: "Current User",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=currentuser",
+        role: "Student"
+      },
+      content: newComment,
+      timestamp: "Just now",
+      likes: 0,
+      isLiked: false
+    };
+
+    setPosts(prev => prev.map(post =>
+      post.id === selectedPost.id
+        ? {
+            ...post,
+            comments: post.comments + 1,
+            commentsList: [...(post.commentsList || []), comment]
+          }
+        : post
+    ));
+
+    setNewComment("");
+    toast({
+      title: "Comment added!",
+      description: "Your comment has been posted.",
+    });
+  };
+
+  const handleLikeComment = (commentId: string) => {
+    if (!selectedPost) return;
+
+    setPosts(prev => prev.map(post =>
+      post.id === selectedPost.id
+        ? {
+            ...post,
+            commentsList: post.commentsList?.map(comment =>
+              comment.id === commentId
+                ? {
+                    ...comment,
+                    isLiked: !comment.isLiked,
+                    likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
+                  }
+                : comment
+            )
+          }
+        : post
+    ));
+  };
+
+  const handleShare = (platform: string) => {
+    if (!selectedPost) return;
+
+    const shareUrl = `${window.location.origin}/community/post/${selectedPost.id}`;
+    const shareText = `Check out this post: ${selectedPost.title}`;
+
+    switch (platform) {
+      case 'copy':
+        navigator.clipboard.writeText(shareUrl);
+        toast({
+          title: "Link copied!",
+          description: "Post link has been copied to clipboard.",
+        });
+        break;
+      case 'twitter':
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+        break;
+      case 'facebook':
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+        break;
+    }
+
+    // Update share count
+    setPosts(prev => prev.map(post =>
+      post.id === selectedPost.id
+        ? { ...post, shares: post.shares + 1 }
+        : post
+    ));
+
+    setIsShareDialogOpen(false);
   };
 
   const filteredPosts = posts.filter((post) => {
@@ -253,11 +414,21 @@ export default function Community() {
             <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} />
             <span>{post.likes}</span>
           </Button>
-          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-500">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-2 text-gray-500 hover:text-blue-600"
+            onClick={() => handleCommentClick(post)}
+          >
             <MessageSquare className="w-4 h-4" />
             <span>{post.comments}</span>
           </Button>
-          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-500">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-2 text-gray-500 hover:text-green-600"
+            onClick={() => handleShareClick(post)}
+          >
             <Share2 className="w-4 h-4" />
             <span>{post.shares}</span>
           </Button>
