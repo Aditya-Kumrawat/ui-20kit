@@ -949,6 +949,7 @@ export default function Chatbot() {
       <FloatingSidebar
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
+        userType={userType}
       />
 
       {/* Main Content */}
