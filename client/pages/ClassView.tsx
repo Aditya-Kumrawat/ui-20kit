@@ -70,6 +70,10 @@ export default function ClassView() {
   const { classId } = useParams();
   const [activeTab, setActiveTab] = useState<"stream" | "classwork" | "people" | "grades">("stream");
   const [newPost, setNewPost] = useState("");
+  const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
+  const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [submissionText, setSubmissionText] = useState("");
 
   // Sample class data
   const classData = {
