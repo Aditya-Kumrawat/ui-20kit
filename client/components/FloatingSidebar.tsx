@@ -95,6 +95,12 @@ export const FloatingSidebar = ({
   const studentMenuItems = [
     { id: "home", label: "My Classes", icon: Home, href: "/dashboard2" },
     {
+      id: "tests",
+      label: "My Tests",
+      icon: Cpu,
+      href: "/dashboard2/tests",
+    },
+    {
       id: "calendar",
       label: "Calendar",
       icon: Calendar,
