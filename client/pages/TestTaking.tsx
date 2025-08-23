@@ -238,9 +238,10 @@ export default function TestTaking() {
   };
 
   const toggleCamera = async () => {
-    if (cameraEnabled && stream) {
+    if (cameraEnabled && streamRef.current) {
       // Stop camera
-      stream.getVideoTracks().forEach((track) => track.stop());
+      streamRef.current.getVideoTracks().forEach((track) => track.stop());
+      streamRef.current = null;
       setStream(null);
       setCameraEnabled(false);
       if (videoRef.current) {
