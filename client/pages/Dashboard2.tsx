@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
@@ -61,7 +67,7 @@ export default function Dashboard2() {
 
   // Available classes that can be joined
   const availableClasses: { [key: string]: ClassData } = {
-    "abc123d": {
+    abc123d: {
       id: "math-101",
       name: "Advanced Mathematics",
       subject: "Mathematics",
@@ -78,7 +84,7 @@ export default function Dashboard2() {
       classCode: "abc123d",
       isPinned: true,
     },
-    "xyz789e": {
+    xyz789e: {
       id: "physics-201",
       name: "Quantum Physics",
       subject: "Physics",
@@ -94,7 +100,7 @@ export default function Dashboard2() {
       lastActivity: "5 hours ago",
       classCode: "xyz789e",
     },
-    "hist101a": {
+    hist101a: {
       id: "history-101",
       name: "World History",
       subject: "History",
@@ -134,7 +140,7 @@ export default function Dashboard2() {
     setIsJoining(true);
 
     // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const foundClass = availableClasses[classCode.toLowerCase()];
 
@@ -149,7 +155,7 @@ export default function Dashboard2() {
     }
 
     // Check if already enrolled
-    if (enrolledClasses.some(cls => cls.id === foundClass.id)) {
+    if (enrolledClasses.some((cls) => cls.id === foundClass.id)) {
       toast({
         title: "Already enrolled",
         description: "You are already enrolled in this class.",
@@ -160,7 +166,7 @@ export default function Dashboard2() {
     }
 
     // Add class to enrolled classes
-    setEnrolledClasses(prev => [...prev, foundClass]);
+    setEnrolledClasses((prev) => [...prev, foundClass]);
 
     toast({
       title: "Success!",
@@ -486,7 +492,10 @@ export default function Dashboard2() {
               <div>
                 <p className="text-sm text-gray-600">Pending Work</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {enrolledClasses.reduce((total, cls) => total + cls.pendingWork, 0)}
+                  {enrolledClasses.reduce(
+                    (total, cls) => total + cls.pendingWork,
+                    0,
+                  )}
                 </p>
               </div>
             </div>
@@ -512,7 +521,10 @@ export default function Dashboard2() {
               <div>
                 <p className="text-sm text-gray-600">Classmates</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {enrolledClasses.reduce((total, cls) => total + cls.studentsCount, 0)}
+                  {enrolledClasses.reduce(
+                    (total, cls) => total + cls.studentsCount,
+                    0,
+                  )}
                 </p>
               </div>
             </div>

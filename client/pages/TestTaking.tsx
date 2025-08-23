@@ -132,11 +132,11 @@ export default function TestTaking() {
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     // Cleanup function to stop camera when component unmounts
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       if (stream) {
         stream.getTracks().forEach((track) => {
           track.stop();
@@ -193,21 +193,37 @@ export default function TestTaking() {
       let errorMessage = "Camera access failed";
       let actionMessage = "Please check your camera settings and try again.";
 
-      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+      if (
+        error.name === "NotAllowedError" ||
+        error.name === "PermissionDeniedError"
+      ) {
         errorMessage = "Camera permission denied";
-        actionMessage = "Please allow camera access in your browser settings and refresh the page. For proctored tests, camera access is required.";
-      } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
+        actionMessage =
+          "Please allow camera access in your browser settings and refresh the page. For proctored tests, camera access is required.";
+      } else if (
+        error.name === "NotFoundError" ||
+        error.name === "DevicesNotFoundError"
+      ) {
         errorMessage = "No camera found";
         actionMessage = "Please connect a camera device and try again.";
-      } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
+      } else if (
+        error.name === "NotReadableError" ||
+        error.name === "TrackStartError"
+      ) {
         errorMessage = "Camera is being used by another application";
-        actionMessage = "Please close other applications using the camera and try again.";
-      } else if (error.name === "OverconstrainedError" || error.name === "ConstraintNotSatisfiedError") {
+        actionMessage =
+          "Please close other applications using the camera and try again.";
+      } else if (
+        error.name === "OverconstrainedError" ||
+        error.name === "ConstraintNotSatisfiedError"
+      ) {
         errorMessage = "Camera doesn't support required settings";
-        actionMessage = "Your camera doesn't support the required resolution. Please try with a different camera.";
+        actionMessage =
+          "Your camera doesn't support the required resolution. Please try with a different camera.";
       } else if (error.message.includes("not supported")) {
         errorMessage = "Camera not supported";
-        actionMessage = "Your browser doesn't support camera access. Please use a modern browser like Chrome, Firefox, or Safari.";
+        actionMessage =
+          "Your browser doesn't support camera access. Please use a modern browser like Chrome, Firefox, or Safari.";
       }
 
       // Show user-friendly error notification
@@ -303,7 +319,7 @@ export default function TestTaking() {
   const handleSubmitTest = () => {
     // Confirm test submission
     const confirmed = window.confirm(
-      "Are you sure you want to submit your test? This will end the test session and turn off your camera and microphone."
+      "Are you sure you want to submit your test? This will end the test session and turn off your camera and microphone.",
     );
 
     if (!confirmed) {
@@ -316,7 +332,8 @@ export default function TestTaking() {
     // Show completion notification
     toast({
       title: "Test submitted successfully",
-      description: "Your answers have been saved. Camera and microphone turned off.",
+      description:
+        "Your answers have been saved. Camera and microphone turned off.",
     });
 
     // Process answers and submit
