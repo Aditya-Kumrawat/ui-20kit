@@ -46,6 +46,7 @@ interface TestData {
 export default function TestTaking() {
   const navigate = useNavigate();
   const { testId } = useParams();
+  const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
