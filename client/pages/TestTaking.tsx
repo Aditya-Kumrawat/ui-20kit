@@ -125,8 +125,18 @@ export default function TestTaking() {
     setTimeRemaining(testData.duration * 60); // Convert minutes to seconds
     setTestStarted(true);
 
+    // Add beforeunload event to cleanup camera when user closes tab/window
+    const handleBeforeUnload = () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     // Cleanup function to stop camera when component unmounts
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       if (stream) {
         stream.getTracks().forEach((track) => {
           track.stop();
