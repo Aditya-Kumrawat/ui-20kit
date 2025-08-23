@@ -197,12 +197,25 @@ export default function TestTaking() {
 
   const toggleCamera = async () => {
     if (cameraEnabled && stream) {
+      // Stop camera
       stream.getVideoTracks().forEach((track) => track.stop());
+      setStream(null);
       setCameraEnabled(false);
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
     } else {
+      // Start camera
       await initializeCamera();
-      setCameraEnabled(true);
     }
+  };
+
+  const retryCamera = async () => {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      setStream(null);
+    }
+    await initializeCamera();
   };
 
   const toggleMic = () => {
