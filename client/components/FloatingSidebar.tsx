@@ -26,6 +26,7 @@ import {
 interface FloatingSidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
+  userType?: "teacher" | "student";
 }
 
 export const FloatingSidebar = ({
