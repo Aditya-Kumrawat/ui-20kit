@@ -63,105 +63,308 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+interface Assignment {
+  id: string;
+  title: string;
+  description: string;
+  dueDate: string;
+  subject: string;
+  status: "draft" | "published" | "graded";
+  submissions: number;
+  totalStudents: number;
+  points: number;
+  createdAt: string;
+}
+
+interface Student {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  status: "active" | "inactive";
+  lastActive: string;
+  grade: string;
+  assignments: {
+    completed: number;
+    pending: number;
+    late: number;
+  };
+}
+
+interface ClassPost {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  authorAvatar: string;
+  createdAt: string;
+  attachments?: string[];
+  comments: number;
+  type: "announcement" | "material" | "assignment";
+}
+
+interface Classroom {
+  id: string;
+  name: string;
+  subject: string;
+  students: number;
+  color: string;
+  lastActivity: string;
+  code: string;
+  status: "active" | "archived";
+}
+
 export default function Dashboard() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
+  const { toast } = useToast();
 
-  const dashboardStats = [
-    {
-      title: "Total Revenue",
-      value: "$54,239",
-      change: "+12.5%",
-      icon: DollarSign,
-      color: "from-green-400 to-green-600",
-      bgColor: "from-green-50 to-green-100",
-    },
-    {
-      title: "New Orders",
-      value: "1,429",
-      change: "+8.2%",
-      icon: ShoppingCart,
-      color: "from-blue-400 to-blue-600",
-      bgColor: "from-blue-50 to-blue-100",
-    },
-    {
-      title: "Active Users",
-      value: "9,532",
-      change: "+18.7%",
-      icon: Users,
-      color: "from-purple-400 to-purple-600",
-      bgColor: "from-purple-50 to-purple-100",
-    },
-    {
-      title: "Performance",
-      value: "94.2%",
-      change: "+2.1%",
-      icon: TrendingUp,
-      color: "from-orange-400 to-orange-600",
-      bgColor: "from-orange-50 to-orange-100",
-    },
-  ];
+  // State management
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [classPosts, setClassPosts] = useState<ClassPost[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [selectedView, setSelectedView] = useState<"overview" | "assignments" | "students" | "posts">("overview");
 
-  // Chart data for the interactive graph
-  const chartData = [
-    { month: "Jan", revenue: 45000, orders: 120 },
-    { month: "Feb", revenue: 52000, orders: 145 },
-    { month: "Mar", revenue: 48000, orders: 130 },
-    { month: "Apr", revenue: 61000, orders: 180 },
-    { month: "May", revenue: 55000, orders: 165 },
-    { month: "Jun", revenue: 67000, orders: 200 },
-    { month: "Jul", revenue: 72000, orders: 220 },
-    { month: "Aug", revenue: 69000, orders: 195 },
-    { month: "Sep", revenue: 78000, orders: 240 },
-    { month: "Oct", revenue: 84000, orders: 260 },
-    { month: "Nov", revenue: 79000, orders: 235 },
-    { month: "Dec", revenue: 89000, orders: 285 },
-  ];
+  // Dialog states
+  const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
+  const [isNewPostOpen, setIsNewPostOpen] = useState(false);
+  const [isPlagiarismOpen, setIsPlagiarismOpen] = useState(false);
+  const [isAnomalyOpen, setIsAnomalyOpen] = useState(false);
 
-  // Map data for global business presence
-  const mapData = [
-    {
-      region: "North America",
-      customers: 12500,
-      revenue: 245000,
-      growth: 15.2,
-      color: "#8b5cf6",
-      position: { x: 150, y: 120 },
-    },
-    {
-      region: "Europe",
-      customers: 8900,
-      revenue: 189000,
-      growth: 12.8,
-      color: "#06b6d4",
-      position: { x: 420, y: 100 },
-    },
-    {
-      region: "Asia Pacific",
-      customers: 15600,
-      revenue: 298000,
-      growth: 22.5,
-      color: "#10b981",
-      position: { x: 650, y: 150 },
-    },
-    {
-      region: "South America",
-      customers: 4200,
-      revenue: 78000,
-      growth: 8.3,
-      color: "#f59e0b",
-      position: { x: 220, y: 250 },
-    },
-    {
-      region: "Africa",
-      customers: 2800,
-      revenue: 52000,
-      growth: 18.7,
-      color: "#ef4444",
-      position: { x: 480, y: 220 },
-    },
-  ];
+  // Form states
+  const [newAssignment, setNewAssignment] = useState({
+    title: "",
+    description: "",
+    dueDate: "",
+    subject: "",
+    points: 100,
+  });
 
-  const [hoveredRegion, setHoveredRegion] = useState(null);
+  const [newPost, setNewPost] = useState({
+    title: "",
+    content: "",
+    type: "announcement" as "announcement" | "material",
+  });
+
+  // Initialize sample data
+  useEffect(() => {
+    // Sample assignments
+    setAssignments([
+      {
+        id: "1",
+        title: "Math Quiz Chapter 5",
+        description: "Complete the quiz on algebraic expressions and equations",
+        dueDate: "2024-01-15",
+        subject: "Mathematics",
+        status: "published",
+        submissions: 18,
+        totalStudents: 25,
+        points: 100,
+        createdAt: "2024-01-10",
+      },
+      {
+        id: "2",
+        title: "Science Lab Report",
+        description: "Write a detailed report on the photosynthesis experiment",
+        dueDate: "2024-01-20",
+        subject: "Science",
+        status: "published",
+        submissions: 12,
+        totalStudents: 25,
+        points: 150,
+        createdAt: "2024-01-08",
+      },
+      {
+        id: "3",
+        title: "History Essay",
+        description: "Essay on the causes of World War I",
+        dueDate: "2024-01-25",
+        subject: "History",
+        status: "draft",
+        submissions: 0,
+        totalStudents: 25,
+        points: 200,
+        createdAt: "2024-01-12",
+      },
+    ]);
+
+    // Sample students
+    setStudents([
+      {
+        id: "1",
+        name: "Alice Johnson",
+        email: "alice.johnson@school.edu",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=alice",
+        status: "active",
+        lastActive: "2 hours ago",
+        grade: "A",
+        assignments: { completed: 8, pending: 2, late: 0 },
+      },
+      {
+        id: "2",
+        name: "Bob Smith",
+        email: "bob.smith@school.edu",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=bob",
+        status: "active",
+        lastActive: "1 day ago",
+        grade: "B+",
+        assignments: { completed: 7, pending: 2, late: 1 },
+      },
+      {
+        id: "3",
+        name: "Charlie Brown",
+        email: "charlie.brown@school.edu",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=charlie",
+        status: "inactive",
+        lastActive: "3 days ago",
+        grade: "B",
+        assignments: { completed: 6, pending: 3, late: 1 },
+      },
+    ]);
+
+    // Sample class posts
+    setClassPosts([
+      {
+        id: "1",
+        title: "Welcome to the new semester!",
+        content: "I hope everyone is excited for the upcoming semester. Please check the course syllabus and let me know if you have any questions.",
+        author: "Dr. Sarah Wilson",
+        authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
+        createdAt: "2024-01-08",
+        comments: 5,
+        type: "announcement",
+      },
+      {
+        id: "2",
+        title: "Chapter 5 Study Materials",
+        content: "I've uploaded additional study materials for Chapter 5. Please review them before our next class.",
+        author: "Dr. Sarah Wilson",
+        authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
+        createdAt: "2024-01-10",
+        attachments: ["Chapter5_Notes.pdf", "Practice_Problems.docx"],
+        comments: 3,
+        type: "material",
+      },
+    ]);
+
+    // Sample classrooms
+    setClassrooms([
+      {
+        id: "1",
+        name: "Advanced Mathematics",
+        subject: "Mathematics",
+        students: 25,
+        color: "bg-blue-500",
+        lastActivity: "2 hours ago",
+        code: "MATH301",
+        status: "active",
+      },
+      {
+        id: "2",
+        name: "General Science",
+        subject: "Science",
+        students: 28,
+        color: "bg-green-500",
+        lastActivity: "4 hours ago",
+        code: "SCI101",
+        status: "active",
+      },
+      {
+        id: "3",
+        name: "World History",
+        subject: "History",
+        students: 22,
+        color: "bg-purple-500",
+        lastActivity: "1 day ago",
+        code: "HIST205",
+        status: "active",
+      },
+      {
+        id: "4",
+        name: "English Literature",
+        subject: "English",
+        students: 20,
+        color: "bg-orange-500",
+        lastActivity: "3 days ago",
+        code: "ENG102",
+        status: "archived",
+      },
+    ]);
+  }, []);
+
+  // Handle new assignment creation
+  const handleCreateAssignment = () => {
+    if (!newAssignment.title || !newAssignment.description || !newAssignment.dueDate) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const assignment: Assignment = {
+      id: Date.now().toString(),
+      title: newAssignment.title,
+      description: newAssignment.description,
+      dueDate: newAssignment.dueDate,
+      subject: newAssignment.subject || "General",
+      status: "draft",
+      submissions: 0,
+      totalStudents: 25,
+      points: newAssignment.points,
+      createdAt: new Date().toISOString().split('T')[0],
+    };
+
+    setAssignments(prev => [assignment, ...prev]);
+    setNewAssignment({ title: "", description: "", dueDate: "", subject: "", points: 100 });
+    setIsNewAssignmentOpen(false);
+
+    toast({
+      title: "Assignment Created",
+      description: "Your assignment has been saved as a draft",
+    });
+  };
+
+  // Handle new post creation
+  const handleCreatePost = () => {
+    if (!newPost.title || !newPost.content) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const post: ClassPost = {
+      id: Date.now().toString(),
+      title: newPost.title,
+      content: newPost.content,
+      author: "Dr. Sarah Wilson",
+      authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
+      createdAt: new Date().toISOString().split('T')[0],
+      comments: 0,
+      type: newPost.type,
+    };
+
+    setClassPosts(prev => [post, ...prev]);
+    setNewPost({ title: "", content: "", type: "announcement" });
+    setIsNewPostOpen(false);
+
+    toast({
+      title: "Post Created",
+      description: "Your post has been published to the class",
+    });
+  };
+
+  // Dashboard stats
+  const dashboardStats = {
+    totalStudents: students.length,
+    activeAssignments: assignments.filter(a => a.status === "published").length,
+    pendingSubmissions: assignments.reduce((acc, a) => acc + (a.totalStudents - a.submissions), 0),
+    averageGrade: "B+",
+  };
 
   return (
     <div className="dashboard-page min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
