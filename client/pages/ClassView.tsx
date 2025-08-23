@@ -208,6 +208,68 @@ export default function ClassView() {
     ]
   };
 
+  // Handle file selection
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      setSelectedFiles(Array.from(files));
+    }
+  };
+
+  // Handle assignment submission
+  const handleSubmitAssignment = async () => {
+    if (!selectedAssignment) return;
+
+    const formData = new FormData();
+    formData.append('assignmentId', selectedAssignment.id);
+    formData.append('submissionText', submissionText);
+
+    selectedFiles.forEach((file, index) => {
+      formData.append(`file_${index}`, file);
+    });
+
+    try {
+      // Simulate API call
+      console.log('Submitting assignment:', {
+        assignmentId: selectedAssignment.id,
+        submissionText,
+        files: selectedFiles.map(f => f.name)
+      });
+
+      // Here you would make the actual API call
+      // const response = await fetch('/api/submit-assignment', {
+      //   method: 'POST',
+      //   body: formData
+      // });
+
+      alert('Assignment submitted successfully!');
+      setIsSubmissionModalOpen(false);
+      setSelectedFiles([]);
+      setSubmissionText('');
+      setSelectedAssignment(null);
+    } catch (error) {
+      console.error('Error submitting assignment:', error);
+      alert('Error submitting assignment. Please try again.');
+    }
+  };
+
+  // Check if assignment is due (within 7 days)
+  const isAssignmentDue = (assignment: Assignment) => {
+    const now = new Date();
+    const dueDate = assignment.dueDate;
+    const timeDiff = dueDate.getTime() - now.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return daysDiff <= 7 && daysDiff >= 0 && !assignment.submitted;
+  };
+
+  // Handle assignment card click
+  const handleAssignmentClick = (assignment: Assignment) => {
+    if (!assignment.submitted && isAssignmentDue(assignment)) {
+      setSelectedAssignment(assignment);
+      setIsSubmissionModalOpen(true);
+    }
+  };
+
   const StreamTab = () => (
     <div className="space-y-6">
       {/* Post creation */}
