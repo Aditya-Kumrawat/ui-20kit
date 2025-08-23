@@ -4,11 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
@@ -80,7 +92,7 @@ export default function Community() {
     title: "",
     content: "",
     category: "",
-    tags: ""
+    tags: "",
   });
 
   // Initialize with sample community data
@@ -95,7 +107,8 @@ export default function Community() {
             role: "Professor",
           },
           title: "Tips for Effective Online Learning",
-          content: "After years of teaching, I've compiled some essential strategies that help students excel in virtual environments. Here are my top recommendations for staying engaged and productive...",
+          content:
+            "After years of teaching, I've compiled some essential strategies that help students excel in virtual environments. Here are my top recommendations for staying engaged and productive...",
           category: "Education",
           timestamp: "2 hours ago",
           likes: 42,
@@ -109,13 +122,14 @@ export default function Community() {
               author: {
                 name: "Student Mike",
                 avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=mike",
-                role: "Student"
+                role: "Student",
               },
-              content: "This is really helpful! Thank you for sharing these tips.",
+              content:
+                "This is really helpful! Thank you for sharing these tips.",
               timestamp: "1 hour ago",
               likes: 5,
-              isLiked: false
-            }
+              isLiked: false,
+            },
           ],
         },
         {
@@ -126,7 +140,8 @@ export default function Community() {
             role: "Student",
           },
           title: "Study Group for Advanced Mathematics",
-          content: "Looking for fellow students to form a study group for our upcoming calculus exam. We meet every Tuesday and Thursday at 6 PM via video call. Everyone welcome!",
+          content:
+            "Looking for fellow students to form a study group for our upcoming calculus exam. We meet every Tuesday and Thursday at 6 PM via video call. Everyone welcome!",
           category: "Study Groups",
           timestamp: "5 hours ago",
           likes: 28,
@@ -144,7 +159,8 @@ export default function Community() {
             role: "Professor",
           },
           title: "New AI Research Lab Opening",
-          content: "Exciting news! We're launching a new AI research lab focused on educational technology. Looking for motivated students and researchers to join our team. Applications open next week.",
+          content:
+            "Exciting news! We're launching a new AI research lab focused on educational technology. Looking for motivated students and researchers to join our team. Applications open next week.",
           category: "Announcements",
           timestamp: "1 day ago",
           likes: 156,
@@ -158,25 +174,27 @@ export default function Community() {
               author: {
                 name: "Dr. Lisa Wang",
                 avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=lisa",
-                role: "Professor"
+                role: "Professor",
               },
-              content: "Exciting opportunity! I'm definitely interested in collaborating.",
+              content:
+                "Exciting opportunity! I'm definitely interested in collaborating.",
               timestamp: "12 hours ago",
               likes: 8,
-              isLiked: true
+              isLiked: true,
             },
             {
               id: "c3",
               author: {
                 name: "John Smith",
                 avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=john",
-                role: "Student"
+                role: "Student",
               },
-              content: "When will applications be available? Looking forward to applying!",
+              content:
+                "When will applications be available? Looking forward to applying!",
               timestamp: "8 hours ago",
               likes: 3,
-              isLiked: false
-            }
+              isLiked: false,
+            },
           ],
         },
       ]);
@@ -185,10 +203,26 @@ export default function Community() {
 
   const categories = [
     { id: "all", label: "All Posts", count: posts.length },
-    { id: "education", label: "Education", count: posts.filter(p => p.category === "Education").length },
-    { id: "study-groups", label: "Study Groups", count: posts.filter(p => p.category === "Study Groups").length },
-    { id: "announcements", label: "Announcements", count: posts.filter(p => p.category === "Announcements").length },
-    { id: "resources", label: "Resources", count: posts.filter(p => p.category === "Resources").length },
+    {
+      id: "education",
+      label: "Education",
+      count: posts.filter((p) => p.category === "Education").length,
+    },
+    {
+      id: "study-groups",
+      label: "Study Groups",
+      count: posts.filter((p) => p.category === "Study Groups").length,
+    },
+    {
+      id: "announcements",
+      label: "Announcements",
+      count: posts.filter((p) => p.category === "Announcements").length,
+    },
+    {
+      id: "resources",
+      label: "Resources",
+      count: posts.filter((p) => p.category === "Resources").length,
+    },
   ];
 
   // Get recent posts for sidebar
@@ -222,12 +256,15 @@ export default function Community() {
       comments: 0,
       shares: 0,
       isLiked: false,
-      tags: newPost.tags.split(",").map(tag => tag.trim()).filter(tag => tag),
+      tags: newPost.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag),
       commentsList: [],
     };
 
-    setPosts(prev => [post, ...prev]);
-    
+    setPosts((prev) => [post, ...prev]);
+
     toast({
       title: "Post created!",
       description: "Your post has been published to the community.",
@@ -239,27 +276,29 @@ export default function Community() {
   };
 
   const handleLikePost = (postId: string) => {
-    setPosts(prev => prev.map(post =>
-      post.id === postId
-        ? {
-            ...post,
-            isLiked: !post.isLiked,
-            likes: post.isLiked ? post.likes - 1 : post.likes + 1
-          }
-        : post
-    ));
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              isLiked: !post.isLiked,
+              likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+            }
+          : post,
+      ),
+    );
   };
 
   const handleCommentClick = (post: CommunityPost) => {
     // Get the most current version of the post from state
-    const currentPost = posts.find(p => p.id === post.id) || post;
+    const currentPost = posts.find((p) => p.id === post.id) || post;
     setSelectedPost(currentPost);
     setIsCommentsDialogOpen(true);
   };
 
   const handleShareClick = (post: CommunityPost) => {
     // Get the most current version of the post from state
-    const currentPost = posts.find(p => p.id === post.id) || post;
+    const currentPost = posts.find((p) => p.id === post.id) || post;
     setSelectedPost(currentPost);
     setIsShareDialogOpen(true);
   };
@@ -272,23 +311,25 @@ export default function Community() {
       author: {
         name: "Current User",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=currentuser",
-        role: "Student"
+        role: "Student",
       },
       content: newComment,
       timestamp: "Just now",
       likes: 0,
-      isLiked: false
+      isLiked: false,
     };
 
-    setPosts(prev => prev.map(post =>
-      post.id === selectedPost.id
-        ? {
-            ...post,
-            comments: post.comments + 1,
-            commentsList: [...(post.commentsList || []), comment]
-          }
-        : post
-    ));
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.id === selectedPost.id
+          ? {
+              ...post,
+              comments: post.comments + 1,
+              commentsList: [...(post.commentsList || []), comment],
+            }
+          : post,
+      ),
+    );
 
     setNewComment("");
     toast({
@@ -300,22 +341,26 @@ export default function Community() {
   const handleLikeComment = (commentId: string) => {
     if (!selectedPost) return;
 
-    setPosts(prev => prev.map(post =>
-      post.id === selectedPost.id
-        ? {
-            ...post,
-            commentsList: post.commentsList?.map(comment =>
-              comment.id === commentId
-                ? {
-                    ...comment,
-                    isLiked: !comment.isLiked,
-                    likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
-                  }
-                : comment
-            )
-          }
-        : post
-    ));
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.id === selectedPost.id
+          ? {
+              ...post,
+              commentsList: post.commentsList?.map((comment) =>
+                comment.id === commentId
+                  ? {
+                      ...comment,
+                      isLiked: !comment.isLiked,
+                      likes: comment.isLiked
+                        ? comment.likes - 1
+                        : comment.likes + 1,
+                    }
+                  : comment,
+              ),
+            }
+          : post,
+      ),
+    );
   };
 
   const handleShare = (platform: string) => {
@@ -325,36 +370,46 @@ export default function Community() {
     const shareText = `Check out this post: ${selectedPost.title}`;
 
     switch (platform) {
-      case 'copy':
+      case "copy":
         navigator.clipboard.writeText(shareUrl);
         toast({
           title: "Link copied!",
           description: "Post link has been copied to clipboard.",
         });
         break;
-      case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+      case "twitter":
+        window.open(
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+          "_blank",
+        );
         break;
-      case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+      case "facebook":
+        window.open(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+          "_blank",
+        );
         break;
     }
 
     // Update share count
-    setPosts(prev => prev.map(post =>
-      post.id === selectedPost.id
-        ? { ...post, shares: post.shares + 1 }
-        : post
-    ));
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.id === selectedPost.id
+          ? { ...post, shares: post.shares + 1 }
+          : post,
+      ),
+    );
 
     setIsShareDialogOpen(false);
   };
 
   const filteredPosts = posts.filter((post) => {
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         post.content.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || 
-                           post.category.toLowerCase().replace(" ", "-") === selectedCategory;
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "all" ||
+      post.category.toLowerCase().replace(" ", "-") === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -371,7 +426,10 @@ export default function Community() {
           <Avatar className="w-10 h-10">
             <AvatarImage src={post.author.avatar} />
             <AvatarFallback>
-              {post.author.name.split(" ").map(n => n[0]).join("")}
+              {post.author.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
             </AvatarFallback>
           </Avatar>
           <div>
@@ -390,7 +448,9 @@ export default function Community() {
 
       {/* Post Content */}
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">{post.title}</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          {post.title}
+        </h3>
         <p className="text-gray-600 leading-relaxed">{post.content}</p>
       </div>
 
@@ -412,10 +472,12 @@ export default function Community() {
           <Button
             variant="ghost"
             size="sm"
-            className={`flex items-center gap-2 ${post.isLiked ? 'text-red-500' : 'text-gray-500'}`}
+            className={`flex items-center gap-2 ${post.isLiked ? "text-red-500" : "text-gray-500"}`}
             onClick={() => handleLikePost(post.id)}
           >
-            <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} />
+            <Heart
+              className={`w-4 h-4 ${post.isLiked ? "fill-current" : ""}`}
+            />
             <span>{post.likes}</span>
           </Button>
           <Button
@@ -446,12 +508,19 @@ export default function Community() {
       <Avatar className="w-8 h-8">
         <AvatarImage src={post.author.avatar} />
         <AvatarFallback>
-          {post.author.name.split(" ").map(n => n[0]).join("")}
+          {post.author.name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")}
         </AvatarFallback>
       </Avatar>
       <div className="flex-1 min-w-0">
-        <h4 className="text-sm font-medium text-gray-900 truncate">{post.title}</h4>
-        <p className="text-xs text-gray-500">{post.author.name} • {post.timestamp}</p>
+        <h4 className="text-sm font-medium text-gray-900 truncate">
+          {post.title}
+        </h4>
+        <p className="text-xs text-gray-500">
+          {post.author.name} • {post.timestamp}
+        </p>
         <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
           <span className="flex items-center gap-1">
             <Heart className="w-3 h-3" />
@@ -491,7 +560,8 @@ export default function Community() {
               Community
             </h1>
             <p className="text-gray-600 mt-1 dashboard-text">
-              Connect, share knowledge, and collaborate with fellow learners and educators
+              Connect, share knowledge, and collaborate with fellow learners and
+              educators
             </p>
           </div>
 
@@ -513,46 +583,62 @@ export default function Community() {
                     id="title"
                     placeholder="Enter post title"
                     value={newPost.title}
-                    onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
+                    onChange={(e) =>
+                      setNewPost((prev) => ({ ...prev, title: e.target.value }))
+                    }
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="category">Category *</Label>
-                  <Select value={newPost.category} onValueChange={(value) => setNewPost(prev => ({ ...prev, category: value }))}>
+                  <Select
+                    value={newPost.category}
+                    onValueChange={(value) =>
+                      setNewPost((prev) => ({ ...prev, category: value }))
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Education">Education</SelectItem>
                       <SelectItem value="Study Groups">Study Groups</SelectItem>
-                      <SelectItem value="Announcements">Announcements</SelectItem>
+                      <SelectItem value="Announcements">
+                        Announcements
+                      </SelectItem>
                       <SelectItem value="Resources">Resources</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="content">Content *</Label>
                   <Textarea
                     id="content"
                     placeholder="What would you like to share with the community?"
                     value={newPost.content}
-                    onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
+                    onChange={(e) =>
+                      setNewPost((prev) => ({
+                        ...prev,
+                        content: e.target.value,
+                      }))
+                    }
                     rows={4}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="tags">Tags (optional)</Label>
                   <Input
                     id="tags"
                     placeholder="Enter tags separated by commas"
                     value={newPost.tags}
-                    onChange={(e) => setNewPost(prev => ({ ...prev, tags: e.target.value }))}
+                    onChange={(e) =>
+                      setNewPost((prev) => ({ ...prev, tags: e.target.value }))
+                    }
                   />
                 </div>
-                
+
                 <div className="flex justify-end gap-2">
                   <Button
                     variant="outline"
@@ -652,7 +738,9 @@ export default function Community() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Total Posts</p>
-                    <p className="text-2xl font-bold text-gray-900">{posts.length}</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {posts.length}
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -716,7 +804,10 @@ export default function Community() {
       </motion.div>
 
       {/* Comments Dialog */}
-      <Dialog open={isCommentsDialogOpen} onOpenChange={setIsCommentsDialogOpen}>
+      <Dialog
+        open={isCommentsDialogOpen}
+        onOpenChange={setIsCommentsDialogOpen}
+      >
         <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>Comments</DialogTitle>
@@ -729,16 +820,27 @@ export default function Community() {
                   <Avatar className="w-8 h-8">
                     <AvatarImage src={selectedPost.author.avatar} />
                     <AvatarFallback>
-                      {selectedPost.author.name.split(" ").map(n => n[0]).join("")}
+                      {selectedPost.author.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h4 className="font-semibold text-sm">{selectedPost.author.name}</h4>
-                    <p className="text-xs text-gray-500">{selectedPost.timestamp}</p>
+                    <h4 className="font-semibold text-sm">
+                      {selectedPost.author.name}
+                    </h4>
+                    <p className="text-xs text-gray-500">
+                      {selectedPost.timestamp}
+                    </p>
                   </div>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{selectedPost.title}</h3>
-                <p className="text-sm text-gray-600 line-clamp-2">{selectedPost.content}</p>
+                <h3 className="font-semibold text-gray-900 mb-1">
+                  {selectedPost.title}
+                </h3>
+                <p className="text-sm text-gray-600 line-clamp-2">
+                  {selectedPost.content}
+                </p>
               </div>
 
               {/* Add Comment */}
@@ -772,34 +874,46 @@ export default function Community() {
 
               {/* Comments List */}
               <div className="max-h-96 overflow-y-auto space-y-4">
-                {selectedPost.commentsList && selectedPost.commentsList.length > 0 ? (
+                {selectedPost.commentsList &&
+                selectedPost.commentsList.length > 0 ? (
                   selectedPost.commentsList.map((comment) => (
                     <div key={comment.id} className="flex gap-3">
                       <Avatar className="w-8 h-8">
                         <AvatarImage src={comment.author.avatar} />
                         <AvatarFallback>
-                          {comment.author.name.split(" ").map(n => n[0]).join("")}
+                          {comment.author.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="bg-gray-50 rounded-lg p-3">
                           <div className="flex items-center gap-2 mb-1">
-                            <h5 className="font-semibold text-sm">{comment.author.name}</h5>
+                            <h5 className="font-semibold text-sm">
+                              {comment.author.name}
+                            </h5>
                             <Badge variant="outline" className="text-xs">
                               {comment.author.role}
                             </Badge>
-                            <span className="text-xs text-gray-500">{comment.timestamp}</span>
+                            <span className="text-xs text-gray-500">
+                              {comment.timestamp}
+                            </span>
                           </div>
-                          <p className="text-sm text-gray-700">{comment.content}</p>
+                          <p className="text-sm text-gray-700">
+                            {comment.content}
+                          </p>
                         </div>
                         <div className="flex items-center gap-2 mt-2">
                           <Button
                             variant="ghost"
                             size="sm"
-                            className={`text-xs ${comment.isLiked ? 'text-red-500' : 'text-gray-500'}`}
+                            className={`text-xs ${comment.isLiked ? "text-red-500" : "text-gray-500"}`}
                             onClick={() => handleLikeComment(comment.id)}
                           >
-                            <Heart className={`w-3 h-3 mr-1 ${comment.isLiked ? 'fill-current' : ''}`} />
+                            <Heart
+                              className={`w-3 h-3 mr-1 ${comment.isLiked ? "fill-current" : ""}`}
+                            />
                             {comment.likes}
                           </Button>
                         </div>
@@ -809,7 +923,9 @@ export default function Community() {
                 ) : (
                   <div className="text-center py-8">
                     <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                    <p className="text-gray-500">No comments yet. Be the first to comment!</p>
+                    <p className="text-gray-500">
+                      No comments yet. Be the first to comment!
+                    </p>
                   </div>
                 )}
               </div>
@@ -841,7 +957,7 @@ export default function Community() {
                 <Button
                   variant="outline"
                   className="w-full justify-start"
-                  onClick={() => handleShare('copy')}
+                  onClick={() => handleShare("copy")}
                 >
                   <Copy className="w-4 h-4 mr-3" />
                   Copy Link
@@ -850,7 +966,7 @@ export default function Community() {
                 <Button
                   variant="outline"
                   className="w-full justify-start"
-                  onClick={() => handleShare('twitter')}
+                  onClick={() => handleShare("twitter")}
                 >
                   <Twitter className="w-4 h-4 mr-3" />
                   Share on Twitter
@@ -859,7 +975,7 @@ export default function Community() {
                 <Button
                   variant="outline"
                   className="w-full justify-start"
-                  onClick={() => handleShare('facebook')}
+                  onClick={() => handleShare("facebook")}
                 >
                   <Facebook className="w-4 h-4 mr-3" />
                   Share on Facebook
