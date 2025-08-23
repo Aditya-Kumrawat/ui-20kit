@@ -299,6 +299,41 @@ export const FloatingSidebar = ({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Logout Section */}
+        <div className="p-3 border-t border-gray-200/50">
+          <motion.button
+            className={`w-full flex items-center gap-3 transition-all duration-200 group ${
+              isCollapsed ? "p-2 justify-center" : "p-3"
+            } rounded-xl hover:bg-red-50 text-red-600 hover:text-red-700`}
+            onClick={() => {
+              // Add logout logic here
+              console.log("Logout clicked");
+              // Example: clear auth tokens, redirect to login, etc.
+              // navigate("/login");
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <LogOut
+              size={isCollapsed ? 20 : 18}
+              className="transition-all duration-200"
+            />
+            <AnimatePresence>
+              {!isCollapsed && (
+                <motion.span
+                  className="text-sm font-medium flex-1 text-left dashboard-text transition-colors duration-200"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Logout
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </div>
       </div>
     </motion.div>
   );
