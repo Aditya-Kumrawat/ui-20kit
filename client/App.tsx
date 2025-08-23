@@ -16,7 +16,6 @@ import Analytics from "./pages/Analytics";
 import Chatbot from "./pages/Chatbot";
 import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
-import TeacherClassroom from "./pages/TeacherClassroom";
 
 const queryClient = new QueryClient();
 
