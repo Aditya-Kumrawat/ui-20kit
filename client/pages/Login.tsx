@@ -138,7 +138,7 @@ export default function Login() {
                   Welcome Back
                 </h1>
                 <p className="text-gray-600 text-lg">
-                  Sign in to continue your AI journey
+                  Unlock the future of learning with AI-powered education
                 </p>
               </motion.div>
 
