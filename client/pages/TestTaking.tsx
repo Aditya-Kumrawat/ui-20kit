@@ -179,6 +179,7 @@ export default function TestTaking() {
         audio: micEnabled,
       });
       setStream(mediaStream);
+      streamRef.current = mediaStream; // Store in ref for reliable cleanup
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
       }
