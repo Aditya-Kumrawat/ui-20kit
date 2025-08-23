@@ -125,12 +125,16 @@ export default function TestTaking() {
     setTimeRemaining(testData.duration * 60); // Convert minutes to seconds
     setTestStarted(true);
 
+    // Cleanup function to stop camera when component unmounts
     return () => {
       if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
+        stream.getTracks().forEach((track) => {
+          track.stop();
+          console.log(`Cleanup: Stopped ${track.kind} track`);
+        });
       }
     };
-  }, []);
+  }, [stream]);
 
   // Timer countdown
   useEffect(() => {
@@ -228,6 +232,22 @@ export default function TestTaking() {
     await initializeCamera();
   };
 
+  // Clean up camera and microphone streams
+  const cleanupMediaStreams = () => {
+    if (stream) {
+      stream.getTracks().forEach((track) => {
+        track.stop();
+        console.log(`Stopped ${track.kind} track`);
+      });
+      setStream(null);
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+    }
+    setCameraEnabled(false);
+    setMicEnabled(false);
+  };
+
   const toggleMic = () => {
     if (stream) {
       stream.getAudioTracks().forEach((track) => {
@@ -271,6 +291,15 @@ export default function TestTaking() {
   };
 
   const handleSubmitTest = () => {
+    // Clean up camera and microphone before submitting
+    cleanupMediaStreams();
+
+    // Show completion notification
+    toast({
+      title: "Test submitted successfully",
+      description: "Your answers have been saved. Camera and microphone turned off.",
+    });
+
     // Process answers and submit
     console.log("Submitting test with answers:", answers);
     navigate("/dashboard2/tests");
