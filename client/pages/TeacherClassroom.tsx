@@ -103,6 +103,17 @@ interface ClassPost {
   type: "announcement" | "material" | "assignment";
 }
 
+interface Classroom {
+  id: string;
+  name: string;
+  subject: string;
+  students: number;
+  color: string;
+  lastActivity: string;
+  code: string;
+  status: "active" | "archived";
+}
+
 export default function TeacherClassroom() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
   const { toast } = useToast();
