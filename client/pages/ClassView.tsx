@@ -883,7 +883,6 @@ export default function ClassView() {
           {activeTab === "stream" && <StreamTab />}
           {activeTab === "classwork" && <ClassworkTab />}
           {activeTab === "people" && <PeopleTab />}
-          {activeTab === "grades" && <GradesTab />}
         </motion.div>
       </motion.div>
     </div>
