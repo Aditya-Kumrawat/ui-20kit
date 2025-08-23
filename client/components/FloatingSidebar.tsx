@@ -71,7 +71,7 @@ export const FloatingSidebar = ({
     {
       id: "community",
       label: "Community",
-      icon: UserGroup,
+      icon: Users,
       href: "/dashboard/community",
     },
   ];
