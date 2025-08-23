@@ -48,6 +48,7 @@ export default function TestTaking() {
   const { testId } = useParams();
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
   // Test state
