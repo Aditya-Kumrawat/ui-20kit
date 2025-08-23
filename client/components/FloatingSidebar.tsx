@@ -93,13 +93,7 @@ export const FloatingSidebar = ({
   ];
 
   const studentMenuItems = [
-    { id: "home", label: "Dashboard", icon: Home, href: "/dashboard2" },
-    {
-      id: "customers",
-      label: "Students",
-      icon: Users,
-      href: "/dashboard2/students",
-    },
+    { id: "home", label: "My Classes", icon: Home, href: "/dashboard2" },
     {
       id: "calendar",
       label: "Calendar",
@@ -108,7 +102,7 @@ export const FloatingSidebar = ({
     },
     {
       id: "chatbot",
-      label: "AI Chat",
+      label: "AI Tutor",
       icon: Brain,
       href: "/dashboard2/chatbot",
     },
