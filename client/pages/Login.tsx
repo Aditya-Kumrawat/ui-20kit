@@ -409,22 +409,22 @@ export default function Login() {
                 transition={{ delay: 1.2 }}
               >
                 <h3 className="text-2xl font-bold text-gray-800 mt-px">
-                  Experience AI Like Never Before
+                  Revolutionizing Education with AI
                 </h3>
                 <p className="text-gray-600 leading-relaxed -mt-px">
-                  Join thousands of developers and creators who are building the
-                  future with our advanced AI platform. From natural language
-                  processing to computer vision, unlock the full potential of
-                  artificial intelligence.
+                  Join thousands of educators and students who are transforming
+                  learning experiences with our intelligent education platform. From
+                  personalized learning paths to smart assessments, discover how AI
+                  can enhance every aspect of education.
                 </p>
 
                 {/* Feature Pills */}
                 <div className="flex flex-wrap gap-2 justify-center">
                   {[
-                    "Real-time AI",
-                    "Advanced ML",
-                    "Easy Integration",
-                    "24/7 Support",
+                    "Smart Learning",
+                    "AI Tutoring",
+                    "Adaptive Tests",
+                    "Progress Analytics",
                   ].map((feature, index) => (
                     <motion.span
                       key={feature}
