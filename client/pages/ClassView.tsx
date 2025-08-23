@@ -274,7 +274,7 @@ export default function ClassView() {
                   {post.type === "assignment" && (
                     <div className="mb-3">
                       <Badge className="bg-blue-100 text-blue-800">
-                        <Assignment className="w-3 h-3 mr-1" />
+                        <FileText className="w-3 h-3 mr-1" />
                         Assignment
                       </Badge>
                     </div>
