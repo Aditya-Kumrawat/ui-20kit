@@ -17,7 +17,7 @@ import {
   Edit,
   Star,
   Cpu,
-  UserGroup,
+  Users,
 } from "lucide-react";
 
 interface FloatingSidebarProps {
