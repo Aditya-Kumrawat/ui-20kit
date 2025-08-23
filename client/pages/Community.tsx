@@ -4,6 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
 import { useSidebar } from "@/contexts/SidebarContext";
@@ -12,16 +18,12 @@ import {
   MessageSquare,
   Heart,
   Share2,
-  BookOpen,
-  Calendar,
-  Star,
   MoreVertical,
   Plus,
   Search,
   Filter,
-  TrendingUp,
-  Award,
   Clock,
+  Send,
 } from "lucide-react";
 
 interface CommunityPost {
@@ -44,94 +46,146 @@ interface CommunityPost {
 
 export default function Community() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
+  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [isPostDialogOpen, setIsPostDialogOpen] = useState(false);
+  const [posts, setPosts] = useState<CommunityPost[]>([]);
+  
+  // New post form state
+  const [newPost, setNewPost] = useState({
+    title: "",
+    content: "",
+    category: "",
+    tags: ""
+  });
 
-  // Sample community data
-  const communityPosts: CommunityPost[] = [
-    {
-      id: "1",
-      author: {
-        name: "Dr. Sarah Johnson",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
-        role: "Professor",
-      },
-      title: "Tips for Effective Online Learning",
-      content: "After years of teaching, I've compiled some essential strategies that help students excel in virtual environments. Here are my top recommendations for staying engaged and productive...",
-      category: "Education",
-      timestamp: "2 hours ago",
-      likes: 42,
-      comments: 18,
-      shares: 7,
-      isLiked: false,
-      tags: ["teaching", "online-learning", "tips"],
-    },
-    {
-      id: "2",
-      author: {
-        name: "Alex Chen",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=alex",
-        role: "Student",
-      },
-      title: "Study Group for Advanced Mathematics",
-      content: "Looking for fellow students to form a study group for our upcoming calculus exam. We meet every Tuesday and Thursday at 6 PM via video call. Everyone welcome!",
-      category: "Study Groups",
-      timestamp: "5 hours ago",
-      likes: 28,
-      comments: 12,
-      shares: 3,
-      isLiked: true,
-      tags: ["mathematics", "study-group", "calculus"],
-    },
-    {
-      id: "3",
-      author: {
-        name: "Prof. Michael Rodriguez",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=michael",
-        role: "Professor",
-      },
-      title: "New AI Research Lab Opening",
-      content: "Exciting news! We're launching a new AI research lab focused on educational technology. Looking for motivated students and researchers to join our team. Applications open next week.",
-      category: "Announcements",
-      timestamp: "1 day ago",
-      likes: 156,
-      comments: 34,
-      shares: 25,
-      isLiked: false,
-      tags: ["ai", "research", "opportunities"],
-    },
-  ];
+  // Initialize with sample community data
+  React.useEffect(() => {
+    if (posts.length === 0) {
+      setPosts([
+        {
+          id: "1",
+          author: {
+            name: "Dr. Sarah Johnson",
+            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
+            role: "Professor",
+          },
+          title: "Tips for Effective Online Learning",
+          content: "After years of teaching, I've compiled some essential strategies that help students excel in virtual environments. Here are my top recommendations for staying engaged and productive...",
+          category: "Education",
+          timestamp: "2 hours ago",
+          likes: 42,
+          comments: 18,
+          shares: 7,
+          isLiked: false,
+          tags: ["teaching", "online-learning", "tips"],
+        },
+        {
+          id: "2",
+          author: {
+            name: "Alex Chen",
+            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=alex",
+            role: "Student",
+          },
+          title: "Study Group for Advanced Mathematics",
+          content: "Looking for fellow students to form a study group for our upcoming calculus exam. We meet every Tuesday and Thursday at 6 PM via video call. Everyone welcome!",
+          category: "Study Groups",
+          timestamp: "5 hours ago",
+          likes: 28,
+          comments: 12,
+          shares: 3,
+          isLiked: true,
+          tags: ["mathematics", "study-group", "calculus"],
+        },
+        {
+          id: "3",
+          author: {
+            name: "Prof. Michael Rodriguez",
+            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=michael",
+            role: "Professor",
+          },
+          title: "New AI Research Lab Opening",
+          content: "Exciting news! We're launching a new AI research lab focused on educational technology. Looking for motivated students and researchers to join our team. Applications open next week.",
+          category: "Announcements",
+          timestamp: "1 day ago",
+          likes: 156,
+          comments: 34,
+          shares: 25,
+          isLiked: false,
+          tags: ["ai", "research", "opportunities"],
+        },
+      ]);
+    }
+  }, []);
 
   const categories = [
-    { id: "all", label: "All Posts", count: 120 },
-    { id: "education", label: "Education", count: 45 },
-    { id: "study-groups", label: "Study Groups", count: 28 },
-    { id: "announcements", label: "Announcements", count: 15 },
-    { id: "resources", label: "Resources", count: 32 },
+    { id: "all", label: "All Posts", count: posts.length },
+    { id: "education", label: "Education", count: posts.filter(p => p.category === "Education").length },
+    { id: "study-groups", label: "Study Groups", count: posts.filter(p => p.category === "Study Groups").length },
+    { id: "announcements", label: "Announcements", count: posts.filter(p => p.category === "Announcements").length },
+    { id: "resources", label: "Resources", count: posts.filter(p => p.category === "Resources").length },
   ];
 
-  const topContributors = [
-    {
-      name: "Dr. Emily Wilson",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=emily",
-      posts: 45,
-      likes: 892,
-    },
-    {
-      name: "James Thompson",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=james",
-      posts: 32,
-      likes: 654,
-    },
-    {
-      name: "Maria Santos",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=maria",
-      posts: 28,
-      likes: 543,
-    },
-  ];
+  // Get recent posts for sidebar
+  const recentPosts = posts
+    .sort((a, b) => new Date().getTime() - new Date().getTime()) // In real app, use actual timestamp
+    .slice(0, 5);
 
-  const filteredPosts = communityPosts.filter((post) => {
+  // Handle new post submission
+  const handleCreatePost = () => {
+    if (!newPost.title.trim() || !newPost.content.trim() || !newPost.category) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const post: CommunityPost = {
+      id: Date.now().toString(),
+      author: {
+        name: "Current User", // In real app, get from auth context
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=currentuser",
+        role: "Student", // In real app, get from user profile
+      },
+      title: newPost.title,
+      content: newPost.content,
+      category: newPost.category,
+      timestamp: "Just now",
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      isLiked: false,
+      tags: newPost.tags.split(",").map(tag => tag.trim()).filter(tag => tag),
+    };
+
+    setPosts(prev => [post, ...prev]);
+    
+    toast({
+      title: "Post created!",
+      description: "Your post has been published to the community.",
+    });
+
+    // Reset form
+    setNewPost({ title: "", content: "", category: "", tags: "" });
+    setIsPostDialogOpen(false);
+  };
+
+  const handleLikePost = (postId: string) => {
+    setPosts(prev => prev.map(post => 
+      post.id === postId 
+        ? { 
+            ...post, 
+            isLiked: !post.isLiked,
+            likes: post.isLiked ? post.likes - 1 : post.likes + 1
+          }
+        : post
+    ));
+  };
+
+  const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          post.content.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "all" || 
@@ -194,6 +248,7 @@ export default function Community() {
             variant="ghost"
             size="sm"
             className={`flex items-center gap-2 ${post.isLiked ? 'text-red-500' : 'text-gray-500'}`}
+            onClick={() => handleLikePost(post.id)}
           >
             <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} />
             <span>{post.likes}</span>
@@ -209,6 +264,31 @@ export default function Community() {
         </div>
       </div>
     </motion.div>
+  );
+
+  const RecentPostItem = ({ post }: { post: CommunityPost }) => (
+    <div className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
+      <Avatar className="w-8 h-8">
+        <AvatarImage src={post.author.avatar} />
+        <AvatarFallback>
+          {post.author.name.split(" ").map(n => n[0]).join("")}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex-1 min-w-0">
+        <h4 className="text-sm font-medium text-gray-900 truncate">{post.title}</h4>
+        <p className="text-xs text-gray-500">{post.author.name} • {post.timestamp}</p>
+        <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+          <span className="flex items-center gap-1">
+            <Heart className="w-3 h-3" />
+            {post.likes}
+          </span>
+          <span className="flex items-center gap-1">
+            <MessageSquare className="w-3 h-3" />
+            {post.comments}
+          </span>
+        </div>
+      </div>
+    </div>
   );
 
   return (
@@ -240,14 +320,86 @@ export default function Community() {
             </p>
           </div>
 
-          <Button className="bg-blue-600 hover:bg-blue-700">
-            <Plus className="w-4 h-4 mr-2" />
-            New Post
-          </Button>
+          <Dialog open={isPostDialogOpen} onOpenChange={setIsPostDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-blue-600 hover:bg-blue-700">
+                <Plus className="w-4 h-4 mr-2" />
+                New Post
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-lg">
+              <DialogHeader>
+                <DialogTitle>Create New Post</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Title *</Label>
+                  <Input
+                    id="title"
+                    placeholder="Enter post title"
+                    value={newPost.title}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category *</Label>
+                  <Select value={newPost.category} onValueChange={(value) => setNewPost(prev => ({ ...prev, category: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Education">Education</SelectItem>
+                      <SelectItem value="Study Groups">Study Groups</SelectItem>
+                      <SelectItem value="Announcements">Announcements</SelectItem>
+                      <SelectItem value="Resources">Resources</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="content">Content *</Label>
+                  <Textarea
+                    id="content"
+                    placeholder="What would you like to share with the community?"
+                    value={newPost.content}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
+                    rows={4}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="tags">Tags (optional)</Label>
+                  <Input
+                    id="tags"
+                    placeholder="Enter tags separated by commas"
+                    value={newPost.tags}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, tags: e.target.value }))}
+                  />
+                </div>
+                
+                <div className="flex justify-end gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsPostDialogOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleCreatePost}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    Create Post
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          {/* Left Sidebar - Search & Categories */}
           <motion.div
             className="lg:col-span-1 space-y-6"
             initial={{ opacity: 0, x: -20 }}
@@ -295,39 +447,6 @@ export default function Community() {
                 ))}
               </div>
             </Card>
-
-            {/* Top Contributors */}
-            <Card className="p-4">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Award className="w-4 h-4" />
-                Top Contributors
-              </h3>
-              <div className="space-y-3">
-                {topContributors.map((contributor, index) => (
-                  <div key={contributor.name} className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-500">
-                        #{index + 1}
-                      </span>
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src={contributor.avatar} />
-                        <AvatarFallback>
-                          {contributor.name.split(" ").map(n => n[0]).join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">
-                        {contributor.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {contributor.posts} posts • {contributor.likes} likes
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
           </motion.div>
 
           {/* Main Feed */}
@@ -338,7 +457,7 @@ export default function Community() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             {/* Community Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <Card className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -357,20 +476,8 @@ export default function Community() {
                     <MessageSquare className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Posts This Week</p>
-                    <p className="text-2xl font-bold text-gray-900">89</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Engagement Rate</p>
-                    <p className="text-2xl font-bold text-gray-900">94%</p>
+                    <p className="text-sm text-gray-600">Total Posts</p>
+                    <p className="text-2xl font-bold text-gray-900">{posts.length}</p>
                   </div>
                 </div>
               </Card>
@@ -403,6 +510,32 @@ export default function Community() {
                 </Card>
               )}
             </div>
+          </motion.div>
+
+          {/* Right Sidebar - Recent Posts */}
+          <motion.div
+            className="lg:col-span-1 space-y-6"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <Card className="p-4">
+              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                Recent Posts
+              </h3>
+              <div className="space-y-2">
+                {recentPosts.length > 0 ? (
+                  recentPosts.map((post) => (
+                    <RecentPostItem key={post.id} post={post} />
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500 text-center py-4">
+                    No recent posts yet
+                  </p>
+                )}
+              </div>
+            </Card>
           </motion.div>
         </div>
       </motion.div>
