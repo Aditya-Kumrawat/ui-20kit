@@ -138,6 +138,54 @@ export default function Login() {
                 </p>
               </motion.div>
 
+              {/* Role Selection */}
+              <motion.div
+                className="space-y-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+              >
+                <p className="text-center lg:text-left text-gray-700 font-medium">
+                  Choose your role
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <motion.button
+                    type="button"
+                    onClick={() => setSelectedRole("teacher")}
+                    className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                      selectedRole === "teacher"
+                        ? "border-purple-500 bg-purple-50 text-purple-700"
+                        : "border-gray-200 bg-white/60 text-gray-700 hover:border-purple-300 hover:bg-purple-25"
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">👨‍🏫</div>
+                      <div className="font-semibold">Teacher</div>
+                      <div className="text-sm opacity-75">Manage classes & students</div>
+                    </div>
+                  </motion.button>
+                  <motion.button
+                    type="button"
+                    onClick={() => setSelectedRole("student")}
+                    className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                      selectedRole === "student"
+                        ? "border-purple-500 bg-purple-50 text-purple-700"
+                        : "border-gray-200 bg-white/60 text-gray-700 hover:border-purple-300 hover:bg-purple-25"
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">👨‍🎓</div>
+                      <div className="font-semibold">Student</div>
+                      <div className="text-sm opacity-75">Access courses & learning</div>
+                    </div>
+                  </motion.button>
+                </div>
+              </motion.div>
+
               {/* Login Form Glass Container */}
               <motion.div
                 className="bg-white/60 backdrop-blur-lg rounded-3xl p-8 border border-purple-200/50 shadow-2xl"
