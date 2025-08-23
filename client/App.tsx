@@ -14,7 +14,7 @@ import MyTests from "./pages/MyTests";
 import TestTaking from "./pages/TestTaking";
 import Analytics from "./pages/Analytics";
 import Chatbot from "./pages/Chatbot";
-import ComputerVision from "./pages/ComputerVision";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,10 +42,7 @@ const App = () => (
             <Route path="/dashboard/tests" element={<MyTests />} />
             <Route path="/dashboard/test/:testId" element={<TestTaking />} />
             <Route path="/dashboard/chatbot" element={<Chatbot />} />
-            <Route
-              path="/dashboard/computer-vision"
-              element={<ComputerVision />}
-            />
+            <Route path="/dashboard/community" element={<Community />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
