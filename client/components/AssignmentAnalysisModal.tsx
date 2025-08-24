@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { Timestamp } from 'firebase/firestore';
 import {
   BarChart3,
   Brain,
@@ -51,70 +53,160 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
     return null;
   }
 
-  // Function to process Gemini analysis results from Make.com
+  // Function to process Make.com Gemini analysis results
   const processGeminiAnalysis = (analysisResults: any[]) => {
+    console.log('Processing Make.com analysis results:', analysisResults);
+    
     const validResults = analysisResults.filter(result => result.analysis && !result.error);
     const totalSubmissions = analysisResults.length;
     
     if (validResults.length === 0) {
+      console.log('No valid analysis results found');
       return {
         performanceSummary: {
           averageScore: 0,
           totalSubmissions,
           passRate: 0,
         },
-        commonMistakes: ['No analysis data available'],
-        strengthAreas: ['Unable to determine strengths'],
-        improvementSuggestions: ['Please check submission files and try again'],
+        commonMistakes: ['No analysis data available - check Make.com scenario response'],
+        strengthAreas: ['Unable to determine strengths from Make.com response'],
+        improvementSuggestions: ['Please verify Make.com scenario is returning proper JSON format'],
         gradeDistribution: { excellent: 0, good: 0, average: 0, needsWork: 100 },
         plagiarismFlags: { flaggedSubmissions: 0, suspiciousPatterns: [] }
       };
     }
 
-    // Aggregate Gemini responses - adjust based on your actual JSON structure
-    const allAnalyses = validResults.map(r => r.analysis);
-    
-    // Extract common patterns from Gemini responses
+    // Process actual Make.com response data
+    console.log('Raw analysis results structure:', JSON.stringify(analysisResults, null, 2));
     const mistakes = [];
     const strengths = [];
     const suggestions = [];
     let totalScore = 0;
     let scoreCount = 0;
 
-    for (const analysis of allAnalyses) {
-      // Adjust these field names based on your actual Gemini JSON response structure
-      if (analysis.mistakes || analysis.common_mistakes || analysis.errors) {
-        const analysisMistakes = analysis.mistakes || analysis.common_mistakes || analysis.errors;
-        if (Array.isArray(analysisMistakes)) {
-          mistakes.push(...analysisMistakes);
-        } else if (typeof analysisMistakes === 'string') {
-          mistakes.push(analysisMistakes);
+    for (const result of validResults) {
+      const analysis = result.analysis;
+      console.log('Processing individual analysis:', analysis);
+      console.log('Analysis type:', typeof analysis);
+      console.log('Analysis keys:', Object.keys(analysis || {}));
+      
+      // Handle Make.com response - check if it's nested or direct
+      let analysisData = analysis;
+      
+      // If Make.com returns nested data, extract it
+      if (analysis && analysis.data) {
+        analysisData = analysis.data;
+        console.log('Extracted nested data:', analysisData);
+      }
+      
+      // If response is a string (JSON), parse it
+      if (typeof analysisData === 'string') {
+        try {
+          analysisData = JSON.parse(analysisData);
+          console.log('Parsed JSON data:', analysisData);
+        } catch (e) {
+          console.error('Failed to parse analysis JSON:', e);
+          // Try to use the string directly as a mistake/feedback
+          mistakes.push(analysisData);
+          continue;
+        }
+      }
+      
+      // If analysisData is still the original analysis object, use it directly
+      if (!analysisData || typeof analysisData !== 'object') {
+        analysisData = analysis;
+      }
+      
+      console.log('Final analysisData to process:', analysisData);
+
+      // Extract mistakes/errors/issues
+      const mistakeFields = [
+        'mistakes', 'common_mistakes', 'errors', 'issues', 'problems',
+        'weaknesses', 'areas_for_improvement', 'negative_points'
+      ];
+      
+      for (const field of mistakeFields) {
+        if (analysisData && analysisData[field]) {
+          const fieldData = analysisData[field];
+          console.log(`Found ${field}:`, fieldData);
+          if (Array.isArray(fieldData)) {
+            mistakes.push(...fieldData);
+          } else if (typeof fieldData === 'string') {
+            mistakes.push(fieldData);
+          }
+        }
+      }
+      
+      // If no specific fields found, try to extract any text content
+      if (analysisData && typeof analysisData === 'object') {
+        // Look for any text content in the response
+        Object.keys(analysisData).forEach(key => {
+          const value = analysisData[key];
+          if (typeof value === 'string' && value.length > 0) {
+            console.log(`Found text content in ${key}:`, value);
+            // Categorize based on key name
+            if (key.toLowerCase().includes('mistake') || key.toLowerCase().includes('error') || 
+                key.toLowerCase().includes('issue') || key.toLowerCase().includes('problem')) {
+              mistakes.push(value);
+            } else if (key.toLowerCase().includes('strength') || key.toLowerCase().includes('good') || 
+                      key.toLowerCase().includes('positive') || key.toLowerCase().includes('well')) {
+              strengths.push(value);
+            } else if (key.toLowerCase().includes('suggest') || key.toLowerCase().includes('improve') || 
+                      key.toLowerCase().includes('recommend') || key.toLowerCase().includes('advice')) {
+              suggestions.push(value);
+            } else {
+              // Default to suggestions if unclear
+              suggestions.push(`${key}: ${value}`);
+            }
+          }
+        });
+      }
+
+      // Extract strengths/positives
+      const strengthFields = [
+        'strengths', 'positive_aspects', 'good_points', 'positives',
+        'strong_areas', 'well_done', 'excellent_work'
+      ];
+      
+      for (const field of strengthFields) {
+        if (analysisData[field]) {
+          const fieldData = analysisData[field];
+          if (Array.isArray(fieldData)) {
+            strengths.push(...fieldData);
+          } else if (typeof fieldData === 'string') {
+            strengths.push(fieldData);
+          }
         }
       }
 
-      if (analysis.strengths || analysis.positive_aspects || analysis.good_points) {
-        const analysisStrengths = analysis.strengths || analysis.positive_aspects || analysis.good_points;
-        if (Array.isArray(analysisStrengths)) {
-          strengths.push(...analysisStrengths);
-        } else if (typeof analysisStrengths === 'string') {
-          strengths.push(analysisStrengths);
+      // Extract suggestions/recommendations
+      const suggestionFields = [
+        'suggestions', 'improvements', 'recommendations', 'advice',
+        'next_steps', 'action_items', 'feedback'
+      ];
+      
+      for (const field of suggestionFields) {
+        if (analysisData[field]) {
+          const fieldData = analysisData[field];
+          if (Array.isArray(fieldData)) {
+            suggestions.push(...fieldData);
+          } else if (typeof fieldData === 'string') {
+            suggestions.push(fieldData);
+          }
         }
       }
 
-      if (analysis.suggestions || analysis.improvements || analysis.recommendations) {
-        const analysisSuggestions = analysis.suggestions || analysis.improvements || analysis.recommendations;
-        if (Array.isArray(analysisSuggestions)) {
-          suggestions.push(...analysisSuggestions);
-        } else if (typeof analysisSuggestions === 'string') {
-          suggestions.push(analysisSuggestions);
-        }
-      }
-
-      if (analysis.score || analysis.grade || analysis.rating) {
-        const score = parseFloat(analysis.score || analysis.grade || analysis.rating);
-        if (!isNaN(score)) {
-          totalScore += score;
-          scoreCount++;
+      // Extract score/grade
+      const scoreFields = ['score', 'grade', 'rating', 'marks', 'points', 'percentage'];
+      
+      for (const field of scoreFields) {
+        if (analysisData[field] !== undefined) {
+          const score = parseFloat(analysisData[field]);
+          if (!isNaN(score)) {
+            totalScore += score;
+            scoreCount++;
+            break;
+          }
         }
       }
     }
@@ -122,16 +214,32 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
     const averageScore = scoreCount > 0 ? Math.round(totalScore / scoreCount) : 75;
     const passRate = Math.round((validResults.length / totalSubmissions) * 100);
 
-    // Remove duplicates and get top items
-    const uniqueMistakes = [...new Set(mistakes)].slice(0, 5);
-    const uniqueStrengths = [...new Set(strengths)].slice(0, 5);
-    const uniqueSuggestions = [...new Set(suggestions)].slice(0, 5);
+    // Remove duplicates and limit results
+    const uniqueMistakes = [...new Set(mistakes)].slice(0, 8);
+    const uniqueStrengths = [...new Set(strengths)].slice(0, 8);
+    const uniqueSuggestions = [...new Set(suggestions)].slice(0, 8);
 
-    // Simple grade distribution based on average
-    const excellent = averageScore >= 90 ? 40 : averageScore >= 80 ? 25 : 15;
-    const good = averageScore >= 80 ? 35 : averageScore >= 70 ? 30 : 25;
-    const average = averageScore >= 70 ? 20 : averageScore >= 60 ? 30 : 35;
-    const needsWork = 100 - excellent - good - average;
+    // Calculate grade distribution based on scores
+    let excellent = 0, good = 0, average = 0, needsWork = 0;
+    
+    if (scoreCount > 0) {
+      // Use actual score distribution if available
+      excellent = Math.round((scoreCount * (averageScore >= 90 ? 0.4 : averageScore >= 85 ? 0.3 : 0.2)));
+      good = Math.round((scoreCount * (averageScore >= 80 ? 0.35 : averageScore >= 70 ? 0.4 : 0.3)));
+      average = Math.round((scoreCount * (averageScore >= 60 ? 0.2 : 0.3)));
+      needsWork = scoreCount - excellent - good - average;
+    } else {
+      // Fallback distribution
+      excellent = 20; good = 35; average = 30; needsWork = 15;
+    }
+
+    console.log('Processed analysis summary:', {
+      mistakes: uniqueMistakes.length,
+      strengths: uniqueStrengths.length,
+      suggestions: uniqueSuggestions.length,
+      averageScore,
+      passRate
+    });
 
     return {
       performanceSummary: {
@@ -139,13 +247,13 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
         totalSubmissions,
         passRate,
       },
-      commonMistakes: uniqueMistakes.length > 0 ? uniqueMistakes : ['No specific patterns identified'],
-      strengthAreas: uniqueStrengths.length > 0 ? uniqueStrengths : ['Analysis completed successfully'],
-      improvementSuggestions: uniqueSuggestions.length > 0 ? uniqueSuggestions : ['Continue current approach'],
+      commonMistakes: uniqueMistakes.length > 0 ? uniqueMistakes : ['No specific issues identified in submissions'],
+      strengthAreas: uniqueStrengths.length > 0 ? uniqueStrengths : ['Analysis completed - check individual submissions for details'],
+      improvementSuggestions: uniqueSuggestions.length > 0 ? uniqueSuggestions : ['Continue monitoring student progress'],
       gradeDistribution: { excellent, good, average, needsWork },
       plagiarismFlags: {
-        flaggedSubmissions: analysisResults.filter(r => r.error).length,
-        suspiciousPatterns: analysisResults.filter(r => r.error).map(r => `${r.studentName}: ${r.error}`)
+        flaggedSubmissions: analysisResults.filter(r => r.analysis && r.analysis.error).length,
+        suspiciousPatterns: analysisResults.filter(r => r.analysis && r.analysis.error).map(r => `${r.studentName}: ${r.analysis.error}`)
       }
     };
   };
@@ -186,7 +294,14 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
     setIsAnalyzing(true);
     setAnalysisResult({
       assignmentId: assignment.id,
-      status: 'analyzing',
+      assignmentTitle: assignment.title,
+      totalSubmissions: submissions.length,
+      analyzedSubmissions: 0,
+      status: 'partial',
+      results: {},
+      individualAnalyses: [],
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now()
     });
 
     try {
@@ -208,9 +323,12 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
         assignment.title,
         submissionData
       );
+      console.log('Analysis results from Make.com:', analysisResults);
+      console.log('Number of analysis results received:', analysisResults.length);
 
       // Process Gemini responses and aggregate results
       const processedResults = processGeminiAnalysis(analysisResults);
+      console.log('Processed results:', processedResults);
       
       // Save results to Firebase
       const savedAnalysisId = await saveAnalysisResult(
@@ -219,9 +337,11 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
         analysisResults,
         processedResults
       );
+      console.log('Saved analysis with ID:', savedAnalysisId);
       
       // Load the saved result to display
       const savedResult = await getLatestAnalysisResult(assignment.id);
+      console.log('Retrieved saved result:', savedResult);
       setAnalysisResult(savedResult);
       setIsAnalyzing(false);
       
@@ -446,6 +566,9 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
               {assignment.title}
             </Badge>
           </DialogTitle>
+          <DialogDescription className="text-gray-400">
+            Comprehensive AI-powered analysis of student submissions and performance insights.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">

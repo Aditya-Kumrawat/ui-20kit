@@ -60,6 +60,8 @@ export const sendToMake = async (
 
     const responseData = await response.json();
     console.log(`Make.com ${webhook} webhook response:`, responseData);
+    console.log(`Make.com ${webhook} response type:`, typeof responseData);
+    console.log(`Make.com ${webhook} response keys:`, Object.keys(responseData || {}));
 
     return { 
       success: true, 

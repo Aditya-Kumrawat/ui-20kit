@@ -83,30 +83,33 @@ export const saveAnalysisResult = async (
 // Get analysis results for an assignment
 export const getAnalysisResults = async (assignmentId: string): Promise<AnalysisResult[]> => {
   try {
-    let q = query(
-      collection(db, 'analysisResults'),
-      where('assignmentId', '==', assignmentId)
-    );
-    
+    // Try with orderBy first, fallback to simple query if index doesn't exist
+    let q;
     try {
-      // Try with orderBy
       q = query(
         collection(db, 'analysisResults'),
         where('assignmentId', '==', assignmentId),
         orderBy('createdAt', 'desc')
       );
     } catch (indexError) {
-      console.warn('Index not available for analysis results orderBy, fetching without sorting');
+      console.warn('Using simple query due to missing index:', indexError);
+      q = query(
+        collection(db, 'analysisResults'),
+        where('assignmentId', '==', assignmentId)
+      );
     }
     
     const querySnapshot = await getDocs(q);
     const results: AnalysisResult[] = [];
     
     querySnapshot.forEach((doc) => {
-      results.push({
-        id: doc.id,
-        ...doc.data()
-      } as AnalysisResult);
+      const data = doc.data();
+      if (data) {
+        results.push({
+          id: doc.id,
+          ...data
+        } as AnalysisResult);
+      }
     });
     
     // Sort in memory if we couldn't sort in the query
@@ -119,7 +122,27 @@ export const getAnalysisResults = async (assignmentId: string): Promise<Analysis
     return results;
   } catch (error) {
     console.error('Error fetching analysis results:', error);
-    return [];
+    // Try simple query without any ordering as final fallback
+    try {
+      const simpleQ = query(
+        collection(db, 'analysisResults'),
+        where('assignmentId', '==', assignmentId)
+      );
+      const querySnapshot = await getDocs(simpleQ);
+      const results: AnalysisResult[] = [];
+      
+      querySnapshot.forEach((doc) => {
+        results.push({
+          id: doc.id,
+          ...doc.data()
+        } as AnalysisResult);
+      });
+      
+      return results;
+    } catch (fallbackError) {
+      console.error('Fallback query also failed:', fallbackError);
+      return [];
+    }
   }
 };
 
