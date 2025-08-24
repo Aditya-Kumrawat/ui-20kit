@@ -164,7 +164,7 @@ export default function Signup() {
                     <span className="text-purple-700 font-bold text-xl">AI</span>
                   </motion.div>
                   <span className="text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
-                    FusionAI
+                    ScholarAI
                   </span>
                 </Link>
               </motion.div>
@@ -177,7 +177,7 @@ export default function Signup() {
                 transition={{ delay: 0.3 }}
               >
                 <h1 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-                  Join FusionAI
+                  Join ScholarAI
                 </h1>
                 <p className="text-gray-600 text-lg">
                   Create your account and start your AI-powered learning journey

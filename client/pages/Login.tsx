@@ -142,7 +142,7 @@ export default function Login() {
                     </span>
                   </motion.div>
                   <span className="text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
-                    FusionAI
+                    ScholarAI
                   </span>
                 </Link>
               </motion.div>
