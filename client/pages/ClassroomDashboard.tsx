@@ -301,9 +301,10 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                         key={assignment.id}
                         className="p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all cursor-pointer"
                         style={{
-                          background: "rgba(255, 255, 255, 0.7)",
-                          backdropFilter: "blur(8px)",
-                          WebkitBackdropFilter: "blur(8px)"
+                          background: "rgba(255, 255, 255, 0.9)",
+                          backdropFilter: "blur(6px)",
+                          WebkitBackdropFilter: "blur(6px)",
+                          border: "1px solid rgba(200, 200, 200, 0.4)"
                         }}
                         onClick={() => {
                           setSelectedAssignment(assignment);
