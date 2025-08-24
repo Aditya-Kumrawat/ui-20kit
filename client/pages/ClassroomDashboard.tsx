@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { FloatingSidebar } from '@/components/FloatingSidebar';
-import { FloatingTopBar } from '@/components/FloatingTopBar';
-import { AssignmentCreator } from '@/components/AssignmentCreator';
-import { AssignmentDetailModal } from '@/components/AssignmentDetailModal';
-import { AssignmentSubmissionsModal } from '@/components/AssignmentSubmissionsModal';
-import { useSidebar } from '@/contexts/SidebarContext';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { FloatingSidebar } from "@/components/FloatingSidebar";
+import { FloatingTopBar } from "@/components/FloatingTopBar";
+import { AssignmentCreator } from "@/components/AssignmentCreator";
+import { AssignmentDetailModal } from "@/components/AssignmentDetailModal";
+import { AssignmentSubmissionsModal } from "@/components/AssignmentSubmissionsModal";
+import { useSidebar } from "@/contexts/SidebarContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   ArrowLeft,
   Users,
@@ -25,10 +25,19 @@ import {
   Share2,
   Eye,
   Edit3,
-} from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Classroom, ClassroomAssignment, Enrollment, ClassroomStats } from '@/types/classroom';
-import { getClassroomStats, getClassroomAssignments, getClassroomEnrollments } from '@/lib/classroomOperations';
+} from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  Classroom,
+  ClassroomAssignment,
+  Enrollment,
+  ClassroomStats,
+} from "@/types/classroom";
+import {
+  getClassroomStats,
+  getClassroomAssignments,
+  getClassroomEnrollments,
+} from "@/lib/classroomOperations";
 
 interface ClassroomDashboardProps {
   classroom: Classroom;
@@ -52,7 +61,8 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAssignmentCreator, setShowAssignmentCreator] = useState(false);
-  const [selectedAssignment, setSelectedAssignment] = useState<ClassroomAssignment | null>(null);
+  const [selectedAssignment, setSelectedAssignment] =
+    useState<ClassroomAssignment | null>(null);
   const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
   const [showSubmissions, setShowSubmissions] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -76,11 +86,11 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
       setAssignments(assignmentsData);
       setEnrollments(enrollmentsData);
     } catch (error) {
-      console.error('Error loading classroom data:', error);
+      console.error("Error loading classroom data:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load classroom data',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load classroom data",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -92,26 +102,26 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
       await navigator.clipboard.writeText(classroom.classCode);
       setCopied(true);
       toast({
-        title: 'Copied!',
-        description: 'Classroom code copied to clipboard',
+        title: "Copied!",
+        description: "Classroom code copied to clipboard",
       });
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to copy classroom code',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to copy classroom code",
+        variant: "destructive",
       });
     }
   };
 
   const formatDate = (timestamp: any) => {
-    if (!timestamp?.seconds) return 'No due date';
+    if (!timestamp?.seconds) return "No due date";
     return new Date(timestamp.seconds * 1000).toLocaleDateString();
   };
 
   const formatDateTime = (timestamp: any) => {
-    if (!timestamp?.seconds) return 'Recently';
+    if (!timestamp?.seconds) return "Recently";
     return new Date(timestamp.seconds * 1000).toLocaleString();
   };
 
@@ -121,7 +131,7 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
         <FloatingSidebar
           isCollapsed={isCollapsed}
           setIsCollapsed={setIsCollapsed}
-          userType={isTeacher ? 'teacher' : 'student'}
+          userType={isTeacher ? "teacher" : "student"}
         />
         <FloatingTopBar isCollapsed={isCollapsed} />
         <div className="w-8 h-8 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
@@ -134,14 +144,14 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
       <FloatingSidebar
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
-        userType={isTeacher ? 'teacher' : 'student'}
+        userType={isTeacher ? "teacher" : "student"}
       />
       <FloatingTopBar isCollapsed={isCollapsed} />
-      
+
       <motion.div
-        className={`${isCollapsed ? 'ml-20' : 'ml-72'} pt-28 p-6`}
+        className={`${isCollapsed ? "ml-20" : "ml-72"} pt-28 p-6`}
         animate={{ marginLeft: isCollapsed ? 80 : 272 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
@@ -154,11 +164,16 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                 ←
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{classroom.name}</h1>
+                <h1
+                  className="text-3xl font-bold text-gray-900"
+                  style={{ fontFamily: "Space Grotesk, sans-serif" }}
+                >
+                  {classroom.name}
+                </h1>
                 <p className="text-gray-600">{classroom.description}</p>
               </div>
             </div>
-            
+
             {isTeacher && (
               <div className="flex items-center gap-3">
                 <button
@@ -193,13 +208,15 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                 backdropFilter: "blur(8px) saturate(150%)",
                 WebkitBackdropFilter: "blur(8px) saturate(150%)",
                 border: "1px solid rgba(200, 200, 200, 0.6)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
               }}
             >
               <div className="flex items-center gap-3 mb-2">
                 <Users className="w-8 h-8 text-blue-400" />
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalStudents}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stats.totalStudents}
+                  </p>
                   <p className="text-gray-600 text-sm">Students</p>
                 </div>
               </div>
@@ -213,13 +230,15 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                 backdropFilter: "blur(8px) saturate(150%)",
                 WebkitBackdropFilter: "blur(8px) saturate(150%)",
                 border: "1px solid rgba(200, 200, 200, 0.6)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
               }}
             >
               <div className="flex items-center gap-3 mb-2">
                 <FileText className="w-8 h-8 text-green-400" />
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalAssignments}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stats.totalAssignments}
+                  </p>
                   <p className="text-gray-600 text-sm">Assignments</p>
                 </div>
               </div>
@@ -233,13 +252,15 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                 backdropFilter: "blur(8px) saturate(150%)",
                 WebkitBackdropFilter: "blur(8px) saturate(150%)",
                 border: "1px solid rgba(200, 200, 200, 0.6)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
               }}
             >
               <div className="flex items-center gap-3 mb-2">
                 <Clock className="w-8 h-8 text-orange-400" />
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">{stats.pendingSubmissions}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stats.pendingSubmissions}
+                  </p>
                   <p className="text-gray-600 text-sm">Pending</p>
                 </div>
               </div>
@@ -253,13 +274,15 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                 backdropFilter: "blur(8px) saturate(150%)",
                 WebkitBackdropFilter: "blur(8px) saturate(150%)",
                 border: "1px solid rgba(200, 200, 200, 0.6)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
               }}
             >
               <div className="flex items-center gap-3 mb-2">
                 <Check className="w-8 h-8 text-purple-400" />
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">{stats.gradedSubmissions}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stats.gradedSubmissions}
+                  </p>
                   <p className="text-gray-600 text-sm">Graded</p>
                 </div>
               </div>
@@ -269,18 +292,24 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Assignments */}
             <div className="lg:col-span-2">
-              <div className="rounded-xl p-6" style={{
-                background: "rgba(255, 255, 255, 0.95)",
-                backdropFilter: "blur(8px) saturate(150%)",
-                WebkitBackdropFilter: "blur(8px) saturate(150%)",
-                border: "1px solid rgba(200, 200, 200, 0.6)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
-              }}>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              <div
+                className="rounded-xl p-6"
+                style={{
+                  background: "rgba(255, 255, 255, 0.95)",
+                  backdropFilter: "blur(8px) saturate(150%)",
+                  WebkitBackdropFilter: "blur(8px) saturate(150%)",
+                  border: "1px solid rgba(200, 200, 200, 0.6)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
+                }}
+              >
+                <h2
+                  className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2"
+                  style={{ fontFamily: "Space Grotesk, sans-serif" }}
+                >
                   <FileText className="w-5 h-5" />
                   Recent Assignments
                 </h2>
-                
+
                 {assignments.length === 0 ? (
                   <div className="text-center py-8">
                     <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
@@ -304,7 +333,7 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                           background: "rgba(255, 255, 255, 0.9)",
                           backdropFilter: "blur(6px)",
                           WebkitBackdropFilter: "blur(6px)",
-                          border: "1px solid rgba(200, 200, 200, 0.4)"
+                          border: "1px solid rgba(200, 200, 200, 0.4)",
                         }}
                         onClick={() => {
                           setSelectedAssignment(assignment);
@@ -313,12 +342,16 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <h3 className="font-medium text-gray-900">{assignment.title}</h3>
+                            <h3 className="font-medium text-gray-900">
+                              {assignment.title}
+                            </h3>
                             <p className="text-gray-600 text-sm mt-1 line-clamp-2">
                               {assignment.description}
                             </p>
                             <div className="flex items-center gap-4 mt-2 text-xs text-gray-600">
-                              <span>Created {formatDateTime(assignment.createdAt)}</span>
+                              <span>
+                                Created {formatDateTime(assignment.createdAt)}
+                              </span>
                               {assignment.dueDate && (
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
@@ -328,13 +361,15 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                              assignment.status === 'published' 
-                                ? 'bg-green-500/20 text-green-600'
-                                : assignment.status === 'draft'
-                                ? 'bg-yellow-500/20 text-yellow-600'
-                                : 'bg-gray-500/20 text-gray-600'
-                            }`}>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs ${
+                                assignment.status === "published"
+                                  ? "bg-green-500/20 text-green-600"
+                                  : assignment.status === "draft"
+                                    ? "bg-yellow-500/20 text-yellow-600"
+                                    : "bg-gray-500/20 text-gray-600"
+                              }`}
+                            >
                               {assignment.status}
                             </span>
                             {isTeacher ? (
@@ -375,22 +410,30 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
 
             {/* Students */}
             <div>
-              <div className="rounded-xl p-6" style={{
-                background: "rgba(255, 255, 255, 0.95)",
-                backdropFilter: "blur(8px) saturate(150%)",
-                WebkitBackdropFilter: "blur(8px) saturate(150%)",
-                border: "1px solid rgba(200, 200, 200, 0.6)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
-              }}>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              <div
+                className="rounded-xl p-6"
+                style={{
+                  background: "rgba(255, 255, 255, 0.95)",
+                  backdropFilter: "blur(8px) saturate(150%)",
+                  WebkitBackdropFilter: "blur(8px) saturate(150%)",
+                  border: "1px solid rgba(200, 200, 200, 0.6)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
+                }}
+              >
+                <h2
+                  className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2"
+                  style={{ fontFamily: "Space Grotesk, sans-serif" }}
+                >
                   <Users className="w-5 h-5" />
                   Students ({enrollments.length})
                 </h2>
-                
+
                 {enrollments.length === 0 ? (
                   <div className="text-center py-8">
                     <Users className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                    <p className="text-gray-600 text-sm">No students enrolled yet</p>
+                    <p className="text-gray-600 text-sm">
+                      No students enrolled yet
+                    </p>
                     <p className="text-gray-500 text-xs mt-1">
                       Share your classroom code with students
                     </p>
@@ -405,7 +448,7 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                           background: "rgba(255, 255, 255, 0.9)",
                           backdropFilter: "blur(6px)",
                           WebkitBackdropFilter: "blur(6px)",
-                          border: "1px solid rgba(200, 200, 200, 0.5)"
+                          border: "1px solid rgba(200, 200, 200, 0.5)",
                         }}
                       >
                         <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
@@ -421,7 +464,7 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                         </div>
                       </div>
                     ))}
-                    
+
                     {enrollments.length > 8 && (
                       <p className="text-center text-gray-600 text-xs pt-2">
                         +{enrollments.length - 8} more students
@@ -440,7 +483,7 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
           onClose={() => setShowAssignmentCreator(false)}
           onAssignmentCreated={loadClassroomData}
         />
-        
+
         <AssignmentDetailModal
           assignment={selectedAssignment}
           isOpen={showAssignmentDetail}
@@ -451,7 +494,7 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
           isTeacher={isTeacher}
           onAssignmentUpdate={loadClassroomData}
         />
-        
+
         <AssignmentSubmissionsModal
           assignment={selectedAssignment}
           isOpen={showSubmissions}

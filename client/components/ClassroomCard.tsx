@@ -1,9 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { BookOpen, Users, Calendar, Copy, Check } from 'lucide-react';
-import { Classroom, ClassroomStats } from '../types/classroom';
-import { useState } from 'react';
-import { useToast } from '../hooks/use-toast';
+import React from "react";
+import { motion } from "framer-motion";
+import { BookOpen, Users, Calendar, Copy, Check } from "lucide-react";
+import { Classroom, ClassroomStats } from "../types/classroom";
+import { useState } from "react";
+import { useToast } from "../hooks/use-toast";
 
 interface ClassroomCardProps {
   classroom: Classroom;
@@ -27,21 +27,21 @@ export const ClassroomCard: React.FC<ClassroomCardProps> = ({
       await navigator.clipboard.writeText(classroom.classCode);
       setCopied(true);
       toast({
-        title: 'Copied!',
-        description: 'Classroom code copied to clipboard',
+        title: "Copied!",
+        description: "Classroom code copied to clipboard",
       });
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to copy classroom code',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to copy classroom code",
+        variant: "destructive",
       });
     }
   };
 
   const formatDate = (timestamp: any) => {
-    if (!timestamp?.seconds) return 'Recently';
+    if (!timestamp?.seconds) return "Recently";
     return new Date(timestamp.seconds * 1000).toLocaleDateString();
   };
 
@@ -56,7 +56,7 @@ export const ClassroomCard: React.FC<ClassroomCardProps> = ({
         backdropFilter: "blur(8px) saturate(150%)",
         WebkitBackdropFilter: "blur(8px) saturate(150%)",
         border: "1px solid rgba(200, 200, 200, 0.6)",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
       }}
     >
       <div className="flex items-start justify-between mb-4">
@@ -65,11 +65,16 @@ export const ClassroomCard: React.FC<ClassroomCardProps> = ({
             <BookOpen className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 text-lg" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{classroom.name}</h3>
+            <h3
+              className="font-semibold text-gray-900 text-lg"
+              style={{ fontFamily: "Space Grotesk, sans-serif" }}
+            >
+              {classroom.name}
+            </h3>
             <p className="text-gray-600 text-sm">{classroom.teacherName}</p>
           </div>
         </div>
-        
+
         {isTeacher && (
           <button
             onClick={copyClassCode}
@@ -96,13 +101,15 @@ export const ClassroomCard: React.FC<ClassroomCardProps> = ({
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 text-blue-600" />
             <span className="text-sm text-gray-700">
-              {stats.totalStudents} student{stats.totalStudents !== 1 ? 's' : ''}
+              {stats.totalStudents} student
+              {stats.totalStudents !== 1 ? "s" : ""}
             </span>
           </div>
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-green-600" />
             <span className="text-sm text-gray-700">
-              {stats.totalAssignments} assignment{stats.totalAssignments !== 1 ? 's' : ''}
+              {stats.totalAssignments} assignment
+              {stats.totalAssignments !== 1 ? "s" : ""}
             </span>
           </div>
         </div>

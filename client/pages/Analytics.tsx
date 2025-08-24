@@ -38,7 +38,9 @@ import {
 export default function Analytics() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
-  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [seeding, setSeeding] = useState(false);
 
@@ -58,42 +60,87 @@ export default function Analytics() {
       await seedAnalyticsData();
       // Data will automatically refresh via real-time listeners
     } catch (error) {
-      console.error('Error seeding data:', error);
+      console.error("Error seeding data:", error);
     } finally {
       setSeeding(false);
     }
   };
 
   // Transform real data for charts
-  const monthlyRevenueData = analyticsData?.submissionTrends.map(trend => ({
-    month: new Date(trend.date).toLocaleDateString('en-US', { month: 'short' }),
-    revenue: trend.submissions * 100, // Mock revenue calculation
-    orders: trend.submissions,
-    customers: trend.students
-  })) || [];
+  const monthlyRevenueData =
+    analyticsData?.submissionTrends.map((trend) => ({
+      month: new Date(trend.date).toLocaleDateString("en-US", {
+        month: "short",
+      }),
+      revenue: trend.submissions * 100, // Mock revenue calculation
+      orders: trend.submissions,
+      customers: trend.students,
+    })) || [];
 
   // Assignment performance data
-  const categoryData = analyticsData?.assignmentStats.slice(0, 6).map((assignment, index) => ({
-    category: assignment.title.length > 15 ? assignment.title.substring(0, 15) + '...' : assignment.title,
-    sales: assignment.submissions * 100,
-    growth: assignment.completionRate - 50, // Mock growth calculation
-    color: ["#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"][index % 6]
-  })) || [];
+  const categoryData =
+    analyticsData?.assignmentStats.slice(0, 6).map((assignment, index) => ({
+      category:
+        assignment.title.length > 15
+          ? assignment.title.substring(0, 15) + "..."
+          : assignment.title,
+      sales: assignment.submissions * 100,
+      growth: assignment.completionRate - 50, // Mock growth calculation
+      color: ["#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"][
+        index % 6
+      ],
+    })) || [];
 
   // Assignment status distribution
-  const trafficData = analyticsData ? [
-    { name: "Completed", value: Math.round(analyticsData.completionRate), color: "#10b981" },
-    { name: "In Progress", value: Math.round((100 - analyticsData.completionRate) * 0.7), color: "#f59e0b" },
-    { name: "Not Started", value: Math.round((100 - analyticsData.completionRate) * 0.3), color: "#ef4444" },
-  ] : [];
+  const trafficData = analyticsData
+    ? [
+        {
+          name: "Completed",
+          value: Math.round(analyticsData.completionRate),
+          color: "#10b981",
+        },
+        {
+          name: "In Progress",
+          value: Math.round((100 - analyticsData.completionRate) * 0.7),
+          color: "#f59e0b",
+        },
+        {
+          name: "Not Started",
+          value: Math.round((100 - analyticsData.completionRate) * 0.3),
+          color: "#ef4444",
+        },
+      ]
+    : [];
 
   // Performance metrics data
-  const performanceData = analyticsData ? [
-    { metric: "Completion Rate", value: Math.round(analyticsData.completionRate), target: 90, color: "#8b5cf6" },
-    { metric: "Average Grade", value: Math.round(analyticsData.averageGrade), target: 85, color: "#10b981" },
-    { metric: "Student Engagement", value: Math.min(100, analyticsData.totalStudents * 10), target: 95, color: "#06b6d4" },
-    { metric: "Assignment Quality", value: Math.min(100, analyticsData.activeAssignments * 15), target: 98, color: "#f59e0b" },
-  ] : [];
+  const performanceData = analyticsData
+    ? [
+        {
+          metric: "Completion Rate",
+          value: Math.round(analyticsData.completionRate),
+          target: 90,
+          color: "#8b5cf6",
+        },
+        {
+          metric: "Average Grade",
+          value: Math.round(analyticsData.averageGrade),
+          target: 85,
+          color: "#10b981",
+        },
+        {
+          metric: "Student Engagement",
+          value: Math.min(100, analyticsData.totalStudents * 10),
+          target: 95,
+          color: "#06b6d4",
+        },
+        {
+          metric: "Assignment Quality",
+          value: Math.min(100, analyticsData.activeAssignments * 15),
+          target: 98,
+          color: "#f59e0b",
+        },
+      ]
+    : [];
 
   // Hourly engagement data
   const hourlyData = analyticsData?.studentEngagement || [];
@@ -161,9 +208,9 @@ export default function Analytics() {
                 <Download className="w-4 h-4 mr-2" />
                 Export
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={handleSeedData}
                 disabled={seeding}
               >
@@ -180,36 +227,39 @@ export default function Analytics() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          {(analyticsData ? [
-            {
-              title: "Total Students",
-              value: analyticsData.totalStudents.toString(),
-              change: "+12.5%",
-              trending: "up",
-              color: "purple",
-            },
-            {
-              title: "Active Assignments",
-              value: analyticsData.activeAssignments.toString(),
-              change: "+8.2%",
-              trending: "up",
-              color: "blue",
-            },
-            {
-              title: "Completion Rate",
-              value: `${analyticsData.completionRate.toFixed(1)}%`,
-              change: analyticsData.completionRate > 75 ? "+5.3%" : "-2.1%",
-              trending: analyticsData.completionRate > 75 ? "up" : "down",
-              color: "green",
-            },
-            {
-              title: "Average Grade",
-              value: analyticsData.averageGrade.toFixed(1),
-              change: "+5.1%",
-              trending: "up",
-              color: "orange",
-            },
-          ] : []).map((metric, index) => (
+          {(analyticsData
+            ? [
+                {
+                  title: "Total Students",
+                  value: analyticsData.totalStudents.toString(),
+                  change: "+12.5%",
+                  trending: "up",
+                  color: "purple",
+                },
+                {
+                  title: "Active Assignments",
+                  value: analyticsData.activeAssignments.toString(),
+                  change: "+8.2%",
+                  trending: "up",
+                  color: "blue",
+                },
+                {
+                  title: "Completion Rate",
+                  value: `${analyticsData.completionRate.toFixed(1)}%`,
+                  change: analyticsData.completionRate > 75 ? "+5.3%" : "-2.1%",
+                  trending: analyticsData.completionRate > 75 ? "up" : "down",
+                  color: "green",
+                },
+                {
+                  title: "Average Grade",
+                  value: analyticsData.averageGrade.toFixed(1),
+                  change: "+5.1%",
+                  trending: "up",
+                  color: "orange",
+                },
+              ]
+            : []
+          ).map((metric, index) => (
             <motion.div
               key={metric.title}
               className="bg-white/60 backdrop-blur-lg rounded-3xl p-6 border border-white/30"

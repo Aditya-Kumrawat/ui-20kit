@@ -134,7 +134,7 @@ export const FloatingSidebar = ({
       } z-50 max-h-screen`}
       animate={{ width: isCollapsed ? 64 : 256 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      style={{ pointerEvents: 'auto' }}
+      style={{ pointerEvents: "auto" }}
     >
       {/* Smooth Off-White Glass Sidebar */}
       <div

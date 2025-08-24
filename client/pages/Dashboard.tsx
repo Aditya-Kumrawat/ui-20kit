@@ -30,7 +30,18 @@ import { useSidebar } from "@/contexts/SidebarContext";
 import { PlagiarismDetection } from "@/components/PlagiarismDetection";
 import { AnomalyDetection } from "@/components/AnomalyDetection";
 import { AssignmentCreator } from "@/components/AssignmentCreator";
-import { getTeacherAssignments, getTeacherStudents, getTeacherClassPosts, getTeacherClassroomStudents, getTeacherClassrooms, FirebaseAssignment, FirebaseStudent, FirebaseClassPost, ClassroomStudent, createFirebaseClassPost } from "@/lib/firebaseOperations";
+import {
+  getTeacherAssignments,
+  getTeacherStudents,
+  getTeacherClassPosts,
+  getTeacherClassroomStudents,
+  getTeacherClassrooms,
+  FirebaseAssignment,
+  FirebaseStudent,
+  FirebaseClassPost,
+  ClassroomStudent,
+  createFirebaseClassPost,
+} from "@/lib/firebaseOperations";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   BookOpen,
@@ -72,7 +83,6 @@ import {
 type Assignment = FirebaseAssignment;
 type Student = FirebaseStudent;
 type ClassPost = FirebaseClassPost;
-
 
 interface Classroom {
   id: string;
@@ -126,43 +136,46 @@ export default function Dashboard() {
   useEffect(() => {
     const loadData = async () => {
       if (!currentUser) return;
-      
+
       setLoading(true);
       try {
         // Load data from Firebase
-        const [assignmentsData, studentsData, postsData, classroomsData] = await Promise.all([
-          getTeacherAssignments(currentUser.uid),
-          getTeacherClassroomStudents(currentUser.uid),
-          getTeacherClassPosts(currentUser.uid),
-          getTeacherClassrooms(currentUser.uid)
-        ]);
-        
+        const [assignmentsData, studentsData, postsData, classroomsData] =
+          await Promise.all([
+            getTeacherAssignments(currentUser.uid),
+            getTeacherClassroomStudents(currentUser.uid),
+            getTeacherClassPosts(currentUser.uid),
+            getTeacherClassrooms(currentUser.uid),
+          ]);
+
         setAssignments(assignmentsData);
         setStudents(studentsData);
         setClassPosts(postsData);
         setClassrooms(classroomsData);
-        
+
         // If no class posts exist, add a sample welcome post
         if (postsData.length === 0) {
-          console.log('No class posts found, adding welcome post');
-          
+          console.log("No class posts found, adding welcome post");
+
           setClassPosts([
             {
-              id: '1',
+              id: "1",
               title: "Welcome to your dashboard!",
-              content: "Create classrooms and assignments to get started. Students can join your classes using classroom codes.",
+              content:
+                "Create classrooms and assignments to get started. Students can join your classes using classroom codes.",
               author: currentUser?.displayName || "Teacher",
-              authorId: currentUser?.uid || '',
-              authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
+              authorId: currentUser?.uid || "",
+              authorAvatar:
+                "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
               createdAt: Timestamp.fromDate(new Date()),
               comments: 0,
               type: "announcement",
-              teacherId: currentUser?.uid || '',
+              teacherId: currentUser?.uid || "",
             },
           ]);
         }
       } catch (error) {
-        console.error('Error loading data:', error);
+        console.error("Error loading data:", error);
         // Set empty arrays on error
         setStudents([]);
         setAssignments([]);
@@ -175,7 +188,6 @@ export default function Dashboard() {
 
     loadData();
   }, [currentUser, toast]);
-
 
   // Handle new assignment creation
   const handleAssignmentCreated = () => {
@@ -198,7 +210,10 @@ export default function Dashboard() {
       const postData = {
         title: newPost.title,
         content: newPost.content,
-        author: currentUser.displayName || currentUser.email?.split('@')[0] || 'Teacher',
+        author:
+          currentUser.displayName ||
+          currentUser.email?.split("@")[0] ||
+          "Teacher",
         authorId: currentUser.uid,
         authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
         type: newPost.type,
@@ -239,13 +254,16 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
       >
-        <Card className="h-full hover:shadow-lg transition-shadow" style={{
-          background: "rgba(245, 245, 255, 0.9)",
-          backdropFilter: "blur(8px) saturate(150%)",
-          WebkitBackdropFilter: "blur(8px) saturate(150%)",
-          border: "1px solid rgba(59, 130, 246, 0.5)",
-          boxShadow: "0 8px 32px rgba(59, 130, 246, 0.2)"
-        }}>
+        <Card
+          className="h-full hover:shadow-lg transition-shadow"
+          style={{
+            background: "rgba(245, 245, 255, 0.9)",
+            backdropFilter: "blur(8px) saturate(150%)",
+            WebkitBackdropFilter: "blur(8px) saturate(150%)",
+            border: "1px solid rgba(59, 130, 246, 0.5)",
+            boxShadow: "0 8px 32px rgba(59, 130, 246, 0.2)",
+          }}
+        >
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-blue-600" />
@@ -260,19 +278,20 @@ export default function Dashboard() {
                 {assignments.length}
               </div>
               <div className="text-sm text-blue-600">
-                {assignments.filter((a) => a.status === "active").length}{" "}
-                Active •{" "}
-                {assignments.filter((a) => a.status === "draft").length} Drafts
+                {assignments.filter((a) => a.status === "active").length} Active
+                • {assignments.filter((a) => a.status === "draft").length}{" "}
+                Drafts
               </div>
               <div className="space-y-2">
                 {assignments.slice(0, 2).map((assignment, index) => (
                   <div
                     key={assignment.id || `assignment-${index}`}
-                    className="flex items-center justify-between rounded-lg p-2" style={{
+                    className="flex items-center justify-between rounded-lg p-2"
+                    style={{
                       background: "rgba(255, 255, 255, 0.9)",
                       backdropFilter: "blur(6px)",
                       WebkitBackdropFilter: "blur(6px)",
-                      border: "1px solid rgba(200, 200, 200, 0.5)"
+                      border: "1px solid rgba(200, 200, 200, 0.5)",
                     }}
                   >
                     <div>
@@ -280,14 +299,15 @@ export default function Dashboard() {
                         {assignment.title}
                       </div>
                       <div className="text-xs text-gray-600">
-                        Due: {assignment.dueDate instanceof Timestamp ? assignment.dueDate.toDate().toLocaleDateString() : new Date(assignment.dueDate).toLocaleDateString()}
+                        Due:{" "}
+                        {assignment.dueDate instanceof Timestamp
+                          ? assignment.dueDate.toDate().toLocaleDateString()
+                          : new Date(assignment.dueDate).toLocaleDateString()}
                       </div>
                     </div>
                     <Badge
                       variant={
-                        assignment.status === "active"
-                          ? "default"
-                          : "secondary"
+                        assignment.status === "active" ? "default" : "secondary"
                       }
                     >
                       {assignment.status}
@@ -314,13 +334,16 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        <Card className="h-full hover:shadow-lg transition-shadow" style={{
-          background: "rgba(245, 255, 245, 0.9)",
-          backdropFilter: "blur(8px) saturate(150%)",
-          WebkitBackdropFilter: "blur(8px) saturate(150%)",
-          border: "1px solid rgba(34, 197, 94, 0.5)",
-          boxShadow: "0 8px 32px rgba(34, 197, 94, 0.2)"
-        }}>
+        <Card
+          className="h-full hover:shadow-lg transition-shadow"
+          style={{
+            background: "rgba(245, 255, 245, 0.9)",
+            backdropFilter: "blur(8px) saturate(150%)",
+            WebkitBackdropFilter: "blur(8px) saturate(150%)",
+            border: "1px solid rgba(34, 197, 94, 0.5)",
+            boxShadow: "0 8px 32px rgba(34, 197, 94, 0.2)",
+          }}
+        >
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5 text-green-600" />
@@ -330,7 +353,7 @@ export default function Dashboard() {
               size="sm"
               variant="outline"
               className="border-green-300 text-green-700 hover:bg-green-50"
-              onClick={() => navigate('/dashboard/classrooms')}
+              onClick={() => navigate("/dashboard/classrooms")}
             >
               <UserCheck className="w-4 h-4 mr-1" />
               Manage
@@ -350,11 +373,12 @@ export default function Dashboard() {
                 {students.slice(0, 2).map((student, index) => (
                   <div
                     key={student.id || `student-${index}`}
-                    className="flex items-center gap-2 rounded-lg p-2" style={{
+                    className="flex items-center gap-2 rounded-lg p-2"
+                    style={{
                       background: "rgba(255, 255, 255, 0.9)",
                       backdropFilter: "blur(6px)",
                       WebkitBackdropFilter: "blur(6px)",
-                      border: "1px solid rgba(200, 200, 200, 0.5)"
+                      border: "1px solid rgba(200, 200, 200, 0.5)",
                     }}
                   >
                     <Avatar className="w-8 h-8">
@@ -397,13 +421,16 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.5 }}
       >
-        <Card className="h-full hover:shadow-lg transition-shadow" style={{
-          background: "rgba(255, 245, 255, 0.9)",
-          backdropFilter: "blur(8px) saturate(150%)",
-          WebkitBackdropFilter: "blur(8px) saturate(150%)",
-          border: "1px solid rgba(147, 51, 234, 0.5)",
-          boxShadow: "0 8px 32px rgba(147, 51, 234, 0.2)"
-        }}>
+        <Card
+          className="h-full hover:shadow-lg transition-shadow"
+          style={{
+            background: "rgba(255, 245, 255, 0.9)",
+            backdropFilter: "blur(8px) saturate(150%)",
+            WebkitBackdropFilter: "blur(8px) saturate(150%)",
+            border: "1px solid rgba(147, 51, 234, 0.5)",
+            boxShadow: "0 8px 32px rgba(147, 51, 234, 0.2)",
+          }}
+        >
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-purple-600" />
@@ -433,17 +460,27 @@ export default function Dashboard() {
               </div>
               <div className="space-y-2">
                 {classPosts.slice(0, 2).map((post, index) => (
-                  <div key={post.id || `post-${index}`} className="rounded-lg p-2" style={{
-                    background: "rgba(255, 255, 255, 0.7)",
-                    backdropFilter: "blur(8px)",
-                    WebkitBackdropFilter: "blur(8px)",
-                    border: "1px solid rgba(255, 255, 255, 0.4)"
-                  }}>
+                  <div
+                    key={post.id || `post-${index}`}
+                    className="rounded-lg p-2"
+                    style={{
+                      background: "rgba(255, 255, 255, 0.7)",
+                      backdropFilter: "blur(8px)",
+                      WebkitBackdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255, 255, 255, 0.4)",
+                    }}
+                  >
                     <div className="font-medium text-sm line-clamp-1">
                       {post.title}
                     </div>
                     <div className="text-xs text-gray-600 flex items-center gap-2">
-                      <span>{post.createdAt?.seconds ? new Date(post.createdAt.seconds * 1000).toLocaleDateString() : 'Today'}</span>
+                      <span>
+                        {post.createdAt?.seconds
+                          ? new Date(
+                              post.createdAt.seconds * 1000,
+                            ).toLocaleDateString()
+                          : "Today"}
+                      </span>
                       <Badge variant="outline" className="text-xs">
                         {post.type}
                       </Badge>
@@ -470,13 +507,16 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
       >
-        <Card className="h-full hover:shadow-lg transition-shadow" style={{
-          background: "rgba(255, 251, 245, 0.9)",
-          backdropFilter: "blur(8px) saturate(150%)",
-          WebkitBackdropFilter: "blur(8px) saturate(150%)",
-          border: "1px solid rgba(234, 88, 12, 0.5)",
-          boxShadow: "0 8px 32px rgba(234, 88, 12, 0.2)"
-        }}>
+        <Card
+          className="h-full hover:shadow-lg transition-shadow"
+          style={{
+            background: "rgba(255, 251, 245, 0.9)",
+            backdropFilter: "blur(8px) saturate(150%)",
+            WebkitBackdropFilter: "blur(8px) saturate(150%)",
+            border: "1px solid rgba(234, 88, 12, 0.5)",
+            boxShadow: "0 8px 32px rgba(234, 88, 12, 0.2)",
+          }}
+        >
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <School className="w-5 h-5 text-orange-600" />
@@ -488,7 +528,7 @@ export default function Dashboard() {
               size="sm"
               variant="outline"
               className="border-orange-300 text-orange-700 hover:bg-orange-50"
-              onClick={() => navigate('/dashboard/classrooms')}
+              onClick={() => navigate("/dashboard/classrooms")}
             >
               <Folder className="w-4 h-4 mr-1" />
               Manage
@@ -500,24 +540,23 @@ export default function Dashboard() {
                 {classrooms.filter((c) => c.isActive === true).length}
               </div>
               <div className="text-sm text-orange-600">
-                {classrooms.filter((c) => c.isActive === true).length} Active
-                • {classrooms.filter((c) => c.isActive === false).length} Archived
+                {classrooms.filter((c) => c.isActive === true).length} Active •{" "}
+                {classrooms.filter((c) => c.isActive === false).length} Archived
               </div>
               <div className="space-y-2">
                 {classrooms.slice(0, 2).map((classroom, index) => (
                   <div
                     key={classroom.id || `classroom-${index}`}
-                    className="flex items-center justify-between rounded-lg p-2 hover:shadow-md transition-all cursor-pointer" style={{
+                    className="flex items-center justify-between rounded-lg p-2 hover:shadow-md transition-all cursor-pointer"
+                    style={{
                       background: "rgba(255, 255, 255, 0.9)",
                       backdropFilter: "blur(6px)",
                       WebkitBackdropFilter: "blur(6px)",
-                      border: "1px solid rgba(200, 200, 200, 0.5)"
+                      border: "1px solid rgba(200, 200, 200, 0.5)",
                     }}
                   >
                     <div className="flex items-center gap-2">
-                      <div
-                        className={`w-3 h-3 rounded-full bg-blue-500`}
-                      />
+                      <div className={`w-3 h-3 rounded-full bg-blue-500`} />
                       <div>
                         <div className="font-medium text-sm">
                           {classroom.name}
@@ -667,7 +706,7 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">
-                    {classrooms.filter(c => c.isActive === true).length}
+                    {classrooms.filter((c) => c.isActive === true).length}
                   </p>
                   <p className="text-sm text-gray-600">Active Classes</p>
                 </div>
@@ -678,7 +717,7 @@ export default function Dashboard() {
 
         {/* Main 4-Block Dashboard */}
         {selectedView === "overview" && <DashboardBlocks />}
-        
+
         {/* View All Assignments */}
         {selectedView === "assignments" && (
           <motion.div
@@ -688,7 +727,9 @@ export default function Dashboard() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">All Assignments</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                All Assignments
+              </h2>
               <Button
                 variant="outline"
                 onClick={() => setSelectedView("overview")}
@@ -702,12 +743,21 @@ export default function Dashboard() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-semibold">{assignment.title}</h3>
-                      <p className="text-sm text-gray-600">{assignment.description}</p>
+                      <p className="text-sm text-gray-600">
+                        {assignment.description}
+                      </p>
                       <p className="text-xs text-gray-500">
-                        Due: {assignment.dueDate ? new Date(assignment.dueDate).toLocaleDateString() : 'No due date'}
+                        Due:{" "}
+                        {assignment.dueDate
+                          ? new Date(assignment.dueDate).toLocaleDateString()
+                          : "No due date"}
                       </p>
                     </div>
-                    <Badge variant={assignment.status === 'active' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        assignment.status === "active" ? "default" : "secondary"
+                      }
+                    >
                       {assignment.status}
                     </Badge>
                   </div>
@@ -744,10 +794,16 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <h3 className="font-semibold">{student.email}</h3>
-                        <p className="text-sm text-gray-600">Student ID: {student.id}</p>
+                        <p className="text-sm text-gray-600">
+                          Student ID: {student.id}
+                        </p>
                       </div>
                     </div>
-                    <Badge variant={student.status === 'active' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        student.status === "active" ? "default" : "secondary"
+                      }
+                    >
                       {student.status}
                     </Badge>
                   </div>
@@ -766,7 +822,9 @@ export default function Dashboard() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">All Community Posts</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                All Community Posts
+              </h2>
               <Button
                 variant="outline"
                 onClick={() => setSelectedView("overview")}
@@ -780,13 +838,22 @@ export default function Dashboard() {
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-semibold">{post.title}</h3>
-                      <Badge variant={post.type === 'announcement' ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={
+                          post.type === "announcement" ? "default" : "secondary"
+                        }
+                      >
                         {post.type}
                       </Badge>
                     </div>
                     <p className="text-sm text-gray-600">{post.content}</p>
                     <p className="text-xs text-gray-500 mt-2">
-                      Posted: {post.createdAt ? new Date(post.createdAt.seconds * 1000).toLocaleDateString() : 'Unknown'}
+                      Posted:{" "}
+                      {post.createdAt
+                        ? new Date(
+                            post.createdAt.seconds * 1000,
+                          ).toLocaleDateString()
+                        : "Unknown"}
                     </p>
                   </div>
                 </Card>
@@ -804,7 +871,9 @@ export default function Dashboard() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">All Classrooms</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                All Classrooms
+              </h2>
               <Button
                 variant="outline"
                 onClick={() => setSelectedView("overview")}
@@ -818,11 +887,17 @@ export default function Dashboard() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-semibold">{classroom.name}</h3>
-                      <p className="text-sm text-gray-600">{classroom.description}</p>
-                      <p className="text-xs text-gray-500">Code: {classroom.classCode}</p>
+                      <p className="text-sm text-gray-600">
+                        {classroom.description}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Code: {classroom.classCode}
+                      </p>
                     </div>
-                    <Badge variant={classroom.isActive ? 'default' : 'secondary'}>
-                      {classroom.isActive ? 'Active' : 'Inactive'}
+                    <Badge
+                      variant={classroom.isActive ? "default" : "secondary"}
+                    >
+                      {classroom.isActive ? "Active" : "Inactive"}
                     </Badge>
                   </div>
                 </Card>
@@ -830,7 +905,6 @@ export default function Dashboard() {
             </div>
           </motion.div>
         )}
-
 
         {/* Assignment Creator */}
         <AssignmentCreator
