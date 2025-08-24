@@ -398,11 +398,11 @@ export default function Dashboard() {
         transition={{ delay: 0.3, duration: 0.5 }}
       >
         <Card className="h-full hover:shadow-lg transition-shadow" style={{
-          background: "rgba(255, 245, 255, 0.65)",
-          backdropFilter: "blur(12px) saturate(150%)",
-          WebkitBackdropFilter: "blur(12px) saturate(150%)",
-          border: "1px solid rgba(147, 51, 234, 0.3)",
-          boxShadow: "0 8px 32px rgba(147, 51, 234, 0.15)"
+          background: "rgba(255, 245, 255, 0.9)",
+          backdropFilter: "blur(8px) saturate(150%)",
+          WebkitBackdropFilter: "blur(8px) saturate(150%)",
+          border: "1px solid rgba(147, 51, 234, 0.5)",
+          boxShadow: "0 8px 32px rgba(147, 51, 234, 0.2)"
         }}>
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
