@@ -20,11 +20,13 @@ import {
   Calendar,
   User,
   Paperclip,
+  BarChart3,
 } from 'lucide-react';
 import { ClassroomAssignment, StudentSubmission } from '@/types/classroom';
 import { getAssignmentSubmissions } from '@/lib/classroomOperations';
 import { downloadFile } from '@/lib/supabaseStorage';
 import { debugSubmissions, testSubmissionRetrieval } from '@/lib/debugSubmissions';
+import { AssignmentAnalysisModal } from '@/components/AssignmentAnalysisModal';
 
 interface AssignmentSubmissionsModalProps {
   assignment: ClassroomAssignment | null;
@@ -40,6 +42,7 @@ export const AssignmentSubmissionsModal: React.FC<AssignmentSubmissionsModalProp
   const { toast } = useToast();
   const [submissions, setSubmissions] = useState<StudentSubmission[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showAnalysis, setShowAnalysis] = useState(false);
 
   useEffect(() => {
     if (assignment && isOpen) {
@@ -197,6 +200,16 @@ export const AssignmentSubmissionsModal: React.FC<AssignmentSubmissionsModalProp
                 <FileText className="w-5 h-5" />
                 Student Submissions ({submissions.length})
               </h3>
+              {submissions.length > 0 && (
+                <Button
+                  onClick={() => setShowAnalysis(true)}
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  size="sm"
+                >
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Reports
+                </Button>
+              )}
             </div>
 
             {loading ? (
@@ -323,6 +336,14 @@ export const AssignmentSubmissionsModal: React.FC<AssignmentSubmissionsModalProp
           </div>
         </div>
       </DialogContent>
+      
+      {/* Analysis Modal */}
+      <AssignmentAnalysisModal
+        assignment={assignment}
+        submissions={submissions}
+        isOpen={showAnalysis}
+        onClose={() => setShowAnalysis(false)}
+      />
     </Dialog>
   );
 };

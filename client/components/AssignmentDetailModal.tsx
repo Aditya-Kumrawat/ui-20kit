@@ -191,20 +191,13 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
         submissionData
       );
 
-      // Send webhook to Make.com
+      // Send webhook to Make.com using centralized service
       try {
-        const webhookData = {
-          assignmentPdfUrl: assignment.materials?.[0]?.url || '', // Assignment PDF URL
-          studentSubmissionPdfUrl: uploadResult.publicUrl || '' // Student submission PDF URL
-        };
-        
-        await fetch('https://hook.eu2.make.com/jku6pwlpbfh349x2jq1mnds2qebx4ruu', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(webhookData),
-        });
+        const { sendSubmissionToMake } = await import('@/lib/makeService');
+        await sendSubmissionToMake(
+          assignment.materials?.[0]?.url || '',
+          uploadResult.publicUrl || ''
+        );
       } catch (webhookError) {
         console.error('Webhook error:', webhookError);
         // Don't fail the submission if webhook fails
