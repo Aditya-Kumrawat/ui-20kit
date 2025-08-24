@@ -189,11 +189,11 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
               whileHover={{ scale: 1.02 }}
               className="rounded-xl p-6"
               style={{
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(12px) saturate(150%)",
-                WebkitBackdropFilter: "blur(12px) saturate(150%)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(8px) saturate(150%)",
+                WebkitBackdropFilter: "blur(8px) saturate(150%)",
+                border: "1px solid rgba(200, 200, 200, 0.6)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
               }}
             >
               <div className="flex items-center gap-3 mb-2">
@@ -209,11 +209,11 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
               whileHover={{ scale: 1.02 }}
               className="rounded-xl p-6"
               style={{
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(12px) saturate(150%)",
-                WebkitBackdropFilter: "blur(12px) saturate(150%)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(8px) saturate(150%)",
+                WebkitBackdropFilter: "blur(8px) saturate(150%)",
+                border: "1px solid rgba(200, 200, 200, 0.6)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
               }}
             >
               <div className="flex items-center gap-3 mb-2">
@@ -229,11 +229,11 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
               whileHover={{ scale: 1.02 }}
               className="rounded-xl p-6"
               style={{
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(12px) saturate(150%)",
-                WebkitBackdropFilter: "blur(12px) saturate(150%)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(8px) saturate(150%)",
+                WebkitBackdropFilter: "blur(8px) saturate(150%)",
+                border: "1px solid rgba(200, 200, 200, 0.6)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
               }}
             >
               <div className="flex items-center gap-3 mb-2">
@@ -249,11 +249,11 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
               whileHover={{ scale: 1.02 }}
               className="rounded-xl p-6"
               style={{
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(12px) saturate(150%)",
-                WebkitBackdropFilter: "blur(12px) saturate(150%)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(8px) saturate(150%)",
+                WebkitBackdropFilter: "blur(8px) saturate(150%)",
+                border: "1px solid rgba(200, 200, 200, 0.6)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
               }}
             >
               <div className="flex items-center gap-3 mb-2">
@@ -270,11 +270,11 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
             {/* Assignments */}
             <div className="lg:col-span-2">
               <div className="rounded-xl p-6" style={{
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(12px) saturate(150%)",
-                WebkitBackdropFilter: "blur(12px) saturate(150%)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(8px) saturate(150%)",
+                WebkitBackdropFilter: "blur(8px) saturate(150%)",
+                border: "1px solid rgba(200, 200, 200, 0.6)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
               }}>
                 <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                   <FileText className="w-5 h-5" />
@@ -375,11 +375,11 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
             {/* Students */}
             <div>
               <div className="rounded-xl p-6" style={{
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(12px) saturate(150%)",
-                WebkitBackdropFilter: "blur(12px) saturate(150%)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(8px) saturate(150%)",
+                WebkitBackdropFilter: "blur(8px) saturate(150%)",
+                border: "1px solid rgba(200, 200, 200, 0.6)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
               }}>
                 <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                   <Users className="w-5 h-5" />
