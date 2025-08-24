@@ -239,7 +239,13 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
       >
-        <Card className="h-full bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow">
+        <Card className="h-full hover:shadow-lg transition-shadow" style={{
+          background: "rgba(245, 245, 255, 0.65)",
+          backdropFilter: "blur(12px) saturate(150%)",
+          WebkitBackdropFilter: "blur(12px) saturate(150%)",
+          border: "1px solid rgba(59, 130, 246, 0.3)",
+          boxShadow: "0 8px 32px rgba(59, 130, 246, 0.15)"
+        }}>
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-blue-600" />
@@ -262,7 +268,12 @@ export default function Dashboard() {
                 {assignments.slice(0, 2).map((assignment, index) => (
                   <div
                     key={assignment.id || `assignment-${index}`}
-                    className="flex items-center justify-between bg-white/60 rounded-lg p-2"
+                    className="flex items-center justify-between rounded-lg p-2" style={{
+                      background: "rgba(255, 255, 255, 0.7)",
+                      backdropFilter: "blur(8px)",
+                      WebkitBackdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255, 255, 255, 0.4)"
+                    }}
                   >
                     <div>
                       <div className="font-medium text-sm">
@@ -303,7 +314,13 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        <Card className="h-full bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow">
+        <Card className="h-full hover:shadow-lg transition-shadow" style={{
+          background: "rgba(245, 255, 245, 0.65)",
+          backdropFilter: "blur(12px) saturate(150%)",
+          WebkitBackdropFilter: "blur(12px) saturate(150%)",
+          border: "1px solid rgba(34, 197, 94, 0.3)",
+          boxShadow: "0 8px 32px rgba(34, 197, 94, 0.15)"
+        }}>
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5 text-green-600" />
@@ -333,7 +350,12 @@ export default function Dashboard() {
                 {students.slice(0, 2).map((student, index) => (
                   <div
                     key={student.id || `student-${index}`}
-                    className="flex items-center gap-2 bg-white/60 rounded-lg p-2"
+                    className="flex items-center gap-2 rounded-lg p-2" style={{
+                      background: "rgba(255, 255, 255, 0.7)",
+                      backdropFilter: "blur(8px)",
+                      WebkitBackdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255, 255, 255, 0.4)"
+                    }}
                   >
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={student.avatar} />
@@ -375,7 +397,13 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.5 }}
       >
-        <Card className="h-full bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow">
+        <Card className="h-full hover:shadow-lg transition-shadow" style={{
+          background: "rgba(255, 245, 255, 0.65)",
+          backdropFilter: "blur(12px) saturate(150%)",
+          WebkitBackdropFilter: "blur(12px) saturate(150%)",
+          border: "1px solid rgba(147, 51, 234, 0.3)",
+          boxShadow: "0 8px 32px rgba(147, 51, 234, 0.15)"
+        }}>
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-purple-600" />
@@ -405,7 +433,12 @@ export default function Dashboard() {
               </div>
               <div className="space-y-2">
                 {classPosts.slice(0, 2).map((post, index) => (
-                  <div key={post.id || `post-${index}`} className="bg-white/60 rounded-lg p-2">
+                  <div key={post.id || `post-${index}`} className="rounded-lg p-2" style={{
+                    background: "rgba(255, 255, 255, 0.7)",
+                    backdropFilter: "blur(8px)",
+                    WebkitBackdropFilter: "blur(8px)",
+                    border: "1px solid rgba(255, 255, 255, 0.4)"
+                  }}>
                     <div className="font-medium text-sm line-clamp-1">
                       {post.title}
                     </div>
@@ -437,7 +470,13 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
       >
-        <Card className="h-full bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-lg transition-shadow">
+        <Card className="h-full hover:shadow-lg transition-shadow" style={{
+          background: "rgba(255, 251, 245, 0.65)",
+          backdropFilter: "blur(12px) saturate(150%)",
+          WebkitBackdropFilter: "blur(12px) saturate(150%)",
+          border: "1px solid rgba(234, 88, 12, 0.3)",
+          boxShadow: "0 8px 32px rgba(234, 88, 12, 0.15)"
+        }}>
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <School className="w-5 h-5 text-orange-600" />
@@ -468,7 +507,12 @@ export default function Dashboard() {
                 {classrooms.slice(0, 2).map((classroom, index) => (
                   <div
                     key={classroom.id || `classroom-${index}`}
-                    className="flex items-center justify-between bg-white/60 rounded-lg p-2 hover:bg-white/80 transition-colors cursor-pointer"
+                    className="flex items-center justify-between rounded-lg p-2 hover:shadow-md transition-all cursor-pointer" style={{
+                      background: "rgba(255, 255, 255, 0.7)",
+                      backdropFilter: "blur(8px)",
+                      WebkitBackdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255, 255, 255, 0.4)"
+                    }}
                   >
                     <div className="flex items-center gap-2">
                       <div
