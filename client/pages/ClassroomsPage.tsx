@@ -28,6 +28,7 @@ import { useSidebar } from '../contexts/SidebarContext';
 export const ClassroomsPage: React.FC = () => {
   const { currentUser } = useAuth();
   const { toast } = useToast();
+  const { isCollapsed, setIsCollapsed } = useSidebar();
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [classroomStats, setClassroomStats] = useState<Record<string, ClassroomStats>>({});
   const [loading, setLoading] = useState(true);
