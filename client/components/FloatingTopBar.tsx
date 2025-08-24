@@ -10,6 +10,7 @@ import {
   User,
   LogOut,
 } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 interface FloatingTopBarProps {
   isCollapsed?: boolean;
@@ -18,6 +19,25 @@ interface FloatingTopBarProps {
 export const FloatingTopBar = ({
   isCollapsed = false,
 }: FloatingTopBarProps) => {
+  const { currentUser } = useAuth();
+  
+  // Get user's display name or email as fallback
+  const userName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User';
+  
+  // Get user's initials for avatar fallback
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Get user role from localStorage
+  const userRole = currentUser ? localStorage.getItem(`user_${currentUser.uid}_role`) || 'User' : 'User';
+  const displayRole = userRole === 'teacher' ? 'Teacher' : userRole === 'student' ? 'Student' : 'User';
+
   return (
     <motion.div
       className={`fixed top-4 right-4 z-40 transition-all duration-300 ${
@@ -72,12 +92,12 @@ export const FloatingTopBar = ({
             {/* Profile */}
             <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-100/50 rounded-2xl px-2 py-1 transition-colors">
               <Avatar className="w-8 h-8">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarImage src={currentUser?.photoURL || "https://github.com/shadcn.png"} />
+                <AvatarFallback>{getInitials(userName)}</AvatarFallback>
               </Avatar>
               <div className="hidden md:block text-sm">
-                <div className="font-medium text-gray-900">John Doe</div>
-                <div className="text-xs text-gray-500">Admin</div>
+                <div className="font-medium text-gray-900">{userName}</div>
+                <div className="text-xs text-gray-500">{displayRole}</div>
               </div>
               <ChevronDown size={14} className="text-gray-400" />
             </div>

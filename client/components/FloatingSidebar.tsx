@@ -19,6 +19,8 @@ import {
   Users,
   GraduationCap,
 } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { auth } from "../lib/firebase";
 
 interface FloatingSidebarProps {
   isCollapsed: boolean;
@@ -34,9 +36,16 @@ export const FloatingSidebar = ({
   const navigate = useNavigate();
   const location = useLocation();
   const [activeIndex, setActiveIndex] = useState(0);
+  const { logout } = useAuth();
 
   const teacherMenuItems = [
     { id: "home", label: "Dashboard", icon: Home, href: "/dashboard" },
+    {
+      id: "classrooms",
+      label: "Classrooms",
+      icon: GraduationCap,
+      href: "/dashboard/classrooms",
+    },
     {
       id: "analytics",
       label: "Analytics",
@@ -71,6 +80,12 @@ export const FloatingSidebar = ({
 
   const studentMenuItems = [
     { id: "home", label: "My Classes", icon: Home, href: "/dashboard2" },
+    {
+      id: "classrooms",
+      label: "Classrooms",
+      icon: GraduationCap,
+      href: "/dashboard2/classrooms",
+    },
     {
       id: "tests",
       label: "My Tests",
@@ -118,6 +133,7 @@ export const FloatingSidebar = ({
       } z-50 max-h-screen`}
       animate={{ width: isCollapsed ? 64 : 256 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
+      style={{ pointerEvents: 'auto' }}
     >
       {/* Smooth Off-White Glass Sidebar */}
       <div
@@ -161,19 +177,23 @@ export const FloatingSidebar = ({
 
         {/* Toggle Button */}
         <motion.button
-          className="absolute -right-3 top-6 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 text-gray-600 hover:text-gray-800"
+          className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 text-gray-600 hover:text-gray-800 hover:bg-white/90 cursor-pointer z-[60]"
           style={{
-            background: "rgba(255, 255, 255, 0.8)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-            border: "1px solid rgba(255, 255, 255, 0.5)",
-            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+            background: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            border: "1px solid rgba(255, 255, 255, 0.8)",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
           }}
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsCollapsed(!isCollapsed);
+          }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
-          {isCollapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
+          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </motion.button>
 
         {/* Navigation Menu */}
@@ -216,22 +236,9 @@ export const FloatingSidebar = ({
                   </motion.span>
                 )}
               </AnimatePresence>
-              {item.badge && !isCollapsed && (
-                <Badge className="bg-red-500 text-white text-xs min-w-[18px] h-5 flex items-center justify-center">
-                  {item.badge}
-                </Badge>
-              )}
               {/* Active indicator dot for collapsed state */}
               {isActive(item.href) && isCollapsed && (
                 <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full shadow-sm animate-pulse"></div>
-              )}
-              {/* Badge dot for collapsed state */}
-              {item.badge && isCollapsed && !isActive(item.href) && (
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-[8px] text-white font-bold">
-                    {item.badge > 9 ? "9+" : item.badge}
-                  </span>
-                </div>
               )}
             </motion.button>
           ))}
@@ -277,13 +284,20 @@ export const FloatingSidebar = ({
             className={`w-full flex items-center gap-3 transition-all duration-200 group ${
               isCollapsed ? "p-2 justify-center" : "p-3"
             } rounded-xl hover:bg-red-50 text-red-600 hover:text-red-700`}
-            onClick={() => {
-              // Clear any auth tokens or user session data here if needed
-              // localStorage.removeItem("authToken");
-              // sessionStorage.clear();
-
-              // Navigate to login page
-              navigate("/login");
+            onClick={async () => {
+              try {
+                await logout();
+                // Clear user role from localStorage
+                const currentUser = auth.currentUser;
+                if (currentUser) {
+                  localStorage.removeItem(`user_${currentUser.uid}_role`);
+                }
+                navigate("/login");
+              } catch (error) {
+                console.error("Logout error:", error);
+                // Force navigation to login even if logout fails
+                navigate("/login");
+              }
             }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

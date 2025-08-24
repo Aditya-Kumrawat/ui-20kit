@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -7,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Timestamp } from "firebase/firestore";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +29,9 @@ import { FloatingTopBar } from "@/components/FloatingTopBar";
 import { useSidebar } from "@/contexts/SidebarContext";
 import { PlagiarismDetection } from "@/components/PlagiarismDetection";
 import { AnomalyDetection } from "@/components/AnomalyDetection";
+import { AssignmentCreator } from "@/components/AssignmentCreator";
+import { getTeacherAssignments, getTeacherStudents, getTeacherClassPosts, getTeacherClassroomStudents, getTeacherClassrooms, FirebaseAssignment, FirebaseStudent, FirebaseClassPost, ClassroomStudent, createFirebaseClassPost } from "@/lib/firebaseOperations";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   BookOpen,
   Users,
@@ -63,45 +68,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-interface Assignment {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: string;
-  subject: string;
-  status: "draft" | "published" | "graded";
-  submissions: number;
-  totalStudents: number;
-  points: number;
-  createdAt: string;
-}
+// Use Firebase types
+type Assignment = FirebaseAssignment;
+type Student = FirebaseStudent;
+type ClassPost = FirebaseClassPost;
 
-interface Student {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-  status: "active" | "inactive";
-  lastActive: string;
-  grade: string;
-  assignments: {
-    completed: number;
-    pending: number;
-    late: number;
-  };
-}
-
-interface ClassPost {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  authorAvatar: string;
-  createdAt: string;
-  attachments?: string[];
-  comments: number;
-  type: "announcement" | "material" | "assignment";
-}
 
 interface Classroom {
   id: string;
@@ -117,12 +88,15 @@ interface Classroom {
 export default function Dashboard() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
   const { toast } = useToast();
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
   // State management
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [classPosts, setClassPosts] = useState<ClassPost[]>([]);
-  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [assignments, setAssignments] = useState<FirebaseAssignment[]>([]);
+  const [students, setStudents] = useState<ClassroomStudent[]>([]);
+  const [classPosts, setClassPosts] = useState<FirebaseClassPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [classrooms, setClassrooms] = useState<any[]>([]);
   const [selectedView, setSelectedView] = useState<
     "overview" | "assignments" | "students" | "posts"
   >("overview");
@@ -148,201 +122,69 @@ export default function Dashboard() {
     type: "announcement" as "announcement" | "material",
   });
 
-  // Initialize sample data
+  // Initialize real data from Firebase
   useEffect(() => {
-    // Sample assignments
-    setAssignments([
-      {
-        id: "1",
-        title: "Math Quiz Chapter 5",
-        description: "Complete the quiz on algebraic expressions and equations",
-        dueDate: "2024-01-15",
-        subject: "Mathematics",
-        status: "published",
-        submissions: 18,
-        totalStudents: 25,
-        points: 100,
-        createdAt: "2024-01-10",
-      },
-      {
-        id: "2",
-        title: "Science Lab Report",
-        description: "Write a detailed report on the photosynthesis experiment",
-        dueDate: "2024-01-20",
-        subject: "Science",
-        status: "published",
-        submissions: 12,
-        totalStudents: 25,
-        points: 150,
-        createdAt: "2024-01-08",
-      },
-      {
-        id: "3",
-        title: "History Essay",
-        description: "Essay on the causes of World War I",
-        dueDate: "2024-01-25",
-        subject: "History",
-        status: "draft",
-        submissions: 0,
-        totalStudents: 25,
-        points: 200,
-        createdAt: "2024-01-12",
-      },
-    ]);
-
-    // Sample students
-    setStudents([
-      {
-        id: "1",
-        name: "Alice Johnson",
-        email: "alice.johnson@school.edu",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=alice",
-        status: "active",
-        lastActive: "2 hours ago",
-        grade: "A",
-        assignments: { completed: 8, pending: 2, late: 0 },
-      },
-      {
-        id: "2",
-        name: "Bob Smith",
-        email: "bob.smith@school.edu",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=bob",
-        status: "active",
-        lastActive: "1 day ago",
-        grade: "B+",
-        assignments: { completed: 7, pending: 2, late: 1 },
-      },
-      {
-        id: "3",
-        name: "Charlie Brown",
-        email: "charlie.brown@school.edu",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=charlie",
-        status: "inactive",
-        lastActive: "3 days ago",
-        grade: "B",
-        assignments: { completed: 6, pending: 3, late: 1 },
-      },
-    ]);
-
-    // Sample class posts
-    setClassPosts([
-      {
-        id: "1",
-        title: "Welcome to the new semester!",
-        content:
-          "I hope everyone is excited for the upcoming semester. Please check the course syllabus and let me know if you have any questions.",
-        author: "Dr. Sarah Wilson",
-        authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
-        createdAt: "2024-01-08",
-        comments: 5,
-        type: "announcement",
-      },
-      {
-        id: "2",
-        title: "Chapter 5 Study Materials",
-        content:
-          "I've uploaded additional study materials for Chapter 5. Please review them before our next class.",
-        author: "Dr. Sarah Wilson",
-        authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
-        createdAt: "2024-01-10",
-        attachments: ["Chapter5_Notes.pdf", "Practice_Problems.docx"],
-        comments: 3,
-        type: "material",
-      },
-    ]);
-
-    // Sample classrooms
-    setClassrooms([
-      {
-        id: "1",
-        name: "Advanced Mathematics",
-        subject: "Mathematics",
-        students: 25,
-        color: "bg-blue-500",
-        lastActivity: "2 hours ago",
-        code: "MATH301",
-        status: "active",
-      },
-      {
-        id: "2",
-        name: "General Science",
-        subject: "Science",
-        students: 28,
-        color: "bg-green-500",
-        lastActivity: "4 hours ago",
-        code: "SCI101",
-        status: "active",
-      },
-      {
-        id: "3",
-        name: "World History",
-        subject: "History",
-        students: 22,
-        color: "bg-purple-500",
-        lastActivity: "1 day ago",
-        code: "HIST205",
-        status: "active",
-      },
-      {
-        id: "4",
-        name: "English Literature",
-        subject: "English",
-        students: 20,
-        color: "bg-orange-500",
-        lastActivity: "3 days ago",
-        code: "ENG102",
-        status: "archived",
-      },
-    ]);
-  }, []);
-
-  // Handle new assignment creation
-  const handleCreateAssignment = () => {
-    if (
-      !newAssignment.title ||
-      !newAssignment.description ||
-      !newAssignment.dueDate
-    ) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const assignment: Assignment = {
-      id: Date.now().toString(),
-      title: newAssignment.title,
-      description: newAssignment.description,
-      dueDate: newAssignment.dueDate,
-      subject: newAssignment.subject || "General",
-      status: "draft",
-      submissions: 0,
-      totalStudents: 25,
-      points: newAssignment.points,
-      createdAt: new Date().toISOString().split("T")[0],
+    const loadData = async () => {
+      if (!currentUser) return;
+      
+      setLoading(true);
+      try {
+        // Load data from Firebase
+        const [assignmentsData, studentsData, postsData, classroomsData] = await Promise.all([
+          getTeacherAssignments(currentUser.uid),
+          getTeacherClassroomStudents(currentUser.uid),
+          getTeacherClassPosts(currentUser.uid),
+          getTeacherClassrooms(currentUser.uid)
+        ]);
+        
+        setAssignments(assignmentsData);
+        setStudents(studentsData);
+        setClassPosts(postsData);
+        setClassrooms(classroomsData);
+        
+        // If no class posts exist, add a sample welcome post
+        if (postsData.length === 0) {
+          console.log('No class posts found, adding welcome post');
+          
+          setClassPosts([
+            {
+              id: '1',
+              title: "Welcome to your dashboard!",
+              content: "Create classrooms and assignments to get started. Students can join your classes using classroom codes.",
+              author: currentUser?.displayName || "Teacher",
+              authorId: currentUser?.uid || '',
+              authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
+              createdAt: Timestamp.fromDate(new Date()),
+              comments: 0,
+              type: "announcement",
+              teacherId: currentUser?.uid || '',
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+        // Set empty arrays on error
+        setStudents([]);
+        setAssignments([]);
+        setClassPosts([]);
+        setClassrooms([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    setAssignments((prev) => [assignment, ...prev]);
-    setNewAssignment({
-      title: "",
-      description: "",
-      dueDate: "",
-      subject: "",
-      points: 100,
-    });
-    setIsNewAssignmentOpen(false);
+    loadData();
+  }, [currentUser, toast]);
 
-    toast({
-      title: "Assignment Created",
-      description: "Your assignment has been saved as a draft",
-    });
+
+  // Handle new assignment creation
+  const handleAssignmentCreated = (newAssignment: FirebaseAssignment) => {
+    setAssignments((prev) => [newAssignment, ...prev]);
   };
 
   // Handle new post creation
-  const handleCreatePost = () => {
-    if (!newPost.title || !newPost.content) {
+  const handleCreatePost = async () => {
+    if (!newPost.title || !newPost.content || !currentUser) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -351,37 +193,40 @@ export default function Dashboard() {
       return;
     }
 
-    const post: ClassPost = {
-      id: Date.now().toString(),
-      title: newPost.title,
-      content: newPost.content,
-      author: "Dr. Sarah Wilson",
-      authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
-      createdAt: new Date().toISOString().split("T")[0],
-      comments: 0,
-      type: newPost.type,
-    };
+    try {
+      const postData = {
+        title: newPost.title,
+        content: newPost.content,
+        author: currentUser.displayName || currentUser.email?.split('@')[0] || 'Teacher',
+        authorId: currentUser.uid,
+        authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher",
+        type: newPost.type,
+        teacherId: currentUser.uid,
+      };
 
-    setClassPosts((prev) => [post, ...prev]);
-    setNewPost({ title: "", content: "", type: "announcement" });
-    setIsNewPostOpen(false);
+      const createdPost = await createFirebaseClassPost(postData);
+      setClassPosts((prev) => [createdPost, ...prev]);
+      setNewPost({ title: "", content: "", type: "announcement" });
+      setIsNewPostOpen(false);
 
-    toast({
-      title: "Post Created",
-      description: "Your post has been published to the class",
-    });
+      toast({
+        title: "Post Created",
+        description: "Your post has been published to the class",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create post",
+        variant: "destructive",
+      });
+    }
   };
 
   // Dashboard stats
   const dashboardStats = {
     totalStudents: students.length,
-    activeAssignments: assignments.filter((a) => a.status === "published")
-      .length,
-    pendingSubmissions: assignments.reduce(
-      (acc, a) => acc + (a.totalStudents - a.submissions),
-      0,
-    ),
-    averageGrade: "B+",
+    activeAssignments: assignments.filter((a) => a.status === "active").length,
+    totalAssignments: assignments.length,
   };
 
   // Main dashboard blocks (2x2 grid)
@@ -391,7 +236,7 @@ export default function Dashboard() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
       >
         <Card className="h-full bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
@@ -401,17 +246,14 @@ export default function Dashboard() {
                 Assignments
               </CardTitle>
             </div>
-            <Dialog
-              open={isNewAssignmentOpen}
-              onOpenChange={setIsNewAssignmentOpen}
+            <Button 
+              size="sm" 
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={() => setIsNewAssignmentOpen(true)}
             >
-              <DialogTrigger asChild>
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                  <Plus className="w-4 h-4 mr-1" />
-                  New
-                </Button>
-              </DialogTrigger>
-            </Dialog>
+              <Plus className="w-4 h-4 mr-1" />
+              New
+            </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -419,14 +261,14 @@ export default function Dashboard() {
                 {assignments.length}
               </div>
               <div className="text-sm text-blue-600">
-                {assignments.filter((a) => a.status === "published").length}{" "}
-                Published •{" "}
+                {assignments.filter((a) => a.status === "active").length}{" "}
+                Active •{" "}
                 {assignments.filter((a) => a.status === "draft").length} Drafts
               </div>
               <div className="space-y-2">
-                {assignments.slice(0, 2).map((assignment) => (
+                {assignments.slice(0, 2).map((assignment, index) => (
                   <div
-                    key={assignment.id}
+                    key={assignment.id || `assignment-${index}`}
                     className="flex items-center justify-between bg-white/60 rounded-lg p-2"
                   >
                     <div>
@@ -434,17 +276,17 @@ export default function Dashboard() {
                         {assignment.title}
                       </div>
                       <div className="text-xs text-gray-600">
-                        Due: {assignment.dueDate}
+                        Due: {assignment.dueDate instanceof Timestamp ? assignment.dueDate.toDate().toLocaleDateString() : new Date(assignment.dueDate).toLocaleDateString()}
                       </div>
                     </div>
                     <Badge
                       variant={
-                        assignment.status === "published"
+                        assignment.status === "active"
                           ? "default"
                           : "secondary"
                       }
                     >
-                      {assignment.submissions}/{assignment.totalStudents}
+                      {assignment.status}
                     </Badge>
                   </div>
                 ))}
@@ -466,7 +308,7 @@ export default function Dashboard() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
       >
         <Card className="h-full bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
@@ -478,6 +320,7 @@ export default function Dashboard() {
               size="sm"
               variant="outline"
               className="border-green-300 text-green-700 hover:bg-green-50"
+              onClick={() => navigate('/dashboard/classrooms')}
             >
               <UserCheck className="w-4 h-4 mr-1" />
               Manage
@@ -494,9 +337,9 @@ export default function Dashboard() {
                 Inactive
               </div>
               <div className="space-y-2">
-                {students.slice(0, 2).map((student) => (
+                {students.slice(0, 2).map((student, index) => (
                   <div
-                    key={student.id}
+                    key={student.id || `student-${index}`}
                     className="flex items-center gap-2 bg-white/60 rounded-lg p-2"
                   >
                     <Avatar className="w-8 h-8">
@@ -511,7 +354,7 @@ export default function Dashboard() {
                     <div className="flex-1">
                       <div className="font-medium text-sm">{student.name}</div>
                       <div className="text-xs text-gray-600">
-                        Grade: {student.grade}
+                        Class: {student.classroomName}
                       </div>
                     </div>
                     <div
@@ -537,14 +380,14 @@ export default function Dashboard() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
       >
         <Card className="h-full bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-purple-600" />
               <CardTitle className="text-lg text-purple-800">
-                Class Posts
+                Community Posts
               </CardTitle>
             </div>
             <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
@@ -568,13 +411,13 @@ export default function Dashboard() {
                 Materials
               </div>
               <div className="space-y-2">
-                {classPosts.slice(0, 2).map((post) => (
-                  <div key={post.id} className="bg-white/60 rounded-lg p-2">
+                {classPosts.slice(0, 2).map((post, index) => (
+                  <div key={post.id || `post-${index}`} className="bg-white/60 rounded-lg p-2">
                     <div className="font-medium text-sm line-clamp-1">
                       {post.title}
                     </div>
                     <div className="text-xs text-gray-600 flex items-center gap-2">
-                      <span>{post.createdAt}</span>
+                      <span>{post.createdAt?.seconds ? new Date(post.createdAt.seconds * 1000).toLocaleDateString() : 'Today'}</span>
                       <Badge variant="outline" className="text-xs">
                         {post.type}
                       </Badge>
@@ -599,7 +442,7 @@ export default function Dashboard() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
       >
         <Card className="h-full bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
@@ -613,6 +456,7 @@ export default function Dashboard() {
               size="sm"
               variant="outline"
               className="border-orange-300 text-orange-700 hover:bg-orange-50"
+              onClick={() => navigate('/dashboard/classrooms')}
             >
               <Folder className="w-4 h-4 mr-1" />
               Manage
@@ -621,29 +465,28 @@ export default function Dashboard() {
           <CardContent>
             <div className="space-y-4">
               <div className="text-3xl font-bold text-orange-800">
-                {classrooms.filter((c) => c.status === "active").length}
+                {classrooms.filter((c) => c.isActive === true).length}
               </div>
               <div className="text-sm text-orange-600">
-                {classrooms.filter((c) => c.status === "active").length} Active
-                • {classrooms.filter((c) => c.status === "archived").length}{" "}
-                Archived
+                {classrooms.filter((c) => c.isActive === true).length} Active
+                • {classrooms.filter((c) => c.isActive === false).length} Archived
               </div>
               <div className="space-y-2">
-                {classrooms.slice(0, 2).map((classroom) => (
+                {classrooms.slice(0, 2).map((classroom, index) => (
                   <div
-                    key={classroom.id}
+                    key={classroom.id || `classroom-${index}`}
                     className="flex items-center justify-between bg-white/60 rounded-lg p-2 hover:bg-white/80 transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-2">
                       <div
-                        className={`w-3 h-3 rounded-full ${classroom.color}`}
+                        className={`w-3 h-3 rounded-full bg-blue-500`}
                       />
                       <div>
                         <div className="font-medium text-sm">
                           {classroom.name}
                         </div>
                         <div className="text-xs text-gray-600">
-                          {classroom.students} students • {classroom.code}
+                          Code: {classroom.classCode}
                         </div>
                       </div>
                     </div>
@@ -674,8 +517,9 @@ export default function Dashboard() {
       <FloatingTopBar isCollapsed={isCollapsed} />
 
       <motion.div
-        className={`transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"} pt-28 p-6`}
+        className={`${isCollapsed ? "ml-20" : "ml-72"} pt-28 p-6`}
         animate={{ marginLeft: isCollapsed ? 80 : 272 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         {/* Header */}
         <motion.div
@@ -769,9 +613,9 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">
-                    {dashboardStats.pendingSubmissions}
+                    {dashboardStats.totalAssignments}
                   </p>
-                  <p className="text-sm text-gray-600">Pending Submissions</p>
+                  <p className="text-sm text-gray-600">Total Assignments</p>
                 </div>
               </div>
             </CardContent>
@@ -781,13 +625,13 @@ export default function Dashboard() {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Award className="w-5 h-5 text-purple-600" />
+                  <GraduationCap className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">
-                    {dashboardStats.averageGrade}
+                    {classrooms.filter(c => c.isActive === true).length}
                   </p>
-                  <p className="text-sm text-gray-600">Average Grade</p>
+                  <p className="text-sm text-gray-600">Active Classes</p>
                 </div>
               </div>
             </CardContent>
@@ -797,179 +641,13 @@ export default function Dashboard() {
         {/* Main 4-Block Dashboard */}
         <DashboardBlocks />
 
-        {/* Recent Activity Feed */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <Card className="bg-white/80 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="w-5 h-5" />
-                Recent Activity
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=alice" />
-                    <AvatarFallback>AJ</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <p className="text-sm">
-                      <strong>Alice Johnson</strong> submitted{" "}
-                      <em>Math Quiz Chapter 5</em>
-                    </p>
-                    <p className="text-xs text-gray-500">2 hours ago</p>
-                  </div>
-                  <Badge variant="outline">New Submission</Badge>
-                </div>
 
-                <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=bob" />
-                    <AvatarFallback>BS</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <p className="text-sm">
-                      <strong>Bob Smith</strong> asked a question in{" "}
-                      <em>Science Lab Report</em>
-                    </p>
-                    <p className="text-xs text-gray-500">4 hours ago</p>
-                  </div>
-                  <Badge variant="outline">Question</Badge>
-                </div>
-
-                <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Calendar className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm">
-                      Reminder: <strong>History Essay</strong> due in 3 days
-                    </p>
-                    <p className="text-xs text-gray-500">System notification</p>
-                  </div>
-                  <Badge variant="outline">Reminder</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* New Assignment Dialog */}
-        <Dialog
-          open={isNewAssignmentOpen}
-          onOpenChange={setIsNewAssignmentOpen}
-        >
-          <DialogContent className="sm:max-w-lg">
-            <DialogHeader>
-              <DialogTitle>Create New Assignment</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">Assignment Title *</Label>
-                <Input
-                  id="title"
-                  placeholder="Enter assignment title"
-                  value={newAssignment.title}
-                  onChange={(e) =>
-                    setNewAssignment((prev) => ({
-                      ...prev,
-                      title: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Select
-                  value={newAssignment.subject}
-                  onValueChange={(value) =>
-                    setNewAssignment((prev) => ({ ...prev, subject: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select subject" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Mathematics">Mathematics</SelectItem>
-                    <SelectItem value="Science">Science</SelectItem>
-                    <SelectItem value="History">History</SelectItem>
-                    <SelectItem value="English">English</SelectItem>
-                    <SelectItem value="General">General</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="description">Description *</Label>
-                <Textarea
-                  id="description"
-                  placeholder="Describe the assignment"
-                  value={newAssignment.description}
-                  onChange={(e) =>
-                    setNewAssignment((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  rows={3}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="dueDate">Due Date *</Label>
-                  <Input
-                    id="dueDate"
-                    type="date"
-                    value={newAssignment.dueDate}
-                    onChange={(e) =>
-                      setNewAssignment((prev) => ({
-                        ...prev,
-                        dueDate: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="points">Points</Label>
-                  <Input
-                    id="points"
-                    type="number"
-                    value={newAssignment.points}
-                    onChange={(e) =>
-                      setNewAssignment((prev) => ({
-                        ...prev,
-                        points: parseInt(e.target.value) || 100,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsNewAssignmentOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleCreateAssignment}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Assignment
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        {/* Assignment Creator */}
+        <AssignmentCreator
+          isOpen={isNewAssignmentOpen}
+          onClose={() => setIsNewAssignmentOpen(false)}
+          onAssignmentCreated={handleAssignmentCreated}
+        />
 
         {/* New Post Dialog */}
         <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>

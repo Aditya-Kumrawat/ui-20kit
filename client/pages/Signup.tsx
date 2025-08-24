@@ -6,39 +6,66 @@ import { Label } from "@/components/ui/label";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { auth } from "../lib/firebase";
 
-export default function Login() {
+export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<
-    "teacher" | "student" | null
-  >(null);
+  const [selectedRole, setSelectedRole] = useState<"teacher" | "student" | null>(null);
+  const [organizationCode, setOrganizationCode] = useState("");
+  const [showOrgCode, setShowOrgCode] = useState(false);
   const [error, setError] = useState("");
+  
+  const { signup } = useAuth();
   const navigate = useNavigate();
-  const { login } = useAuth();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleRoleSelect = (role: "teacher" | "student") => {
+    setSelectedRole(role);
+    setShowOrgCode(role === "teacher");
+    setOrganizationCode("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     if (!selectedRole) {
-      setError("Please select your role (Teacher or Student) before signing in.");
+      setError("Please select your role (Teacher or Student)");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
+    if (selectedRole === "teacher" && organizationCode !== "1234") {
+      setError("Invalid organization code");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      
-      // Store user role in localStorage for navigation
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        localStorage.setItem(`user_${currentUser.uid}_role`, selectedRole);
-      }
+      await signup(formData.email, formData.password, formData.name, selectedRole);
       
       // Navigate to appropriate dashboard based on role
       if (selectedRole === "student") {
@@ -47,7 +74,7 @@ export default function Login() {
         navigate("/dashboard");
       }
     } catch (error: any) {
-      setError(error.message || "Failed to sign in");
+      setError(error.message || "Failed to create account");
     } finally {
       setIsLoading(false);
     }
@@ -69,13 +96,11 @@ export default function Login() {
             src="https://cdn.builder.io/api/v1/image/assets%2F627a9941e0f84ba9a1e4d483e654346d%2F5bee1870f7d54ea68116a7d3f91cb28e"
           />
         </video>
-        {/* Light overlay */}
         <div className="absolute inset-0 bg-white/80" />
       </div>
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Floating Orbs */}
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
@@ -100,7 +125,6 @@ export default function Login() {
           />
         ))}
 
-        {/* Grid Pattern */}
         <div
           className="absolute inset-0 opacity-5"
           style={{
@@ -117,7 +141,7 @@ export default function Login() {
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6 bg-white">
         <div className="w-full max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center justify-items-center">
-            {/* Left Side - Login Form */}
+            {/* Left Side - Signup Form */}
             <motion.div
               className="w-full max-w-md mx-auto lg:mx-0 space-y-8"
               initial={{ opacity: 0, x: -50 }}
@@ -137,9 +161,7 @@ export default function Login() {
                     whileHover={{ scale: 1.05, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <span className="text-purple-700 font-bold text-xl">
-                      AI
-                    </span>
+                    <span className="text-purple-700 font-bold text-xl">AI</span>
                   </motion.div>
                   <span className="text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
                     FusionAI
@@ -155,10 +177,10 @@ export default function Login() {
                 transition={{ delay: 0.3 }}
               >
                 <h1 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-                  Welcome Back
+                  Join FusionAI
                 </h1>
                 <p className="text-gray-600 text-lg">
-                  Unlock the future of learning with AI-powered education
+                  Create your account and start your AI-powered learning journey
                 </p>
               </motion.div>
 
@@ -175,7 +197,7 @@ export default function Login() {
                 <div className="grid grid-cols-2 gap-4">
                   <motion.button
                     type="button"
-                    onClick={() => setSelectedRole("teacher")}
+                    onClick={() => handleRoleSelect("teacher")}
                     className={`p-4 rounded-xl border-2 transition-all duration-300 ${
                       selectedRole === "teacher"
                         ? "border-purple-500 bg-purple-50 text-purple-700"
@@ -187,14 +209,12 @@ export default function Login() {
                     <div className="text-center">
                       <div className="text-2xl mb-2">👨‍🏫</div>
                       <div className="font-semibold">Teacher</div>
-                      <div className="text-sm opacity-75">
-                        Manage classes & students
-                      </div>
+                      <div className="text-sm opacity-75">Manage classes & students</div>
                     </div>
                   </motion.button>
                   <motion.button
                     type="button"
-                    onClick={() => setSelectedRole("student")}
+                    onClick={() => handleRoleSelect("student")}
                     className={`p-4 rounded-xl border-2 transition-all duration-300 ${
                       selectedRole === "student"
                         ? "border-purple-500 bg-purple-50 text-purple-700"
@@ -206,15 +226,13 @@ export default function Login() {
                     <div className="text-center">
                       <div className="text-2xl mb-2">👨‍🎓</div>
                       <div className="font-semibold">Student</div>
-                      <div className="text-sm opacity-75">
-                        Access courses & learning
-                      </div>
+                      <div className="text-sm opacity-75">Access courses & learning</div>
                     </div>
                   </motion.button>
                 </div>
               </motion.div>
 
-              {/* Login Form Glass Container */}
+              {/* Signup Form Glass Container */}
               <motion.div
                 className="bg-white/60 backdrop-blur-lg rounded-3xl p-8 border border-purple-200/50 shadow-2xl"
                 initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -229,24 +247,45 @@ export default function Login() {
                     </div>
                   )}
 
-                  {/* Email Field */}
+                  {/* Name Field */}
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.55 }}
                   >
-                    <Label
-                      htmlFor="email"
-                      className="text-gray-700 text-sm font-medium"
-                    >
+                    <Label htmlFor="name" className="text-gray-700 text-sm font-medium">
+                      Full Name
+                    </Label>
+                    <div className="mt-2">
+                      <Input
+                        id="name"
+                        name="name"
+                        type="text"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="Enter your full name"
+                        className="bg-white/70 backdrop-blur-sm border-purple-200 text-gray-800 placeholder:text-gray-500 rounded-xl h-12 focus:border-purple-400 focus:ring-purple-400/20"
+                        required
+                      />
+                    </div>
+                  </motion.div>
+
+                  {/* Email Field */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    <Label htmlFor="email" className="text-gray-700 text-sm font-medium">
                       Email Address
                     </Label>
                     <div className="mt-2">
                       <Input
                         id="email"
+                        name="email"
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={formData.email}
+                        onChange={handleInputChange}
                         placeholder="Enter your email"
                         className="bg-white/70 backdrop-blur-sm border-purple-200 text-gray-800 placeholder:text-gray-500 rounded-xl h-12 focus:border-purple-400 focus:ring-purple-400/20"
                         required
@@ -260,19 +299,17 @@ export default function Login() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.65 }}
                   >
-                    <Label
-                      htmlFor="password"
-                      className="text-gray-700 text-sm font-medium"
-                    >
+                    <Label htmlFor="password" className="text-gray-700 text-sm font-medium">
                       Password
                     </Label>
                     <div className="mt-2 relative">
                       <Input
                         id="password"
+                        name="password"
                         type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        placeholder="Create a password"
                         className="bg-white/70 backdrop-blur-sm border-purple-200 text-gray-800 placeholder:text-gray-500 rounded-xl h-12 pr-12 focus:border-purple-400 focus:ring-purple-400/20"
                         required
                       />
@@ -286,29 +323,65 @@ export default function Login() {
                     </div>
                   </motion.div>
 
-                  {/* Remember Me & Forgot Password */}
+                  {/* Confirm Password Field */}
                   <motion.div
-                    className="flex items-center justify-between"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.75 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7 }}
                   >
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 rounded border-white/30 bg-white/10 text-blue-500 focus:ring-blue-400/20"
+                    <Label htmlFor="confirmPassword" className="text-gray-700 text-sm font-medium">
+                      Confirm Password
+                    </Label>
+                    <div className="mt-2 relative">
+                      <Input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                        placeholder="Confirm your password"
+                        className="bg-white/70 backdrop-blur-sm border-purple-200 text-gray-800 placeholder:text-gray-500 rounded-xl h-12 pr-12 focus:border-purple-400 focus:ring-purple-400/20"
+                        required
                       />
-                      <span className="text-gray-700 text-sm">Remember me</span>
-                    </label>
-                    <a
-                      href="#"
-                      className="text-purple-600 hover:text-purple-500 text-sm transition-colors"
-                    >
-                      Forgot password?
-                    </a>
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
                   </motion.div>
 
-                  {/* Sign In Button */}
+                  {/* Organization Code Field (Teachers only) */}
+                  {showOrgCode && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ delay: 0.75 }}
+                    >
+                      <Label htmlFor="organizationCode" className="text-gray-700 text-sm font-medium">
+                        Organization Code
+                      </Label>
+                      <div className="mt-2">
+                        <Input
+                          id="organizationCode"
+                          type="text"
+                          value={organizationCode}
+                          onChange={(e) => setOrganizationCode(e.target.value)}
+                          placeholder="Enter organization code"
+                          className="bg-white/70 backdrop-blur-sm border-purple-200 text-gray-800 placeholder:text-gray-500 rounded-xl h-12 focus:border-purple-400 focus:ring-purple-400/20"
+                          required
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Contact your administrator for the organization code
+                      </p>
+                    </motion.div>
+                  )}
+
+                  {/* Sign Up Button */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -334,16 +407,16 @@ export default function Login() {
                               ease: "linear",
                             }}
                           />
-                          <span>Signing In...</span>
+                          <span>Creating Account...</span>
                         </motion.div>
                       ) : (
-                        "Sign In"
+                        "Create Account"
                       )}
                     </Button>
                   </motion.div>
                 </form>
 
-                {/* Sign Up Link */}
+                {/* Sign In Link */}
                 <motion.div
                   className="mt-6 text-center"
                   initial={{ opacity: 0 }}
@@ -351,12 +424,12 @@ export default function Login() {
                   transition={{ delay: 1.15 }}
                 >
                   <p className="text-gray-600 text-sm">
-                    Don't have an account?{" "}
+                    Already have an account?{" "}
                     <Link
-                      to="/signup"
+                      to="/login"
                       className="text-purple-600 hover:text-purple-500 font-semibold transition-colors"
                     >
-                      Sign up for free
+                      Sign in
                     </Link>
                   </p>
                 </motion.div>
@@ -405,22 +478,21 @@ export default function Login() {
                 transition={{ delay: 1.2 }}
               >
                 <h3 className="text-2xl font-bold text-gray-800 mt-px">
-                  Revolutionizing Education with AI
+                  Start Your AI Learning Journey
                 </h3>
                 <p className="text-gray-600 leading-relaxed -mt-px">
                   Join thousands of educators and students who are transforming
                   learning experiences with our intelligent education platform.
-                  From personalized learning paths to smart assessments,
-                  discover how AI can enhance every aspect of education.
+                  Create personalized learning paths and discover the future of education.
                 </p>
 
                 {/* Feature Pills */}
                 <div className="flex flex-wrap gap-2 justify-center">
                   {[
-                    "Smart Learning",
-                    "AI Tutoring",
-                    "Adaptive Tests",
-                    "Progress Analytics",
+                    "Personalized Learning",
+                    "Smart Assessments",
+                    "Real-time Analytics",
+                    "Collaborative Tools",
                   ].map((feature, index) => (
                     <motion.span
                       key={feature}

@@ -674,10 +674,10 @@ export default function Index() {
                     >
                       {stat.prefix}
                       {stat.originalValue === 2.3
-                        ? (stat.count / 10).toFixed(1)
+                        ? (stat.value / 10).toFixed(1)
                         : stat.originalValue === 83.3
-                          ? (stat.count / 10).toFixed(1)
-                          : stat.count}
+                          ? (stat.value / 10).toFixed(1)
+                          : stat.value}
                       {stat.suffix}
                     </p>
                   </Card>
@@ -1336,7 +1336,7 @@ export default function Index() {
                           cy={node.y}
                           r="4"
                           fill="#ffffff"
-                          initial={{ scale: 0, opacity: 0 }}
+                          initial={{ scale: 0, opacity: 0, cx: node.x, cy: node.y }}
                           animate={{
                             scale: [0, 1.2, 1],
                             opacity: 1,
@@ -1388,10 +1388,11 @@ export default function Index() {
 
                       {/* Data Flow Animation */}
                       <motion.circle
-                        cx="0"
-                        cy="60"
+                        cx={0}
+                        cy={60}
                         r="3"
                         fill="#fbbf24"
+                        initial={{ cx: 0, cy: 60 }}
                         animate={{
                           cx: [0, 20, 70, 120, 170, 200],
                           cy: [60, 60, 45, 60, 60, 60],
@@ -1573,12 +1574,12 @@ export default function Index() {
                             key={i}
                             cx={point.x}
                             cy={point.y}
-                            r="3"
-                            fill="#ffffff"
-                            initial={{ scale: 0, opacity: 0 }}
+                            r="2"
+                            fill="#fbbf24"
+                            initial={{ scale: 0, opacity: 0, cx: point.x, cy: point.y }}
                             animate={{
-                              scale: [0, 1.2, 1],
-                              opacity: 1,
+                              scale: [0, 1.5, 1],
+                              opacity: [0, 1, 0.8],
                             }}
                             transition={{
                               duration: 0.5,
@@ -1594,10 +1595,11 @@ export default function Index() {
                           <motion.rect
                             key={i}
                             x={x}
-                            y="100"
-                            width="8"
-                            height="0"
+                            y={100}
+                            width={8}
+                            height={0}
                             fill="rgba(255,255,255,0.7)"
+                            initial={{ height: 0, y: 100 }}
                             animate={{
                               height: [0, 10 + i * 5, 0],
                               y: [100, 90 - i * 5, 100],
