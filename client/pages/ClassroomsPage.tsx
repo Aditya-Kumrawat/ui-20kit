@@ -21,14 +21,10 @@ import { ClassroomCard } from '../components/ClassroomCard';
 import { ClassroomCreator } from '../components/ClassroomCreator';
 import { ClassroomJoin } from '../components/ClassroomJoin';
 import { ClassroomDashboard } from './ClassroomDashboard';
-import { FloatingSidebar } from '../components/FloatingSidebar';
-import { FloatingTopBar } from '../components/FloatingTopBar';
-import { useSidebar } from '../contexts/SidebarContext';
 
 export const ClassroomsPage: React.FC = () => {
   const { currentUser } = useAuth();
   const { toast } = useToast();
-  const { isCollapsed, setIsCollapsed } = useSidebar();
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [classroomStats, setClassroomStats] = useState<Record<string, ClassroomStats>>({});
   const [loading, setLoading] = useState(true);
@@ -119,16 +115,10 @@ export const ClassroomsPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <FloatingSidebar
-          isCollapsed={isCollapsed}
-          setIsCollapsed={setIsCollapsed}
-          userType={isTeacher ? 'teacher' : 'student'}
-        />
-        <FloatingTopBar isCollapsed={isCollapsed} />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading classrooms...</p>
+          <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white">Loading classrooms...</p>
         </div>
       </div>
     );
