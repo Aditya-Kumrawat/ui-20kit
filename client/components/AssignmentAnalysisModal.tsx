@@ -27,39 +27,13 @@ import {
 } from 'lucide-react';
 import { ClassroomAssignment, StudentSubmission } from '@/types/classroom';
 import { analyzeAllSubmissions } from '@/lib/makeService';
+import { saveAnalysisResult, getLatestAnalysisResult, AnalysisResult as StoredAnalysisResult } from '@/lib/analysisStorage';
 
 interface AssignmentAnalysisModalProps {
   assignment: ClassroomAssignment | null;
   submissions: StudentSubmission[];
   isOpen: boolean;
   onClose: () => void;
-}
-
-interface AnalysisResult {
-  assignmentId: string;
-  status: 'pending' | 'analyzing' | 'completed' | 'failed';
-  results?: {
-    performanceSummary?: {
-      averageScore: number;
-      totalSubmissions: number;
-      passRate: number;
-    };
-    commonMistakes?: string[];
-    strengthAreas?: string[];
-    improvementSuggestions?: string[];
-    gradeDistribution?: {
-      excellent: number;
-      good: number;
-      average: number;
-      needsWork: number;
-    };
-    plagiarismFlags?: {
-      flaggedSubmissions: number;
-      suspiciousPatterns: string[];
-    };
-  };
-  generatedAt?: string;
-  error?: string;
 }
 
 export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = ({
@@ -69,8 +43,13 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
   onClose,
 }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<StoredAnalysisResult | null>(null);
   const { toast } = useToast();
+
+  // Early return if assignment is null to prevent crashes
+  if (!assignment) {
+    return null;
+  }
 
   // Function to process Gemini analysis results from Make.com
   const processGeminiAnalysis = (analysisResults: any[]) => {
@@ -173,10 +152,26 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
 
   useEffect(() => {
     if (assignment && isOpen) {
-      // Reset analysis when modal opens
-      setAnalysisResult(null);
+      // Check for existing analysis results first
+      loadExistingAnalysis();
     }
   }, [assignment, isOpen]);
+
+  const loadExistingAnalysis = async () => {
+    if (!assignment) return;
+    
+    try {
+      const existingResult = await getLatestAnalysisResult(assignment.id);
+      if (existingResult) {
+        setAnalysisResult(existingResult);
+      } else {
+        setAnalysisResult(null);
+      }
+    } catch (error) {
+      console.error('Error loading existing analysis:', error);
+      setAnalysisResult(null);
+    }
+  };
 
   const handleStartAnalysis = async () => {
     if (!assignment || submissions.length === 0) {
@@ -209,6 +204,7 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
 
       // Send to Make.com for AI analysis using your existing Gemini scenario
       const analysisResults = await analyzeAllSubmissions(
+        assignment.id,
         assignment.title,
         submissionData
       );
@@ -216,26 +212,46 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
       // Process Gemini responses and aggregate results
       const processedResults = processGeminiAnalysis(analysisResults);
       
-      setAnalysisResult({
-        assignmentId: assignment.id,
-        status: 'completed',
-        results: processedResults,
-        generatedAt: new Date().toISOString(),
-      });
+      // Save results to Firebase
+      const savedAnalysisId = await saveAnalysisResult(
+        assignment.id,
+        assignment.title,
+        analysisResults,
+        processedResults
+      );
+      
+      // Load the saved result to display
+      const savedResult = await getLatestAnalysisResult(assignment.id);
+      setAnalysisResult(savedResult);
       setIsAnalyzing(false);
       
       toast({
         title: 'Analysis Complete',
-        description: `AI analysis completed for ${analysisResults.length} submissions!`,
+        description: `AI analysis completed and saved for ${analysisResults.length} submissions!`,
       });
 
     } catch (error) {
       console.error('Analysis error:', error);
-      setAnalysisResult({
+      // Create a failed analysis result and save it
+      const failedResult: Omit<StoredAnalysisResult, 'id'> = {
         assignmentId: assignment.id,
+        assignmentTitle: assignment.title,
+        totalSubmissions: submissions.length,
+        analyzedSubmissions: 0,
+        results: {
+          performanceSummary: { averageScore: 0, totalSubmissions: submissions.length, passRate: 0 },
+          commonMistakes: ['Analysis failed - please try again'],
+          strengthAreas: [],
+          improvementSuggestions: [],
+          gradeDistribution: { excellent: 0, good: 0, average: 0, needsWork: 100 },
+          plagiarismFlags: { flaggedSubmissions: 0, suspiciousPatterns: [] }
+        },
+        individualAnalyses: [],
         status: 'failed',
-        error: error instanceof Error ? error.message : 'Analysis failed',
-      });
+        createdAt: { seconds: Math.floor(Date.now() / 1000) } as any,
+        updatedAt: { seconds: Math.floor(Date.now() / 1000) } as any
+      };
+      setAnalysisResult(failedResult as StoredAnalysisResult);
       setIsAnalyzing(false);
       
       toast({
@@ -436,6 +452,12 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
           {/* Assignment Info */}
           <div className="bg-white/5 rounded-lg p-4">
             <div className="flex items-center justify-between">
+              {analysisResult?.status === 'failed' && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <h3 className="font-medium text-red-800 mb-2">Analysis Failed</h3>
+                  <p className="text-red-600">The analysis could not be completed. Please try again.</p>
+                </div>
+              )}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <FileText className="w-5 h-5 text-blue-400" />
@@ -449,13 +471,11 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
             </div>
           </div>
 
-          {/* Analysis Controls */}
-          {!analysisResult && (
-            <div className="text-center py-8">
-              <Brain className="w-16 h-16 text-purple-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">
-                Ready to Analyze with AI
-              </h3>
+          {/* No Analysis Yet */}
+          {!analysisResult && !isAnalyzing && (
+            <div className="text-center py-12">
+              <Sparkles className="w-16 h-16 text-purple-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">AI Assignment Analysis</h3>
               <p className="text-gray-400 mb-6">
                 Get comprehensive insights about student performance, common mistakes, and improvement suggestions.
               </p>
@@ -465,23 +485,25 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
                 className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3"
                 size="lg"
               >
-                {isAnalyzing ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Analyzing with AI...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Start AI Analysis
-                  </>
-                )}
+                <Sparkles className="w-5 h-5 mr-2" />
+                Start AI Analysis
               </Button>
             </div>
           )}
 
-          {/* Analysis Status */}
-          {analysisResult && analysisResult.status === 'analyzing' && (
+          {/* Analyzing State */}
+          {isAnalyzing && (
+            <div className="text-center py-12">
+              <Loader2 className="w-16 h-16 text-blue-400 mx-auto mb-4 animate-spin" />
+              <h3 className="text-xl font-semibold text-white mb-2">Analyzing Submissions</h3>
+              <p className="text-gray-400">
+                Processing {submissions.length} submissions with AI analysis...
+              </p>
+            </div>
+          )}
+
+          {/* Remove this section since we use isAnalyzing state instead */}
+          {false && (
             <div className="text-center py-8">
               <Loader2 className="w-12 h-12 text-purple-400 mx-auto mb-4 animate-spin" />
               <h3 className="text-lg font-semibold text-white mb-2">
@@ -500,10 +522,10 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-green-400" />
                   <span className="text-white font-medium">Analysis Complete</span>
-                  {analysisResult.generatedAt && (
-                    <span className="text-gray-400 text-sm">
-                      • {new Date(analysisResult.generatedAt).toLocaleString()}
-                    </span>
+                  {analysisResult.createdAt && (
+                    <p className="text-sm text-gray-500">
+                      Generated on {new Date(analysisResult.createdAt.seconds * 1000).toLocaleDateString()}
+                    </p>
                   )}
                 </div>
                 <Button

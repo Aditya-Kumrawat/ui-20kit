@@ -105,8 +105,9 @@ export const sendSubmissionForAnalysis = async (
   });
 };
 
-// Function to analyze multiple submissions one by one
+// Function to analyze multiple submissions one by one and store results
 export const analyzeAllSubmissions = async (
+  assignmentId: string,
   assignmentTitle: string,
   submissions: Array<{
     studentId: string;
