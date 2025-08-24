@@ -19,6 +19,8 @@ import TestTaking from "./pages/TestTaking";
 import Analytics from "./pages/Analytics";
 import Chatbot from "./pages/Chatbot";
 import Community from "./pages/Community";
+import CodeTest from "./pages/CodeTest";
+import TestManagement from "./pages/TestManagement";
 import NotFound from "./pages/NotFound";
 import { ClassroomsPage } from "./pages/ClassroomsPage";
 
@@ -42,7 +44,7 @@ const App = () => (
               <Route path="/dashboard/classrooms" element={<ProtectedRoute requiredRole="teacher"><ClassroomsPage /></ProtectedRoute>} />
               <Route path="/dashboard/analytics" element={<ProtectedRoute requiredRole="teacher"><Analytics /></ProtectedRoute>} />
               <Route path="/dashboard/calendar" element={<ProtectedRoute requiredRole="teacher"><Calendar /></ProtectedRoute>} />
-              <Route path="/dashboard/tests" element={<ProtectedRoute requiredRole="teacher"><MyTests /></ProtectedRoute>} />
+              <Route path="/dashboard/tests" element={<ProtectedRoute requiredRole="teacher"><TestManagement /></ProtectedRoute>} />
               <Route path="/dashboard/test/:testId" element={<ProtectedRoute requiredRole="teacher"><TestTaking /></ProtectedRoute>} />
               <Route path="/dashboard/chatbot" element={<ProtectedRoute requiredRole="teacher"><Chatbot /></ProtectedRoute>} />
               <Route path="/dashboard/community" element={<ProtectedRoute requiredRole="teacher"><Community /></ProtectedRoute>} />
@@ -51,6 +53,7 @@ const App = () => (
               <Route path="/dashboard2" element={<ProtectedRoute requiredRole="student"><Dashboard2 /></ProtectedRoute>} />
               <Route path="/dashboard2/classrooms" element={<ProtectedRoute requiredRole="student"><ClassroomsPage /></ProtectedRoute>} />
               <Route path="/dashboard2/class/:classId" element={<ProtectedRoute requiredRole="student"><ClassView /></ProtectedRoute>} />
+              <Route path="/dashboard2/codetest" element={<ProtectedRoute requiredRole="student"><CodeTest /></ProtectedRoute>} />
               <Route path="/dashboard2/students" element={<ProtectedRoute requiredRole="student"><Dashboard2 /></ProtectedRoute>} />
               <Route path="/dashboard2/calendar" element={<ProtectedRoute requiredRole="student"><Calendar /></ProtectedRoute>} />
               <Route path="/dashboard2/tests" element={<ProtectedRoute requiredRole="student"><MyTests /></ProtectedRoute>} />

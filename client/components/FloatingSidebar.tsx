@@ -18,6 +18,7 @@ import {
   Cpu,
   Users,
   GraduationCap,
+  Code,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { auth } from "../lib/firebase";
@@ -85,6 +86,12 @@ export const FloatingSidebar = ({
       label: "Classrooms",
       icon: GraduationCap,
       href: "/dashboard2/classrooms",
+    },
+    {
+      id: "codetest",
+      label: "Code Test",
+      icon: Code,
+      href: "/dashboard2/codetest",
     },
     {
       id: "tests",
