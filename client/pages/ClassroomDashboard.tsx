@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BookOpen, 
-  Users, 
-  Plus, 
-  Calendar, 
-  FileText, 
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { FloatingSidebar } from '@/components/FloatingSidebar';
+import { FloatingTopBar } from '@/components/FloatingTopBar';
+import { AssignmentCreator } from '@/components/AssignmentCreator';
+import { AssignmentDetailModal } from '@/components/AssignmentDetailModal';
+import { useSidebar } from '@/contexts/SidebarContext';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  ArrowLeft,
+  Users,
+  Calendar,
+  FileText,
   Clock,
+  Check,
+  AlertCircle,
+  Plus,
   Settings,
   Copy,
-  Check
+  Share2,
+  Eye,
+  Edit3,
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../hooks/use-toast';
-import { 
-  getClassroomStats, 
-  getClassroomAssignments, 
-  getClassroomEnrollments 
-} from '../lib/classroomOperations';
-import { Classroom, ClassroomStats, ClassroomAssignment, Enrollment } from '../types/classroom';
-import { AssignmentCreator } from '../components/AssignmentCreator';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Classroom, ClassroomAssignment, Enrollment, ClassroomStats } from '@/types/classroom';
+import { getClassroomStats, getClassroomAssignments, getClassroomEnrollments } from '@/lib/classroomOperations';
 
 interface ClassroomDashboardProps {
   classroom: Classroom;
@@ -42,6 +50,8 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAssignmentCreator, setShowAssignmentCreator] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState<ClassroomAssignment | null>(null);
+  const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const isTeacher = currentUser?.uid === classroom.teacherId;
@@ -234,7 +244,11 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                   {assignments.slice(0, 5).map((assignment) => (
                     <div
                       key={assignment.id}
-                      className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors"
+                      className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                      onClick={() => {
+                        setSelectedAssignment(assignment);
+                        setShowAssignmentDetail(true);
+                      }}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -252,15 +266,32 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                             )}
                           </div>
                         </div>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          assignment.status === 'published' 
-                            ? 'bg-green-500/20 text-green-400'
-                            : assignment.status === 'draft'
-                            ? 'bg-yellow-500/20 text-yellow-400'
-                            : 'bg-gray-500/20 text-gray-400'
-                        }`}>
-                          {assignment.status}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            assignment.status === 'published' 
+                              ? 'bg-green-500/20 text-green-400'
+                              : assignment.status === 'draft'
+                              ? 'bg-yellow-500/20 text-yellow-400'
+                              : 'bg-gray-500/20 text-gray-400'
+                          }`}>
+                            {assignment.status}
+                          </span>
+                          {isTeacher ? (
+                            <Eye className="w-4 h-4 text-gray-400" />
+                          ) : (
+                            <Button
+                              size="sm"
+                              className="bg-blue-600 hover:bg-blue-700 text-white"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedAssignment(assignment);
+                                setShowAssignmentDetail(true);
+                              }}
+                            >
+                              View
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -318,12 +349,22 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
         </div>
       </div>
 
-      {/* Assignment Creator Modal */}
       <AssignmentCreator
         isOpen={showAssignmentCreator}
+        classroomId={classroom.id}
         onClose={() => setShowAssignmentCreator(false)}
         onAssignmentCreated={loadClassroomData}
-        classroomId={classroom.id}
+      />
+      
+      <AssignmentDetailModal
+        assignment={selectedAssignment}
+        isOpen={showAssignmentDetail}
+        onClose={() => {
+          setShowAssignmentDetail(false);
+          setSelectedAssignment(null);
+        }}
+        isTeacher={isTeacher}
+        onAssignmentUpdate={loadClassroomData}
       />
     </div>
   );

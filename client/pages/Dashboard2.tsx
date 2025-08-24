@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -16,7 +16,9 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { FloatingTopBar } from "@/components/FloatingTopBar";
+import { AssignmentDetailModal } from "@/components/AssignmentDetailModal";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Plus,
   MoreVertical,
@@ -33,8 +35,11 @@ import {
   List,
   Star,
   Pin,
+  Eye,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getStudentPendingAssignments, joinClassroom, getTeacherClassrooms } from "@/lib/classroomOperations";
+import { ClassroomAssignment, Classroom } from "@/types/classroom";
 
 interface ClassData {
   id: string;
@@ -56,6 +61,7 @@ interface ClassData {
 
 export default function Dashboard2() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -63,68 +69,56 @@ export default function Dashboard2() {
   const [joinClassOpen, setJoinClassOpen] = useState(false);
   const [classCode, setClassCode] = useState("");
   const [isJoining, setIsJoining] = useState(false);
-  const [enrolledClasses, setEnrolledClasses] = useState<ClassData[]>([]);
+  const [enrolledClasses, setEnrolledClasses] = useState<Classroom[]>([]);
+  const [pendingAssignments, setPendingAssignments] = useState<ClassroomAssignment[]>([]);
+  const [selectedAssignment, setSelectedAssignment] = useState<ClassroomAssignment | null>(null);
+  const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Available classes that can be joined
-  const availableClasses: { [key: string]: ClassData } = {
-    abc123d: {
-      id: "math-101",
-      name: "Advanced Mathematics",
-      subject: "Mathematics",
-      teacher: "Dr. Sarah Johnson",
-      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
-      section: "Section A",
-      room: "Room 201",
-      color: "from-blue-500 to-blue-600",
-      coverImage:
-        "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=200&fit=crop",
-      studentsCount: 28,
-      pendingWork: 3,
-      lastActivity: "2 hours ago",
-      classCode: "abc123d",
-      isPinned: true,
-    },
-    xyz789e: {
-      id: "physics-201",
-      name: "Quantum Physics",
-      subject: "Physics",
-      teacher: "Prof. Michael Chen",
-      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=michael",
-      section: "Section B",
-      room: "Lab 305",
-      color: "from-purple-500 to-purple-600",
-      coverImage:
-        "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=400&h=200&fit=crop",
-      studentsCount: 24,
-      pendingWork: 1,
-      lastActivity: "5 hours ago",
-      classCode: "xyz789e",
-    },
-    hist101a: {
-      id: "history-101",
-      name: "World History",
-      subject: "History",
-      teacher: "Prof. James Wilson",
-      teacherAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=james",
-      section: "Section A",
-      room: "Room 301",
-      color: "from-indigo-500 to-indigo-600",
-      studentsCount: 25,
-      pendingWork: 0,
-      lastActivity: "Just started",
-      classCode: "hist101a",
-    },
+  // Load student data
+  useEffect(() => {
+    if (currentUser) {
+      loadStudentData();
+    }
+  }, [currentUser]);
+
+  const loadStudentData = async () => {
+    if (!currentUser) return;
+    
+    try {
+      setLoading(true);
+      
+      // Load pending assignments
+      const assignments = await getStudentPendingAssignments(currentUser.uid);
+      setPendingAssignments(assignments);
+      
+      // Load enrolled classrooms (using teacher classrooms function as placeholder)
+      // In a real app, you'd have a getStudentClassrooms function
+      const classrooms = await getTeacherClassrooms(currentUser.uid);
+      setEnrolledClasses(classrooms);
+      
+    } catch (error) {
+      console.error('Error loading student data:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load dashboard data',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Initialize with some enrolled classes
-  React.useEffect(() => {
-    if (enrolledClasses.length === 0) {
-      setEnrolledClasses([
-        availableClasses["abc123d"],
-        availableClasses["xyz789e"],
-      ]);
-    }
-  }, []);
+  const formatDate = (timestamp: any) => {
+    if (!timestamp) return 'No due date';
+    const date = new Date(timestamp.seconds * 1000);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   // Handle join class functionality
   const handleJoinClass = async () => {
@@ -137,56 +131,52 @@ export default function Dashboard2() {
       return;
     }
 
+    if (!currentUser) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to join a class",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsJoining(true);
 
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    const foundClass = availableClasses[classCode.toLowerCase()];
-
-    if (!foundClass) {
+    try {
+      await joinClassroom(
+        classCode.trim(),
+        currentUser.uid,
+        currentUser.displayName || currentUser.email || 'Unknown Student'
+      );
+      
       toast({
-        title: "Class not found",
-        description: "Invalid class code. Please check and try again.",
+        title: "Success",
+        description: "Successfully joined the classroom!",
+      });
+      
+      setClassCode("");
+      setJoinClassOpen(false);
+      loadStudentData(); // Refresh data
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to join classroom",
         variant: "destructive",
       });
+    } finally {
       setIsJoining(false);
-      return;
     }
-
-    // Check if already enrolled
-    if (enrolledClasses.some((cls) => cls.id === foundClass.id)) {
-      toast({
-        title: "Already enrolled",
-        description: "You are already enrolled in this class.",
-        variant: "destructive",
-      });
-      setIsJoining(false);
-      return;
-    }
-
-    // Add class to enrolled classes
-    setEnrolledClasses((prev) => [...prev, foundClass]);
-
-    toast({
-      title: "Success!",
-      description: `Successfully joined ${foundClass.name}`,
-    });
-
-    // Reset form
-    setClassCode("");
-    setJoinClassOpen(false);
-    setIsJoining(false);
   };
 
   const filteredClasses = enrolledClasses.filter(
     (cls) =>
       cls.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cls.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cls.teacher.toLowerCase().includes(searchQuery.toLowerCase()),
+      cls.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cls.teacherName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cls.classCode.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const ClassCard = ({ classData }: { classData: ClassData }) => (
+  const ClassCard = ({ classData }: { classData: Classroom }) => (
     <motion.div
       className="group relative overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
       whileHover={{ y: -4, scale: 1.02 }}
@@ -196,22 +186,14 @@ export default function Dashboard2() {
       {/* Cover Image */}
       <div className="relative h-32 overflow-hidden">
         <div
-          className={`absolute inset-0 bg-gradient-to-br ${classData.color} opacity-90`}
+          className={`absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 opacity-90`}
         />
-        {classData.coverImage && (
-          <img
-            src={classData.coverImage}
-            alt=""
-            className="w-full h-full object-cover opacity-60"
-          />
-        )}
+        <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 opacity-60" />
 
-        {/* Pinned indicator */}
-        {classData.isPinned && (
-          <div className="absolute top-3 left-3">
-            <Pin className="w-4 h-4 text-white fill-white" />
-          </div>
-        )}
+        {/* Pinned indicator - placeholder */}
+        <div className="absolute top-3 left-3">
+          <BookOpen className="w-4 h-4 text-white" />
+        </div>
 
         {/* More options */}
         <div className="absolute top-3 right-3">
@@ -234,7 +216,7 @@ export default function Dashboard2() {
             {classData.name}
           </h3>
           <p className="text-white/80 text-sm">
-            {classData.section} ��� {classData.teacher}
+            {classData.description || 'No description'}
           </p>
         </div>
       </div>
@@ -242,12 +224,12 @@ export default function Dashboard2() {
       {/* Card content */}
       <div className="p-4">
         {/* Pending work indicator */}
-        {classData.pendingWork > 0 && (
+        {pendingAssignments.filter(a => a.classroomId === classData.id).length > 0 && (
           <div className="flex items-center gap-2 mb-3">
             <AlertCircle className="w-4 h-4 text-orange-500" />
             <span className="text-sm text-orange-600 font-medium">
-              {classData.pendingWork} assignment
-              {classData.pendingWork > 1 ? "s" : ""} due
+              {pendingAssignments.filter(a => a.classroomId === classData.id).length} assignment
+              {pendingAssignments.filter(a => a.classroomId === classData.id).length > 1 ? "s" : ""} due
             </span>
           </div>
         )}
@@ -255,35 +237,34 @@ export default function Dashboard2() {
         {/* Quick stats */}
         <div className="flex items-center justify-between text-sm text-gray-600">
           <div className="flex items-center gap-1">
-            <Users className="w-4 h-4" />
-            <span>{classData.studentsCount} students</span>
+            <FileText className="w-4 h-4" />
+            <span>Class Code: {classData.classCode}</span>
           </div>
           <div className="flex items-center gap-1">
             <Clock className="w-4 h-4" />
-            <span>{classData.lastActivity}</span>
+            <span>Active</span>
           </div>
         </div>
 
         {/* Teacher info */}
         <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
           <Avatar className="w-6 h-6">
-            <AvatarImage src={classData.teacherAvatar} />
             <AvatarFallback className="text-xs">
-              {classData.teacher
+              {(classData.teacherName || 'T')
                 .split(" ")
                 .map((n) => n[0])
                 .join("")}
             </AvatarFallback>
           </Avatar>
           <span className="text-sm text-gray-700 truncate">
-            {classData.teacher}
+            {classData.teacherName || 'Teacher'}
           </span>
         </div>
       </div>
     </motion.div>
   );
 
-  const ClassListItem = ({ classData }: { classData: ClassData }) => (
+  const ClassListItem = ({ classData }: { classData: Classroom }) => (
     <motion.div
       className="group bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border border-gray-100"
       whileHover={{ scale: 1.01 }}
@@ -373,9 +354,9 @@ export default function Dashboard2() {
           transition={{ duration: 0.5 }}
         >
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Student Dashboard</h1>
             <p className="text-gray-600 mt-1">
-              Welcome back! Here are your enrolled classes.
+              Welcome back! You have {pendingAssignments.length} pending assignments.
             </p>
           </div>
 

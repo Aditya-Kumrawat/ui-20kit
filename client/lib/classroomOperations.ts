@@ -1,18 +1,16 @@
+import { db } from './firebase';
 import { 
   collection, 
-  doc, 
   addDoc, 
   getDocs, 
-  getDoc, 
   query, 
   where, 
   orderBy, 
-  updateDoc, 
-  deleteDoc,
   Timestamp,
-  writeBatch
+  doc,
+  getDoc,
+  updateDoc
 } from 'firebase/firestore';
-import { db } from './firebase';
 import { 
   Classroom, 
   Enrollment, 
@@ -333,13 +331,13 @@ export const submitAssignment = async (
   submissionData: Omit<StudentSubmission, 'id' | 'assignmentId' | 'studentId' | 'studentName' | 'submittedAt' | 'status'>
 ): Promise<StudentSubmission> => {
   try {
-    const submission = {
+    const submission: Omit<StudentSubmission, 'id'> = {
       assignmentId,
       studentId,
       studentName,
-      ...submissionData,
       submittedAt: Timestamp.now(),
-      status: 'submitted' as const,
+      status: 'submitted',
+      ...submissionData,
     };
 
     const docRef = await addDoc(collection(db, 'submissions'), submission);
@@ -351,6 +349,100 @@ export const submitAssignment = async (
   } catch (error) {
     console.error('Error submitting assignment:', error);
     throw new Error('Failed to submit assignment');
+  }
+};
+
+// Update assignment (for teachers)
+export const updateAssignment = async (
+  assignmentId: string,
+  updateData: Partial<Omit<ClassroomAssignment, 'id' | 'createdAt' | 'teacherId' | 'classroomId'>>
+): Promise<void> => {
+  try {
+    const assignmentRef = doc(db, 'assignments', assignmentId);
+    const updatedData = {
+      ...updateData,
+      updatedAt: Timestamp.now(),
+    };
+    
+    await updateDoc(assignmentRef, updatedData);
+  } catch (error) {
+    console.error('Error updating assignment:', error);
+    throw new Error('Failed to update assignment');
+  }
+};
+
+// Get student's pending assignments
+export const getStudentPendingAssignments = async (studentId: string): Promise<ClassroomAssignment[]> => {
+  try {
+    // First get all classrooms the student is enrolled in
+    const enrollmentQuery = query(
+      collection(db, 'enrollments'),
+      where('studentId', '==', studentId),
+      where('status', '==', 'active')
+    );
+    const enrollmentSnapshot = await getDocs(enrollmentQuery);
+    
+    if (enrollmentSnapshot.empty) {
+      return [];
+    }
+
+    const classroomIds: string[] = [];
+    enrollmentSnapshot.forEach((doc) => {
+      classroomIds.push(doc.data().classroomId);
+    });
+
+    // Get all assignments from enrolled classrooms
+    const assignments: ClassroomAssignment[] = [];
+    
+    // Process in batches due to Firestore 'in' query limit
+    const batchSize = 10;
+    for (let i = 0; i < classroomIds.length; i += batchSize) {
+      const batch = classroomIds.slice(i, i + batchSize);
+      
+      const assignmentQuery = query(
+        collection(db, 'assignments'),
+        where('classroomId', 'in', batch),
+        where('status', '==', 'published')
+      );
+      
+      const assignmentSnapshot = await getDocs(assignmentQuery);
+      assignmentSnapshot.forEach((doc) => {
+        assignments.push({
+          id: doc.id,
+          ...doc.data()
+        } as ClassroomAssignment);
+      });
+    }
+
+    // Get student's submissions to filter out already submitted assignments
+    const submissionQuery = query(
+      collection(db, 'submissions'),
+      where('studentId', '==', studentId)
+    );
+    const submissionSnapshot = await getDocs(submissionQuery);
+    
+    const submittedAssignmentIds = new Set<string>();
+    submissionSnapshot.forEach((doc) => {
+      submittedAssignmentIds.add(doc.data().assignmentId);
+    });
+
+    // Filter out submitted assignments and return pending ones
+    const pendingAssignments = assignments.filter(assignment => 
+      !submittedAssignmentIds.has(assignment.id)
+    );
+
+    // Sort by due date (closest first)
+    pendingAssignments.sort((a, b) => {
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+      return a.dueDate.seconds - b.dueDate.seconds;
+    });
+
+    return pendingAssignments;
+  } catch (error) {
+    console.error('Error fetching student pending assignments:', error);
+    return [];
   }
 };
 

@@ -18,7 +18,7 @@ export const uploadAssignmentMaterial = async (
     const filePath = `assignments/${assignmentId}/${Date.now()}-${finalFileName}`;
 
     const { data, error } = await supabase.storage
-      .from('hackwave-storage')
+      .from('assignments')
       .upload(filePath, file, {
         cacheControl: '3600',
         upsert: false
@@ -33,7 +33,7 @@ export const uploadAssignmentMaterial = async (
     }
 
     const { data: urlData } = supabase.storage
-      .from('hackwave-storage')
+      .from('assignments')
       .getPublicUrl(filePath);
 
     return {
@@ -62,7 +62,7 @@ export const uploadSubmissionFile = async (
     const filePath = `submissions/${assignmentId}/${studentId}/${Date.now()}-${finalFileName}`;
 
     const { data, error } = await supabase.storage
-      .from('hackwave-storage')
+      .from('submissions')
       .upload(filePath, file, {
         cacheControl: '3600',
         upsert: false
@@ -77,7 +77,7 @@ export const uploadSubmissionFile = async (
     }
 
     const { data: urlData } = supabase.storage
-      .from('hackwave-storage')
+      .from('submissions')
       .getPublicUrl(filePath);
 
     return {
@@ -106,7 +106,7 @@ export const uploadClassroomFile = async (
     const filePath = `classrooms/${classroomId}/${folder}/${Date.now()}-${finalFileName}`;
 
     const { data, error } = await supabase.storage
-      .from('hackwave-storage')
+      .from('assignments')
       .upload(filePath, file, {
         cacheControl: '3600',
         upsert: false
@@ -121,7 +121,7 @@ export const uploadClassroomFile = async (
     }
 
     const { data: urlData } = supabase.storage
-      .from('hackwave-storage')
+      .from('assignments')
       .getPublicUrl(filePath);
 
     return {
@@ -137,11 +137,37 @@ export const uploadClassroomFile = async (
   }
 };
 
+// Download file from storage
+export const downloadFile = async (url: string, fileName: string): Promise<void> => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Failed to download file');
+    }
+    
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    
+    // Cleanup
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(downloadUrl);
+  } catch (error) {
+    console.error('Download error:', error);
+    throw error;
+  }
+};
+
 // Delete file from storage
 export const deleteFile = async (filePath: string): Promise<boolean> => {
   try {
     const { error } = await supabase.storage
-      .from('hackwave-storage')
+      .from('assignments')
       .remove([filePath]);
 
     if (error) {

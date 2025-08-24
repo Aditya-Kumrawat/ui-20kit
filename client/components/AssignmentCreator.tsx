@@ -174,6 +174,15 @@ export const AssignmentCreator: React.FC<AssignmentCreatorProps> = ({
       return
     }
 
+    if (!fileUpload.uploaded || !fileUpload.url) {
+      toast({
+        title: 'Missing Assignment File',
+        description: 'Please upload an assignment file before creating the assignment.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     if (!currentUser) {
       toast({
         title: 'Authentication Error',
@@ -338,13 +347,13 @@ export const AssignmentCreator: React.FC<AssignmentCreatorProps> = ({
 
           {/* File Upload Section */}
           <div className="space-y-4">
-            <Label>Assignment Files (Optional)</Label>
+            <Label>Assignment Files *</Label>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
               {!fileUpload.file ? (
                 <div className="text-center">
                   <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                   <p className="text-sm text-gray-600 mb-2">
-                    Upload PDF, PPT, or DOC files (Max 10MB)
+                    Upload PDF, PPT, or DOC files (Max 10MB) - Required
                   </p>
                   <input
                     type="file"
