@@ -21,6 +21,9 @@ import { ClassroomCard } from '../components/ClassroomCard';
 import { ClassroomCreator } from '../components/ClassroomCreator';
 import { ClassroomJoin } from '../components/ClassroomJoin';
 import { ClassroomDashboard } from './ClassroomDashboard';
+import { FloatingSidebar } from '../components/FloatingSidebar';
+import { FloatingTopBar } from '../components/FloatingTopBar';
+import { useSidebar } from '../contexts/SidebarContext';
 
 export const ClassroomsPage: React.FC = () => {
   const { currentUser } = useAuth();
