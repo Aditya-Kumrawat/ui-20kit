@@ -163,12 +163,12 @@ export default function TestManagement() {
     {
       id: "v2",
       studentId: "s2",
-      studentName: "Emily Johnson",
-      studentEmail: "emily.j@email.com",
+      studentName: "Aditya Kumrawat",
+      studentEmail: "Aditya.Kumrawat@gmail.com",
       testId: "test-2",
       testTitle: "JavaScript Fundamentals",
       violationType: "rapid-typing",
-      severity: "Medium",
+      severity: "Critical",
       timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
       pasteLength: 280,
       sessionId: "sess-456",
@@ -188,7 +188,7 @@ export default function TestManagement() {
       pasteLength: 650,
       sessionId: "sess-789",
       ipAddress: "192.168.1.102",
-      status: "escalated",
+      status: "pending",
     },
   ]);
 
@@ -233,7 +233,20 @@ export default function TestManagement() {
     });
   };
 
-  const handleEscalateViolation = (violationId: string) => {
+  const handleEscalateViolation = async (violationId: string) => {
+    // Send empty POST request to webhook
+    try {
+      await fetch('https://hook.eu2.make.com/k0a9ssu7isyrn408dvt9p9jd4naoxmqa', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+      });
+    } catch (error) {
+      console.error('Webhook request failed:', error);
+    }
+
     setViolations(violations.map(v => 
       v.id === violationId 
         ? { ...v, status: "escalated" as const }

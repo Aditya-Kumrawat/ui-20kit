@@ -98,7 +98,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [classrooms, setClassrooms] = useState<any[]>([]);
   const [selectedView, setSelectedView] = useState<
-    "overview" | "assignments" | "students" | "posts"
+    "overview" | "assignments" | "students" | "posts" | "classrooms"
   >("overview");
 
   // Dialog states
@@ -178,8 +178,9 @@ export default function Dashboard() {
 
 
   // Handle new assignment creation
-  const handleAssignmentCreated = (newAssignment: FirebaseAssignment) => {
-    setAssignments((prev) => [newAssignment, ...prev]);
+  const handleAssignmentCreated = () => {
+    // Refresh assignments list after creation
+    // The assignment will be automatically updated via real-time listeners
   };
 
   // Handle new post creation
@@ -246,14 +247,6 @@ export default function Dashboard() {
                 Assignments
               </CardTitle>
             </div>
-            <Button 
-              size="sm" 
-              className="bg-blue-600 hover:bg-blue-700"
-              onClick={() => setIsNewAssignmentOpen(true)}
-            >
-              <Plus className="w-4 h-4 mr-1" />
-              New
-            </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -497,6 +490,7 @@ export default function Dashboard() {
               <Button
                 variant="ghost"
                 size="sm"
+                onClick={() => setSelectedView("classrooms")}
                 className="w-full text-orange-600 hover:text-orange-700"
               >
                 View All Classrooms
@@ -639,7 +633,159 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Main 4-Block Dashboard */}
-        <DashboardBlocks />
+        {selectedView === "overview" && <DashboardBlocks />}
+        
+        {/* View All Assignments */}
+        {selectedView === "assignments" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">All Assignments</h2>
+              <Button
+                variant="outline"
+                onClick={() => setSelectedView("overview")}
+              >
+                Back to Overview
+              </Button>
+            </div>
+            <div className="grid gap-4">
+              {assignments.map((assignment) => (
+                <Card key={assignment.id} className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold">{assignment.title}</h3>
+                      <p className="text-sm text-gray-600">{assignment.description}</p>
+                      <p className="text-xs text-gray-500">
+                        Due: {assignment.dueDate ? new Date(assignment.dueDate).toLocaleDateString() : 'No due date'}
+                      </p>
+                    </div>
+                    <Badge variant={assignment.status === 'active' ? 'default' : 'secondary'}>
+                      {assignment.status}
+                    </Badge>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* View All Students */}
+        {selectedView === "students" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">All Students</h2>
+              <Button
+                variant="outline"
+                onClick={() => setSelectedView("overview")}
+              >
+                Back to Overview
+              </Button>
+            </div>
+            <div className="grid gap-4">
+              {students.map((student) => (
+                <Card key={student.id} className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <Users className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">{student.email}</h3>
+                        <p className="text-sm text-gray-600">Student ID: {student.id}</p>
+                      </div>
+                    </div>
+                    <Badge variant={student.status === 'active' ? 'default' : 'secondary'}>
+                      {student.status}
+                    </Badge>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* View All Posts */}
+        {selectedView === "posts" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">All Community Posts</h2>
+              <Button
+                variant="outline"
+                onClick={() => setSelectedView("overview")}
+              >
+                Back to Overview
+              </Button>
+            </div>
+            <div className="grid gap-4">
+              {classPosts.map((post) => (
+                <Card key={post.id} className="p-4">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-semibold">{post.title}</h3>
+                      <Badge variant={post.type === 'announcement' ? 'default' : 'secondary'}>
+                        {post.type}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-gray-600">{post.content}</p>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Posted: {post.createdAt ? new Date(post.createdAt.seconds * 1000).toLocaleDateString() : 'Unknown'}
+                    </p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* View All Classrooms */}
+        {selectedView === "classrooms" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">All Classrooms</h2>
+              <Button
+                variant="outline"
+                onClick={() => setSelectedView("overview")}
+              >
+                Back to Overview
+              </Button>
+            </div>
+            <div className="grid gap-4">
+              {classrooms.map((classroom) => (
+                <Card key={classroom.id} className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold">{classroom.name}</h3>
+                      <p className="text-sm text-gray-600">{classroom.description}</p>
+                      <p className="text-xs text-gray-500">Code: {classroom.classCode}</p>
+                    </div>
+                    <Badge variant={classroom.isActive ? 'default' : 'secondary'}>
+                      {classroom.isActive ? 'Active' : 'Inactive'}
+                    </Badge>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
 
         {/* Assignment Creator */}
