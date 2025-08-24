@@ -15,8 +15,8 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../hooks/use-toast';
 import { uploadSubmissionFile } from '../lib/supabaseStorage';
-import { submitAssignment } from '../lib/classroomOperations';
-import { ClassroomAssignment, SubmissionFile } from '../types/classroom';
+import { submitAssignment, getStudentSubmission, updateSubmission } from '../lib/classroomOperations';
+import { ClassroomAssignment, SubmissionFile, StudentSubmission as StudentSubmissionType } from '../types/classroom';
 
 interface StudentSubmissionProps {
   assignment: ClassroomAssignment;
@@ -42,20 +42,56 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
   const { currentUser } = useAuth();
   const { toast } = useToast();
   const [textSubmission, setTextSubmission] = useState('');
-  const [files, setFiles] = useState<FileUploadState[]>([]);
+  const [currentFile, setCurrentFile] = useState<FileUploadState | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [existingSubmission, setExistingSubmission] = useState<StudentSubmissionType | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const addFileSlot = () => {
-    setFiles(prev => [...prev, {
+  // Load existing submission when component opens
+  React.useEffect(() => {
+    const loadExistingSubmission = async () => {
+      if (!currentUser || !isOpen) return;
+      
+      setLoading(true);
+      try {
+        const submission = await getStudentSubmission(assignment.id, currentUser.uid);
+        setExistingSubmission(submission);
+        
+        if (submission) {
+          setTextSubmission(submission.textSubmission || '');
+          // If there's an existing file, set it up for display/replacement
+          if (submission.files && submission.files.length > 0) {
+            const existingFile = submission.files[0];
+            setCurrentFile({
+              file: null, // We don't have the original File object
+              uploading: false,
+              uploaded: true,
+              error: null,
+              url: existingFile.url,
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error loading existing submission:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadExistingSubmission();
+  }, [assignment.id, currentUser, isOpen]);
+
+  const initializeFileSlot = () => {
+    setCurrentFile({
       file: null,
       uploading: false,
       uploaded: false,
       error: null,
       url: null,
-    }]);
+    });
   };
 
-  const handleFileSelect = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -69,52 +105,51 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
       return;
     }
 
-    setFiles(prev => prev.map((fileState, i) => 
-      i === index ? { ...fileState, file, uploaded: false, error: null, url: null } : fileState
-    ));
+    setCurrentFile({
+      file,
+      uploading: false,
+      uploaded: false,
+      error: null,
+      url: null,
+    });
   };
 
-  const uploadFile = async (index: number) => {
-    const fileState = files[index];
-    if (!fileState.file || !currentUser) return;
+  const uploadFile = async () => {
+    if (!currentFile?.file || !currentUser) return;
 
-    setFiles(prev => prev.map((f, i) => 
-      i === index ? { ...f, uploading: true, error: null } : f
-    ));
+    setCurrentFile(prev => prev ? { ...prev, uploading: true, error: null } : null);
 
     try {
       const result = await uploadSubmissionFile(
-        fileState.file,
+        currentFile.file,
         assignment.id,
         currentUser.uid,
-        fileState.file.name
+        currentFile.file.name
       );
 
       if (result.success) {
-        setFiles(prev => prev.map((f, i) => 
-          i === index ? { 
-            ...f, 
-            uploading: false, 
-            uploaded: true, 
-            url: result.publicUrl 
-          } : f
-        ));
+        setCurrentFile(prev => prev ? {
+          ...prev,
+          uploading: false,
+          uploaded: true,
+          url: result.publicUrl
+        } : null);
 
         toast({
-          title: 'File Uploaded',
-          description: 'Your file has been uploaded successfully!',
+          title: existingSubmission ? 'File Replaced' : 'File Uploaded',
+          description: existingSubmission 
+            ? 'Your file has been replaced successfully!' 
+            : 'Your file has been uploaded successfully!',
         });
       } else {
         throw new Error(result.error || 'Upload failed');
       }
     } catch (error) {
-      setFiles(prev => prev.map((f, i) => 
-        i === index ? { 
-          ...f, 
-          uploading: false, 
-          error: error instanceof Error ? error.message : 'Upload failed' 
-        } : f
-      ));
+      setCurrentFile(prev => prev ? {
+        ...prev,
+        uploading: false,
+        error: error instanceof Error ? error.message : 'Upload failed'
+      } : null);
 
       toast({
         title: 'Upload Failed',
@@ -124,19 +159,20 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
     }
   };
 
-  const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
+  const removeFile = () => {
+    setCurrentFile(null);
   };
 
   const handleSubmit = async () => {
     if (!currentUser) return;
 
-    const uploadedFiles = files.filter(f => f.uploaded && f.url);
+    const hasFile = currentFile?.uploaded && currentFile?.url;
+    const hasText = textSubmission.trim();
     
-    if (!textSubmission.trim() && uploadedFiles.length === 0) {
+    if (!hasText && !hasFile) {
       toast({
         title: 'Nothing to Submit',
-        description: 'Please add text or upload files before submitting.',
+        description: 'Please add text or upload a file before submitting.',
         variant: 'destructive',
       });
       return;
@@ -145,39 +181,47 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
     setSubmitting(true);
 
     try {
-      const submissionFiles: SubmissionFile[] = uploadedFiles.map(f => ({
+      const submissionFiles: SubmissionFile[] = hasFile ? [{
         id: Date.now().toString() + Math.random(),
-        name: f.file?.name || 'File',
-        url: f.url!,
-        size: f.file?.size || 0,
-        type: f.file?.type || 'application/octet-stream',
+        name: currentFile.file?.name || existingSubmission?.files?.[0]?.name || 'File',
+        url: currentFile.url!,
+        size: currentFile.file?.size || existingSubmission?.files?.[0]?.size || 0,
+        type: currentFile.file?.type || existingSubmission?.files?.[0]?.type || 'application/octet-stream',
         uploadedAt: { seconds: Date.now() / 1000, nanoseconds: 0 } as any,
-      }));
+      }] : [];
 
-      await submitAssignment(
-        assignment.id,
-        currentUser.uid,
-        currentUser.displayName || currentUser.email || 'Student',
-        {
-          files: submissionFiles,
-          textSubmission: textSubmission.trim() || undefined,
-        }
-      );
+      const submissionData = {
+        files: submissionFiles,
+        textSubmission: hasText ? textSubmission.trim() : undefined,
+      };
 
-      toast({
-        title: 'Assignment Submitted',
-        description: 'Your assignment has been submitted successfully!',
-      });
+      if (existingSubmission) {
+        // Update existing submission
+        await updateSubmission(existingSubmission.id, submissionData);
+        toast({
+          title: 'Assignment Updated',
+          description: 'Your assignment has been updated successfully!',
+        });
+      } else {
+        // Create new submission
+        await submitAssignment(
+          assignment.id,
+          currentUser.uid,
+          currentUser.displayName || currentUser.email || 'Student',
+          submissionData
+        );
+        toast({
+          title: 'Assignment Submitted',
+          description: 'Your assignment has been submitted successfully!',
+        });
+      }
 
-      // Reset form
-      setTextSubmission('');
-      setFiles([]);
       onSubmissionComplete();
       onClose();
     } catch (error) {
       toast({
-        title: 'Submission Failed',
-        description: error instanceof Error ? error.message : 'Failed to submit assignment',
+        title: existingSubmission ? 'Update Failed' : 'Submission Failed',
+        description: error instanceof Error ? error.message : `Failed to ${existingSubmission ? 'update' : 'submit'} assignment`,
         variant: 'destructive',
       });
     } finally {
@@ -196,6 +240,17 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
   };
 
   if (!isOpen) return null;
+  
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-3">
+          <Loader2 className="w-6 h-6 animate-spin text-white" />
+          <span className="text-white">Loading submission...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -207,7 +262,9 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-semibold text-white">{assignment.title}</h2>
+            <h2 className="text-xl font-semibold text-white">
+              {existingSubmission ? 'Update Assignment' : 'Submit Assignment'}: {assignment.title}
+            </h2>
             <div className="flex items-center gap-4 mt-2 text-sm text-gray-300">
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
@@ -219,6 +276,11 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
               {isOverdue() && (
                 <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded-full text-xs">
                   Overdue
+                </span>
+              )}
+              {existingSubmission && (
+                <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs">
+                  Previously Submitted
                 </span>
               )}
             </div>
@@ -282,90 +344,127 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
             <label className="text-sm font-medium text-gray-300">
-              Upload Files (Optional)
+              {existingSubmission ? 'Replace File (Optional)' : 'Upload File (Optional)'}
             </label>
-            <button
-              onClick={addFileSlot}
-              className="flex items-center gap-1 px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              Add File
-            </button>
+            {!currentFile && (
+              <button
+                onClick={initializeFileSlot}
+                className="flex items-center gap-1 px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                {existingSubmission ? 'Replace File' : 'Add File'}
+              </button>
+            )}
           </div>
 
-          <div className="space-y-3">
-            {files.map((fileState, index) => (
-              <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
-                {!fileState.file ? (
+          {currentFile && (
+            <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+              {!currentFile.file && currentFile.uploaded ? (
+                // Show existing file from previous submission
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileSelect(index, e)}
-                      className="flex-1 text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-                    />
-                    <button
-                      onClick={() => removeFile(index)}
-                      className="p-1 hover:bg-white/10 rounded transition-colors"
-                    >
-                      <X className="w-4 h-4 text-gray-400" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <FileText className="w-5 h-5 text-blue-400" />
-                        <div>
-                          <p className="text-white text-sm font-medium">{fileState.file.name}</p>
-                          <p className="text-gray-400 text-xs">
-                            {(fileState.file.size / 1024 / 1024).toFixed(2)} MB
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {fileState.uploaded ? (
-                          <CheckCircle className="w-5 h-5 text-green-400" />
-                        ) : fileState.error ? (
-                          <AlertCircle className="w-5 h-5 text-red-400" />
-                        ) : null}
-                        <button
-                          onClick={() => removeFile(index)}
-                          disabled={fileState.uploading}
-                          className="p-1 hover:bg-white/10 rounded transition-colors disabled:opacity-50"
-                        >
-                          <X className="w-4 h-4 text-gray-400" />
-                        </button>
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-5 h-5 text-blue-400" />
+                      <div>
+                        <p className="text-white text-sm font-medium">
+                          {existingSubmission?.files?.[0]?.name || 'Previous File'}
+                        </p>
+                        <p className="text-gray-400 text-xs">
+                          {existingSubmission?.files?.[0]?.size ? 
+                            (existingSubmission.files[0].size / 1024 / 1024).toFixed(2) + ' MB' : 
+                            'Unknown size'
+                          }
+                        </p>
                       </div>
                     </div>
-
-                    {fileState.error && (
-                      <p className="text-sm text-red-400">{fileState.error}</p>
-                    )}
-
-                    {!fileState.uploaded && !fileState.error && (
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-400" />
                       <button
-                        onClick={() => uploadFile(index)}
-                        disabled={fileState.uploading}
-                        className="w-full p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg text-white text-sm transition-colors flex items-center justify-center gap-2"
+                        onClick={removeFile}
+                        className="p-1 hover:bg-white/10 rounded transition-colors"
                       >
-                        {fileState.uploading ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Uploading...
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="w-4 h-4" />
-                            Upload File
-                          </>
-                        )}
+                        <X className="w-4 h-4 text-gray-400" />
                       </button>
-                    )}
+                    </div>
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-600 file:text-white hover:file:bg-orange-700"
+                  />
+                  <p className="text-xs text-gray-400">Select a new file to replace the current one</p>
+                </div>
+              ) : !currentFile.file ? (
+                // Show file input for new file
+                <div className="flex items-center justify-between">
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    className="flex-1 text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                  />
+                  <button
+                    onClick={removeFile}
+                    className="p-1 hover:bg-white/10 rounded transition-colors"
+                  >
+                    <X className="w-4 h-4 text-gray-400" />
+                  </button>
+                </div>
+              ) : (
+                // Show selected file with upload option
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-5 h-5 text-blue-400" />
+                      <div>
+                        <p className="text-white text-sm font-medium">{currentFile.file.name}</p>
+                        <p className="text-gray-400 text-xs">
+                          {(currentFile.file.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {currentFile.uploaded ? (
+                        <CheckCircle className="w-5 h-5 text-green-400" />
+                      ) : currentFile.error ? (
+                        <AlertCircle className="w-5 h-5 text-red-400" />
+                      ) : null}
+                      <button
+                        onClick={removeFile}
+                        disabled={currentFile.uploading}
+                        className="p-1 hover:bg-white/10 rounded transition-colors disabled:opacity-50"
+                      >
+                        <X className="w-4 h-4 text-gray-400" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {currentFile.error && (
+                    <p className="text-sm text-red-400">{currentFile.error}</p>
+                  )}
+
+                  {!currentFile.uploaded && !currentFile.error && (
+                    <button
+                      onClick={uploadFile}
+                      disabled={currentFile.uploading}
+                      className="w-full p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg text-white text-sm transition-colors flex items-center justify-center gap-2"
+                    >
+                      {currentFile.uploading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4" />
+                          {existingSubmission ? 'Replace File' : 'Upload File'}
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Submit Button */}
@@ -389,7 +488,7 @@ export const StudentSubmission: React.FC<StudentSubmissionProps> = ({
             ) : (
               <>
                 <Send className="w-4 h-4" />
-                Submit Assignment
+                {existingSubmission ? 'Update Assignment' : 'Submit Assignment'}
               </>
             )}
           </button>

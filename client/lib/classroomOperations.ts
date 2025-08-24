@@ -446,6 +446,51 @@ export const getStudentPendingAssignments = async (studentId: string): Promise<C
   }
 };
 
+// Get student's submission for a specific assignment
+export const getStudentSubmission = async (assignmentId: string, studentId: string): Promise<StudentSubmission | null> => {
+  try {
+    const q = query(
+      collection(db, 'submissions'),
+      where('assignmentId', '==', assignmentId),
+      where('studentId', '==', studentId)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      return null;
+    }
+    
+    const doc = querySnapshot.docs[0];
+    return {
+      id: doc.id,
+      ...doc.data()
+    } as StudentSubmission;
+  } catch (error) {
+    console.error('Error fetching student submission:', error);
+    return null;
+  }
+};
+
+// Update existing submission (for file replacement)
+export const updateSubmission = async (
+  submissionId: string,
+  updateData: Partial<Omit<StudentSubmission, 'id' | 'assignmentId' | 'studentId' | 'studentName'>>
+): Promise<void> => {
+  try {
+    const submissionRef = doc(db, 'submissions', submissionId);
+    const updatedData = {
+      ...updateData,
+      submittedAt: Timestamp.now(),
+    };
+    
+    await updateDoc(submissionRef, updatedData);
+  } catch (error) {
+    console.error('Error updating submission:', error);
+    throw new Error('Failed to update submission');
+  }
+};
+
 // Get assignment submissions
 export const getAssignmentSubmissions = async (assignmentId: string): Promise<StudentSubmission[]> => {
   try {
@@ -507,6 +552,58 @@ export const getClassroomStats = async (classroomId: string): Promise<ClassroomS
       totalAssignments: 0,
       pendingSubmissions: 0,
       gradedSubmissions: 0,
+    };
+  }
+};
+
+// Get student's completed assignments count
+export const getStudentCompletedAssignments = async (studentId: string): Promise<number> => {
+  try {
+    const submissionQuery = query(
+      collection(db, 'submissions'),
+      where('studentId', '==', studentId),
+      where('status', '==', 'submitted')
+    );
+    const submissionSnapshot = await getDocs(submissionQuery);
+    return submissionSnapshot.size;
+  } catch (error) {
+    console.error('Error fetching student completed assignments:', error);
+    return 0;
+  }
+};
+
+// Get student dashboard stats
+export const getStudentDashboardStats = async (studentId: string) => {
+  try {
+    // Get enrolled classrooms
+    const classrooms = await getStudentClassrooms(studentId);
+    
+    // Get pending assignments
+    const pendingAssignments = await getStudentPendingAssignments(studentId);
+    
+    // Get completed assignments count
+    const completedCount = await getStudentCompletedAssignments(studentId);
+    
+    // Calculate total classmates (excluding the student themselves)
+    let totalClassmates = 0;
+    for (const classroom of classrooms) {
+      const enrollments = await getClassroomEnrollments(classroom.id);
+      totalClassmates += Math.max(0, enrollments.length - 1); // Subtract 1 for the student themselves
+    }
+    
+    return {
+      totalClasses: classrooms.length,
+      pendingWork: pendingAssignments.length,
+      completedAssignments: completedCount,
+      totalClassmates
+    };
+  } catch (error) {
+    console.error('Error fetching student dashboard stats:', error);
+    return {
+      totalClasses: 0,
+      pendingWork: 0,
+      completedAssignments: 0,
+      totalClassmates: 0
     };
   }
 };

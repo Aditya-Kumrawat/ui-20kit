@@ -38,7 +38,7 @@ import {
   Eye,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { getStudentPendingAssignments, joinClassroom, getTeacherClassrooms } from "@/lib/classroomOperations";
+import { getStudentPendingAssignments, joinClassroom, getStudentClassrooms, getStudentDashboardStats } from "@/lib/classroomOperations";
 import { ClassroomAssignment, Classroom } from "@/types/classroom";
 
 interface ClassData {
@@ -74,6 +74,12 @@ export default function Dashboard2() {
   const [selectedAssignment, setSelectedAssignment] = useState<ClassroomAssignment | null>(null);
   const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [dashboardStats, setDashboardStats] = useState({
+    totalClasses: 0,
+    pendingWork: 0,
+    completedAssignments: 0,
+    totalClassmates: 0
+  });
 
   // Load student data
   useEffect(() => {
@@ -88,13 +94,16 @@ export default function Dashboard2() {
     try {
       setLoading(true);
       
+      // Load dashboard stats (includes all metrics)
+      const stats = await getStudentDashboardStats(currentUser.uid);
+      setDashboardStats(stats);
+      
       // Load pending assignments
       const assignments = await getStudentPendingAssignments(currentUser.uid);
       setPendingAssignments(assignments);
       
-      // Load enrolled classrooms (using teacher classrooms function as placeholder)
-      // In a real app, you'd have a getStudentClassrooms function
-      const classrooms = await getTeacherClassrooms(currentUser.uid);
+      // Load enrolled classrooms
+      const classrooms = await getStudentClassrooms(currentUser.uid);
       setEnrolledClasses(classrooms);
       
     } catch (error) {
@@ -144,9 +153,10 @@ export default function Dashboard2() {
 
     try {
       await joinClassroom(
-        classCode.trim(),
         currentUser.uid,
-        currentUser.displayName || currentUser.email || 'Unknown Student'
+        currentUser.displayName || currentUser.email || 'Unknown Student',
+        currentUser.email || '',
+        classCode.trim()
       );
       
       toast({
@@ -274,7 +284,7 @@ export default function Dashboard2() {
       <div className="flex items-center gap-4">
         {/* Class color indicator */}
         <div
-          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${classData.color} flex-shrink-0`}
+          className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex-shrink-0"
         />
 
         {/* Class info */}
@@ -283,33 +293,31 @@ export default function Dashboard2() {
             <h3 className="font-semibold text-gray-900 truncate">
               {classData.name}
             </h3>
-            {classData.isPinned && (
-              <Pin className="w-4 h-4 text-gray-400 fill-gray-400" />
-            )}
+            {/* Pin functionality can be added later */}
           </div>
           <p className="text-sm text-gray-600 truncate">
-            {classData.section} • {classData.teacher}
+            {classData.teacherName || 'Teacher'}
           </p>
           <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
             <span className="flex items-center gap-1">
               <Users className="w-3 h-3" />
-              {classData.studentsCount}
+              Active
             </span>
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
-              {classData.lastActivity}
+              Recent
             </span>
           </div>
         </div>
 
         {/* Pending work */}
         <div className="flex items-center gap-2">
-          {classData.pendingWork > 0 ? (
+          {pendingAssignments.filter(a => a.classroomId === classData.id).length > 0 ? (
             <Badge
               variant="secondary"
               className="bg-orange-100 text-orange-700"
             >
-              {classData.pendingWork} due
+              {pendingAssignments.filter(a => a.classroomId === classData.id).length} due
             </Badge>
           ) : (
             <CheckCircle className="w-5 h-5 text-green-500" />
@@ -356,7 +364,7 @@ export default function Dashboard2() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Student Dashboard</h1>
             <p className="text-gray-600 mt-1">
-              Welcome back! You have {pendingAssignments.length} pending assignments.
+              Welcome back! You have {dashboardStats.pendingWork} pending assignments.
             </p>
           </div>
 
@@ -459,7 +467,7 @@ export default function Dashboard2() {
               <div>
                 <p className="text-sm text-gray-600">Total Classes</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {enrolledClasses.length}
+                  {dashboardStats.totalClasses}
                 </p>
               </div>
             </div>
@@ -473,10 +481,7 @@ export default function Dashboard2() {
               <div>
                 <p className="text-sm text-gray-600">Pending Work</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {enrolledClasses.reduce(
-                    (total, cls) => total + cls.pendingWork,
-                    0,
-                  )}
+                  {dashboardStats.pendingWork}
                 </p>
               </div>
             </div>
@@ -489,7 +494,7 @@ export default function Dashboard2() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">24</p>
+                <p className="text-2xl font-bold text-gray-900">{dashboardStats.completedAssignments}</p>
               </div>
             </div>
           </Card>
@@ -502,10 +507,7 @@ export default function Dashboard2() {
               <div>
                 <p className="text-sm text-gray-600">Classmates</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {enrolledClasses.reduce(
-                    (total, cls) => total + cls.studentsCount,
-                    0,
-                  )}
+                  {dashboardStats.totalClassmates}
                 </p>
               </div>
             </div>
