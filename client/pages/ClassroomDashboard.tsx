@@ -8,6 +8,7 @@ import { FloatingSidebar } from '@/components/FloatingSidebar';
 import { FloatingTopBar } from '@/components/FloatingTopBar';
 import { AssignmentCreator } from '@/components/AssignmentCreator';
 import { AssignmentDetailModal } from '@/components/AssignmentDetailModal';
+import { AssignmentSubmissionsModal } from '@/components/AssignmentSubmissionsModal';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -52,6 +53,7 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
   const [showAssignmentCreator, setShowAssignmentCreator] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<ClassroomAssignment | null>(null);
   const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
+  const [showSubmissions, setShowSubmissions] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const isTeacher = currentUser?.uid === classroom.teacherId;
@@ -277,7 +279,19 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                             {assignment.status}
                           </span>
                           {isTeacher ? (
-                            <Eye className="w-4 h-4 text-gray-400" />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="border-white/20 text-white hover:bg-white/10"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedAssignment(assignment);
+                                setShowSubmissions(true);
+                              }}
+                            >
+                              <Eye className="w-4 h-4 mr-1" />
+                              View Submissions
+                            </Button>
                           ) : (
                             <Button
                               size="sm"
@@ -365,6 +379,15 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
         }}
         isTeacher={isTeacher}
         onAssignmentUpdate={loadClassroomData}
+      />
+      
+      <AssignmentSubmissionsModal
+        assignment={selectedAssignment}
+        isOpen={showSubmissions}
+        onClose={() => {
+          setShowSubmissions(false);
+          setSelectedAssignment(null);
+        }}
       />
     </div>
   );

@@ -494,13 +494,31 @@ export const updateSubmission = async (
 // Get assignment submissions
 export const getAssignmentSubmissions = async (assignmentId: string): Promise<StudentSubmission[]> => {
   try {
-    const q = query(
+    // Try with orderBy first, fallback without if index doesn't exist
+    let q = query(
       collection(db, 'submissions'),
-      where('assignmentId', '==', assignmentId),
-      orderBy('submittedAt', 'desc')
+      where('assignmentId', '==', assignmentId)
     );
     
-    const querySnapshot = await getDocs(q);
+    let querySnapshot;
+    try {
+      // Try with orderBy
+      q = query(
+        collection(db, 'submissions'),
+        where('assignmentId', '==', assignmentId),
+        orderBy('submittedAt', 'desc')
+      );
+      querySnapshot = await getDocs(q);
+    } catch (indexError) {
+      console.warn('Index not available for submissions orderBy, fetching without sorting:', indexError);
+      // Fallback without orderBy
+      q = query(
+        collection(db, 'submissions'),
+        where('assignmentId', '==', assignmentId)
+      );
+      querySnapshot = await getDocs(q);
+    }
+    
     const submissions: StudentSubmission[] = [];
     
     querySnapshot.forEach((doc) => {
@@ -510,10 +528,18 @@ export const getAssignmentSubmissions = async (assignmentId: string): Promise<St
       } as StudentSubmission);
     });
     
+    // Sort in memory if we couldn't sort in the query
+    submissions.sort((a, b) => {
+      const aTime = a.submittedAt?.seconds || 0;
+      const bTime = b.submittedAt?.seconds || 0;
+      return bTime - aTime;
+    });
+    
     return submissions;
   } catch (error) {
     console.error('Error fetching assignment submissions:', error);
-    throw new Error('Failed to fetch submissions');
+    // Return empty array instead of throwing to prevent crashes
+    return [];
   }
 };
 
