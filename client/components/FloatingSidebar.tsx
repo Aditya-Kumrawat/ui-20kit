@@ -105,12 +105,6 @@ export const FloatingSidebar = ({
       icon: Calendar,
       href: "/dashboard2/calendar",
     },
-    {
-      id: "chatbot",
-      label: "AI Tutor",
-      icon: Brain,
-      href: "/dashboard2/chatbot",
-    },
   ];
 
   const menuItems =
