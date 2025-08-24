@@ -50,7 +50,14 @@ export const ClassroomCard: React.FC<ClassroomCardProps> = ({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 cursor-pointer hover:bg-white/10 transition-all duration-200"
+      className="rounded-xl p-6 cursor-pointer hover:shadow-lg transition-all duration-200"
+      style={{
+        background: "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(8px) saturate(150%)",
+        WebkitBackdropFilter: "blur(8px) saturate(150%)",
+        border: "1px solid rgba(200, 200, 200, 0.6)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
+      }}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
