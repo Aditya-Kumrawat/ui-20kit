@@ -315,11 +315,11 @@ export default function Dashboard() {
         transition={{ delay: 0.2, duration: 0.5 }}
       >
         <Card className="h-full hover:shadow-lg transition-shadow" style={{
-          background: "rgba(245, 255, 245, 0.65)",
-          backdropFilter: "blur(12px) saturate(150%)",
-          WebkitBackdropFilter: "blur(12px) saturate(150%)",
-          border: "1px solid rgba(34, 197, 94, 0.3)",
-          boxShadow: "0 8px 32px rgba(34, 197, 94, 0.15)"
+          background: "rgba(245, 255, 245, 0.9)",
+          backdropFilter: "blur(8px) saturate(150%)",
+          WebkitBackdropFilter: "blur(8px) saturate(150%)",
+          border: "1px solid rgba(34, 197, 94, 0.5)",
+          boxShadow: "0 8px 32px rgba(34, 197, 94, 0.2)"
         }}>
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div className="flex items-center gap-2">
