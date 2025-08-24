@@ -402,10 +402,10 @@ export const ClassroomDashboard: React.FC<ClassroomDashboardProps> = ({
                         key={enrollment.id}
                         className="flex items-center gap-3 p-3 rounded-lg"
                         style={{
-                          background: "rgba(255, 255, 255, 0.7)",
-                          backdropFilter: "blur(8px)",
-                          WebkitBackdropFilter: "blur(8px)",
-                          border: "1px solid rgba(255, 255, 255, 0.4)"
+                          background: "rgba(255, 255, 255, 0.9)",
+                          backdropFilter: "blur(6px)",
+                          WebkitBackdropFilter: "blur(6px)",
+                          border: "1px solid rgba(200, 200, 200, 0.5)"
                         }}
                       >
                         <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
