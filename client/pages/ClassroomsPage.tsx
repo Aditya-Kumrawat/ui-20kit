@@ -274,11 +274,11 @@ export const ClassroomsPage: React.FC = () => {
           {/* Summary Stats */}
           {classrooms.length > 0 && (
             <div className="mt-8 p-6 rounded-xl" style={{
-              background: "rgba(255, 255, 255, 0.8)",
-              backdropFilter: "blur(12px) saturate(150%)",
-              WebkitBackdropFilter: "blur(12px) saturate(150%)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+              background: "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(8px) saturate(150%)",
+              WebkitBackdropFilter: "blur(8px) saturate(150%)",
+              border: "1px solid rgba(200, 200, 200, 0.6)",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
             }}>
               <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Summary</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
