@@ -191,17 +191,8 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
         submissionData
       );
 
-      // Send webhook to Make.com using centralized service
-      try {
-        const { sendSubmissionToMake } = await import('@/lib/makeService');
-        await sendSubmissionToMake(
-          assignment.materials?.[0]?.url || '',
-          uploadResult.publicUrl || ''
-        );
-      } catch (webhookError) {
-        console.error('Webhook error:', webhookError);
-        // Don't fail the submission if webhook fails
-      }
+      // Note: Removed Make.com webhook call from student submission
+      // Make.com requests should only happen when teacher clicks "Analyze with AI"
 
       toast({
         title: 'Success',
