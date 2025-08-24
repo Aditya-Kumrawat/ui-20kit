@@ -269,10 +269,10 @@ export default function Dashboard() {
                   <div
                     key={assignment.id || `assignment-${index}`}
                     className="flex items-center justify-between rounded-lg p-2" style={{
-                      background: "rgba(255, 255, 255, 0.7)",
-                      backdropFilter: "blur(8px)",
-                      WebkitBackdropFilter: "blur(8px)",
-                      border: "1px solid rgba(255, 255, 255, 0.4)"
+                      background: "rgba(255, 255, 255, 0.9)",
+                      backdropFilter: "blur(6px)",
+                      WebkitBackdropFilter: "blur(6px)",
+                      border: "1px solid rgba(200, 200, 200, 0.5)"
                     }}
                   >
                     <div>
@@ -351,10 +351,10 @@ export default function Dashboard() {
                   <div
                     key={student.id || `student-${index}`}
                     className="flex items-center gap-2 rounded-lg p-2" style={{
-                      background: "rgba(255, 255, 255, 0.7)",
-                      backdropFilter: "blur(8px)",
-                      WebkitBackdropFilter: "blur(8px)",
-                      border: "1px solid rgba(255, 255, 255, 0.4)"
+                      background: "rgba(255, 255, 255, 0.9)",
+                      backdropFilter: "blur(6px)",
+                      WebkitBackdropFilter: "blur(6px)",
+                      border: "1px solid rgba(200, 200, 200, 0.5)"
                     }}
                   >
                     <Avatar className="w-8 h-8">
@@ -508,10 +508,10 @@ export default function Dashboard() {
                   <div
                     key={classroom.id || `classroom-${index}`}
                     className="flex items-center justify-between rounded-lg p-2 hover:shadow-md transition-all cursor-pointer" style={{
-                      background: "rgba(255, 255, 255, 0.7)",
-                      backdropFilter: "blur(8px)",
-                      WebkitBackdropFilter: "blur(8px)",
-                      border: "1px solid rgba(255, 255, 255, 0.4)"
+                      background: "rgba(255, 255, 255, 0.9)",
+                      backdropFilter: "blur(6px)",
+                      WebkitBackdropFilter: "blur(6px)",
+                      border: "1px solid rgba(200, 200, 200, 0.5)"
                     }}
                   >
                     <div className="flex items-center gap-2">
