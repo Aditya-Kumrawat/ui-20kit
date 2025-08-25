@@ -382,173 +382,198 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
     }
   };
 
-  const renderAnalysisResults = () => {
-    if (!analysisResult?.results) return null;
+  const renderIndividualStudentReport = (studentAnalysis: any, index: number) => {
+    const { studentName, analysis, error } = studentAnalysis;
+    
+    if (error) {
+      return (
+        <Card key={index} className="bg-red-50 border-red-200">
+          <CardHeader>
+            <CardTitle className="text-red-800 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" />
+              {studentName}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-red-600">Analysis failed: {error}</p>
+          </CardContent>
+        </Card>
+      );
+    }
 
-    const { results } = analysisResult;
+    if (!analysis) {
+      return (
+        <Card key={index} className="bg-gray-50 border-gray-200">
+          <CardHeader>
+            <CardTitle className="text-gray-800 flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              {studentName}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600">No analysis data available</p>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    // Parse the Make.com analysis response
+    let analysisData = analysis;
+    
+    // Handle nested data structure
+    if (analysis && analysis.data) {
+      analysisData = analysis.data;
+    }
+    
+    // Parse JSON string if needed
+    if (typeof analysisData === 'string') {
+      try {
+        analysisData = JSON.parse(analysisData);
+      } catch (e) {
+        console.error('Failed to parse analysis JSON for', studentName, ':', e);
+      }
+    }
+
+    // Extract key information from Make.com response
+    const overallScore = analysisData?.overall_score || 'N/A';
+    const confidenceLevel = analysisData?.confidence_level || 'Unknown';
+    const keyIndicators = analysisData?.key_indicators || [];
+
+    // Determine score color (based on 100-point scale)
+    const getScoreColor = (score: any) => {
+      if (score === 'N/A') return 'text-gray-600';
+      const numScore = typeof score === 'number' ? score : parseInt(score);
+      if (numScore >= 80) return 'text-green-600';
+      if (numScore >= 60) return 'text-yellow-600';
+      if (numScore >= 40) return 'text-orange-600';
+      return 'text-red-600';
+    };
+
+    const getScoreBadgeColor = (score: any) => {
+      if (score === 'N/A') return 'bg-gray-100 text-gray-700';
+      const numScore = typeof score === 'number' ? score : parseInt(score);
+      if (numScore >= 80) return 'bg-green-100 text-green-800';
+      if (numScore >= 60) return 'bg-yellow-100 text-yellow-800';
+      if (numScore >= 40) return 'bg-orange-100 text-orange-800';
+      return 'bg-red-100 text-red-800';
+    };
+
+    const getConfidenceBadgeColor = (confidence: string) => {
+      switch (confidence.toLowerCase()) {
+        case 'high': return 'bg-green-100 text-green-800';
+        case 'medium': return 'bg-yellow-100 text-yellow-800';
+        case 'low': return 'bg-red-100 text-red-800';
+        default: return 'bg-gray-100 text-gray-700';
+      }
+    };
 
     return (
-      <div className="space-y-6">
-        {/* Performance Summary */}
-        {results.performanceSummary && (
-          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-blue-600" />
-                Performance Summary
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">
-                    {results.performanceSummary.averageScore}%
-                  </div>
-                  <div className="text-sm text-gray-600">Average Score</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {results.performanceSummary.totalSubmissions}
-                  </div>
-                  <div className="text-sm text-gray-600">Total Submissions</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">
-                    {results.performanceSummary.passRate}%
-                  </div>
-                  <div className="text-sm text-gray-600">Pass Rate</div>
-                </div>
+      <Card key={index} className="bg-white/90 backdrop-blur-sm border-gray-200/60 hover:shadow-md transition-shadow">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-gray-900 flex items-center gap-2">
+              <Users className="w-5 h-5 text-blue-600" />
+              {studentName}
+            </CardTitle>
+            <div className="flex items-center gap-2">
+              <Badge className={getScoreBadgeColor(overallScore)}>
+                Score: {overallScore}/100
+              </Badge>
+              <Badge className={getConfidenceBadgeColor(confidenceLevel)}>
+                {confidenceLevel} Confidence
+              </Badge>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Overall Score Display */}
+          <div className="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center">
+              <div className={`text-3xl font-bold ${getScoreColor(overallScore)}`}>
+                {overallScore}/100
               </div>
-            </CardContent>
-          </Card>
-        )}
+              <div className="text-sm text-gray-600">Overall Score</div>
+            </div>
+          </div>
 
-        {/* Grade Distribution */}
-        {results.gradeDistribution && (
-          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green-600" />
-                Grade Distribution
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {Object.entries(results.gradeDistribution).map(([grade, percentage]) => (
-                  <div key={grade} className="flex items-center justify-between">
-                    <span className="text-gray-700 capitalize">{grade.replace(/([A-Z])/g, ' $1')}</span>
-                    <div className="flex items-center gap-2">
-                      <div className="w-32 bg-gray-200 rounded-full h-2">
-                        <div 
-                          className={`h-2 rounded-full ${
-                            grade === 'excellent' ? 'bg-green-500' :
-                            grade === 'good' ? 'bg-blue-500' :
-                            grade === 'average' ? 'bg-yellow-500' : 'bg-red-500'
-                          }`}
-                          style={{ width: `${percentage}%` }}
-                        />
-                      </div>
-                      <span className="text-gray-900 font-medium w-8">{percentage}%</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Common Mistakes */}
-        {results.commonMistakes && results.commonMistakes.length > 0 && (
-          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-orange-600" />
-                Common Mistakes
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {results.commonMistakes.map((mistake, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-700">
-                    <span className="text-orange-600 mt-1">•</span>
-                    {mistake}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Strength Areas */}
-        {results.strengthAreas && results.strengthAreas.length > 0 && (
-          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <Award className="w-5 h-5 text-green-600" />
-                Strength Areas
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {results.strengthAreas.map((strength, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-700">
-                    <span className="text-green-600 mt-1">•</span>
-                    {strength}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Improvement Suggestions */}
-        {results.improvementSuggestions && results.improvementSuggestions.length > 0 && (
-          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <Target className="w-5 h-5 text-blue-600" />
-                Improvement Suggestions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {results.improvementSuggestions.map((suggestion, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-700">
+          {/* Key Indicators */}
+          {keyIndicators && keyIndicators.length > 0 && (
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                <Target className="w-4 h-4 text-blue-600" />
+                Key Indicators
+              </h4>
+              <ul className="space-y-1">
+                {keyIndicators.map((indicator: string, idx: number) => (
+                  <li key={idx} className="flex items-start gap-2 text-gray-700">
                     <span className="text-blue-600 mt-1">•</span>
-                    {suggestion}
+                    {indicator}
                   </li>
                 ))}
               </ul>
-            </CardContent>
-          </Card>
-        )}
+            </div>
+          )}
 
-        {/* Plagiarism Flags */}
-        {results.plagiarismFlags && results.plagiarismFlags.flaggedSubmissions > 0 && (
-          <Card className="bg-red-50 border-red-200">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-red-400" />
-                Plagiarism Alerts
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-3">
-                <span className="text-red-700 font-medium">
-                  {results.plagiarismFlags.flaggedSubmissions} submissions flagged
-                </span>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const renderAnalysisResults = () => {
+    if (!analysisResult?.individualAnalyses) return null;
+
+    const { individualAnalyses } = analysisResult;
+
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-blue-600" />
+            Individual Student Reports
+          </h3>
+          <Badge variant="outline" className="text-gray-600">
+            {individualAnalyses.length} submissions analyzed
+          </Badge>
+        </div>
+
+        {/* Individual Student Reports */}
+        <div className="grid gap-4">
+          {individualAnalyses.map((studentAnalysis, index) => 
+            renderIndividualStudentReport(studentAnalysis, index)
+          )}
+        </div>
+
+        {/* Summary Stats */}
+        <Card className="bg-blue-50 border-blue-200 mt-6">
+          <CardHeader>
+            <CardTitle className="text-blue-900 flex items-center gap-2">
+              <BarChart3 className="w-5 h-5" />
+              Analysis Summary
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {individualAnalyses.length}
+                </div>
+                <div className="text-sm text-blue-700">Total Analyzed</div>
               </div>
-              <ul className="space-y-2">
-                {results.plagiarismFlags.suspiciousPatterns.map((pattern, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-700">
-                    <span className="text-red-600 mt-1">•</span>
-                    {pattern}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
+              <div>
+                <div className="text-2xl font-bold text-green-600">
+                  {individualAnalyses.filter(a => a.analysis && !a.error).length}
+                </div>
+                <div className="text-sm text-green-700">Successful</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-red-600">
+                  {individualAnalyses.filter(a => a.error).length}
+                </div>
+                <div className="text-sm text-red-700">Failed</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   };

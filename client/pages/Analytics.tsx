@@ -40,8 +40,6 @@ export default function Analytics() {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [seeding, setSeeding] = useState(false);
-
   // Real-time data subscription
   useEffect(() => {
     const unsubscribe = analyticsService.subscribeToAnalytics((data) => {
@@ -51,18 +49,6 @@ export default function Analytics() {
 
     return () => unsubscribe();
   }, []);
-
-  const handleSeedData = async () => {
-    setSeeding(true);
-    try {
-      await seedAnalyticsData();
-      // Data will automatically refresh via real-time listeners
-    } catch (error) {
-      console.error('Error seeding data:', error);
-    } finally {
-      setSeeding(false);
-    }
-  };
 
   // Transform real data for charts
   const monthlyRevenueData = analyticsData?.submissionTrends.map(trend => ({
@@ -75,7 +61,7 @@ export default function Analytics() {
   // Assignment performance data
   const categoryData = analyticsData?.assignmentStats.slice(0, 6).map((assignment, index) => ({
     category: assignment.title.length > 15 ? assignment.title.substring(0, 15) + '...' : assignment.title,
-    sales: assignment.submissions * 100,
+    sales: assignment.submissions,
     growth: assignment.completionRate - 50, // Mock growth calculation
     color: ["#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"][index % 6]
   })) || [];
@@ -160,14 +146,6 @@ export default function Analytics() {
               <Button variant="outline" size="sm">
                 <Download className="w-4 h-4 mr-2" />
                 Export
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleSeedData}
-                disabled={seeding}
-              >
-                {seeding ? "Adding Data..." : "Add Sample Data"}
               </Button>
             </div>
           </div>
@@ -340,7 +318,7 @@ export default function Analytics() {
                     </span>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-gray-900">
-                        ${(category.sales / 1000).toFixed(0)}K
+                        {category.sales} pts
                       </span>
                       <span
                         className={`text-xs px-2 py-1 rounded-full ${
