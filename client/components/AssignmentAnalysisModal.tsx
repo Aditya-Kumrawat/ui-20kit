@@ -391,32 +391,32 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
       <div className="space-y-6">
         {/* Performance Summary */}
         {results.performanceSummary && (
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-blue-400" />
+              <CardTitle className="text-gray-900 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-blue-600" />
                 Performance Summary
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-400">
+                  <div className="text-2xl font-bold text-green-600">
                     {results.performanceSummary.averageScore}%
                   </div>
-                  <div className="text-sm text-gray-400">Average Score</div>
+                  <div className="text-sm text-gray-600">Average Score</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400">
+                  <div className="text-2xl font-bold text-blue-600">
                     {results.performanceSummary.totalSubmissions}
                   </div>
-                  <div className="text-sm text-gray-400">Total Submissions</div>
+                  <div className="text-sm text-gray-600">Total Submissions</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-400">
+                  <div className="text-2xl font-bold text-purple-600">
                     {results.performanceSummary.passRate}%
                   </div>
-                  <div className="text-sm text-gray-400">Pass Rate</div>
+                  <div className="text-sm text-gray-600">Pass Rate</div>
                 </div>
               </div>
             </CardContent>
@@ -425,10 +425,10 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
 
         {/* Grade Distribution */}
         {results.gradeDistribution && (
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green-400" />
+              <CardTitle className="text-gray-900 flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-green-600" />
                 Grade Distribution
               </CardTitle>
             </CardHeader>
@@ -436,9 +436,9 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
               <div className="space-y-3">
                 {Object.entries(results.gradeDistribution).map(([grade, percentage]) => (
                   <div key={grade} className="flex items-center justify-between">
-                    <span className="text-gray-300 capitalize">{grade.replace(/([A-Z])/g, ' $1')}</span>
+                    <span className="text-gray-700 capitalize">{grade.replace(/([A-Z])/g, ' $1')}</span>
                     <div className="flex items-center gap-2">
-                      <div className="w-32 bg-white/10 rounded-full h-2">
+                      <div className="w-32 bg-gray-200 rounded-full h-2">
                         <div 
                           className={`h-2 rounded-full ${
                             grade === 'excellent' ? 'bg-green-500' :
@@ -448,7 +448,7 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
-                      <span className="text-white font-medium w-8">{percentage}%</span>
+                      <span className="text-gray-900 font-medium w-8">{percentage}%</span>
                     </div>
                   </div>
                 ))}
@@ -459,18 +459,18 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
 
         {/* Common Mistakes */}
         {results.commonMistakes && results.commonMistakes.length > 0 && (
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-orange-400" />
+              <CardTitle className="text-gray-900 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-orange-600" />
                 Common Mistakes
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
                 {results.commonMistakes.map((mistake, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-300">
-                    <span className="text-orange-400 mt-1">•</span>
+                  <li key={index} className="flex items-start gap-2 text-gray-700">
+                    <span className="text-orange-600 mt-1">•</span>
                     {mistake}
                   </li>
                 ))}
@@ -481,18 +481,18 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
 
         {/* Strength Areas */}
         {results.strengthAreas && results.strengthAreas.length > 0 && (
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <Award className="w-5 h-5 text-green-400" />
+              <CardTitle className="text-gray-900 flex items-center gap-2">
+                <Award className="w-5 h-5 text-green-600" />
                 Strength Areas
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
                 {results.strengthAreas.map((strength, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-300">
-                    <span className="text-green-400 mt-1">•</span>
+                  <li key={index} className="flex items-start gap-2 text-gray-700">
+                    <span className="text-green-600 mt-1">•</span>
                     {strength}
                   </li>
                 ))}
@@ -503,18 +503,18 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
 
         {/* Improvement Suggestions */}
         {results.improvementSuggestions && results.improvementSuggestions.length > 0 && (
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-white/80 backdrop-blur-sm border-gray-200/60">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <Target className="w-5 h-5 text-blue-400" />
+              <CardTitle className="text-gray-900 flex items-center gap-2">
+                <Target className="w-5 h-5 text-blue-600" />
                 Improvement Suggestions
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
                 {results.improvementSuggestions.map((suggestion, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-300">
-                    <span className="text-blue-400 mt-1">•</span>
+                  <li key={index} className="flex items-start gap-2 text-gray-700">
+                    <span className="text-blue-600 mt-1">•</span>
                     {suggestion}
                   </li>
                 ))}
@@ -525,23 +525,23 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
 
         {/* Plagiarism Flags */}
         {results.plagiarismFlags && results.plagiarismFlags.flaggedSubmissions > 0 && (
-          <Card className="bg-red-500/10 border-red-500/20">
+          <Card className="bg-red-50 border-red-200">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-gray-900 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-red-400" />
                 Plagiarism Alerts
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="mb-3">
-                <span className="text-red-400 font-medium">
+                <span className="text-red-700 font-medium">
                   {results.plagiarismFlags.flaggedSubmissions} submissions flagged
                 </span>
               </div>
               <ul className="space-y-2">
                 {results.plagiarismFlags.suspiciousPatterns.map((pattern, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-300">
-                    <span className="text-red-400 mt-1">•</span>
+                  <li key={index} className="flex items-start gap-2 text-gray-700">
+                    <span className="text-red-600 mt-1">•</span>
                     {pattern}
                   </li>
                 ))}
@@ -557,23 +557,23 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border border-white/20">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 border border-gray-200">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-white flex items-center gap-3">
-            <Brain className="w-6 h-6 text-purple-400" />
+          <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <Brain className="w-6 h-6 text-blue-600" />
             AI Assignment Analysis
-            <Badge className="bg-purple-500/20 text-purple-400">
+            <Badge className="bg-blue-100 text-blue-700">
               {assignment.title}
             </Badge>
           </DialogTitle>
-          <DialogDescription className="text-gray-400">
+          <DialogDescription className="text-gray-600">
             Comprehensive AI-powered analysis of student submissions and performance insights.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Assignment Info */}
-          <div className="bg-white/5 rounded-lg p-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200/60">
             <div className="flex items-center justify-between">
               {analysisResult?.status === 'failed' && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -583,12 +583,12 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
               )}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-blue-400" />
-                  <span className="text-white font-medium">{assignment.title}</span>
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  <span className="text-gray-900 font-medium">{assignment.title}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-300">{submissions.length} submissions</span>
+                  <Users className="w-4 h-4 text-gray-600" />
+                  <span className="text-gray-700">{submissions.length} submissions</span>
                 </div>
               </div>
             </div>
@@ -597,15 +597,15 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
           {/* No Analysis Yet */}
           {!analysisResult && !isAnalyzing && (
             <div className="text-center py-12">
-              <Sparkles className="w-16 h-16 text-purple-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">AI Assignment Analysis</h3>
-              <p className="text-gray-400 mb-6">
+              <Sparkles className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">AI Assignment Analysis</h3>
+              <p className="text-gray-600 mb-6">
                 Get comprehensive insights about student performance, common mistakes, and improvement suggestions.
               </p>
               <Button
                 onClick={handleStartAnalysis}
                 disabled={isAnalyzing || submissions.length === 0}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
                 size="lg"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
@@ -617,9 +617,9 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
           {/* Analyzing State */}
           {isAnalyzing && (
             <div className="text-center py-12">
-              <Loader2 className="w-16 h-16 text-blue-400 mx-auto mb-4 animate-spin" />
-              <h3 className="text-xl font-semibold text-white mb-2">Analyzing Submissions</h3>
-              <p className="text-gray-400">
+              <Loader2 className="w-16 h-16 text-blue-600 mx-auto mb-4 animate-spin" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Analyzing Submissions</h3>
+              <p className="text-gray-600">
                 Processing {submissions.length} submissions with AI analysis...
               </p>
             </div>
@@ -643,8 +643,8 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
             <div>
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-400" />
-                  <span className="text-white font-medium">Analysis Complete</span>
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <span className="text-gray-900 font-medium">Analysis Complete</span>
                   {analysisResult.createdAt && (
                     <p className="text-sm text-gray-500">
                       Generated on {new Date(analysisResult.createdAt.seconds * 1000).toLocaleDateString()}
@@ -655,7 +655,7 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
                   onClick={handleStartAnalysis}
                   variant="outline"
                   size="sm"
-                  className="border-white/20 text-white hover:bg-white/10"
+                  className="border-gray-300 text-gray-700 hover:bg-gray-50"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Re-analyze
@@ -668,16 +668,16 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
           {/* Analysis Error */}
           {analysisResult && analysisResult.status === 'failed' && (
             <div className="text-center py-8">
-              <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Analysis Failed
               </h3>
-              <p className="text-gray-400 mb-4">
-                {analysisResult.error || 'Something went wrong during analysis.'}
+              <p className="text-gray-600 mb-4">
+Something went wrong during analysis.
               </p>
               <Button
                 onClick={handleStartAnalysis}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Try Again
@@ -686,11 +686,11 @@ export const AssignmentAnalysisModal: React.FC<AssignmentAnalysisModalProps> = (
           )}
 
           {/* Action Buttons */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
             <Button
               onClick={onClose}
               variant="outline"
-              className="border-white/20 text-white hover:bg-white/10"
+              className="border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               Close
             </Button>

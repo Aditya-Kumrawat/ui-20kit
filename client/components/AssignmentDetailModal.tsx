@@ -217,15 +217,15 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border border-white/20">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 border border-gray-200">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-white flex items-center gap-3">
-            <FileText className="w-6 h-6 text-blue-400" />
+          <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <FileText className="w-6 h-6 text-blue-600" />
             {isEditing ? (
               <Input
                 value={editForm.title}
                 onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                className="bg-white/10 border-white/20 text-white"
+                className="bg-white border-gray-300 text-gray-900"
               />
             ) : (
               assignment.title
@@ -236,7 +236,7 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsEditing(!isEditing)}
-                className="ml-auto text-white hover:bg-white/10"
+                className="ml-auto text-gray-700 hover:bg-gray-100"
               >
                 {isEditing ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
               </Button>
@@ -247,8 +247,8 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
         <div className="space-y-6">
           {/* Assignment Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white/5 rounded-lg p-4">
-              <div className="flex items-center gap-2 text-gray-400 mb-1">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200/60">
+              <div className="flex items-center gap-2 text-gray-600 mb-1">
                 <Calendar className="w-4 h-4" />
                 <span className="text-sm">Due Date</span>
               </div>
@@ -257,15 +257,15 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
                   type="datetime-local"
                   value={editForm.dueDate}
                   onChange={(e) => setEditForm({ ...editForm, dueDate: e.target.value })}
-                  className="bg-white/10 border-white/20 text-white"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               ) : (
-                <p className="text-white font-medium">{formatDate(assignment.dueDate)}</p>
+                <p className="text-gray-900 font-medium">{formatDate(assignment.dueDate)}</p>
               )}
             </div>
 
-            <div className="bg-white/5 rounded-lg p-4">
-              <div className="flex items-center gap-2 text-gray-400 mb-1">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200/60">
+              <div className="flex items-center gap-2 text-gray-600 mb-1">
                 <CheckCircle className="w-4 h-4" />
                 <span className="text-sm">Points</span>
               </div>
@@ -274,15 +274,15 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
                   type="number"
                   value={editForm.points}
                   onChange={(e) => setEditForm({ ...editForm, points: parseInt(e.target.value) || 0 })}
-                  className="bg-white/10 border-white/20 text-white"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               ) : (
-                <p className="text-white font-medium">{assignment.points || 0} points</p>
+                <p className="text-gray-900 font-medium">{(assignment as any).points || 0} points</p>
               )}
             </div>
 
-            <div className="bg-white/5 rounded-lg p-4">
-              <div className="flex items-center gap-2 text-gray-400 mb-1">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200/60">
+              <div className="flex items-center gap-2 text-gray-600 mb-1">
                 <AlertCircle className="w-4 h-4" />
                 <span className="text-sm">Status</span>
               </div>
@@ -299,17 +299,17 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
           </div>
 
           {/* Description */}
-          <div className="bg-white/5 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-3">Description</h3>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-gray-200/60">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
             {isEditing ? (
               <Textarea
                 value={editForm.description}
                 onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
-                className="bg-white/10 border-white/20 text-white min-h-[120px]"
+                className="bg-white border-gray-300 text-gray-900 min-h-[120px]"
                 placeholder="Assignment description..."
               />
             ) : (
-              <p className="text-gray-300 whitespace-pre-wrap">
+              <p className="text-gray-700 whitespace-pre-wrap">
                 {assignment.description || 'No description provided.'}
               </p>
             )}
@@ -317,8 +317,8 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
 
           {/* Materials */}
           {assignment.materials && assignment.materials.length > 0 && (
-            <div className="bg-white/5 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-gray-200/60">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
                 <Paperclip className="w-5 h-5" />
                 Materials
               </h3>
@@ -326,14 +326,14 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
                 {assignment.materials.map((material, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                    className="flex items-center gap-3 p-3 bg-white/60 rounded-lg hover:bg-white/80 transition-colors border border-gray-200/40"
                   >
-                    <FileText className="w-4 h-4 text-blue-400" />
-                    <span className="text-white flex-1">{material.name}</span>
+                    <FileText className="w-4 h-4 text-blue-600" />
+                    <span className="text-gray-900 flex-1">{material.name}</span>
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-blue-400 hover:bg-blue-400/10"
+                      className="text-blue-600 hover:bg-blue-50"
                       onClick={() => handleDownloadMaterial(material)}
                     >
                       <Download className="w-4 h-4" />
@@ -346,23 +346,23 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
 
           {/* Student Submission Section */}
           {!isTeacher && assignment.status === 'published' && (
-            <div className="bg-white/5 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-gray-200/60">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
                 <Upload className="w-5 h-5" />
                 Submit Assignment
               </h3>
               
               <div className="space-y-4">
                 <div>
-                  <Label className="text-white mb-2 block">Upload Your Submission (PDF Required) *</Label>
+                  <Label className="text-gray-900 mb-2 block">Upload Your Submission (PDF Required) *</Label>
                   <Input
                     type="file"
                     accept=".pdf"
-                    onChange={(e) => setSubmissionFiles(e.target.files)}
-                    className="bg-white/10 border-white/20 text-white file:bg-blue-600 file:text-white file:border-0 file:rounded-md file:px-3 file:py-1"
+                    onChange={(e) => setSubmissionFiles(e.target.files ? Array.from(e.target.files) : [])}
+                    className="bg-white border-gray-300 text-gray-900 file:bg-blue-600 file:text-white file:border-0 file:rounded-md file:px-3 file:py-1"
                     required
                   />
-                  <p className="text-sm text-gray-400 mt-1">
+                  <p className="text-sm text-gray-600 mt-1">
                     Please upload your assignment as a PDF file
                   </p>
                 </div>
@@ -392,7 +392,7 @@ export const AssignmentDetailModal: React.FC<AssignmentDetailModalProps> = ({
               <Button
                 onClick={() => setIsEditing(false)}
                 variant="outline"
-                className="border-white/20 text-white hover:bg-white/10"
+                className="border-gray-300 text-gray-700 hover:bg-gray-50"
               >
                 Cancel
               </Button>

@@ -117,14 +117,12 @@ export const FloatingSidebar = ({
     userType === "student" ? studentMenuItems : teacherMenuItems;
 
   const isActive = (href: string) => {
-    // Exact match for root dashboard path
-    if (href === "/dashboard") {
-      return location.pathname === "/dashboard";
+    // Exact match for root dashboard paths
+    if (href === "/dashboard" || href === "/dashboard2") {
+      return location.pathname === href;
     }
-    // For other paths, use exact match or sub-paths
-    return (
-      location.pathname === href || location.pathname.startsWith(href + "/")
-    );
+    // For other paths, use exact match only to prevent multiple selections
+    return location.pathname === href;
   };
 
   // Update active index when location changes
@@ -182,29 +180,9 @@ export const FloatingSidebar = ({
           </div>
         </motion.div>
 
-        {/* Toggle Button */}
-        <motion.button
-          className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 text-gray-600 hover:text-gray-800 hover:bg-white/90 cursor-pointer z-[60]"
-          style={{
-            background: "rgba(255, 255, 255, 0.95)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-            border: "1px solid rgba(255, 255, 255, 0.8)",
-            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsCollapsed(!isCollapsed);
-          }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-        </motion.button>
 
         {/* Navigation Menu */}
-        <div className="flex-1 p-3 space-y-1 relative">
+        <div className="flex-1 p-3 space-y-1 relative overflow-y-auto">
           {menuItems.map((item, index) => (
             <motion.button
               key={item.id}
@@ -251,42 +229,10 @@ export const FloatingSidebar = ({
           ))}
         </div>
 
-        {/* Video Section */}
-        <AnimatePresence>
-          {!isCollapsed && (
-            <motion.div
-              className="p-3 border-t border-gray-200/50"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="flex flex-col relative mt-5 h-auto pb-7">
-                <div className="flex flex-col relative mt-5 min-h-5 min-w-5 w-full">
-                  <div className="relative">
-                    <video
-                      autoPlay
-                      muted
-                      controls={false}
-                      playsInline
-                      loop
-                      className="w-full h-full object-cover object-center rounded-sm relative flex flex-col mt-5 min-h-5 min-w-5"
-                    >
-                      <source
-                        type="video/mp4"
-                        src="https://cdn.builder.io/o/assets%2Fa35bd991f0e541aa931714571cb88c16%2F671424c800a94207be9aa0b5e0a92325?alt=media&token=7a7dbbe0-724a-46f1-8b5e-83a5a7b0456d&apiKey=a35bd991f0e541aa931714571cb88c16"
-                      />
-                    </video>
-                    <div className="w-full pt-[70.04048582995948%] pointer-events-none text-[0px]" />
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
-        {/* Logout Section */}
-        <div className="p-3 border-t border-gray-200/50">
+        {/* Bottom Section with Logout and Toggle */}
+        <div className="p-3 border-t border-gray-200/50 space-y-2">
+          {/* Logout Button */}
           <motion.button
             className={`w-full flex items-center gap-3 transition-all duration-200 group ${
               isCollapsed ? "p-2 justify-center" : "p-3"
@@ -327,6 +273,29 @@ export const FloatingSidebar = ({
               )}
             </AnimatePresence>
           </motion.button>
+          
+          {/* Toggle Button - Centered at Bottom */}
+          <div className="flex justify-center">
+            <motion.button
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 text-gray-600 hover:text-gray-800 hover:bg-white/90 cursor-pointer"
+              style={{
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                border: "1px solid rgba(255, 255, 255, 0.8)",
+                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsCollapsed(!isCollapsed);
+              }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            </motion.button>
+          </div>
         </div>
       </div>
     </motion.div>

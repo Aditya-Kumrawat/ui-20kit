@@ -627,7 +627,7 @@ export default function TestTaking() {
       {/* Video Proctoring Component */}
       {testData.isProctored && (
         <motion.div
-          className="fixed top-28 right-6 z-50"
+          className="fixed bottom-6 right-6 z-50"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}

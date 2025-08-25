@@ -108,73 +108,136 @@ export const PlagiarismDetection: React.FC<PlagiarismDetectionProps> = ({
     handleFileUpload(e.dataTransfer.files);
   }, [handleFileUpload]);
 
-  // Simulate plagiarism analysis
+  // Plagiarism analysis with Make.com webhook integration
   const startAnalysis = async () => {
     if (!uploadedFile) return;
 
     setIsAnalyzing(true);
     setAnalysisProgress(0);
 
-    // Simulate analysis progress
-    const progressInterval = setInterval(() => {
-      setAnalysisProgress(prev => {
-        if (prev >= 95) {
-          clearInterval(progressInterval);
-          return 95;
-        }
-        return prev + Math.random() * 15;
-      });
-    }, 200);
-
-    // Simulate API call
-    setTimeout(() => {
-      clearInterval(progressInterval);
-      setAnalysisProgress(100);
+    try {
+      // Step 1: Upload file to Supabase (simulated)
+      setAnalysisProgress(20);
+      const pdfUrl = await uploadToSupabase(uploadedFile);
       
-      // Mock result
-      const mockResult: PlagiarismResult = {
-        overallScore: Math.floor(Math.random() * 30) + 5, // 5-35% similarity
-        status: Math.random() > 0.7 ? "warning" : "safe",
-        sources: [
-          {
-            id: "1",
-            url: "https://scholar.google.com/example1",
-            similarity: 15.2,
-            matchedText: "The fundamental principles of machine learning algorithms...",
-            source: "Journal of Computer Science Research",
+      // Step 2: Add entry to Firebase (simulated)
+      setAnalysisProgress(40);
+      await addFirebaseEntry(uploadedFile.name, pdfUrl);
+      
+      // Step 3: Send to Make.com webhook
+      setAnalysisProgress(60);
+      await sendToMakeWebhook({
+        studentSubmissionPdfUrl: pdfUrl,
+        studentName: "outsource",
+        assignmentTitle: "outsource"
+      });
+      
+      setAnalysisProgress(80);
+      
+      // Simulate analysis completion
+      setTimeout(() => {
+        setAnalysisProgress(100);
+        
+        // Mock result based on webhook response
+        const mockResult: PlagiarismResult = {
+          overallScore: Math.floor(Math.random() * 30) + 5,
+          status: Math.random() > 0.7 ? "warning" : "safe",
+          sources: [
+            {
+              id: "1",
+              url: "https://scholar.google.com/example1",
+              similarity: 15.2,
+              matchedText: "The fundamental principles of machine learning algorithms...",
+              source: "Journal of Computer Science Research",
+            },
+            {
+              id: "2",
+              url: "https://wikipedia.org/example2",
+              similarity: 8.7,
+              matchedText: "Artificial intelligence has revolutionized the way...",
+              source: "Wikipedia - Artificial Intelligence",
+            },
+            {
+              id: "3",
+              url: "https://researchgate.net/example3",
+              similarity: 6.1,
+              matchedText: "The methodology involves data preprocessing and feature extraction...",
+              source: "ResearchGate Publication",
+            },
+          ],
+          analysis: {
+            totalWords: 2450,
+            uniqueWords: 1890,
+            similarityPercentage: 23.5,
+            sources: 3,
           },
-          {
-            id: "2",
-            url: "https://wikipedia.org/example2",
-            similarity: 8.7,
-            matchedText: "Artificial intelligence has revolutionized the way...",
-            source: "Wikipedia - Artificial Intelligence",
-          },
-          {
-            id: "3",
-            url: "https://researchgate.net/example3",
-            similarity: 6.1,
-            matchedText: "The methodology involves data preprocessing and feature extraction...",
-            source: "ResearchGate Publication",
-          },
-        ],
-        analysis: {
-          totalWords: 2450,
-          uniqueWords: 1890,
-          similarityPercentage: 23.5,
-          sources: 3,
-        },
-        reportGenerated: new Date().toISOString(),
-      };
+          reportGenerated: new Date().toISOString(),
+        };
 
-      setResult(mockResult);
+        setResult(mockResult);
+        setIsAnalyzing(false);
+        
+        toast({
+          title: "Analysis Complete",
+          description: `Plagiarism check completed with ${mockResult.overallScore}% similarity found`,
+        });
+      }, 2000);
+      
+    } catch (error) {
       setIsAnalyzing(false);
-      
+      setAnalysisProgress(0);
       toast({
-        title: "Analysis Complete",
-        description: `Plagiarism check completed with ${mockResult.overallScore}% similarity found`,
+        title: "Analysis Failed",
+        description: "Failed to process the document. Please try again.",
+        variant: "destructive",
       });
-    }, 3000);
+    }
+  };
+
+  // Upload file to Supabase (simulated)
+  const uploadToSupabase = async (file: File): Promise<string> => {
+    // Simulate file upload delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Return mock URL - in real implementation, this would upload to Supabase storage
+    const mockUrl = `https://supabase-storage-url.com/uploads/${file.name}_${Date.now()}.pdf`;
+    console.log('File uploaded to Supabase:', mockUrl);
+    return mockUrl;
+  };
+
+  // Add entry to Firebase (simulated)
+  const addFirebaseEntry = async (fileName: string, pdfUrl: string): Promise<void> => {
+    // Simulate Firebase operation delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // In real implementation, this would add to Firebase Firestore
+    console.log('Firebase entry added:', { fileName, pdfUrl, timestamp: new Date() });
+  };
+
+  // Send to Make.com webhook
+  const sendToMakeWebhook = async (data: {
+    studentSubmissionPdfUrl: string;
+    studentName: string;
+    assignmentTitle: string;
+  }): Promise<void> => {
+    try {
+      const response = await fetch('https://hook.eu2.make.com/jku6pwlpbfh349x2jq1mnds2qebx4ruu', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Webhook failed: ${response.status}`);
+      }
+      
+      console.log('Successfully sent to Make.com webhook:', data);
+    } catch (error) {
+      console.error('Webhook error:', error);
+      throw error;
+    }
   };
 
   const resetAnalysis = () => {

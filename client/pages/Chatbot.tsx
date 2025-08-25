@@ -754,18 +754,7 @@ export default function Chatbot() {
       icon: <Search size={16} />,
       prompt: "Help me research this topic",
     },
-    {
-      id: "write",
-      label: "Write",
-      icon: <FileText size={16} />,
-      prompt: "Help me write something",
-    },
-    {
-      id: "code",
-      label: "Code",
-      icon: <Code size={16} />,
-      prompt: "Help me with coding",
-    },
+
     {
       id: "ideas",
       label: "Ideas",
@@ -1273,7 +1262,7 @@ export default function Chatbot() {
                 )}
 
                 {/* Debug Logs */}
-                {debugLogs.length > 0 && (
+                {/* {debugLogs.length > 0 && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -1287,7 +1276,7 @@ export default function Chatbot() {
                       ))}
                     </div>
                   </motion.div>
-                )}
+                )} */}
               </div>
             </div>
           </motion.div>

@@ -137,12 +137,10 @@ export default function Login() {
                     whileHover={{ scale: 1.05, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <span className="text-purple-700 font-bold text-xl">
-                      AI
-                    </span>
+                    <span className="text-purple-700 font-bold text-xl">S</span>
                   </motion.div>
                   <span className="text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
-                    FusionAI
+                    ScholarAI
                   </span>
                 </Link>
               </motion.div>

@@ -560,12 +560,32 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
+        {/* Educational Banner */}
+        <motion.div
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 border border-gray-200/60">
+            <img 
+              src="/educational-banner.png" 
+              alt="Educational Banner" 
+              className="w-full h-36 object-cover object-center"
+            />
+            {/* <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div> */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              
+            </div>
+          </div>
+        </motion.div>
+
         {/* Quick Stats Bar */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
           <Card className="bg-white/80 backdrop-blur-sm">
             <CardContent className="p-4">
